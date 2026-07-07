@@ -1915,7 +1915,7 @@ function addMsg(text, role) {
     btns.className = 'msg ai'; btns.style.cssText = 'display:flex;gap:8px;justify-content:flex-end;padding:0;margin-top:-8px;border:none;background:transparent;';
     const cp = document.createElement('button');
     cp.textContent = '复制'; cp.style.cssText = 'background:var(--input-bg);border:1px solid var(--input-border);font-size:11px;cursor:pointer;padding:2px 8px;border-radius:4px;color:var(--gray);font-family:inherit;';
-    cp.onclick = function(){navigator.clipboard.writeText(text).then(function(){cp.textContent='已复制';setTimeout(function(){cp.textContent='复制';},1500);});};
+    cp.onclick = function(){var t=text.replace(/\*\*(.+?)\*\*/g,'$1').replace(/^#{1,4}\s/gm,'').replace(/^>\s?/gm,'');navigator.clipboard.writeText(t).then(function(){cp.textContent='已复制';setTimeout(function(){cp.textContent='复制';},1500);});};
     btns.appendChild(cp);
     if (messages.length >= 1) {
       const rg = document.createElement('button');
