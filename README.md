@@ -1,4 +1,4 @@
-# Debate-Grill · 《辩论筑基》体系 · 辩论教练式Grill Skill
+# Debate-Coach · 《辩论筑基》体系 · 辩论教练式Grill Skill
 
 > **请注意 / Please Note**：本 skill 仅供华语辩论训练，严禁商业用途。完整免费视频课程见 YouTube 和 Bilibili。For Chinese-language debate training only. Non-commercial use only. Free courses on YouTube & Bilibili.
 
@@ -17,11 +17,11 @@
 ### Claude Code
 
 ```bash
-mkdir -p .claude/skills/debate-grill
-cp SKILL.md .claude/skills/debate-grill/
+mkdir -p .claude/skills/debate-coach
+cp SKILL.md .claude/skills/debate-coach/
 ```
 
-然后 `/reload-plugins` 或重启 Claude Code。调用方式：直接输入辩题和持方即可自动激活，或输入"答疑"进入概念模式。也可配置 slash command 后输入 `/debate-grill`。
+然后 `/reload-plugins` 或重启 Claude Code。调用方式：直接输入辩题和持方即可自动激活，或输入"答疑"进入概念模式。也可配置 slash command 后输入 `/debate-coach`。
 
 ### ChatGPT Custom GPT
 
@@ -36,10 +36,10 @@ cp SKILL.md .claude/skills/debate-grill/
 
 ```bash
 mkdir -p .cursor/rules
-cp SKILL.md .cursor/rules/debate-grill.md
+cp SKILL.md .cursor/rules/debate-coach.md
 ```
 
-在 Cursor 中，skill 作为 rule 生效。可通过 `@debate-grill` 引用。
+在 Cursor 中，skill 作为 rule 生效。可通过 `@debate-coach` 引用。
 
 ### GitHub Copilot
 
