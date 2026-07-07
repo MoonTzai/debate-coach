@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Debate-Grill · 《辩论筑基》体系辩论审问</title>
+<title>Debate-Coach · 《辩论筑基》体系辩论审问</title>
 <style>
 :root {
   --bg: #0d0d0d; --card: #141414; --border: #222; --input-bg: #1a1a1a; --input-border: #333;
@@ -91,7 +91,7 @@ header .status { font-size:12px; color:var(--gray); }
 <body>
 
 <header>
-  <h1>辩论筑基・Debate-Grill</h1>
+  <h1>辩论筑基・Debate-Coach</h1>
   <div style="display:flex;align-items:center;gap:12px;">
     <span class="status" id="status">未连接</span>
     <button onclick="newChat()" class="header-btn">新对话</button>
@@ -103,7 +103,7 @@ header .status { font-size:12px; color:var(--gray); }
 </header>
 
 <div id="chat">
-  <div class="msg ai"><b>辩论筑基・Debate-Grill</b><br><br>我是基于 <a href="https://github.com/mattpocock/grill-me" target="_blank">grill-me</a> 审问模式、学习《辩论筑基》（Debate Universal Grammar，精灵Moon著）全套体系内容训练的辩论教练。感谢 grill-me（Matt Pocock）的开创性审问格式，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。<br><br>⚠️ 本 skill 仅供华语辩论训练，严禁商业用途。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精灵Moon"）。<br>⚠️ For Chinese-language debate training only. Non-commercial use only. Free courses on YouTube &amp; Bilibili (search "辩论筑基" or "精灵Moon").<br><br><span style="color:var(--red);">⚠️ 本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准，本 Skill 会话内容仅供参考！仅供参考！仅供参考！！！</span></div>
+  <div class="msg ai"><b>辩论筑基・Debate-Coach</b><br><br>我是基于 <a href="https://github.com/mattpocock/grill-me" target="_blank">grill-me</a> 审问模式、学习《辩论筑基》（Debate Universal Grammar，精灵Moon著）全套体系内容训练的辩论教练。感谢 grill-me（Matt Pocock）的开创性审问格式，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。<br><br>⚠️ 本 skill 仅供华语辩论训练，严禁商业用途。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精灵Moon"）。<br>⚠️ For Chinese-language debate training only. Non-commercial use only. Free courses on YouTube &amp; Bilibili (search "辩论筑基" or "精灵Moon").<br><br><span style="color:var(--red);">⚠️ 本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准，本 Skill 会话内容仅供参考！仅供参考！仅供参考！！！</span></div>
   <div class="msg ai"><b>📋 准备具体辩题</b>：输入辩题和持方，例如"辩题：在校大学生创业利大于弊，持方：正方"<br><b>💬 自由问答</b>：回复 <b>"答疑"</b> 进入自由问答模式</div>
 </div>
 
@@ -190,7 +190,7 @@ header .status { font-size:12px; color:var(--gray); }
 
 <script type="text/plain" id="system-prompt">
 ---
-name: debate-grill
+name: debate-coach
 description: 《辩论筑基》体系辩论审问——引导出论与攻防处理。基于 grill-me 审问模式，完整内置《辩论筑基》(Debate Universal Grammar) 全套体系。自包含，不需另行学习。
 version: 7.3.0
 author: 精灵Moon
@@ -1523,7 +1523,7 @@ function showConfirm(msg) {
   });
 }
 
-const WELCOME_1 = '辩论筑基・Debate-Grill\n\n我是基于 grill-me 审问模式、学习《辩论筑基》（Debate Universal Grammar，精灵Moon著）全套体系内容训练的辩论教练。感谢 grill-me（Matt Pocock）的开创性审问格式，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。\n\n⚠️ 本 skill 仅供华语辩论训练，严禁商业用途。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精灵Moon"）。\n⚠️ For Chinese-language debate training only. Non-commercial use only. Free courses on YouTube & Bilibili (search "辩论筑基" or "精灵Moon").\n\n⚠️ 本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准，本 Skill 会话内容仅供参考！仅供参考！仅供参考！！！';
+const WELCOME_1 = '辩论筑基・Debate-Coach\n\n我是基于 grill-me 审问模式、学习《辩论筑基》（Debate Universal Grammar，精灵Moon著）全套体系内容训练的辩论教练。感谢 grill-me（Matt Pocock）的开创性审问格式，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。\n\n⚠️ 本 skill 仅供华语辩论训练，严禁商业用途。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精灵Moon"）。\n⚠️ For Chinese-language debate training only. Non-commercial use only. Free courses on YouTube & Bilibili (search "辩论筑基" or "精灵Moon").\n\n⚠️ 本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准，本 Skill 会话内容仅供参考！仅供参考！仅供参考！！！';
 const WELCOME_2 = '📋 准备具体辩题：输入辩题和持方，例如"辩题：在校大学生创业利大于弊，持方：正方"\n💬 自由问答：回复"答疑"进入自由问答模式';
 const WELCOME_MSGS = [
   {role:'assistant', content:WELCOME_1},
@@ -1661,7 +1661,7 @@ function getFileLabel() {
 }
 
 function fileName(ext) {
-  return 'Debate-Grill-会话记录-' + getFileLabel() + '-' + ts() + '.' + ext;
+  return 'Debate-Coach-会话记录-' + getFileLabel() + '-' + ts() + '.' + ext;
 }
 
 
@@ -1760,7 +1760,7 @@ function importSession(input) {
 }
 
 function exportTxt() {
-  let text = '辩论筑基・Debate-Grill 会话记录\n\n';
+  let text = '辩论筑基・Debate-Coach 会话记录\n\n';
   text += `导出时间：${new Date().toLocaleString()}\n\n${'─'.repeat(40)}\n\n`;
   const all = [...WELCOME_MSGS, ...messages];
   for (const m of all) {
@@ -1771,7 +1771,7 @@ function exportTxt() {
 }
 
 function exportChat() {
-  let text = '# Debate-Grill 会话记录\n\n';
+  let text = '# Debate-Coach 会话记录\n\n';
   text += `导出时间：${new Date().toLocaleString()}\n\n---\n\n`;
   const all = [...WELCOME_MSGS, ...messages];
   for (const m of all) {
@@ -1782,7 +1782,7 @@ function exportChat() {
 }
 
 function exportHTML() {
-  const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>Debate-Grill 聊天记录</title>
+  const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>Debate-Coach 聊天记录</title>
 <style>${document.querySelector('style').textContent}
 body{background:var(--bg);color:var(--text);font-family:'Microsoft YaHei','PingFang SC',sans-serif;padding:24px;max-width:860px;margin:0 auto;}
 .msg{max-width:75%;padding:12px 16px;border-radius:12px;line-height:1.7;font-size:15px;white-space:pre-wrap;margin-bottom:16px;}
@@ -1791,7 +1791,7 @@ body{background:var(--bg);color:var(--text);font-family:'Microsoft YaHei','PingF
 .msg.system{margin:0 auto;background:transparent;color:var(--gray);font-size:13px;text-align:center;border:none;}
 </style></head><body>
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-<h1 style="color:var(--gold);margin:0;font-size:20px;">辩论筑基・Debate-Grill</h1>
+<h1 style="color:var(--gold);margin:0;font-size:20px;">辩论筑基・Debate-Coach</h1>
 <button id="export-theme-btn" onclick="var b=document.body;b.classList.toggle('light');this.textContent=b.classList.contains('light')?'深色模式':'浅色模式'" style="background:var(--card);color:var(--gray);border:1px solid var(--input-border);padding:6px 12px;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;">浅色模式</button>
 </div>
 <p style="color:var(--gray);margin-bottom:24px;">导出时间：${new Date().toLocaleString()}</p>
@@ -1808,7 +1808,7 @@ async function newChat() {
   chat.innerHTML = '';
   const msg1 = document.createElement('div');
   msg1.className = 'msg ai';
-  msg1.innerHTML = '<b>辩论筑基・Debate-Grill</b><br><br>我是基于 <a href="https://github.com/mattpocock/grill-me" target="_blank">grill-me</a> 审问模式、学习《辩论筑基》（Debate Universal Grammar，精灵Moon著）全套体系内容训练的辩论教练。感谢 grill-me（Matt Pocock）的开创性审问格式，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。<br><br>⚠️ 本 skill 仅供华语辩论训练，严禁商业用途。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精灵Moon"）。<br>⚠️ For Chinese-language debate training only. Non-commercial use only. Free courses on YouTube &amp; Bilibili (search "辩论筑基" or "精灵Moon").<br><br><span style="color:var(--red);">⚠️ 本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准，本 Skill 会话内容仅供参考！仅供参考！仅供参考！！！</span>';
+  msg1.innerHTML = '<b>辩论筑基・Debate-Coach</b><br><br>我是基于 <a href="https://github.com/mattpocock/grill-me" target="_blank">grill-me</a> 审问模式、学习《辩论筑基》（Debate Universal Grammar，精灵Moon著）全套体系内容训练的辩论教练。感谢 grill-me（Matt Pocock）的开创性审问格式，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。<br><br>⚠️ 本 skill 仅供华语辩论训练，严禁商业用途。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精灵Moon"）。<br>⚠️ For Chinese-language debate training only. Non-commercial use only. Free courses on YouTube &amp; Bilibili (search "辩论筑基" or "精灵Moon").<br><br><span style="color:var(--red);">⚠️ 本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准，本 Skill 会话内容仅供参考！仅供参考！仅供参考！！！</span>';
   chat.appendChild(msg1);
   const msg2 = document.createElement('div');
   msg2.className = 'msg ai';
