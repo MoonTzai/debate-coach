@@ -1,9 +1,9 @@
 #!/bin/bash
-# Install debate-grill skill for Cursor
-# Run from the debate-grill/ directory
+# Install debate-coach skill for Cursor
+# Run from the debate-coach/ directory
 
 RULES_DIR=".cursor/rules"
 mkdir -p "$RULES_DIR"
-cp SKILL.md "$RULES_DIR/debate-grill.md"
-echo "debate-grill installed to $RULES_DIR/debate-grill.md"
-echo "Use @debate-grill in Cursor to reference this skill."
+cp SKILL.md "$RULES_DIR/debate-coach.md"
+echo "debate-coach installed to $RULES_DIR/debate-coach.md"
+echo "Use @debate-coach in Cursor to reference this skill."

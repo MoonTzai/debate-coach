@@ -77,7 +77,7 @@ response = openai.ChatCompletion.create(
 
 如果你不想安装任何 AI 客户端，可以直接使用独立网页版：
 
-用浏览器打开 `debate-grill-web.html`，输入 DeepSeek API Key（从 [platform.deepseek.com](https://platform.deepseek.com) 获取）即可使用。网页版内置完整的《辩论筑基》知识体系，支持导出/导入会话记录、深色/浅色主题切换、移动端适配。
+用浏览器打开 `debate-coach-web.html`，输入 DeepSeek API Key（从 [platform.deepseek.com](https://platform.deepseek.com) 获取）即可使用。网页版内置完整的《辩论筑基》知识体系，支持导出/导入会话记录、深色/浅色主题切换、移动端适配。
 
 ## 知识覆盖
 
