@@ -1,4 +1,4 @@
-# Debate-Grill · 《辩论筑基》体系辩论教练式Grill Skill
+# Debate-Grill · 《辩论筑基》体系 · 辩论教练式Grill Skill
 
 > **请注意 / Please Note**：本 skill 仅供华语辩论训练，严禁商业用途。完整免费视频课程见 YouTube 和 Bilibili。For Chinese-language debate training only. Non-commercial use only. Free courses on YouTube & Bilibili.
 
