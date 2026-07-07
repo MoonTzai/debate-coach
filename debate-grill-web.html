@@ -1909,23 +1909,22 @@ function addMsg(text, role) {
   const div = document.createElement('div');
   div.className = 'msg ' + role;
   div.innerHTML = renderMD(text);
+  chat.appendChild(div);
   if (role === 'ai') {
-    div.style.position = 'relative';
     const btns = document.createElement('div');
-    btns.style.cssText = 'display:flex;gap:8px;justify-content:flex-end;margin-top:6px;';
+    btns.className = 'msg ai'; btns.style.cssText = 'display:flex;gap:8px;justify-content:flex-end;padding:0;margin-top:-8px;border:none;background:transparent;';
     const cp = document.createElement('button');
     cp.textContent = '复制'; cp.style.cssText = 'background:var(--input-bg);border:1px solid var(--input-border);font-size:11px;cursor:pointer;padding:2px 8px;border-radius:4px;color:var(--gray);font-family:inherit;';
     cp.onclick = function(){navigator.clipboard.writeText(text).then(function(){cp.textContent='已复制';setTimeout(function(){cp.textContent='复制';},1500);});};
     btns.appendChild(cp);
-    if (messages.length >= 2) {
+    if (messages.length >= 1) {
       const rg = document.createElement('button');
       rg.textContent = '重生成'; rg.style.cssText = 'background:var(--input-bg);border:1px solid var(--input-border);font-size:11px;cursor:pointer;padding:2px 8px;border-radius:4px;color:var(--gray);font-family:inherit;';
       rg.onclick = function(){var lu=[...messages].reverse().find(function(m){return m.role==='user';});if(!lu)return;while(messages.length>0&&messages[messages.length-1].role==='assistant')messages.pop();if(messages.length>0&&messages[messages.length-1].role==='user')messages.pop();input.value=lu.content;send();};
       btns.appendChild(rg);
     }
-    div.appendChild(btns);
+    chat.appendChild(btns);
   }
-  chat.appendChild(div);
   // 成文稿警告自动兜底
   const MANUSCRIPT_RE = /(?:立论稿|驳论稿|结辩稿|陈词稿|质询套题|自由辩套题|攻防话术|申论稿|小结稿)/;
   const WARNING = '⚠️ 以上内容及数据为 AI 生成，仅供类型参考。具体论据、数据、案例应自行查证并替换为准确、有出处的真实内容。';
