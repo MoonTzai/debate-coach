@@ -117,8 +117,8 @@ header .status { font-size:12px; color:var(--gray); }
   <div style="text-align:center;">
     <p id="confirm-msg" style="color:var(--text);font-size:15px;margin-bottom:20px;"></p>
     <div style="display:flex;gap:10px;justify-content:center;">
-      <button id="confirm-cancel" class="secondary" style="width:auto;padding:10px 24px;">取消</button>
       <button id="confirm-ok" style="width:auto;padding:10px 24px;">确认</button>
+      <button id="confirm-cancel" class="secondary" style="width:auto;padding:10px 24px;">取消</button>
     </div>
   </div>
 </div>
@@ -1961,7 +1961,7 @@ function addMsg(text, role) {
     div.appendChild(w);
   }
   // 赛制确认：追加跳过按钮
-  if (role === 'ai' && text.includes('赛制') && text.includes('？')) {
+  if (role === 'ai' && text.includes('你也可以先跳过')) {
     const btn = document.createElement('button');
     btn.textContent = '⏭️ 先跳过';
     btn.style.cssText = 'display:inline-block;margin-top:6px;background:var(--card);color:var(--gold);border:1px solid var(--gold);padding:4px 12px;border-radius:14px;font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.15s;';
@@ -2048,7 +2048,7 @@ async function send() {
     }
     messages.push({role:'assistant', content: fullText});
     // 赛制跳过
-    if (fullText.includes('赛制') && fullText.includes('？')) {
+    if (fullText.includes('你也可以先跳过')) {
       const sb = document.createElement('button');
       sb.textContent = '⏭️ 先跳过'; sb.style.cssText = 'display:inline-block;margin-top:6px;background:var(--card);color:var(--gold);border:1px solid var(--gold);padding:4px 12px;border-radius:14px;font-size:12px;cursor:pointer;font-family:inherit;';
       sb.onmouseenter = function(){sb.style.background='var(--gold)';sb.style.color='#000';};
