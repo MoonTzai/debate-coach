@@ -91,7 +91,7 @@ header .status { font-size:12px; color:var(--gray); }
 <body>
 
 <header>
-  <h1>《辩论筑基》老爷爷・Debate-Grill</h1>
+  <h1>《辩论筑基》・Debate-Grill</h1>
   <div style="display:flex;align-items:center;gap:12px;">
     <span class="status" id="status">未连接</span>
     <button onclick="newChat()" class="header-btn">新对话</button>
@@ -103,7 +103,7 @@ header .status { font-size:12px; color:var(--gray); }
 </header>
 
 <div id="chat">
-  <div class="msg ai"><b>《辩论筑基》老爷爷・Debate-Grill</b><br><br>我是基于 <a href="https://github.com/mattpocock/grill-me" target="_blank">grill-me</a> 审问模式、学习《辩论筑基》（Debate Universal Grammar，精灵Moon著）全套体系内容训练的辩论教练。感谢 grill-me（Matt Pocock）的开创性审问格式，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。<br><br>⚠️ 本 skill 仅供华语辩论训练，严禁商业用途。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精灵Moon"）。<br>⚠️ For Chinese-language debate training only. Non-commercial use only. Free courses on YouTube &amp; Bilibili (search "辩论筑基" or "精灵Moon").<br><br><span style="color:var(--red);">⚠️ 本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准，本 Skill 会话内容仅供参考！仅供参考！仅供参考！！！</span></div>
+  <div class="msg ai"><b>《辩论筑基》・Debate-Grill</b><br><br>我是基于 <a href="https://github.com/mattpocock/grill-me" target="_blank">grill-me</a> 审问模式、学习《辩论筑基》（Debate Universal Grammar，精灵Moon著）全套体系内容训练的辩论教练。感谢 grill-me（Matt Pocock）的开创性审问格式，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。<br><br>⚠️ 本 skill 仅供华语辩论训练，严禁商业用途。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精灵Moon"）。<br>⚠️ For Chinese-language debate training only. Non-commercial use only. Free courses on YouTube &amp; Bilibili (search "辩论筑基" or "精灵Moon").<br><br><span style="color:var(--red);">⚠️ 本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准，本 Skill 会话内容仅供参考！仅供参考！仅供参考！！！</span></div>
   <div class="msg ai"><b>📋 准备具体辩题</b>：输入辩题和持方，例如"辩题：在校大学生创业利大于弊，持方：正方"<br><b>💬 自由问答</b>：回复 <b>"答疑"</b> 进入自由问答模式</div>
 </div>
 
@@ -732,15 +732,11 @@ BP同方竞争：OG和CG相互竞争排名，OG应多出论点堵死CG的Extensi
 
 用户输入辩题后，先判断持方是否明确。
 
-**如果用户完全没说持方** → 先问：
-"你的持方是正方还是反方？"
-**只输出这一句，停下来。**
+**如果用户完全没说持方且从辩题无法推断** → 先问"你的持方是正方还是反方？"。**只输出这一句，停下来。**
 
-**如果用户的辩题包含"/"或表述模糊、持方可能被误解** → 用你自己的话复述辩题并确认：
-"我先确认一下——这个辩题的意思是不是[用一句话说清楚辩题在比较什么]。你是正方（[具体持方内容]）还是反方（[具体持方内容]）？"
-**不要猜。不要看到"/"就假设它是正方/反方分隔符。停下来等用户确认。**
+**如果用户说了持方但辩题包含"/"且"/"的含义确实模糊**（无法确定"/"是正反分隔还是辩题内的比较）→ 复述辩题确认。**仅此一种情况需要确认。语义已经清楚的（如"孔子和老子谁更伟大，反方"）直接确认收到。**
 
-**如果持方明确** → 确认收到：
+**如果持方已明确** → 确认收到：
 "收到了。你的辩题是：**[辩题]**，持方：**[持方]**。从零开始准备立论，还是已有架构进行攻防？回复 A（出论）或 B（攻防），或回复「答疑」进入自由问答。"
 
 **只输出确认消息，然后停下来。不要在这个消息里问赛制。不要输出阶段A的任何内容。等用户回复 A 或 B。**
@@ -1506,7 +1502,7 @@ let modelName = localStorage.getItem('debate_grill_model') || '';
 let riskAccepted = localStorage.getItem('debate_grill_risk_accepted') === 'true';
 let messages = [];
 
-const WELCOME_1 = '《辩论筑基》老爷爷・Debate-Grill\n\n我是基于 grill-me 审问模式、学习《辩论筑基》（Debate Universal Grammar，精灵Moon著）全套体系内容训练的辩论教练。感谢 grill-me（Matt Pocock）的开创性审问格式，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。\n\n⚠️ 本 skill 仅供华语辩论训练，严禁商业用途。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精灵Moon"）。\n⚠️ For Chinese-language debate training only. Non-commercial use only. Free courses on YouTube & Bilibili (search "辩论筑基" or "精灵Moon").\n\n⚠️ 本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准，本 Skill 会话内容仅供参考！仅供参考！仅供参考！！！';
+const WELCOME_1 = '《辩论筑基》・Debate-Grill\n\n我是基于 grill-me 审问模式、学习《辩论筑基》（Debate Universal Grammar，精灵Moon著）全套体系内容训练的辩论教练。感谢 grill-me（Matt Pocock）的开创性审问格式，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。\n\n⚠️ 本 skill 仅供华语辩论训练，严禁商业用途。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精灵Moon"）。\n⚠️ For Chinese-language debate training only. Non-commercial use only. Free courses on YouTube & Bilibili (search "辩论筑基" or "精灵Moon").\n\n⚠️ 本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准，本 Skill 会话内容仅供参考！仅供参考！仅供参考！！！';
 const WELCOME_2 = '📋 准备具体辩题：输入辩题和持方，例如"辩题：在校大学生创业利大于弊，持方：正方"\n💬 自由问答：回复"答疑"进入自由问答模式';
 const WELCOME_MSGS = [
   {role:'assistant', content:WELCOME_1},
@@ -1743,7 +1739,7 @@ function importSession(input) {
 }
 
 function exportTxt() {
-  let text = '《辩论筑基》老爷爷・Debate-Grill 会话记录\n\n';
+  let text = '《辩论筑基》・Debate-Grill 会话记录\n\n';
   text += `导出时间：${new Date().toLocaleString()}\n\n${'─'.repeat(40)}\n\n`;
   const all = [...WELCOME_MSGS, ...messages];
   for (const m of all) {
@@ -1774,7 +1770,7 @@ body{background:var(--bg);color:var(--text);font-family:'Microsoft YaHei','PingF
 .msg.system{margin:0 auto;background:transparent;color:var(--gray);font-size:13px;text-align:center;border:none;}
 </style></head><body>
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-<h1 style="color:var(--gold);margin:0;font-size:20px;">《辩论筑基》老爷爷・Debate-Grill</h1>
+<h1 style="color:var(--gold);margin:0;font-size:20px;">《辩论筑基》・Debate-Grill</h1>
 <button id="export-theme-btn" onclick="var b=document.body;b.classList.toggle('light');this.textContent=b.classList.contains('light')?'深色模式':'浅色模式'" style="background:var(--card);color:var(--gray);border:1px solid var(--input-border);padding:6px 12px;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;">浅色模式</button>
 </div>
 <p style="color:var(--gray);margin-bottom:24px;">导出时间：${new Date().toLocaleString()}</p>
@@ -1791,7 +1787,7 @@ function newChat() {
   chat.innerHTML = '';
   const msg1 = document.createElement('div');
   msg1.className = 'msg ai';
-  msg1.innerHTML = '<b>《辩论筑基》老爷爷・Debate-Grill</b><br><br>我是基于 <a href="https://github.com/mattpocock/grill-me" target="_blank">grill-me</a> 审问模式、学习《辩论筑基》（Debate Universal Grammar，精灵Moon著）全套体系内容训练的辩论教练。感谢 grill-me（Matt Pocock）的开创性审问格式，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。<br><br>⚠️ 本 skill 仅供华语辩论训练，严禁商业用途。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精灵Moon"）。<br>⚠️ For Chinese-language debate training only. Non-commercial use only. Free courses on YouTube &amp; Bilibili (search "辩论筑基" or "精灵Moon").<br><br><span style="color:var(--red);">⚠️ 本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准，本 Skill 会话内容仅供参考！仅供参考！仅供参考！！！</span>';
+  msg1.innerHTML = '<b>《辩论筑基》・Debate-Grill</b><br><br>我是基于 <a href="https://github.com/mattpocock/grill-me" target="_blank">grill-me</a> 审问模式、学习《辩论筑基》（Debate Universal Grammar，精灵Moon著）全套体系内容训练的辩论教练。感谢 grill-me（Matt Pocock）的开创性审问格式，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。<br><br>⚠️ 本 skill 仅供华语辩论训练，严禁商业用途。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精灵Moon"）。<br>⚠️ For Chinese-language debate training only. Non-commercial use only. Free courses on YouTube &amp; Bilibili (search "辩论筑基" or "精灵Moon").<br><br><span style="color:var(--red);">⚠️ 本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准，本 Skill 会话内容仅供参考！仅供参考！仅供参考！！！</span>';
   chat.appendChild(msg1);
   const msg2 = document.createElement('div');
   msg2.className = 'msg ai';
@@ -2032,6 +2028,15 @@ async function send() {
       }
     }
     messages.push({role:'assistant', content: fullText});
+    // 赛制跳过
+    if (fullText.includes('赛制') && fullText.includes('？')) {
+      const sb = document.createElement('button');
+      sb.textContent = '⏭️ 先跳过'; sb.style.cssText = 'display:inline-block;margin-top:6px;background:var(--card);color:var(--gold);border:1px solid var(--gold);padding:4px 12px;border-radius:14px;font-size:12px;cursor:pointer;font-family:inherit;';
+      sb.onmouseenter = function(){sb.style.background='var(--gold)';sb.style.color='#000';};
+      sb.onmouseleave = function(){sb.style.background='var(--card)';sb.style.color='var(--gold)';};
+      sb.onclick = function(){input.value='先跳过，直接开始讨论';send();};
+      msgDiv.appendChild(sb);
+    }
     // Copy + Regenerate
     const btns = document.createElement('div');
     btns.className = 'msg ai'; btns.style.cssText = 'display:flex;gap:8px;justify-content:flex-end;padding:0;margin-top:-8px;border:none;background:transparent;';
