@@ -1627,9 +1627,9 @@ if (!riskAccepted) {
     applyTheme(next);
   }
 
-  // init theme from localStorage, default dark
+  // init theme from localStorage, default light
   (function initTheme() {
-    const saved = localStorage.getItem('debate_coach_theme') || 'dark';
+    const saved = localStorage.getItem('debate_coach_theme') || 'light';
     applyTheme(saved);
   })();
 
