@@ -2019,8 +2019,7 @@ async function send() {
       throw new Error(msg);
     }
     const msgDiv = loadingDiv;
-    msgDiv.classList.remove('loading');
-    msgDiv.innerHTML = '...';
+    let _first = true;
     let fullText = '';
     const reader = resp.body.getReader();
     const decoder = new TextDecoder();
@@ -2039,6 +2038,7 @@ async function send() {
           const json = JSON.parse(data);
           const delta = json.choices && json.choices[0] && json.choices[0].delta;
           if (delta && delta.content) {
+            if (_first) { msgDiv.classList.remove('loading'); msgDiv.innerHTML = ''; _first = false; }
             fullText += delta.content;
             msgDiv.innerHTML = renderMD(fullText);
             chat.scrollTop = chat.scrollHeight;
