@@ -2032,6 +2032,20 @@ async function send() {
       }
     }
     messages.push({role:'assistant', content: fullText});
+    // Copy + Regenerate
+    const btns = document.createElement('div');
+    btns.className = 'msg ai'; btns.style.cssText = 'display:flex;gap:8px;justify-content:flex-end;padding:0;margin-top:-8px;border:none;background:transparent;';
+    const cp = document.createElement('button');
+    cp.textContent = '复制'; cp.style.cssText = 'background:var(--input-bg);border:1px solid var(--input-border);font-size:11px;cursor:pointer;padding:2px 8px;border-radius:4px;color:var(--gray);font-family:inherit;';
+    cp.onclick = function(){var t=fullText.replace(/\*\*(.+?)\*\*/g,'$1').replace(/^#{1,4}\s/gm,'').replace(/^>\s?/gm,'');navigator.clipboard.writeText(t).then(function(){cp.textContent='已复制';setTimeout(function(){cp.textContent='复制';},1500);});};
+    btns.appendChild(cp);
+    if (messages.length >= 2) {
+      const rg = document.createElement('button');
+      rg.textContent = '重生成'; rg.style.cssText = 'background:var(--input-bg);border:1px solid var(--input-border);font-size:11px;cursor:pointer;padding:2px 8px;border-radius:4px;color:var(--gray);font-family:inherit;';
+      rg.onclick = function(){var lu=[...messages].reverse().find(function(m){return m.role==='user';});if(!lu)return;while(messages.length>0&&messages[messages.length-1].role==='assistant')messages.pop();if(messages.length>0&&messages[messages.length-1].role==='user')messages.pop();input.value=lu.content;send();};
+      btns.appendChild(rg);
+    }
+    chat.appendChild(btns);
   } catch(e) {
     loadingDiv.remove();
     if (e.message.includes('401') || e.message.includes('key')) addMsg('您的 API Key 似乎不正确，请检查后重试。', 'system');
