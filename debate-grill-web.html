@@ -1997,11 +1997,9 @@ async function send() {
       const msg = (err.error && err.error.message) || 'HTTP ' + resp.status;
       throw new Error(msg);
     }
-    loadingDiv.remove();
-    const msgDiv = document.createElement('div');
-    msgDiv.className = 'msg ai';
-    msgDiv.innerHTML = '';
-    chat.appendChild(msgDiv);
+    const msgDiv = loadingDiv;
+    msgDiv.classList.remove('loading');
+    msgDiv.innerHTML = '...';
     let fullText = '';
     const reader = resp.body.getReader();
     const decoder = new TextDecoder();
