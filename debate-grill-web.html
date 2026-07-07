@@ -1944,7 +1944,7 @@ function addMsg(text, role) {
     div.appendChild(w);
   }
   // 赛制确认：追加跳过按钮
-  if (role === 'ai' && text.length < 300 && /赛制.{0,20}[？?]/.test(text)) {
+  if (role === 'ai' && text.includes('赛制') && text.includes('？')) {
     const btn = document.createElement('button');
     btn.textContent = '⏭️ 先跳过';
     btn.style.cssText = 'display:inline-block;margin-top:6px;background:var(--card);color:var(--gold);border:1px solid var(--gold);padding:4px 12px;border-radius:14px;font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.15s;';
