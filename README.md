@@ -1,4 +1,4 @@
-# Debate-Coach · 《辩论筑基》体系·辩论教练式·Grill Skill
+# Debate-Coach · 《辩论筑基》体系 · 辩论教练式 · Grill Skill
 
 Debate-Coach — A debate coaching grill skill grounded in the *Debate Universal Grammar (辩论筑基)* system.
 
