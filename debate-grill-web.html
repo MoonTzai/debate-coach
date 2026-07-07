@@ -48,6 +48,8 @@ header .status { font-size:12px; color:var(--gray); }
 #custom-toggle:hover { color: var(--gold) !important; }
 #custom-section input { color: var(--dark-gray); }
 #custom-section input:focus { border-color: var(--gold); color: var(--text); }
+.ds-model-hint { color: var(--dark-gray); }
+body.light .ds-model-hint { color: #000; }
 .btn-row { display:flex; gap:8px; }
 .fmt-col { flex:1; display:flex; flex-direction:column; gap:4px; }
 .fmt-label { font-size:10px; color:var(--gray); text-align:center; line-height:1.2; min-height:24px; display:flex; align-items:center; justify-content:center; }
@@ -135,11 +137,11 @@ header .status { font-size:12px; color:var(--gray); }
     <h2>输入 API Key</h2>
     <p>从 <a href="https://platform.deepseek.com" target="_blank" style="color:#4fa8ee">platform.deepseek.com</a> 获取。仅保存在你的浏览器本地。也可在下方「自定义模型」中使用其他 AI 服务的 Key。</p>
     <p style="color:var(--red);"><b>⚠️ 费用提示</b>：本工具通过第三方 AI API 运行，后续使用将消耗你的 API 付费额度（按 token 计费）。请留意账户余额。因使用产生的任何费用、超额扣款或账户风险，均由你自行承担。</p>
-    <input type="password" id="api-key-input" placeholder="sk-……">
+    <input type="password" id="api-key-input" placeholder="sk-……" style="padding:8px 12px;font-size:14px;">
 
-    <label style="display:block;font-size:12px;color:var(--gray);margin-bottom:4px;margin-top:12px;">模型名称</label>
-    <input type="text" id="api-model-input" placeholder="deepseek-chat" style="color:var(--dark-gray);font-size:14px;">
-    <p style="font-size:11px;color:var(--dark-gray);margin:2px 0 8px 0;">默认 <code>deepseek-chat</code> = DeepSeek 动态别名，始终指向最新对话模型，也可自行指定其它 DS 模型。默认使用 DeepSeek API Key。如需调用 OpenAI、Claude、GLM 等其它大模型，请展开下方「自定义模型」，手动设置 API 地址与 Key，上方 DS 输入框留空。本工具非 DeepSeek 或任何 AI 服务商的官方产品。</p>
+    <label style="display:block;font-size:12px;color:var(--gray);margin-bottom:2px;margin-top:8px;">模型名称<span class="ds-model-hint">（默认deepseek-chat=DeepSeek动态别名，自动调用最新模型）</span></label>
+    <input type="text" id="api-model-input" placeholder="deepseek-chat" style="color:var(--dark-gray);font-size:13px;padding:8px 12px;">
+    <p class="ds-model-hint" style="font-size:10px;margin:2px 0 6px 0;line-height:1.4;">其它模型请展开下方「自定义模型」。</p>
 
     <button onclick="saveKey()">确认</button>
     <button class="secondary" onclick="cancelApiKey()">返回</button>
