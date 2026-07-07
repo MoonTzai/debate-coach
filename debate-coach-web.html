@@ -1504,13 +1504,6 @@ POI 策略（进攻全部过完后一条消息）："BP 的进攻不只在申论
 <script>
 const SYSTEM_PROMPT = document.getElementById('system-prompt').textContent;
 
-// ===== MIGRATE old localStorage keys =====
-['api_key','api_url','model','risk_accepted','theme'].forEach(function(k) {
-  var old = 'debate_grill_' + k;
-  var val = localStorage.getItem(old);
-  if (val != null) { localStorage.setItem('debate_coach_' + k, val); localStorage.removeItem(old); }
-});
-
 // ===== STATE =====
 let apiKey = localStorage.getItem('debate_coach_api_key') || '';
 let apiUrl = localStorage.getItem('debate_coach_api_url') || '';
