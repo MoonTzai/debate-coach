@@ -111,7 +111,7 @@ response = openai.ChatCompletion.create(
 
 ## 许可与署名
 
-本 skill 基于《辩论筑基》（精灵·Moon著，YouTube & Bilibili 搜索"辩论筑基"或"精灵Moon"可看完整免费视频课程）体系构建。
+本 skill 基于《辩论筑基》（精灵·Moon著，YouTube & Bilibili 搜索"辩论筑基"或"精灵·Moon"可看完整免费视频课程）体系构建。
 
 - Skill 文件本身：CC BY-NC-SA 4.0（非商业使用）
 - 《辩论筑基》课件权利归属：精灵·Moon
