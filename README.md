@@ -4,9 +4,9 @@ Debate-Coach — A debate coaching grill skill grounded in the *Debate Universal
 
 ---
 
-> **请注意**：因教材所限，本 skill 目前仅针对华语辩论进行了调试，对英语辩论完全不适配，而且主流英语辩论和华语辩论流行的一般性辩论也大相径庭，相关英语功能仅供娱乐与参考。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精灵Moon"）。
+> **请注意**：因教材所限，本 skill 目前仅针对华语辩论进行了调试，对英语辩论完全不适配，而且主流英语辩论和华语辩论流行的一般性辩论也大相径庭，相关英语功能仅供娱乐与参考。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精靈Moon"）。
 
-> **Please note**: Due to the nature of its source material, this skill is currently calibrated only for Chinese-language debate. It is wholly unsuited to English-language debate, whose mainstream formats differ fundamentally from the generalist style prevalent in Chinese-language debate. Any English-language functionality is for entertainment and reference only. Free video courses are available on YouTube and Bilibili (search "辩论筑基" or "精灵Moon").
+> **Please note**: Due to the nature of its source material, this skill is currently calibrated only for Chinese-language debate. It is wholly unsuited to English-language debate, whose mainstream formats differ fundamentally from the generalist style prevalent in Chinese-language debate. Any English-language functionality is for entertainment and reference only. Free video courses are available on YouTube and Bilibili (search "辩论筑基" or "精靈Moon").
 
 > 本 skill 的审问模式基于 [grill-me](https://github.com/mattpocock/grill-me)（Matt Pocock / Total TypeScript）构建，感谢 Matt Pocock 的开创性工作，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。
 
@@ -14,9 +14,9 @@ Debate-Coach — A debate coaching grill skill grounded in the *Debate Universal
 
 ---
 
-基于《辩论筑基》（精灵Moon著，2020版+2023Pro版，56课件+SmartArt全量提取）全套理念、知识体系与操作框架的 AI 辩论教练式问答 skill。
+基于《辩论筑基》（精靈Moon著，2020版+2023Pro版，56课件+SmartArt全量提取）全套理念、知识体系与操作框架的 AI 辩论教练式问答 skill。
 
-An AI debate-coaching skill grounded in the full conceptual framework, knowledge system, and operational methods of *Debate Universal Grammar* (精灵Moon, 2020 edition + 2023 Pro edition, 56 courseware files with complete SmartArt extraction).
+An AI debate-coaching skill grounded in the full conceptual framework, knowledge system, and operational methods of *Debate Universal Grammar* (精靈Moon, 2020 edition + 2023 Pro edition, 56 courseware files with complete SmartArt extraction).
 
 **自包含**——不需另行学习《辩论筑基》。安装后 AI 即深度理解筑基全部术语与框架，可逐层引导出论、穷举攻防路径、进行结构性交锋分析。
 
@@ -173,11 +173,11 @@ This skill embeds the complete DUG knowledge system across ten volumes (AI-gener
 
 ## 许可与署名 / License & Attribution
 
-本 skill 基于《辩论筑基》（精灵Moon著，YouTube & Bilibili 搜索"辩论筑基"或"精灵Moon"可看完整免费视频课程）体系构建。
+本 skill 基于《辩论筑基》（精靈Moon著，YouTube & Bilibili 搜索"辩论筑基"或"精靈Moon"可看完整免费视频课程）体系构建。
 
-This skill is built on the *Debate Universal Grammar (辩论筑基)* system by 精灵Moon (free full video courses on YouTube & Bilibili — search "辩论筑基" or "精灵Moon").
+This skill is built on the *Debate Universal Grammar (辩论筑基)* system by 精靈Moon (free full video courses on YouTube & Bilibili — search "辩论筑基" or "精靈Moon").
 
 - Skill 文件本身 / Skill files: CC BY-NC-SA 4.0（非商业使用 / non-commercial use）
-- 《辩论筑基》课件权利归属 / Courseware rights: 精灵Moon
-- 使用本 skill 生成的辩论内容如大量复现筑基特有术语与框架，建议标注"基于《辩论筑基》（精灵Moon著）" / When debate content generated with this skill extensively reproduces DUG-specific terminology and frameworks, please attribute: "基于《辩论筑基》（精灵Moon著）"
+- 《辩论筑基》课件权利归属 / Courseware rights: 精靈Moon
+- 使用本 skill 生成的辩论内容如大量复现筑基特有术语与框架，建议标注"基于《辩论筑基》（精靈Moon著）" / When debate content generated with this skill extensively reproduces DUG-specific terminology and frameworks, please attribute: "基于《辩论筑基》（精靈Moon著）"
 - 学术引用（Burke新修辞学、Rosch原型理论、Entman框架理论等）遵循学术引用规范 / Academic citations (Burke's New Rhetoric, Rosch's Prototype Theory, Entman's Framing Theory, etc.) follow standard academic practice
