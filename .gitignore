@@ -1,1 +1,21 @@
-Source/publish-debate-grill.sh
+# === 禁止上传 GitHub ===
+Source/
+Memory/
+Upload/
+Output/
+.claude/
+CLAUDE.md
+*.jpg
+*.zip
+*.bat
+*.pptx
+*.xlsx
+*.json
+*.wav
+*.srt
+*.py
+
+# === 系统文件 ===
+.DS_Store
+Thumbs.db
+*.log
