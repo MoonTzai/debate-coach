@@ -1502,6 +1502,18 @@ let modelName = localStorage.getItem('debate_grill_model') || '';
 let riskAccepted = localStorage.getItem('debate_grill_risk_accepted') === 'true';
 let messages = [];
 
+function showConfirm(msg) {
+  return new Promise(function(ok) {
+    document.getElementById('confirm-msg').textContent = msg;
+    document.getElementById('confirm-modal').style.display = 'flex';
+    var btn = document.getElementById('confirm-ok');
+    var nw = btn.cloneNode(true);
+    btn.parentNode.replaceChild(nw, btn);
+    nw.onclick = function() { document.getElementById('confirm-modal').style.display = 'none'; ok(true); };
+    document.getElementById('confirm-modal').querySelector('.secondary').onclick = function() { document.getElementById('confirm-modal').style.display = 'none'; ok(false); };
+  });
+}
+
 const WELCOME_1 = '《辩论筑基》・Debate-Grill\n\n我是基于 grill-me 审问模式、学习《辩论筑基》（Debate Universal Grammar，精灵Moon著）全套体系内容训练的辩论教练。感谢 grill-me（Matt Pocock）的开创性审问格式，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。\n\n⚠️ 本 skill 仅供华语辩论训练，严禁商业用途。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精灵Moon"）。\n⚠️ For Chinese-language debate training only. Non-commercial use only. Free courses on YouTube & Bilibili (search "辩论筑基" or "精灵Moon").\n\n⚠️ 本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准，本 Skill 会话内容仅供参考！仅供参考！仅供参考！！！';
 const WELCOME_2 = '📋 准备具体辩题：输入辩题和持方，例如"辩题：在校大学生创业利大于弊，持方：正方"\n💬 自由问答：回复"答疑"进入自由问答模式';
 const WELCOME_MSGS = [
@@ -1779,8 +1791,8 @@ ${document.getElementById('chat').innerHTML}
   download(new Blob([html], {type:'text/html;charset=utf-8'}), fileName('html'));
 }
 
-function newChat() {
-  if (messages.length > 0 && !confirm('确定要开始新对话吗？\n\n当前对话历史将被清空。如需保留，请先用「导出会话记录」保存。')) {
+async function newChat() {
+  if (messages.length > 0 && !(await showConfirm('确定要开始新对话吗？当前对话历史将被清空。如需保留，请先用「导出会话记录」保存。'))) {
     return;
   }
   messages = [];
@@ -1817,8 +1829,8 @@ function cancelApiKey() {
   statusEl.style.color = '';
 }
 
-function logout() {
-  if (confirm('确定要注销吗？这将清空 API Key 和风险确认状态，页面将刷新。')) {
+async function logout() {
+  if (await showConfirm('确定要注销吗？这将清空 API Key 和风险确认状态，页面将刷新。')) {
     localStorage.removeItem('debate_grill_api_key');
     localStorage.removeItem('debate_grill_api_url');
     localStorage.removeItem('debate_grill_model');
