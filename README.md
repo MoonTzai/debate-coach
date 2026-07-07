@@ -4,7 +4,7 @@
 
 > **本 skill 的审问模式基于 [grill-me](https://github.com/mattpocock/grill-me)（Matt Pocock / Total TypeScript）构建，感谢 Matt Pocock 的开创性工作，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。**
 
-基于《辩论筑基》（精灵·Moon著，2020版+2023Pro版，56课件+SmartArt全量提取）全套理念、知识体系与操作框架的 AI 辩论教练式问答 skill。
+基于《辩论筑基》（精灵Moon著，2020版+2023Pro版，56课件+SmartArt全量提取）全套理念、知识体系与操作框架的 AI 辩论教练式问答 skill。
 
 **自包含**——不需另行学习《辩论筑基》。安装后 AI 即深度理解筑基全部术语与框架，可逐层引导出论、穷举攻防路径、进行结构性交锋分析。
 
@@ -111,9 +111,9 @@ response = openai.ChatCompletion.create(
 
 ## 许可与署名
 
-本 skill 基于《辩论筑基》（精灵·Moon著，YouTube & Bilibili 搜索"辩论筑基"或"精灵·Moon"可看完整免费视频课程）体系构建。
+本 skill 基于《辩论筑基》（精灵Moon著，YouTube & Bilibili 搜索"辩论筑基"或"精灵Moon"可看完整免费视频课程）体系构建。
 
 - Skill 文件本身：CC BY-NC-SA 4.0（非商业使用）
-- 《辩论筑基》课件权利归属：精灵·Moon
-- 使用本 skill 生成的辩论内容如大量复现筑基特有术语与框架，建议标注"基于《辩论筑基》（精灵·Moon著）"
+- 《辩论筑基》课件权利归属：精灵Moon
+- 使用本 skill 生成的辩论内容如大量复现筑基特有术语与框架，建议标注"基于《辩论筑基》（精灵Moon著）"
 - 学术引用（Burke新修辞学、Rosch原型理论、Entman框架理论等）：遵循学术引用规范
