@@ -1992,34 +1992,51 @@ async function send() {
       body:JSON.stringify({
         model: modelName || 'deepseek-v4-pro',
         messages:[{role:'system',content:SYSTEM_PROMPT},...messages],
-        temperature:0.7, max_tokens:4096
+        temperature:0.7, max_tokens:4096,
+        stream: true
       })
     });
-    const data = await resp.json();
-    loadingDiv.remove();
-
-    if (data.choices && data.choices[0]) {
-      const reply = data.choices[0].message.content;
-      addMsg(reply, 'ai');
-      messages.push({role:'assistant', content:reply});
-    } else {
-      let errMsg = '请求失败，请稍后重试。';
-      if (!resp.ok) {
-        const status = resp.status;
-        const apiErr = (data.error && data.error.message) || '';
-        if (status === 401) errMsg = '您的 API Key 似乎不正确，请检查后重试。';
-        else if (status === 402) errMsg = '您的 API 账户余额不足，请充值后重试。';
-        else if (status === 429) errMsg = 'API 请求过于频繁，请稍后重试。';
-        else if (status === 500) errMsg = 'API 服务器错误，请稍后重试。';
-        else if (apiErr.includes('key')) errMsg = '您的 API Key 似乎不正确，请检查后重试。';
-        else if (apiErr.includes('balance') || apiErr.includes('insufficient')) errMsg = '您的 API 账户余额不足，请充值后重试。';
-        if (apiErr) errMsg += '（' + apiErr + '）';
-      }
-      addMsg(errMsg, 'system');
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      const msg = (err.error && err.error.message) || 'HTTP ' + resp.status;
+      throw new Error(msg);
     }
+    loadingDiv.remove();
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'msg ai';
+    msgDiv.innerHTML = '';
+    chat.appendChild(msgDiv);
+    let fullText = '';
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    while (true) {
+      const {done, value} = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, {stream: true});
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const data = line.slice(6);
+        if (data === '[DONE]') continue;
+        try {
+          const json = JSON.parse(data);
+          const delta = json.choices && json.choices[0] && json.choices[0].delta;
+          if (delta && delta.content) {
+            fullText += delta.content;
+            msgDiv.innerHTML = renderMD(fullText);
+            chat.scrollTop = chat.scrollHeight;
+          }
+        } catch(e) {}
+      }
+    }
+    messages.push({role:'assistant', content: fullText});
   } catch(e) {
     loadingDiv.remove();
-    addMsg('网络连接失败，请检查网络后重试。（' + e.message + '）', 'system');
+    if (e.message.includes('401') || e.message.includes('key')) addMsg('您的 API Key 似乎不正确，请检查后重试。', 'system');
+    else if (e.message.includes('402') || e.message.includes('balance') || e.message.includes('insufficient')) addMsg('您的 API 账户余额不足，请充值后重试。', 'system');
+    else addMsg('网络连接失败，请检查网络后重试。（' + e.message + '）', 'system');
   }
 }
 
