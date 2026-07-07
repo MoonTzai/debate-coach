@@ -137,8 +137,8 @@ header .status { font-size:12px; color:var(--gray); }
     <p style="color:var(--red);"><b>⚠️ 费用提示</b>：本工具通过第三方 AI API 运行，后续使用将消耗你的 API 付费额度（按 token 计费）。请留意账户余额。因使用产生的任何费用、超额扣款或账户风险，均由你自行承担。</p>
     <input type="password" id="api-key-input" placeholder="sk-……" style="padding:8px 12px;font-size:14px;">
 
-    <label style="display:block;font-size:12px;color:var(--gray);margin-bottom:2px;margin-top:8px;">模型名称<span style="color:var(--dark-gray);">（默认deepseek-chat=DeepSeek动态别名，自动调用最新模型）</span></label>
-    <input type="text" id="api-model-input" placeholder="deepseek-chat" style="color:var(--dark-gray);font-size:13px;padding:8px 12px;">
+    <label style="display:block;font-size:12px;color:var(--gray);margin-bottom:2px;margin-top:8px;">模型名称<span style="color:var(--dark-gray);">（默认deepseek-v4-pro，可手动输入其它模型）</span></label>
+    <input type="text" id="api-model-input" placeholder="deepseek-v4-pro" style="color:var(--dark-gray);font-size:13px;padding:8px 12px;">
     <p style="font-size:10px;color:var(--dark-gray);margin:2px 0 6px 0;line-height:1.4;">其它模型请展开下方「自定义模型」。</p>
 
     <button onclick="saveKey()">确认</button>
@@ -730,16 +730,20 @@ BP同方竞争：OG和CG相互竞争排名，OG应多出论点堵死CG的Extensi
 
 ## 阶段 0：模式选择
 
-用户输入辩题后，先判断是否已包含持方（正方/反方/正/反）。
+用户输入辩题后，先判断持方是否明确。
 
-**如果用户没说持方** → 先问：
+**如果用户完全没说持方** → 先问：
 "你的持方是正方还是反方？"
-**只输出这一句，停下来。等用户回复持方后，再继续下面的确认消息。**
+**只输出这一句，停下来。**
 
-**如果用户已说持方** → 确认收到：
+**如果用户的辩题包含"/"或表述模糊、持方可能被误解** → 用你自己的话复述辩题并确认：
+"我先确认一下——这个辩题的意思是不是[用一句话说清楚辩题在比较什么]。你是正方（[具体持方内容]）还是反方（[具体持方内容]）？"
+**不要猜。不要看到"/"就假设它是正方/反方分隔符。停下来等用户确认。**
+
+**如果持方明确** → 确认收到：
 "收到了。你的辩题是：**[辩题]**，持方：**[持方]**。从零开始准备立论，还是已有架构进行攻防？回复 A（出论）或 B（攻防），或回复「答疑」进入自由问答。"
 
-**只输出上面这个消息，然后停下来。不要在这个消息里问赛制。不要输出阶段A的任何内容。等用户回复 A 或 B。**
+**只输出确认消息，然后停下来。不要在这个消息里问赛制。不要输出阶段A的任何内容。等用户回复 A 或 B。**
 
 用户回复 A 或 B 后，输出赛制确认：
 
@@ -1879,7 +1883,7 @@ function toggleCustom() {
 }
 
 function updateStatus() {
-  const m = modelName || 'deepseek-chat';
+  const m = modelName || 'deepseek-v4-pro';
   statusEl.textContent = '✓ ' + m + (apiUrl ? '（自定义接口）' : '');
   statusEl.style.color = '#6ecd71';
 }
@@ -1986,7 +1990,7 @@ async function send() {
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
       body:JSON.stringify({
-        model: modelName || 'deepseek-chat',
+        model: modelName || 'deepseek-v4-pro',
         messages:[{role:'system',content:SYSTEM_PROMPT},...messages],
         temperature:0.7, max_tokens:4096
       })
