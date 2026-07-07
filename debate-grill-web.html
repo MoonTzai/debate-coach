@@ -1637,7 +1637,7 @@ function getFileLabel() {
   for (const m of messages) {
     if (m.role === 'assistant') {
       const m2 = m.content.replace(/\*\*/g, '');
-      const match = m2.match(/你的辩题是[：:]\s*(.+?)\s*[，,]\s*持方[：:]\s*(.+?)(?:[。！\n]|$)/);
+      const match = m2.match(/辩题[：:是]\s*(.+?)\s*[，,、]\s*持方[：:为]?\s*(.+?)(?:[。！\n\.]|$)/);
       if (match) return clean(match[1]) + '-' + clean(match[2]);
     }
   }
@@ -1647,7 +1647,7 @@ function getFileLabel() {
     if (m.role === 'user') {
       const u = m.content.replace(/\*\*/g, '');
       // "辩题：高中恋爱...，持方：正方"
-      let match = u.match(/辩题[：:]\s*(.+?)\s*[，,]\s*持方[：:]\s*(.+)/);
+      let match = u.match(/辩题[：:]\s*(.+?)\s*[，,、]\s*持方[：:为]?\s*(.+)/);
       if (match) return clean(match[1]) + '-' + clean(match[2]);
       // "高中恋爱...，正方" or "高中恋爱...，反方"
       match = u.match(/(.+?)\s*[，,]\s*(正方|反方|正|反)/);
