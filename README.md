@@ -107,6 +107,10 @@ Open `debate-coach-web.html` in your browser, enter a DeepSeek API key (get one 
 
 ### 全功能完整版 / Full-Featured Complete Version
 
+全功能完整版需安装 AI 客户端并载入本 Skill，与网页版共享同一套《辩论筑基》知识体系和教练逻辑。区别在于 Skill 版嵌入 AI 客户端（Claude Code、Cursor 等）内运行，结合客户端 API 能力，可对本地文件（包括但不限于文稿、视频、音频）进行分析使用，也可结合知识库和 AI 按要求生成文件，适合深度备赛、训练、教学场景。
+
+The Full-Featured Complete Version requires an AI client with this Skill installed. It shares the same DUG knowledge base and coaching logic as the web version. The difference is that the Skill runs inside an AI client (Claude Code, Cursor, etc.) with full access to the client's API capabilities — it can analyze local files (including documents, video, and audio), and can generate files on demand by combining the knowledge base with AI, making it ideal for deep tournament prep, training, and teaching scenarios.
+
 安装 AI 客户端并安装本 Skill 后，向 AI 输入辩题和持方。Skill 会先确认你的需求（从零出论 / 攻防准备 / 自由问答），然后逐层引导：
 
 Once you've installed an AI client and this Skill, enter a debate topic and your side. The skill will first confirm what you need (case construction / attack-defense prep / Q&A), then guide you layer by layer:
