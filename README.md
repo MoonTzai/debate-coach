@@ -22,9 +22,9 @@ An AI debate-coaching skill grounded in the full conceptual framework, knowledge
 
 ### ⚠️ 重要声明 / Important Disclaimer
 
-**本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准，本 Skill 会话内容仅供参考！！！仅供参考！！！仅供参考！！！**
+**本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准（Bilibili/YouTube 免费放送），本 Skill 会话内容仅供参考！！！仅供参考！！！仅供参考！！！**
 
-**This skill's responses are produced by AI trained on the Debate Universal Grammar courseware (slides, not video lectures). Discrepancies with the author's understanding and intent are inevitable. For authoritative knowledge, always refer to the video lectures. Conversations with this skill are for reference only.**
+**This skill's responses are produced by AI trained on the Debate Universal Grammar courseware (slides, not video lectures). Discrepancies with the author's understanding and intent are inevitable. For authoritative knowledge, always refer to the video lectures (free on Bilibili/YouTube). Conversations with this skill are for reference only.**
 
 ---
 
@@ -164,9 +164,9 @@ This skill embeds the complete DUG knowledge system across ten volumes (AI-gener
 
 ### ⚠️ 重要声明 / Important Disclaimer
 
-**本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准，本 Skill 会话内容仅供参考！！！仅供参考！！！仅供参考！！！**
+**本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准（Bilibili/YouTube 免费放送），本 Skill 会话内容仅供参考！！！仅供参考！！！仅供参考！！！**
 
-**This skill's responses are produced by AI trained on the Debate Universal Grammar courseware (slides, not video lectures). Discrepancies with the author's understanding and intent are inevitable. For authoritative knowledge, always refer to the video lectures. Conversations with this skill are for reference only.**
+**This skill's responses are produced by AI trained on the Debate Universal Grammar courseware (slides, not video lectures). Discrepancies with the author's understanding and intent are inevitable. For authoritative knowledge, always refer to the video lectures (free on Bilibili/YouTube). Conversations with this skill are for reference only.**
 
 ---
 
