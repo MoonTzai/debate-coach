@@ -4,10 +4,6 @@ Debate-Coach — A debate coaching grill skill grounded in the *Debate Universal
 
 ---
 
-> **请注意**：因教材所限，本 skill 目前仅针对华语辩论进行了调试，对英语辩论完全不适配，而且主流英语辩论和华语辩论流行的一般性辩论也大相径庭，相关英语功能仅供娱乐与参考。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精靈Moon"）。
-
-> **Please note**: Due to the nature of its source material, this skill is currently calibrated only for Chinese-language debate. It is wholly unsuited to English-language debate, whose mainstream formats differ fundamentally from the generalist style prevalent in Chinese-language debate. Any English-language functionality is for entertainment and reference only. Free video courses are available on YouTube and Bilibili (search "辩论筑基" or "精靈Moon").
-
 > 本 skill 的审问模式基于 [grill-me](https://github.com/mattpocock/grill-me)（Matt Pocock / Total TypeScript）构建，感谢 Matt Pocock 的开创性工作，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。
 
 > The questioning protocol is built on [grill-me](https://github.com/mattpocock/grill-me) by Matt Pocock (Total TypeScript). Deep gratitude to Matt for his pioneering work, and to 王伯元 for sharing the inspiration to apply grill-me to debate.
@@ -99,9 +95,21 @@ response = openai.ChatCompletion.create(
 
 ## 使用方式 / How to Use
 
-安装后，向 AI 输入辩题和持方。Skill 会先确认你的需求（从零出论 / 攻防准备 / 自由问答），然后逐层引导：
+### 网页版 / Web Version
 
-Once installed, enter a debate topic and your side. The skill will first confirm what you need (case construction / attack-defense prep / Q&A), then guide you layer by layer:
+如果你不想安装任何 AI 客户端，可以直接使用独立网页版（安卓手机用户也可安装网页版封装的 APK，比浏览器打开更为易用）：
+
+If you'd rather not install any AI client, use the standalone web version (Android users can also install the packaged APK, which is more user-friendly than opening in a browser):
+
+用浏览器打开 `debate-coach-web.html`，输入 DeepSeek API Key（从 [platform.deepseek.com](https://platform.deepseek.com) 获取）即可使用。网页版内置完整的《辩论筑基》知识体系，支持导出/导入会话记录、深色/浅色主题切换、移动端适配。
+
+Open `debate-coach-web.html` in your browser, enter a DeepSeek API key (get one at [platform.deepseek.com](https://platform.deepseek.com)), and you're ready to go. The web version has the full DUG knowledge base built in, and supports session export/import, dark/light theme switching, and mobile-friendly layout.
+
+### 全功能完整版 / Full-Featured Complete Version
+
+安装 AI 客户端并安装本 Skill 后，向 AI 输入辩题和持方。Skill 会先确认你的需求（从零出论 / 攻防准备 / 自由问答），然后逐层引导：
+
+Once you've installed an AI client and this Skill, enter a debate topic and your side. The skill will first confirm what you need (case construction / attack-defense prep / Q&A), then guide you layer by layer:
 
 1. **从零出论 / Case Construction**：确认辩题持方 → 选择出论或攻防模式 → 确认赛制（可跳过） → 辩题关键词定义 → 选择切入视角 → 建立标准 → 挖掘价值 → 穷举三类反驳 → 结构性交锋（消化/反转） → 预判主线
 
@@ -123,15 +131,15 @@ Once installed, enter a debate topic and your side. The skill will first confirm
 
 The coach provides directional options with recommendations, guiding you through a collaborative interview. All interactions follow the "term + plain-language dual track" principle — every DUG term is accompanied by a natural-language explanation.
 
-### 网页版 / Web Version
+### 英文版 / English Version
 
-如果你不想安装任何 AI 客户端，可以直接使用独立网页版：
+如需使用英文版，将 `SKILL-EN.md` 安装到对应 AI 客户端即可（安装方式见上方各客户端说明）。英文版覆盖 ~90% 内容，尚在完善中。网页版内置中英文切换，无需额外安装。
 
-If you'd rather not install any AI client, use the standalone web version:
+For the English version, install `SKILL-EN.md` into your AI client (see installation instructions above for each client). The English version covers ~90% of the content and is still being refined. The web version has built-in Chinese/English switching — no extra installation needed.
 
-用浏览器打开 `debate-coach-web.html`，输入 DeepSeek API Key（从 [platform.deepseek.com](https://platform.deepseek.com) 获取）即可使用。网页版内置完整的《辩论筑基》知识体系，支持导出/导入会话记录、深色/浅色主题切换、移动端适配。
-
-Open `debate-coach-web.html` in your browser, enter a DeepSeek API key (get one at [platform.deepseek.com](https://platform.deepseek.com)), and you're ready to go. The web version has the full DUG knowledge base built in, and supports session export/import, dark/light theme switching, and mobile-friendly layout.
+> **请注意**：因教材所限，本 skill 目前仅针对华语辩论进行了调试，对英语辩论完全不适配，而且主流英语辩论和华语辩论流行的一般性辩论也大相径庭，相关英语功能仅供娱乐与参考。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精靈Moon"）。
+>
+> **Please note**: Due to the nature of its source material, this skill is currently calibrated only for Chinese-language debate. It is wholly unsuited to English-language debate, whose mainstream formats differ fundamentally from the generalist style prevalent in Chinese-language debate. Any English-language functionality is for entertainment and reference only. Free video courses are available on YouTube and Bilibili (search "辩论筑基" or "精靈Moon").
 
 ---
 
