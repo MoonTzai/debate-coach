@@ -101,9 +101,9 @@ response = openai.ChatCompletion.create(
 
 If you'd rather not install any AI client, use the standalone web version (Android users can also install the packaged APK, which is more user-friendly than opening in a browser):
 
-用浏览器打开 `debate-coach-web.html`，输入 DeepSeek API Key（从 [platform.deepseek.com](https://platform.deepseek.com) 获取）即可使用。网页版内置完整的《辩论筑基》知识体系，支持导出/导入会话记录、深色/浅色主题切换、移动端适配。
+用浏览器打开 `debate-coach-web.html`，输入 DeepSeek API Key（从 [platform.deepseek.com](https://platform.deepseek.com) 获取）即可使用。也支持自定义填入第三方 API 地址和模型名（如 GLM-5.2、Kimi、Qwen 等），只要兼容 OpenAI `/v1/chat/completions` 格式（Bearer Token + SSE streaming）即可。注意：部分供应商提供多种接口格式，请选择其 OpenAI 兼容地址填入。网页版内置完整的《辩论筑基》知识体系，支持导出/导入会话记录、深色/浅色主题切换、移动端适配。
 
-Open `debate-coach-web.html` in your browser, enter a DeepSeek API key (get one at [platform.deepseek.com](https://platform.deepseek.com)), and you're ready to go. The web version has the full DUG knowledge base built in, and supports session export/import, dark/light theme switching, and mobile-friendly layout.
+Open `debate-coach-web.html` in your browser, enter a DeepSeek API key (get one at [platform.deepseek.com](https://platform.deepseek.com)), and you're ready to go. You can also configure a custom third-party API endpoint and model name (e.g. GLM-5.2, Kimi, Qwen, etc.) — any service compatible with the OpenAI `/v1/chat/completions` format (Bearer Token + SSE streaming) will work. Note: some providers offer multiple API formats — be sure to select their OpenAI-compatible `/v1/chat/completions` endpoint. The web version has the full DUG knowledge base built in, and supports session export/import, dark/light theme switching, and mobile-friendly layout.
 
 ### 全功能完整版 / Full-Featured Complete Version
 
