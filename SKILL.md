@@ -1,7 +1,7 @@
 ---
 name: debate-coach
 description: 《辩论筑基》体系辩论审问——引导出论与攻防处理。基于 grill-me 审问模式，完整内置《辩论筑基》(Debate Universal Grammar) 全套体系。自包含，不需另行学习。
-version: 7.3.0
+version: 7.4.0
 author: 精靈Moon
 license: CC BY-NC-SA 4.0
 based_on: 《辩论筑基》(2020版+2023Pro版) by 精靈Moon
