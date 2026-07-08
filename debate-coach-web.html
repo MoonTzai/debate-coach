@@ -86,6 +86,9 @@ header .status { font-size:12px; color:var(--gray); }
   .fmt-col button { font-size:12px; padding:8px 6px; }
   .btn-row { flex-wrap:wrap; }
 }
+.msg pre.logo { font-family:'Cascadia Code','Fira Code','JetBrains Mono','Consolas','Courier New',monospace; font-size:12px; line-height:1.15; text-align:left; color:var(--gold); margin:0 auto; display:table; white-space:pre; overflow-x:auto; }
+.logo-billing { color:var(--red); }
+.logo-leaf { color:#6ecd71; }
 </style>
 </head>
 <body>
@@ -103,6 +106,25 @@ header .status { font-size:12px; color:var(--gray); }
 </header>
 
 <div id="chat">
+  <div class="msg ai"><pre class="logo">        ▄▄▄▄▄         ▄▄▄▄▄
+       █     █       █     █
+      █       █     █       █
+     █         █▄▄▄█         █
+    █           <span class="logo-leaf">▓▓▓▓</span>          █
+    █            <span class="logo-leaf">▓▓</span>           █
+    █                         █
+    █        ●         ●      █
+    █                         █
+    █                         █
+    █                         █
+    █                         █
+     █                       █
+      █  █▀▀▀█       █▀▀▀█  █
+       ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+
+      辩 论 筑 基 · 精 靈 M O O N
+      D E B A T E - C O A C H
+      <span id="logo-model">deepseek-v4-pro</span> · <span class="logo-billing">API Usage Billing</span></pre></div>
   <div class="msg ai"><b>辩论筑基・Debate-Coach</b><br><br>我是基于 <a href="https://github.com/mattpocock/grill-me" target="_blank">grill-me</a> 审问模式、学习《辩论筑基》（Debate Universal Grammar，精靈Moon著）全套体系内容训练的辩论教练。感谢 grill-me（Matt Pocock）的开创性审问格式，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。<br><br>⚠️ 因教材所限，本 skill 目前仅针对华语辩论进行了调试，对英语辩论完全不适配，而且主流英语辩论和华语辩论流行的一般性辩论也大相径庭，相关英语功能仅供娱乐与参考。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精靈Moon"）。<br><br><span style="color:var(--red);">⚠️ 本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准，本 Skill 会话内容仅供参考！仅供参考！仅供参考！！！</span></div>
   <div class="msg ai"><b>📋 准备辩题</b> — 输入 <b>『辩题和持方』</b>，例：<b>『辩题：在校大学生创业利大于弊，持方：正方』</b><br><b>💬 自由问答</b> — 回复 <b>『答疑』</b><br><b>📊 赛后复盘</b> — 回复 <b>『复盘』</b> <span style="color:var(--gray);font-size:13px;">（仅限 AI 客户端加载 Skill 使用，网页版不支持本地文件分析）</span></div>
 </div>
@@ -1606,6 +1628,7 @@ if (!riskAccepted) {
   riskModal.style.display = 'none';
   apiModal.style.display = 'none';
   updateStatus();
+  updateLogoModel();
 }
 
 
@@ -1855,6 +1878,10 @@ async function newChat() {
   }
   messages = [];
   chat.innerHTML = '';
+  const logoDiv = document.createElement('div');
+  logoDiv.className = 'msg ai';
+  logoDiv.innerHTML = '<pre class="logo">        ▄▄▄▄▄         ▄▄▄▄▄\\n       █     █       █     █\\n      █       █     █       █\\n     █         █▄▄▄█         █\\n    █           <span class=\\"logo-leaf\\">▓▓▓▓</span>          █\\n    █            <span class=\\"logo-leaf\\">▓▓</span>           █\\n    █                         █\\n    █        ●         ●      █\\n    █                         █\\n    █                         █\\n    █                         █\\n    █                         █\\n     █                       █\\n      █  █▀▀▀█       █▀▀▀█  █\\n       ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\\n\\n      辩 论 筑 基 · 精 靈 M O O N\\n      D E B A T E - C O A C H\\n      <span id=\\"logo-model\\">'+(modelName||'deepseek-v4-pro')+'</span> · <span class=\\"logo-billing\\">API Usage Billing</span></pre>';
+  chat.appendChild(logoDiv);
   const msg1 = document.createElement('div');
   msg1.className = 'msg ai';
   msg1.innerHTML = '<b>辩论筑基・Debate-Coach</b><br><br>我是基于 <a href="https://github.com/mattpocock/grill-me" target="_blank">grill-me</a> 审问模式、学习《辩论筑基》（Debate Universal Grammar，精靈Moon著）全套体系内容训练的辩论教练。感谢 grill-me（Matt Pocock）的开创性审问格式，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。<br><br>⚠️ 因教材所限，本 skill 目前仅针对华语辩论进行了调试，对英语辩论完全不适配，而且主流英语辩论和华语辩论流行的一般性辩论也大相径庭，相关英语功能仅供娱乐与参考。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精靈Moon"）。<br><br><span style="color:var(--red);">⚠️ 本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准，本 Skill 会话内容仅供参考！仅供参考！仅供参考！！！</span>';
@@ -1934,6 +1961,7 @@ function saveKey() {
 
   apiModal.style.display = 'none';
   updateStatus();
+  updateLogoModel();
 }
 
 function toggleCustom() {
@@ -1952,6 +1980,11 @@ function updateStatus() {
   const m = modelName || 'deepseek-v4-pro';
   statusEl.textContent = '✓ ' + m + (apiUrl ? '（自定义接口）' : '');
   statusEl.style.color = '#6ecd71';
+}
+
+function updateLogoModel() {
+  const el = document.getElementById('logo-model');
+  if (el) { el.textContent = modelName || 'deepseek-v4-pro'; }
 }
 
 // ===== CHAT =====
