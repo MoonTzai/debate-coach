@@ -32,6 +32,60 @@ An AI debate-coaching skill grounded in the full conceptual framework, knowledge
 
 ---
 
+## 使用方式 / How to Use
+
+### 网页版 / APP 客户端 / Web Version / APK Client
+
+如果你不想安装任何 AI 客户端，可以直接使用独立网页版（安卓手机用户也可安装网页版封装的 APK，比浏览器打开更为易用）：
+
+If you'd rather not install any AI client, use the standalone web version (Android users can also install the packaged APK, which is more user-friendly than opening in a browser):
+
+用浏览器打开 `debate-coach-web.html`，输入 DeepSeek API Key（从 [platform.deepseek.com](https://platform.deepseek.com) 获取）即可使用。也支持自定义填入第三方 API 地址和模型名（如 GLM-5.2、Kimi、Qwen 等），只要兼容 OpenAI `/v1/chat/completions` 格式（Bearer Token + SSE streaming）即可。注意：部分供应商提供多种接口格式，请选择其 OpenAI 兼容地址填入。网页版/APP客户端内置完整的《辩论筑基》知识体系，支持导出/导入会话记录、深色/浅色主题切换、移动端适配。
+
+Open `debate-coach-web.html` in your browser, enter a DeepSeek API key (get one at [platform.deepseek.com](https://platform.deepseek.com)), and you're ready to go. You can also configure a custom third-party API endpoint and model name (e.g. GLM-5.2, Kimi, Qwen, etc.) — any service compatible with the OpenAI `/v1/chat/completions` format (Bearer Token + SSE streaming) will work. Note: some providers offer multiple API formats — be sure to select their OpenAI-compatible `/v1/chat/completions` endpoint. The web version/APK client has the full DUG knowledge base built in, and supports session export/import, dark/light theme switching, and mobile-friendly layout.
+
+### 全功能完整版 / Full-Featured Complete Version
+
+全功能完整版需安装 AI 客户端并载入本 Skill，与网页版/APP客户端共享同一套《辩论筑基》知识体系和教练逻辑。区别在于 Skill 版嵌入 AI 客户端（Claude Code、Cursor 等）内运行，结合客户端 API 能力，可对本地文件（包括但不限于文稿、视频、音频）进行分析使用，也可结合知识库和 AI 按要求生成文件，适合深度备赛、训练、教学场景。
+
+The Full-Featured Complete Version requires an AI client with this Skill installed. It shares the same DUG knowledge base and coaching logic as the web version/APK client. The difference is that the Skill runs inside an AI client (Claude Code, Cursor, etc.) with full access to the client's API capabilities — it can analyze local files (including documents, video, and audio), and can generate files on demand by combining the knowledge base with AI, making it ideal for deep tournament prep, training, and teaching scenarios.
+
+安装 AI 客户端并安装本 Skill 后，向 AI 输入辩题和持方。Skill 会先确认你的需求（从零出论 / 攻防准备 / 自由问答），然后逐层引导：
+
+Once you've installed an AI client and this Skill, enter a debate topic and your side. The skill will first confirm what you need (case construction / attack-defense prep / Q&A), then guide you layer by layer:
+
+1. **从零出论 / Case Construction**：确认辩题持方 → 选择出论或攻防模式 → 确认赛制（可跳过） → 辩题关键词定义 → 选择切入视角 → 建立标准 → 挖掘价值 → 穷举三类反驳 → 结构性交锋（消化/反转） → 预判主线
+
+   Confirm topic & side → choose case construction or attack-defense mode → confirm format (skippable) → define keywords → choose framing angle → establish criteria → uncover values → exhaust three types of rebuttal → structural clash (absorption/reversal) → anticipate main thread.
+
+2. **备赛攻防 / Pre-tournament Attack-Defense Prep**：两路径——架构攻防（防守自检→对手预判→碰撞防守→主动进攻→决胜推演）或单点攻防（自检→三种反驳穷举→逐类反击→单点整合）。支持传辩/奥瑞冈/BP 三种赛制。
+
+   Two paths: structural prep (self-audit → opponent prediction → defensive fortification → proactive offense → decisive scenario planning) or single-point prep (self-audit → exhaust three rebuttal types → counter each → integrate). Supports traditional Chinese debate, Oregon-style policy debate, and British Parliamentary.
+
+3. **赛后复盘 / Post-match Review**：主线类型判断 → 三维模型得失分析 → 内容深度评估
+
+   Identify main-thread type → analyze gains/losses via the three-dimensional judging model → assess content depth.
+
+4. **自由问答 / Q&A**：无需准备辩题，提出任何辩论相关问题——实战困境、技术选择、策略判断、赛制疑问、训练方法等，基于筑基体系全面解答。
+
+   No debate topic needed — ask any debate-related question: tactical dilemmas, technique choices, strategy judgments, format questions, training methods, etc. Answered comprehensively through the DUG framework.
+
+教练会给出方向选项和推荐，以合作式访谈引导你逐步构建架构。所有交互遵循"术语+白话双轨"原则——使用筑基术语时连带自然语言解释。
+
+The coach provides directional options with recommendations, guiding you through a collaborative interview. All interactions follow the "term + plain-language dual track" principle — every DUG term is accompanied by a natural-language explanation.
+
+### 英文版 / English Version
+
+如需使用英文版，将 `SKILL-EN.md` 安装到对应 AI 客户端即可（安装方式见上方各客户端说明）。英文版覆盖 ~90% 内容，尚在完善中。网页版/APP客户端内置中英文切换，无需额外安装。
+
+For the English version, install `SKILL-EN.md` into your AI client (see installation instructions above for each client). The English version covers ~90% of the content and is still being refined. The web version/APK client has built-in Chinese/English switching — no extra installation needed.
+
+> **请注意**：因教材所限，本 skill 目前仅针对华语辩论进行了调试，对英语辩论完全不适配，而且主流英语辩论和华语辩论流行的一般性辩论也大相径庭，相关英语功能仅供娱乐与参考。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精靈Moon"）。
+>
+> **Please note**: Due to the nature of its source material, this skill is currently calibrated only for Chinese-language debate. It is wholly unsuited to English-language debate, whose mainstream formats differ fundamentally from the generalist style prevalent in Chinese-language debate. Any English-language functionality is for entertainment and reference only. Free video courses are available on YouTube and Bilibili (search "辩论筑基" or "精靈Moon").
+
+---
+
 ## 快速安装 / Quick Install
 
 ### Claude Code
@@ -94,60 +148,6 @@ response = openai.ChatCompletion.create(
     ]
 )
 ```
-
----
-
-## 使用方式 / How to Use
-
-### 网页版 / APP 客户端 / Web Version / APK Client
-
-如果你不想安装任何 AI 客户端，可以直接使用独立网页版（安卓手机用户也可安装网页版封装的 APK，比浏览器打开更为易用）：
-
-If you'd rather not install any AI client, use the standalone web version (Android users can also install the packaged APK, which is more user-friendly than opening in a browser):
-
-用浏览器打开 `debate-coach-web.html`，输入 DeepSeek API Key（从 [platform.deepseek.com](https://platform.deepseek.com) 获取）即可使用。也支持自定义填入第三方 API 地址和模型名（如 GLM-5.2、Kimi、Qwen 等），只要兼容 OpenAI `/v1/chat/completions` 格式（Bearer Token + SSE streaming）即可。注意：部分供应商提供多种接口格式，请选择其 OpenAI 兼容地址填入。网页版/APP客户端内置完整的《辩论筑基》知识体系，支持导出/导入会话记录、深色/浅色主题切换、移动端适配。
-
-Open `debate-coach-web.html` in your browser, enter a DeepSeek API key (get one at [platform.deepseek.com](https://platform.deepseek.com)), and you're ready to go. You can also configure a custom third-party API endpoint and model name (e.g. GLM-5.2, Kimi, Qwen, etc.) — any service compatible with the OpenAI `/v1/chat/completions` format (Bearer Token + SSE streaming) will work. Note: some providers offer multiple API formats — be sure to select their OpenAI-compatible `/v1/chat/completions` endpoint. The web version/APK client has the full DUG knowledge base built in, and supports session export/import, dark/light theme switching, and mobile-friendly layout.
-
-### 全功能完整版 / Full-Featured Complete Version
-
-全功能完整版需安装 AI 客户端并载入本 Skill，与网页版/APP客户端共享同一套《辩论筑基》知识体系和教练逻辑。区别在于 Skill 版嵌入 AI 客户端（Claude Code、Cursor 等）内运行，结合客户端 API 能力，可对本地文件（包括但不限于文稿、视频、音频）进行分析使用，也可结合知识库和 AI 按要求生成文件，适合深度备赛、训练、教学场景。
-
-The Full-Featured Complete Version requires an AI client with this Skill installed. It shares the same DUG knowledge base and coaching logic as the web version/APK client. The difference is that the Skill runs inside an AI client (Claude Code, Cursor, etc.) with full access to the client's API capabilities — it can analyze local files (including documents, video, and audio), and can generate files on demand by combining the knowledge base with AI, making it ideal for deep tournament prep, training, and teaching scenarios.
-
-安装 AI 客户端并安装本 Skill 后，向 AI 输入辩题和持方。Skill 会先确认你的需求（从零出论 / 攻防准备 / 自由问答），然后逐层引导：
-
-Once you've installed an AI client and this Skill, enter a debate topic and your side. The skill will first confirm what you need (case construction / attack-defense prep / Q&A), then guide you layer by layer:
-
-1. **从零出论 / Case Construction**：确认辩题持方 → 选择出论或攻防模式 → 确认赛制（可跳过） → 辩题关键词定义 → 选择切入视角 → 建立标准 → 挖掘价值 → 穷举三类反驳 → 结构性交锋（消化/反转） → 预判主线
-
-   Confirm topic & side → choose case construction or attack-defense mode → confirm format (skippable) → define keywords → choose framing angle → establish criteria → uncover values → exhaust three types of rebuttal → structural clash (absorption/reversal) → anticipate main thread.
-
-2. **备赛攻防 / Pre-tournament Attack-Defense Prep**：两路径——架构攻防（防守自检→对手预判→碰撞防守→主动进攻→决胜推演）或单点攻防（自检→三种反驳穷举→逐类反击→单点整合）。支持传辩/奥瑞冈/BP 三种赛制。
-
-   Two paths: structural prep (self-audit → opponent prediction → defensive fortification → proactive offense → decisive scenario planning) or single-point prep (self-audit → exhaust three rebuttal types → counter each → integrate). Supports traditional Chinese debate, Oregon-style policy debate, and British Parliamentary.
-
-3. **赛后复盘 / Post-match Review**：主线类型判断 → 三维模型得失分析 → 内容深度评估
-
-   Identify main-thread type → analyze gains/losses via the three-dimensional judging model → assess content depth.
-
-4. **自由问答 / Q&A**：无需准备辩题，提出任何辩论相关问题——实战困境、技术选择、策略判断、赛制疑问、训练方法等，基于筑基体系全面解答。
-
-   No debate topic needed — ask any debate-related question: tactical dilemmas, technique choices, strategy judgments, format questions, training methods, etc. Answered comprehensively through the DUG framework.
-
-教练会给出方向选项和推荐，以合作式访谈引导你逐步构建架构。所有交互遵循"术语+白话双轨"原则——使用筑基术语时连带自然语言解释。
-
-The coach provides directional options with recommendations, guiding you through a collaborative interview. All interactions follow the "term + plain-language dual track" principle — every DUG term is accompanied by a natural-language explanation.
-
-### 英文版 / English Version
-
-如需使用英文版，将 `SKILL-EN.md` 安装到对应 AI 客户端即可（安装方式见上方各客户端说明）。英文版覆盖 ~90% 内容，尚在完善中。网页版/APP客户端内置中英文切换，无需额外安装。
-
-For the English version, install `SKILL-EN.md` into your AI client (see installation instructions above for each client). The English version covers ~90% of the content and is still being refined. The web version/APK client has built-in Chinese/English switching — no extra installation needed.
-
-> **请注意**：因教材所限，本 skill 目前仅针对华语辩论进行了调试，对英语辩论完全不适配，而且主流英语辩论和华语辩论流行的一般性辩论也大相径庭，相关英语功能仅供娱乐与参考。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精靈Moon"）。
->
-> **Please note**: Due to the nature of its source material, this skill is currently calibrated only for Chinese-language debate. It is wholly unsuited to English-language debate, whose mainstream formats differ fundamentally from the generalist style prevalent in Chinese-language debate. Any English-language functionality is for entertainment and reference only. Free video courses are available on YouTube and Bilibili (search "辩论筑基" or "精靈Moon").
 
 ---
 
