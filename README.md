@@ -2,6 +2,10 @@
 
 Debate-Coach — A debate coaching grill skill grounded in the *Debate Universal Grammar (辩论筑基)* system.
 
+> **声明**：本工具仅供技术学习使用。用户须自行承担使用 API 产生的全部法律及费用风险。
+>
+> **Disclaimer**: This tool is provided for technical learning purposes only. Users are solely responsible for all legal and cost risks arising from API usage.
+
 ---
 
 > 本 skill 的审问模式基于 [grill-me](https://github.com/mattpocock/grill-me)（Matt Pocock / Total TypeScript）构建，感谢 Matt Pocock 的开创性工作，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。
