@@ -1,0 +1,317 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000012026070900000001 /* DebateCoachApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000112026070900000001 /* DebateCoachApp.swift */; };
+		A10000022026070900000001 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000122026070900000001 /* Models.swift */; };
+		A10000032026070900000001 /* AppSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000132026070900000001 /* AppSettingsStore.swift */; };
+		A10000042026070900000001 /* PromptLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000142026070900000001 /* PromptLoader.swift */; };
+		A10000052026070900000001 /* ChatAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000152026070900000001 /* ChatAPIClient.swift */; };
+		A10000062026070900000001 /* SessionTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000162026070900000001 /* SessionTransfer.swift */; };
+		A10000072026070900000001 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000172026070900000001 /* RootView.swift */; };
+		A10000082026070900000001 /* DebateCoachIOS/Documents/PrivacyPolicy.md in Resources */ = {isa = PBXBuildFile; fileRef = A10000182026070900000001 /* DebateCoachIOS/Documents/PrivacyPolicy.md */; };
+		A10000092026070900000001 /* SKILL.md in Resources */ = {isa = PBXBuildFile; fileRef = A10000192026070900000001 /* SKILL.md */; };
+		A10000102026070900000001 /* SKILL-EN.md in Resources */ = {isa = PBXBuildFile; fileRef = A10000202026070900000001 /* SKILL-EN.md */; };
+		A10000112026070900000002 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000122026070900000002 /* DesignSystem.swift */; };
+		A10000132026071000000002 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000142026071000000002 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A10000112026070900000001 /* DebateCoachApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebateCoachApp.swift; sourceTree = "<group>"; };
+		A10000122026070900000001 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		A10000122026070900000002 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+		A10000132026070900000001 /* AppSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStore.swift; sourceTree = "<group>"; };
+		A10000142026070900000001 /* PromptLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptLoader.swift; sourceTree = "<group>"; };
+		A10000142026071000000002 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A10000152026070900000001 /* ChatAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatAPIClient.swift; sourceTree = "<group>"; };
+		A10000162026070900000001 /* SessionTransfer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionTransfer.swift; sourceTree = "<group>"; };
+		A10000172026070900000001 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		A10000182026070900000001 /* DebateCoachIOS/Documents/PrivacyPolicy.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DebateCoachIOS/Documents/PrivacyPolicy.md; sourceTree = SOURCE_ROOT; };
+		A10000192026070900000001 /* SKILL.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = SKILL.md; path = ../SKILL.md; sourceTree = "<group>"; };
+		A10000202026070900000001 /* SKILL-EN.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = "SKILL-EN.md"; path = "../SKILL-EN.md"; sourceTree = "<group>"; };
+		A10000212026070900000001 /* DebateCoachIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = DebateCoachIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A10000312026070900000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A10000412026070900000001 = {
+			isa = PBXGroup;
+			children = (
+				A10000422026070900000001 /* DebateCoachIOS */,
+				A10000452026070900000001 /* Documents */,
+				A10000432026070900000001 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A10000422026070900000001 /* DebateCoachIOS */ = {
+			isa = PBXGroup;
+			children = (
+				A10000112026070900000001 /* DebateCoachApp.swift */,
+				A10000122026070900000001 /* Models.swift */,
+				A10000132026070900000001 /* AppSettingsStore.swift */,
+				A10000142026070900000001 /* PromptLoader.swift */,
+				A10000152026070900000001 /* ChatAPIClient.swift */,
+				A10000162026070900000001 /* SessionTransfer.swift */,
+				A10000172026070900000001 /* RootView.swift */,
+				A10000122026070900000002 /* DesignSystem.swift */,
+				A10000142026071000000002 /* Assets.xcassets */,
+			);
+			path = DebateCoachIOS;
+			sourceTree = "<group>";
+		};
+		A10000432026070900000001 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A10000212026070900000001 /* DebateCoachIOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A10000452026070900000001 /* Documents */ = {
+			isa = PBXGroup;
+			children = (
+				A10000182026070900000001 /* DebateCoachIOS/Documents/PrivacyPolicy.md */,
+				A10000192026070900000001 /* SKILL.md */,
+				A10000202026070900000001 /* SKILL-EN.md */,
+			);
+			path = Documents;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A10000512026070900000001 /* DebateCoachIOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A10000612026070900000001 /* Build configuration list for PBXNativeTarget "DebateCoachIOS" */;
+			buildPhases = (
+				A10000712026070900000001 /* Sources */,
+				A10000312026070900000001 /* Frameworks */,
+				A10000812026070900000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DebateCoachIOS;
+			productName = DebateCoachIOS;
+			productReference = A10000212026070900000001 /* DebateCoachIOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A10000912026070900000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2606;
+				LastUpgradeCheck = 2606;
+				TargetAttributes = {
+					A10000512026070900000001 = {
+						CreatedOnToolsVersion = 26.6;
+					};
+				};
+			};
+			buildConfigurationList = A10001012026070900000001 /* Build configuration list for PBXProject "DebateCoachIOS" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A10000412026070900000001;
+			productRefGroup = A10000432026070900000001 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A10000512026070900000001 /* DebateCoachIOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A10000812026070900000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000082026070900000001 /* DebateCoachIOS/Documents/PrivacyPolicy.md in Resources */,
+				A10000092026070900000001 /* SKILL.md in Resources */,
+				A10000102026070900000001 /* SKILL-EN.md in Resources */,
+				A10000132026071000000002 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A10000712026070900000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000012026070900000001 /* DebateCoachApp.swift in Sources */,
+				A10000022026070900000001 /* Models.swift in Sources */,
+				A10000032026070900000001 /* AppSettingsStore.swift in Sources */,
+				A10000042026070900000001 /* PromptLoader.swift in Sources */,
+				A10000052026070900000001 /* ChatAPIClient.swift in Sources */,
+				A10000062026070900000001 /* SessionTransfer.swift in Sources */,
+				A10000072026070900000001 /* RootView.swift in Sources */,
+				A10000112026070900000002 /* DesignSystem.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A10001112026070900000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+			};
+			name = Debug;
+		};
+		A10001212026070900000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A10001312026070900000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V6K4KZ264R;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Debate Coach";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Debate Coach may connect to a model service on your local network when you configure a local API endpoint.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Exported session files can be saved to your photo library when you share them.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIFileSharingEnabled = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jinglingmoon.DebateCoachIOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A10001412026070900000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V6K4KZ264R;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Debate Coach";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Debate Coach may connect to a model service on your local network when you configure a local API endpoint.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Exported session files can be saved to your photo library when you share them.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIFileSharingEnabled = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jinglingmoon.DebateCoachIOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A10000612026070900000001 /* Build configuration list for PBXNativeTarget "DebateCoachIOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10001312026070900000001 /* Debug */,
+				A10001412026070900000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A10001012026070900000001 /* Build configuration list for PBXProject "DebateCoachIOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10001112026070900000001 /* Debug */,
+				A10001212026070900000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A10000912026070900000001 /* Project object */;
+}

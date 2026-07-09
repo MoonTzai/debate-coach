@@ -20,3 +20,6 @@ CLAUDE.md
 Thumbs.db
 *.log
 node_modules/
+.deriveddata/
+*.xcresult
+xcuserdata/
