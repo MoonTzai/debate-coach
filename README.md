@@ -86,7 +86,7 @@ response = openai.ChatCompletion.create(
     model="gpt-4",
     messages=[
         {"role": "system", "content": open("SKILL.md").read()},
-        {"role": "user", "content": "辩题：在校大学生创业利大于弊，持方：正方"}
+        {"role": "user", "content": "辩题：在校大学生创业利大于弊还是弊大于利，持方：正方"}
     ]
 )
 ```
