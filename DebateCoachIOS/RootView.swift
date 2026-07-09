@@ -263,6 +263,10 @@ private struct ChatWorkspaceView: View {
                                 export(session: session, kind: .markdown)
                             }
 
+                            Button(systemLocalizedText(zh: "导出 JPG", en: "Export JPG"), systemImage: "photo") {
+                                export(session: session, kind: .jpg)
+                            }
+
                             Button(systemLocalizedText(zh: "清空当前会话", en: "Clear Current Session"), systemImage: "trash", role: .destructive) {
                                 showClearAlert = true
                             }
@@ -493,6 +497,16 @@ private struct ChatWorkspaceView: View {
             case .markdown:
                 data = SessionTransfer.exportMarkdown(from: session)
                 fileExtension = "md"
+            case .jpg:
+                guard let imageData = exportConversationImage(session: session) else {
+                    errorMessage = systemLocalizedText(
+                        zh: "JPG 导出失败。当前设备或系统版本可能不支持图片渲染。",
+                        en: "JPG export failed. This device or OS version may not support image rendering."
+                    )
+                    return
+                }
+                data = imageData
+                fileExtension = "jpg"
             }
 
             let url = FileManager.default.temporaryDirectory.appendingPathComponent(
@@ -503,6 +517,53 @@ private struct ChatWorkspaceView: View {
         } catch {
             errorMessage = error.localizedDescription
         }
+    }
+
+    @MainActor
+    private func exportConversationImage(session: ChatSession) -> Data? {
+        #if os(iOS)
+        let snapshot = ChatExportSnapshotView(session: session)
+        let hostingController = UIHostingController(rootView: snapshot)
+        let targetWidth: CGFloat = 900
+        let targetSize = hostingController.sizeThatFits(in: CGSize(width: targetWidth, height: .greatestFiniteMagnitude))
+
+        guard targetSize.width > 0, targetSize.height > 0 else { return nil }
+
+        let maxExportScale: CGFloat = 2
+        let maxPixelWidth: CGFloat = 1800
+        let maxPixelHeight: CGFloat = 12000
+        let maxPixelArea: CGFloat = 28_000_000
+        let areaLimitedScale = sqrt(maxPixelArea / (targetSize.width * targetSize.height))
+        let renderScale = min(
+            maxExportScale,
+            maxPixelWidth / targetSize.width,
+            maxPixelHeight / targetSize.height,
+            areaLimitedScale
+        )
+
+        guard renderScale.isFinite, renderScale > 0 else { return nil }
+        let imageRenderer = ImageRenderer(content: snapshot)
+        imageRenderer.proposedSize = ProposedViewSize(width: targetWidth, height: targetSize.height)
+        imageRenderer.scale = renderScale
+
+        guard let renderedImage = imageRenderer.uiImage else { return nil }
+
+        let format = UIGraphicsImageRendererFormat.default()
+        format.scale = renderedImage.scale
+        format.opaque = true
+
+        let flattenedRenderer = UIGraphicsImageRenderer(size: renderedImage.size, format: format)
+        let flattenedImage = flattenedRenderer.image { context in
+            let bounds = CGRect(origin: .zero, size: renderedImage.size)
+            UIColor(red: 243 / 255, green: 241 / 255, blue: 236 / 255, alpha: 1).setFill()
+            context.fill(bounds)
+            renderedImage.draw(in: bounds)
+        }
+
+        return flattenedImage.jpegData(compressionQuality: 0.88)
+        #else
+        return nil
+        #endif
     }
 
     private func handleImport(_ result: Result<[URL], Error>) {
@@ -554,12 +615,19 @@ private struct ChatWorkspaceView: View {
     private func shouldShowSkipFormatAction(for message: ChatMessage) -> Bool {
         guard message.role == .assistant, message.id == lastAssistantMessageID else { return false }
         let content = message.content
-        return content.contains("赛制")
-            || content.localizedCaseInsensitiveContains("BP")
-            || content.localizedCaseInsensitiveContains("奥瑞冈")
-            || content.localizedCaseInsensitiveContains("传辩")
-            || content.contains("先跳过")
-            || content.contains("几个环节")
+        let normalized = content.replacingOccurrences(of: " ", with: "")
+
+        let isChineseFormatPrompt =
+            normalized.contains("你们这次比赛的赛制是什么")
+            && normalized.contains("几个环节")
+            && normalized.contains("先跳过")
+
+        let isEnglishFormatPrompt =
+            content.localizedCaseInsensitiveContains("what is the format of your competition")
+            && content.localizedCaseInsensitiveContains("how many segments")
+            && content.localizedCaseInsensitiveContains("skip for now")
+
+        return isChineseFormatPrompt || isEnglishFormatPrompt
     }
 }
 
@@ -615,6 +683,21 @@ private struct HistoryView: View {
     var body: some View {
         NavigationStack {
             List {
+                Section {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(systemLocalizedText(zh: "历史记录", en: "History"))
+                            .font(.system(size: 28, weight: .semibold))
+                            .foregroundStyle(DebateTheme.ink)
+                        Text(systemLocalizedText(zh: "查看并恢复之前的练习会话。", en: "Review and reopen previous practice sessions."))
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundStyle(DebateTheme.inkSoft)
+                    }
+                    .padding(.top, 10)
+                    .listRowInsets(EdgeInsets(top: 0, leading: 20, bottom: 4, trailing: 20))
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
+                }
+
                 Section {
                     if archivedSessions.isEmpty {
                         Text(systemLocalizedText(zh: "还没有历史记录", en: "No saved history yet"))
@@ -677,13 +760,6 @@ private struct HistoryView: View {
             .background(DebateTheme.pageGradient.ignoresSafeArea())
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.hidden, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text(systemLocalizedText(zh: "历史记录", en: "History"))
-                        .font(.system(size: 22, weight: .semibold))
-                        .foregroundStyle(DebateTheme.ink)
-                }
-            }
         }
     }
 
@@ -708,6 +784,22 @@ private struct SettingsView: View {
 
     private var trashedSessions: [ChatSession] {
         sessions.filter(\.isDeleted)
+    }
+
+    private var appVersionText: String {
+        let shortVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+        let buildVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String
+
+        switch (shortVersion, buildVersion) {
+        case let (short?, build?) where !short.isEmpty && !build.isEmpty:
+            return "\(short) (\(build))"
+        case let (short?, _) where !short.isEmpty:
+            return short
+        case let (_, build?) where !build.isEmpty:
+            return build
+        default:
+            return systemLocalizedText(zh: "未知版本", en: "Unknown Version")
+        }
     }
 
     var body: some View {
@@ -770,9 +862,13 @@ private struct SettingsView: View {
 
                     SettingsCard(title: systemLocalizedText(zh: "关于", en: "Credits")) {
                         VStack(alignment: .leading, spacing: 10) {
-                            Text("出品：精靈Moon")
-                            Text("开发：精靈Moon, Boyuan Wang")
-                            Text("内容体系基于《辩论筑基》")
+                            Text(systemLocalizedText(zh: "版本：\(appVersionText)", en: "Version: \(appVersionText)"))
+                            Text(systemLocalizedText(zh: "出品：精靈Moon", en: "Produced by: Jingling Moon"))
+                            Text(systemLocalizedText(zh: "开发：精靈Moon, Boyuan Wang", en: "Developed by: Jingling Moon, Boyuan Wang"))
+                            Text(systemLocalizedText(zh: "内容基于《辩论筑基》。", en: "Content is based on Debate Foundations."))
+                            Text(systemLocalizedText(zh: "Bilibili 和 YouTube 提供完整免费教学视频。", en: "Complete free teaching videos are available on Bilibili and YouTube."))
+                            Text(systemLocalizedText(zh: "本 Debate-Coach 项目已在 GitHub 开源。", en: "The Debate-Coach project is open sourced on GitHub."))
+                            Text(systemLocalizedText(zh: "核心文件遵循 CC BY-NC-SA 4.0 协议，请勿非法或违规使用。", en: "Core files follow the CC BY-NC-SA 4.0 license. Do not use them illegally or in violation of regulations."))
                         }
                         .font(.system(size: 16, weight: .medium))
                         .foregroundStyle(DebateTheme.ink)
@@ -1013,6 +1109,7 @@ private struct WelcomeCard: View {
                     .multilineTextAlignment(.leading)
             }
             .padding(20)
+            .padding(.top, 14)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(DebateTheme.accent, in: RoundedRectangle(cornerRadius: DebateRadius.xl, style: .continuous))
         }
@@ -1235,6 +1332,68 @@ private struct ShareSheet: UIViewControllerRepresentable {
 private enum ExportKind {
     case json
     case markdown
+    case jpg
+}
+
+private struct ChatExportSnapshotView: View {
+    let session: ChatSession
+
+    private let exportCanvasWidth: CGFloat = 900
+    private let exportContentWidth: CGFloat = 852
+
+    private var exportFooterImage: UIImage? {
+        guard let url = Bundle.main.url(forResource: "last", withExtension: "png") else {
+            return nil
+        }
+        return UIImage(contentsOfFile: url.path)
+    }
+
+    private var exportFooterHeight: CGFloat? {
+        guard let footerImage = exportFooterImage, footerImage.size.width > 0 else {
+            return nil
+        }
+        return exportContentWidth * (footerImage.size.height / footerImage.size.width)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(session.title)
+                    .font(.system(size: 28, weight: .semibold))
+                    .foregroundStyle(DebateTheme.ink)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                Text(systemLocalizedText(zh: "辩论教练会话导出", en: "Debate Coach Conversation Export"))
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(DebateTheme.inkSoft)
+            }
+            .padding(.bottom, 8)
+
+            ForEach(session.sortedMessages) { message in
+                MessageBubble(
+                    message: message,
+                    showsRegenerateAction: false,
+                    showsSkipAction: false,
+                    regenerateTitle: "",
+                    skipTitle: "",
+                    onRegenerate: {},
+                    onSkip: {}
+                )
+            }
+
+            if let footerImage = exportFooterImage,
+               let footerHeight = exportFooterHeight {
+                Image(uiImage: footerImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: exportContentWidth, height: footerHeight)
+                    .padding(.top, 10)
+            }
+        }
+        .padding(24)
+        .frame(width: exportCanvasWidth, alignment: .leading)
+        .background(DebateTheme.pageGradient)
+    }
 }
 
 private func systemLocalizedText(zh: String, en: String) -> String {

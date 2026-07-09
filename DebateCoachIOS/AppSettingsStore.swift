@@ -24,7 +24,7 @@ final class AppSettingsStore: ObservableObject {
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         self.baseURL = defaults.string(forKey: DefaultsKey.baseURL) ?? "https://api.deepseek.com/v1/chat/completions"
-        self.model = defaults.string(forKey: DefaultsKey.model) ?? "deepseek-chat"
+        self.model = defaults.string(forKey: DefaultsKey.model) ?? "deepseek-v4-pro"
         self.language = AppLanguage(rawValue: defaults.string(forKey: DefaultsKey.language) ?? "") ?? .zh
         self.riskAccepted = defaults.bool(forKey: DefaultsKey.riskAccepted)
         self.currentSessionID = defaults.string(forKey: DefaultsKey.currentSessionID) ?? ""

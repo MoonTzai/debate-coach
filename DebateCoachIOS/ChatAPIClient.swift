@@ -13,7 +13,7 @@ enum LLMRequestBuilder {
         model: String
     ) throws -> Data {
         let request = ChatCompletionRequest(
-            model: model.isEmpty ? "deepseek-chat" : model,
+            model: model.isEmpty ? "deepseek-v4-pro" : model,
             messages: [LLMChatMessage(role: "system", content: prompt)] + conversation,
             temperature: 0.7,
             maxTokens: 4096,
