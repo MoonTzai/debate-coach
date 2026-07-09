@@ -1,6 +1,6 @@
-# Debate-Coach · 《辩论筑基》体系 · 辩论教练式 · Grill Skill
+# Debate-Coach · 《辩论筑基》 · 辩论教练 · AI Grill Skill
 
-Debate-Coach — A debate coaching grill skill grounded in the *Debate Universal Grammar (辩论筑基)* system.
+Debate-Coach — An AI debate coaching grill skill grounded in the *Debate Universal Grammar (辩论筑基)* system.
 
 > **声明**：本工具仅供技术学习使用。用户须自行承担使用 API 产生的全部法律及费用风险。
 >
@@ -99,21 +99,21 @@ response = openai.ChatCompletion.create(
 
 ## 使用方式 / How to Use
 
-### 网页版 / Web Version
+### 网页版 / APP 客户端 / Web Version / APK Client
 
 如果你不想安装任何 AI 客户端，可以直接使用独立网页版（安卓手机用户也可安装网页版封装的 APK，比浏览器打开更为易用）：
 
 If you'd rather not install any AI client, use the standalone web version (Android users can also install the packaged APK, which is more user-friendly than opening in a browser):
 
-用浏览器打开 `debate-coach-web.html`，输入 DeepSeek API Key（从 [platform.deepseek.com](https://platform.deepseek.com) 获取）即可使用。也支持自定义填入第三方 API 地址和模型名（如 GLM-5.2、Kimi、Qwen 等），只要兼容 OpenAI `/v1/chat/completions` 格式（Bearer Token + SSE streaming）即可。注意：部分供应商提供多种接口格式，请选择其 OpenAI 兼容地址填入。网页版内置完整的《辩论筑基》知识体系，支持导出/导入会话记录、深色/浅色主题切换、移动端适配。
+用浏览器打开 `debate-coach-web.html`，输入 DeepSeek API Key（从 [platform.deepseek.com](https://platform.deepseek.com) 获取）即可使用。也支持自定义填入第三方 API 地址和模型名（如 GLM-5.2、Kimi、Qwen 等），只要兼容 OpenAI `/v1/chat/completions` 格式（Bearer Token + SSE streaming）即可。注意：部分供应商提供多种接口格式，请选择其 OpenAI 兼容地址填入。网页版/APP客户端内置完整的《辩论筑基》知识体系，支持导出/导入会话记录、深色/浅色主题切换、移动端适配。
 
-Open `debate-coach-web.html` in your browser, enter a DeepSeek API key (get one at [platform.deepseek.com](https://platform.deepseek.com)), and you're ready to go. You can also configure a custom third-party API endpoint and model name (e.g. GLM-5.2, Kimi, Qwen, etc.) — any service compatible with the OpenAI `/v1/chat/completions` format (Bearer Token + SSE streaming) will work. Note: some providers offer multiple API formats — be sure to select their OpenAI-compatible `/v1/chat/completions` endpoint. The web version has the full DUG knowledge base built in, and supports session export/import, dark/light theme switching, and mobile-friendly layout.
+Open `debate-coach-web.html` in your browser, enter a DeepSeek API key (get one at [platform.deepseek.com](https://platform.deepseek.com)), and you're ready to go. You can also configure a custom third-party API endpoint and model name (e.g. GLM-5.2, Kimi, Qwen, etc.) — any service compatible with the OpenAI `/v1/chat/completions` format (Bearer Token + SSE streaming) will work. Note: some providers offer multiple API formats — be sure to select their OpenAI-compatible `/v1/chat/completions` endpoint. The web version/APK client has the full DUG knowledge base built in, and supports session export/import, dark/light theme switching, and mobile-friendly layout.
 
 ### 全功能完整版 / Full-Featured Complete Version
 
-全功能完整版需安装 AI 客户端并载入本 Skill，与网页版共享同一套《辩论筑基》知识体系和教练逻辑。区别在于 Skill 版嵌入 AI 客户端（Claude Code、Cursor 等）内运行，结合客户端 API 能力，可对本地文件（包括但不限于文稿、视频、音频）进行分析使用，也可结合知识库和 AI 按要求生成文件，适合深度备赛、训练、教学场景。
+全功能完整版需安装 AI 客户端并载入本 Skill，与网页版/APP客户端共享同一套《辩论筑基》知识体系和教练逻辑。区别在于 Skill 版嵌入 AI 客户端（Claude Code、Cursor 等）内运行，结合客户端 API 能力，可对本地文件（包括但不限于文稿、视频、音频）进行分析使用，也可结合知识库和 AI 按要求生成文件，适合深度备赛、训练、教学场景。
 
-The Full-Featured Complete Version requires an AI client with this Skill installed. It shares the same DUG knowledge base and coaching logic as the web version. The difference is that the Skill runs inside an AI client (Claude Code, Cursor, etc.) with full access to the client's API capabilities — it can analyze local files (including documents, video, and audio), and can generate files on demand by combining the knowledge base with AI, making it ideal for deep tournament prep, training, and teaching scenarios.
+The Full-Featured Complete Version requires an AI client with this Skill installed. It shares the same DUG knowledge base and coaching logic as the web version/APK client. The difference is that the Skill runs inside an AI client (Claude Code, Cursor, etc.) with full access to the client's API capabilities — it can analyze local files (including documents, video, and audio), and can generate files on demand by combining the knowledge base with AI, making it ideal for deep tournament prep, training, and teaching scenarios.
 
 安装 AI 客户端并安装本 Skill 后，向 AI 输入辩题和持方。Skill 会先确认你的需求（从零出论 / 攻防准备 / 自由问答），然后逐层引导：
 
@@ -141,9 +141,9 @@ The coach provides directional options with recommendations, guiding you through
 
 ### 英文版 / English Version
 
-如需使用英文版，将 `SKILL-EN.md` 安装到对应 AI 客户端即可（安装方式见上方各客户端说明）。英文版覆盖 ~90% 内容，尚在完善中。网页版内置中英文切换，无需额外安装。
+如需使用英文版，将 `SKILL-EN.md` 安装到对应 AI 客户端即可（安装方式见上方各客户端说明）。英文版覆盖 ~90% 内容，尚在完善中。网页版/APP客户端内置中英文切换，无需额外安装。
 
-For the English version, install `SKILL-EN.md` into your AI client (see installation instructions above for each client). The English version covers ~90% of the content and is still being refined. The web version has built-in Chinese/English switching — no extra installation needed.
+For the English version, install `SKILL-EN.md` into your AI client (see installation instructions above for each client). The English version covers ~90% of the content and is still being refined. The web version/APK client has built-in Chinese/English switching — no extra installation needed.
 
 > **请注意**：因教材所限，本 skill 目前仅针对华语辩论进行了调试，对英语辩论完全不适配，而且主流英语辩论和华语辩论流行的一般性辩论也大相径庭，相关英语功能仅供娱乐与参考。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精靈Moon"）。
 >
