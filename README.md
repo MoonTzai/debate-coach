@@ -8,9 +8,9 @@ Debate-Coach — An AI debate coaching grill skill grounded in the *Debate Unive
 
 ---
 
-> 本 skill 的审问模式基于 [grill-me](https://github.com/mattpocock/grill-me)（Matt Pocock / Total TypeScript）构建，感谢 Matt Pocock 的开创性工作，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用。
+> 本 skill 的审问模式基于 [grill-me](https://github.com/mattpocock/grill-me)（Matt Pocock / Total TypeScript）构建，感谢 Matt Pocock 的开创性工作，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用、并主力完成iOS端APP的开发工作。
 
-> The questioning protocol is built on [grill-me](https://github.com/mattpocock/grill-me) by Matt Pocock (Total TypeScript). Deep gratitude to Matt for his pioneering work, and to 王伯元 for sharing the inspiration to apply grill-me to debate.
+> The questioning protocol is built on [grill-me](https://github.com/mattpocock/grill-me) by Matt Pocock (Total TypeScript). Deep gratitude to Matt for his pioneering work, and to 王伯元 for sharing the inspiration to apply grill-me to debate and for leading the iOS app development.
 
 ---
 
