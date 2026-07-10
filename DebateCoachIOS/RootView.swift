@@ -96,6 +96,7 @@ private struct MainTabView: View {
                 }
         }
         .tint(DebateTheme.accent)
+        .toolbar(.visible, for: .tabBar)
         .toolbarBackground(.visible, for: .tabBar)
         .toolbarBackground(.ultraThinMaterial, for: .tabBar)
     }
@@ -108,9 +109,13 @@ private struct ChatWorkspaceView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \ChatSession.updatedAt, order: .reverse) private var sessions: [ChatSession]
 
+    @StateObject private var keyboard = KeyboardObserver()
     @State private var draftText = ""
-    @State private var streamingText = ""
-    @State private var isSending = false
+    @State private var streamingTexts: [UUID: String] = [:]
+    @State private var sendingSessionIDs: Set<UUID> = []
+    @State private var autoScrollSessionIDs: Set<UUID> = []
+    @State private var pendingScrollWorkItem: DispatchWorkItem?
+    @State private var failedUserMessageIDsBySession: [UUID: UUID] = [:]
     @State private var errorMessage: String?
     @State private var showImporter = false
     @State private var shareURL: URL?
@@ -128,6 +133,21 @@ private struct ChatWorkspaceView: View {
         return activeSessions.first
     }
 
+    private var currentStreamingText: String {
+        guard let sessionID = currentSession?.id else { return "" }
+        return streamingTexts[sessionID] ?? ""
+    }
+
+    private var currentSessionIsSending: Bool {
+        guard let sessionID = currentSession?.id else { return false }
+        return sendingSessionIDs.contains(sessionID)
+    }
+
+    private var currentSessionAutoScrollEnabled: Bool {
+        guard let sessionID = currentSession?.id else { return false }
+        return autoScrollSessionIDs.contains(sessionID)
+    }
+
     var body: some View {
         NavigationStack {
             Group {
@@ -135,14 +155,14 @@ private struct ChatWorkspaceView: View {
                     ScrollViewReader { proxy in
                         ScrollView {
                             LazyVStack(alignment: .leading, spacing: 14) {
-                                if session.sortedMessages.isEmpty && streamingText.isEmpty {
+                                if session.sortedMessages.isEmpty && currentStreamingText.isEmpty {
                                     WelcomeCard(language: settings.language)
                                 }
 
                                 ForEach(session.sortedMessages) { message in
                                     MessageBubble(
                                         message: message,
-                                        showsRegenerateAction: message.id == lastAssistantMessageID,
+                                        showsRegenerateAction: shouldShowRegenerateAction(for: message),
                                         showsSkipAction: shouldShowSkipFormatAction(for: message),
                                         regenerateTitle: systemLocalizedText(zh: "重新生成", en: "Regenerate"),
                                         skipTitle: systemLocalizedText(zh: "先跳过", en: "Skip for now"),
@@ -160,8 +180,9 @@ private struct ChatWorkspaceView: View {
                                     .id(message.id)
                                 }
 
-                                if isSending {
-                                    StreamingBubble(text: streamingText)
+                                if currentSessionIsSending {
+                                    StreamingBubble(text: currentStreamingText)
+                                        .padding(.bottom, 14)
                                         .id("streaming")
                                 }
                             }
@@ -174,26 +195,30 @@ private struct ChatWorkspaceView: View {
                         .onTapGesture {
                             isComposerFocused = false
                         }
+                        .simultaneousGesture(
+                            DragGesture(minimumDistance: 8).onChanged { _ in
+                                guard currentSessionIsSending, let sessionID = currentSession?.id else { return }
+                                autoScrollSessionIDs.remove(sessionID)
+                            }
+                        )
                         .onChange(of: session.sortedMessages.count) { _, _ in
+                            guard currentSessionAutoScrollEnabled || !currentSessionIsSending else { return }
                             scrollToBottom(proxy: proxy)
                         }
-                        .onChange(of: streamingText) { _, _ in
-                            scrollToBottom(proxy: proxy)
+                        .onChange(of: currentStreamingText) { _, _ in
+                            guard currentSessionAutoScrollEnabled else { return }
+                            scheduleScrollToBottom(proxy: proxy)
                         }
                         .onChange(of: isComposerFocused) { _, focused in
                             if focused {
+                                enableAutoScrollForCurrentSession()
                                 scrollToBottom(proxy: proxy)
-
-                                Task { @MainActor in
-                                    try? await Task.sleep(for: .milliseconds(120))
-                                    scrollToBottom(proxy: proxy)
-                                }
-
-                                Task { @MainActor in
-                                    try? await Task.sleep(for: .milliseconds(260))
-                                    scrollToBottom(proxy: proxy)
-                                }
                             }
+                        }
+                        .onChange(of: keyboard.isVisible) { _, visible in
+                            guard visible else { return }
+                            enableAutoScrollForCurrentSession()
+                            scrollToBottom(proxy: proxy)
                         }
                     }
                 } else {
@@ -221,7 +246,7 @@ private struct ChatWorkspaceView: View {
                 ChatHeaderBackdrop()
                     .allowsHitTesting(false)
             }
-            .toolbar(isComposerFocused ? .hidden : .visible, for: .tabBar)
+            .toolbar(keyboard.isVisible ? .hidden : .visible, for: .tabBar)
             .toolbarBackground(.hidden, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -237,15 +262,10 @@ private struct ChatWorkspaceView: View {
                 }
 
                 ToolbarItem(placement: .principal) {
-                    VStack(spacing: 2) {
-                        Text(currentSession?.title ?? "Debate-Coach")
-                            .font(.system(size: 22, weight: .semibold))
-                            .foregroundStyle(DebateTheme.ink)
-                            .lineLimit(1)
-                        Text(systemLocalizedText(zh: "辩论教练", en: "Debate Coach"))
-                            .font(.system(size: 12, weight: .medium))
-                            .foregroundStyle(DebateTheme.inkSoft)
-                    }
+                    Text(currentSession?.title ?? "Debate-Coach")
+                        .font(.system(size: 22, weight: .semibold))
+                        .foregroundStyle(DebateTheme.ink)
+                        .lineLimit(1)
                 }
 
                 ToolbarItem(placement: .topBarTrailing) {
@@ -327,7 +347,7 @@ private struct ChatWorkspaceView: View {
                     .lineLimit(1 ... 5)
                     .textFieldStyle(.plain)
                     .foregroundStyle(DebateTheme.ink)
-                    .disabled(isSending)
+                    .disabled(currentSessionIsSending)
                     .focused($isComposerFocused)
 
                     Button {
@@ -339,7 +359,7 @@ private struct ChatWorkspaceView: View {
                             Circle()
                                 .fill(sendButtonEnabled ? DebateTheme.accent : DebateTheme.inkMuted.opacity(0.24))
 
-                            if isSending {
+                            if currentSessionIsSending {
                                 ProgressView()
                                     .tint(.white)
                             } else {
@@ -359,7 +379,7 @@ private struct ChatWorkspaceView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 18)
-        .padding(.top, 8)
+        .padding(.top, 18)
         .padding(.bottom, 8)
         .background(
             ZStack {
@@ -386,6 +406,7 @@ private struct ChatWorkspaceView: View {
             errorMessage = systemLocalizedText(zh: "请先在设置中填写 API Key。", en: "Please enter your API Key in Settings first.")
             return
         }
+        guard sendingSessionIDs.contains(session.id) == false else { return }
 
         let userMessage = ChatMessage(role: .user, content: text, createdAt: .now, session: session)
         session.messages.append(userMessage)
@@ -396,8 +417,10 @@ private struct ChatWorkspaceView: View {
         persist()
 
         draftText = ""
-        streamingText = ""
-        isSending = true
+        failedUserMessageIDsBySession[session.id] = nil
+        streamingTexts[session.id] = ""
+        sendingSessionIDs.insert(session.id)
+        autoScrollSessionIDs.insert(session.id)
         isComposerFocused = false
 
         do {
@@ -412,22 +435,44 @@ private struct ChatWorkspaceView: View {
                 conversation: conversation
             )
 
+            let flushInterval: Duration = .milliseconds(45)
+            let clock = ContinuousClock()
+            var bufferedText = ""
+            var lastFlushTime = clock.now
+
             for try await chunk in stream {
-                streamingText += chunk
+                bufferedText += chunk
+
+                if clock.now - lastFlushTime >= flushInterval {
+                    streamingTexts[session.id] = bufferedText
+                    lastFlushTime = clock.now
+                }
             }
 
-            if !streamingText.isEmpty {
-                let assistantMessage = ChatMessage(role: .assistant, content: streamingText, createdAt: .now, session: session)
+            streamingTexts[session.id] = bufferedText
+
+            let completedText = streamingTexts[session.id] ?? ""
+            if !completedText.isEmpty {
+                let assistantMessage = ChatMessage(role: .assistant, content: completedText, createdAt: .now, session: session)
                 session.messages.append(assistantMessage)
                 session.updatedAt = .now
+                failedUserMessageIDsBySession[session.id] = nil
                 persist()
+            } else {
+                failedUserMessageIDsBySession[session.id] = userMessage.id
+                errorMessage = systemLocalizedText(
+                    zh: "教练这次没有返回内容，你可以点击“重新生成”再试一次。",
+                    en: "The coach returned no content this time. Tap Regenerate to try again."
+                )
             }
         } catch {
+            failedUserMessageIDsBySession[session.id] = userMessage.id
             errorMessage = error.localizedDescription
         }
 
-        streamingText = ""
-        isSending = false
+        streamingTexts[session.id] = nil
+        sendingSessionIDs.remove(session.id)
+        autoScrollSessionIDs.remove(session.id)
     }
 
     @MainActor
@@ -592,7 +637,7 @@ private struct ChatWorkspaceView: View {
 
     private func scrollToBottom(proxy: ScrollViewProxy) {
         DispatchQueue.main.async {
-            if isSending {
+            if currentSessionIsSending {
                 proxy.scrollTo("streaming", anchor: .bottom)
             } else if let id = currentSession?.sortedMessages.last?.id {
                 proxy.scrollTo(id, anchor: .bottom)
@@ -600,16 +645,41 @@ private struct ChatWorkspaceView: View {
         }
     }
 
+    private func scheduleScrollToBottom(proxy: ScrollViewProxy) {
+        pendingScrollWorkItem?.cancel()
+
+        let workItem = DispatchWorkItem {
+            scrollToBottom(proxy: proxy)
+        }
+
+        pendingScrollWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.06, execute: workItem)
+    }
+
     private func persist() {
         try? modelContext.save()
     }
 
+    private func enableAutoScrollForCurrentSession() {
+        guard let sessionID = currentSession?.id, currentSessionIsSending else { return }
+        autoScrollSessionIDs.insert(sessionID)
+    }
+
     private var sendButtonEnabled: Bool {
-        !isSending && !draftText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        !currentSessionIsSending && !draftText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     private var lastAssistantMessageID: UUID? {
         currentSession?.sortedMessages.last(where: { $0.role == .assistant })?.id
+    }
+
+    private func shouldShowRegenerateAction(for message: ChatMessage) -> Bool {
+        if message.id == lastAssistantMessageID {
+            return true
+        }
+
+        guard let sessionID = currentSession?.id else { return false }
+        return failedUserMessageIDsBySession[sessionID] == message.id
     }
 
     private func shouldShowSkipFormatAction(for message: ChatMessage) -> Bool {
@@ -665,6 +735,69 @@ private struct ChatHeaderBackdrop: View {
                 Spacer()
             }
             .ignoresSafeArea()
+        }
+    }
+}
+
+private final class KeyboardObserver: ObservableObject {
+    @Published private(set) var isVisible = false
+
+    private var observers: [NSObjectProtocol] = []
+
+    init() {
+        let center = NotificationCenter.default
+
+        observers.append(
+            center.addObserver(forName: UIResponder.keyboardWillChangeFrameNotification, object: nil, queue: .main) { [weak self] notification in
+                self?.handle(notification: notification)
+            }
+        )
+
+        observers.append(
+            center.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { [weak self] notification in
+                self?.handle(notification: notification, forceHidden: true)
+            }
+        )
+    }
+
+    deinit {
+        for observer in observers {
+            NotificationCenter.default.removeObserver(observer)
+        }
+    }
+
+    private func handle(notification: Notification, forceHidden: Bool = false) {
+        let userInfo = notification.userInfo ?? [:]
+        let duration = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double) ?? 0.25
+        let curveRawValue = (userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int) ?? UIView.AnimationCurve.easeInOut.rawValue
+        let curve = UIView.AnimationCurve(rawValue: curveRawValue) ?? .easeInOut
+
+        let nextVisible: Bool
+        if forceHidden {
+            nextVisible = false
+        } else if let frame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect) {
+            nextVisible = frame.minY < UIScreen.main.bounds.height
+        } else {
+            nextVisible = false
+        }
+
+        withAnimation(animation(for: curve, duration: duration)) {
+            isVisible = nextVisible
+        }
+    }
+
+    private func animation(for curve: UIView.AnimationCurve, duration: Double) -> Animation {
+        switch curve {
+        case .easeInOut:
+            return .easeInOut(duration: duration)
+        case .easeIn:
+            return .easeIn(duration: duration)
+        case .easeOut:
+            return .easeOut(duration: duration)
+        case .linear:
+            return .linear(duration: duration)
+        @unknown default:
+            return .easeOut(duration: duration)
         }
     }
 }
@@ -865,6 +998,10 @@ private struct SettingsView: View {
                             Text(systemLocalizedText(zh: "版本：\(appVersionText)", en: "Version: \(appVersionText)"))
                             Text(systemLocalizedText(zh: "出品：精靈Moon", en: "Produced by: Jingling Moon"))
                             Text(systemLocalizedText(zh: "开发：精靈Moon, Boyuan Wang", en: "Developed by: Jingling Moon, Boyuan Wang"))
+                            Text(systemLocalizedText(
+                                zh: "本工具仅供技术学习，用户需自行承担使用 API 产生的法律及费用风险。",
+                                en: "This tool is for technical learning only. Users are responsible for any legal and cost risks arising from API usage."
+                            ))
                             Text(systemLocalizedText(zh: "内容基于《辩论筑基》。", en: "Content is based on Debate Foundations."))
                             Text(systemLocalizedText(zh: "Bilibili 和 YouTube 提供完整免费教学视频。", en: "Complete free teaching videos are available on Bilibili and YouTube."))
                             Text(systemLocalizedText(zh: "本 Debate-Coach 项目已在 GitHub 开源。", en: "The Debate-Coach project is open sourced on GitHub."))
@@ -882,8 +1019,10 @@ private struct SettingsView: View {
                             }
                             .foregroundStyle(DebateTheme.ink)
 
-                            Link(systemLocalizedText(zh: "联系支持", en: "Contact Support"), destination: URL(string: "mailto:support@example.com")!)
-                                .foregroundStyle(DebateTheme.ink)
+                            NavigationLink(systemLocalizedText(zh: "联系支持", en: "Contact Support")) {
+                                SupportLinksView()
+                            }
+                            .foregroundStyle(DebateTheme.ink)
                         }
                     }
                 }
@@ -1017,42 +1156,51 @@ private struct RiskConsentView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    Text(riskIntroText)
-                        .font(.system(size: 17, weight: .regular))
-                        .foregroundStyle(Color.black)
+            GeometryReader { proxy in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        Text(riskIntroText)
+                            .font(.system(size: 17, weight: .regular))
+                            .foregroundStyle(Color.black)
+                            .padding(.top, 20)
 
-                    VStack(alignment: .leading, spacing: 10) {
-                        RiskNoteRow(
-                            systemImage: "exclamationmark.triangle.fill",
-                            text: systemLocalizedText(zh: "仅供技术学习与参考使用。", en: "For technical learning and reference use.")
-                        )
-                        RiskNoteRow(
-                            systemImage: "key.fill",
-                            text: systemLocalizedText(zh: "API 使用成本与合规责任由用户自行承担。", en: "Users are responsible for API usage costs and legal compliance.")
-                        )
-                        RiskNoteRow(
-                            systemImage: "book.fill",
-                            text: systemLocalizedText(zh: "内容基于 AI 对课件的学习，而非权威视频讲解。", en: "Content is based on AI learning from courseware, not authoritative video lectures.")
-                        )
-                        RiskNoteRow(
-                            systemImage: "lock.fill",
-                            text: systemLocalizedText(zh: "本地会话记录默认仅保存在此设备，除非你主动导出。", en: "Local session history stays on this device unless you export it.")
-                        )
-                    }
-                    .font(.body)
+                        VStack(alignment: .leading, spacing: 10) {
+                            RiskNoteRow(
+                                systemImage: "exclamationmark.triangle.fill",
+                                text: systemLocalizedText(zh: "仅供技术学习与参考使用。", en: "For technical learning and reference use.")
+                            )
+                            RiskNoteRow(
+                                systemImage: "key.fill",
+                                text: systemLocalizedText(
+                                    zh: "本工具仅供技术学习，用户需自行承担使用 API 产生的法律、合规及费用风险。",
+                                    en: "This tool is for technical learning only. Users are responsible for any legal, compliance, and cost risks arising from API usage."
+                                )
+                            )
+                            RiskNoteRow(
+                                systemImage: "book.fill",
+                                text: systemLocalizedText(zh: "内容基于 AI 对课件的学习，而非权威视频讲解。", en: "Content is based on AI learning from courseware, not authoritative video lectures.")
+                            )
+                            RiskNoteRow(
+                                systemImage: "lock.fill",
+                                text: systemLocalizedText(zh: "本地会话记录默认仅保存在此设备，除非你主动导出。", en: "Local session history stays on this device unless you export it.")
+                            )
+                        }
+                        .font(.body)
 
-                    Button {
-                        settings.riskAccepted = true
-                    } label: {
-                        Text(systemLocalizedText(zh: "我已了解并继续", en: "I Understand and Continue"))
-                            .frame(maxWidth: .infinity)
+                        Spacer(minLength: 56)
+
+                        Button {
+                            settings.riskAccepted = true
+                        } label: {
+                            Text(systemLocalizedText(zh: "我已了解并继续", en: "I Understand and Continue"))
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(PrimaryActionButtonStyle())
                     }
-                    .buttonStyle(PrimaryActionButtonStyle())
+                    .frame(minHeight: proxy.size.height - 48, alignment: .top)
+                    .padding(24)
+                    .foregroundStyle(Color.black)
                 }
-                .padding(24)
-                .foregroundStyle(Color.black)
             }
             .background(DebateTheme.pageGradient.ignoresSafeArea())
             .navigationTitle(systemLocalizedText(zh: "开始之前", en: "Before You Start"))
@@ -1172,12 +1320,7 @@ private struct MessageBubble: View {
                     }
                     .foregroundStyle(labelColor)
 
-                    Text(message.content)
-                        .textSelection(.enabled)
-                        .font(.system(size: 17, weight: .regular))
-                        .foregroundStyle(DebateTheme.ink)
-                        .lineSpacing(4)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    bubbleText
                 }
                 .padding(.horizontal, 18)
                 .padding(.vertical, 16)
@@ -1187,7 +1330,7 @@ private struct MessageBubble: View {
                 if message.role != .user { Spacer(minLength: 40) }
             }
 
-            if message.role == .assistant && (showsRegenerateAction || showsSkipAction) {
+            if showsRegenerateAction || showsSkipAction {
                 HStack(spacing: 8) {
                     if showsSkipAction {
                         Button(action: onSkip) {
@@ -1213,7 +1356,8 @@ private struct MessageBubble: View {
                         .buttonStyle(.plain)
                     }
                 }
-                .padding(.leading, 6)
+                .frame(maxWidth: .infinity, alignment: message.role == .user ? .trailing : .leading)
+                .padding(.horizontal, 6)
             }
         }
     }
@@ -1251,6 +1395,15 @@ private struct MessageBubble: View {
     private var timestamp: String {
         message.createdAt.formatted(date: .omitted, time: .shortened)
     }
+
+    @ViewBuilder
+    private var bubbleText: some View {
+        if message.role == .assistant || message.role == .system {
+            MarkdownBubbleContent(text: message.content)
+        } else {
+            PlainBubbleText(text: message.content)
+        }
+    }
 }
 
 private struct StreamingBubble: View {
@@ -1274,11 +1427,7 @@ private struct StreamingBubble: View {
                             .foregroundStyle(DebateTheme.inkSoft)
                     }
                 } else {
-                    Text(text)
-                        .textSelection(.enabled)
-                        .font(.system(size: 17, weight: .regular))
-                        .foregroundStyle(DebateTheme.ink)
-                        .lineSpacing(3)
+                    PlainStreamingPreviewText(text: text)
                 }
             }
             .padding(.horizontal, 18)
@@ -1294,6 +1443,350 @@ private struct StreamingBubble: View {
     }
 }
 
+private struct PlainStreamingPreviewText: View {
+    let text: String
+
+    var body: some View {
+        Text(text)
+            .textSelection(.enabled)
+            .font(.system(size: 17, weight: .regular))
+            .foregroundStyle(DebateTheme.ink)
+            .lineSpacing(4)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+private struct PlainBubbleText: View {
+    let text: String
+
+    var body: some View {
+        Text(text)
+            .textSelection(.enabled)
+            .font(.system(size: 17, weight: .regular))
+            .foregroundStyle(DebateTheme.ink)
+            .lineSpacing(4)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+private struct MarkdownBubbleText: View {
+    let text: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            ForEach(Array(paragraphs.enumerated()), id: \.offset) { _, paragraph in
+                VStack(alignment: .leading, spacing: 4) {
+                    ForEach(Array(paragraph.enumerated()), id: \.offset) { _, line in
+                        MarkdownBubbleLine(text: line)
+                    }
+                }
+            }
+        }
+        .lineSpacing(4)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .tint(DebateTheme.accent)
+    }
+
+    private var paragraphs: [[String]] {
+        let normalized = text.replacingOccurrences(of: "\r\n", with: "\n")
+        let chunks = normalized.components(separatedBy: "\n\n")
+
+        return chunks
+            .map { chunk in
+                chunk
+                    .split(separator: "\n", omittingEmptySubsequences: false)
+                    .map(String.init)
+            }
+            .filter { paragraph in
+                paragraph.contains { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+            }
+    }
+
+}
+
+private struct MarkdownBubbleLine: View {
+    let text: String
+
+    var body: some View {
+        if let heading = headingLevel {
+            Text(heading.text)
+                .textSelection(.enabled)
+                .font(heading.font)
+                .foregroundStyle(DebateTheme.ink)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, heading.topPadding)
+                .padding(.bottom, heading.bottomPadding)
+        } else {
+            Text(markdownText(for: text))
+                .textSelection(.enabled)
+                .font(.system(size: 17, weight: .regular))
+                .foregroundStyle(DebateTheme.ink)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
+    private var headingLevel: (text: String, font: Font, topPadding: CGFloat, bottomPadding: CGFloat)? {
+        let trimmed = text.trimmingCharacters(in: .whitespaces)
+
+        guard trimmed.hasPrefix("#") else { return nil }
+
+        let level = trimmed.prefix { $0 == "#" }.count
+        guard (1...6).contains(level) else { return nil }
+
+        let title = trimmed.dropFirst(level).trimmingCharacters(in: .whitespaces)
+        guard !title.isEmpty else { return nil }
+
+        switch level {
+        case 1:
+            return (title, .system(size: 28, weight: .bold), 6, 4)
+        case 2:
+            return (title, .system(size: 24, weight: .bold), 4, 3)
+        case 3:
+            return (title, .system(size: 21, weight: .semibold), 3, 2)
+        default:
+            return (title, .system(size: 18, weight: .semibold), 2, 1)
+        }
+    }
+
+    private func markdownText(for line: String) -> AttributedString {
+        (try? AttributedString(
+            markdown: line,
+            options: .init(interpretedSyntax: .inlineOnlyPreservingWhitespace)
+        )) ?? AttributedString(line)
+    }
+}
+
+private struct MarkdownBubbleContent: View {
+    let text: String
+
+    var body: some View {
+        let blocks = MarkdownBubbleParser.parse(text: text)
+
+        VStack(alignment: .leading, spacing: 10) {
+            ForEach(Array(blocks.enumerated()), id: \.offset) { _, block in
+                switch block {
+                case let .markdown(markdown):
+                    MarkdownBubbleText(text: markdown)
+                case let .table(table):
+                    MarkdownTableView(table: table)
+                case .divider:
+                    MarkdownDividerView()
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+private struct DebateExportRenderingKey: EnvironmentKey {
+    static let defaultValue = false
+}
+
+private extension EnvironmentValues {
+    var debateExportRendering: Bool {
+        get { self[DebateExportRenderingKey.self] }
+        set { self[DebateExportRenderingKey.self] = newValue }
+    }
+}
+
+private struct MarkdownTableView: View {
+    let table: MarkdownTable
+    @Environment(\.debateExportRendering) private var isExportRendering
+
+    var body: some View {
+        Group {
+            if isExportRendering {
+                tableGrid
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    tableGrid
+                }
+            }
+        }
+    }
+
+    private var tableGrid: some View {
+        Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 8) {
+            GridRow {
+                ForEach(Array(table.headers.enumerated()), id: \.offset) { _, header in
+                    MarkdownTableCell(text: header, isHeader: true)
+                }
+            }
+
+            Rectangle()
+                .fill(DebateTheme.inkMuted.opacity(0.18))
+                .frame(height: 1)
+                .gridCellColumns(table.headers.count)
+
+            ForEach(Array(table.rows.enumerated()), id: \.offset) { _, row in
+                GridRow {
+                    ForEach(0..<table.headers.count, id: \.self) { columnIndex in
+                        MarkdownTableCell(
+                            text: columnIndex < row.count ? row[columnIndex] : "",
+                            isHeader: false
+                        )
+                    }
+                }
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(DebateTheme.panelSoft.opacity(0.9), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+    }
+}
+
+private struct MarkdownTableCell: View {
+    let text: String
+    let isHeader: Bool
+
+    var body: some View {
+        Text(markdownText)
+            .font(.system(size: 15, weight: isHeader ? .semibold : .regular))
+            .foregroundColor(DebateTheme.ink)
+            .frame(minWidth: 88, alignment: .leading)
+            .fixedSize(horizontal: false, vertical: true)
+            .textSelection(.enabled)
+            .tint(DebateTheme.accent)
+    }
+
+    private var markdownText: AttributedString {
+        (try? AttributedString(
+            markdown: text,
+            options: .init(interpretedSyntax: .inlineOnlyPreservingWhitespace)
+        )) ?? AttributedString(text)
+    }
+}
+
+private struct MarkdownDividerView: View {
+    var body: some View {
+        Rectangle()
+            .fill(DebateTheme.inkMuted.opacity(0.22))
+            .frame(maxWidth: .infinity)
+            .frame(height: 1)
+            .padding(.vertical, 6)
+    }
+}
+
+private enum MarkdownBubbleBlock {
+    case markdown(String)
+    case table(MarkdownTable)
+    case divider
+}
+
+private struct MarkdownTable {
+    let headers: [String]
+    let rows: [[String]]
+}
+
+private enum MarkdownBubbleParser {
+    static func parse(text: String) -> [MarkdownBubbleBlock] {
+        let lines = text.components(separatedBy: .newlines)
+        var blocks: [MarkdownBubbleBlock] = []
+        var markdownBuffer: [String] = []
+        var index = 0
+
+        func flushMarkdownBuffer() {
+            let markdown = markdownBuffer.joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !markdown.isEmpty else {
+                markdownBuffer.removeAll()
+                return
+            }
+            blocks.append(.markdown(markdown))
+            markdownBuffer.removeAll()
+        }
+
+        while index < lines.count {
+            if let table = parseTable(lines: lines, startIndex: index) {
+                flushMarkdownBuffer()
+                blocks.append(.table(table.table))
+                index = table.nextIndex
+            } else if isDivider(lines[index]) {
+                flushMarkdownBuffer()
+                blocks.append(.divider)
+                index += 1
+            } else {
+                markdownBuffer.append(lines[index])
+                index += 1
+            }
+        }
+
+        flushMarkdownBuffer()
+        return blocks
+    }
+
+    private static func parseTable(lines: [String], startIndex: Int) -> (table: MarkdownTable, nextIndex: Int)? {
+        guard startIndex + 1 < lines.count else { return nil }
+
+        let headerLine = lines[startIndex]
+        let separatorLine = lines[startIndex + 1]
+
+        guard isTableRow(headerLine), isTableSeparator(separatorLine) else {
+            return nil
+        }
+
+        let headers = splitTableRow(headerLine)
+        guard headers.count >= 2 else { return nil }
+
+        var rows: [[String]] = []
+        var currentIndex = startIndex + 2
+
+        while currentIndex < lines.count, isTableRow(lines[currentIndex]) {
+            rows.append(normalizeRow(splitTableRow(lines[currentIndex]), columnCount: headers.count))
+            currentIndex += 1
+        }
+
+        return (MarkdownTable(headers: headers, rows: rows), currentIndex)
+    }
+
+    private static func isTableRow(_ line: String) -> Bool {
+        let trimmed = line.trimmingCharacters(in: .whitespaces)
+        guard trimmed.contains("|") else { return false }
+        let columns = splitTableRow(trimmed)
+        return columns.count >= 2
+    }
+
+    private static func isTableSeparator(_ line: String) -> Bool {
+        let trimmed = line.trimmingCharacters(in: .whitespaces)
+        guard trimmed.contains("|") else { return false }
+
+        let columns = trimmed
+            .trimmingCharacters(in: CharacterSet(charactersIn: "|"))
+            .split(separator: "|", omittingEmptySubsequences: false)
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+
+        guard columns.count >= 2 else { return false }
+
+        return columns.allSatisfy { column in
+            !column.isEmpty && column.allSatisfy { $0 == "-" || $0 == ":" }
+        }
+    }
+
+    private static func splitTableRow(_ line: String) -> [String] {
+        line
+            .trimmingCharacters(in: .whitespaces)
+            .trimmingCharacters(in: CharacterSet(charactersIn: "|"))
+            .split(separator: "|", omittingEmptySubsequences: false)
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+    }
+
+    private static func isDivider(_ line: String) -> Bool {
+        let trimmed = line.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty else { return false }
+        guard trimmed.allSatisfy({ $0 == "-" || $0 == "_" || $0 == "*" }) else { return false }
+        return trimmed.count >= 3
+    }
+
+    private static func normalizeRow(_ row: [String], columnCount: Int) -> [String] {
+        if row.count == columnCount {
+            return row
+        }
+        if row.count > columnCount {
+            return Array(row.prefix(columnCount))
+        }
+        return row + Array(repeating: "", count: columnCount - row.count)
+    }
+}
+
 private struct MarkdownDocumentView: View {
     let title: String
     let text: String
@@ -1301,6 +1794,7 @@ private struct MarkdownDocumentView: View {
     var body: some View {
         ScrollView {
             Text(markdownAttributedString ?? AttributedString(text))
+                .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
         }
@@ -1311,6 +1805,26 @@ private struct MarkdownDocumentView: View {
 
     private var markdownAttributedString: AttributedString? {
         try? AttributedString(markdown: text)
+    }
+}
+
+private struct SupportLinksView: View {
+    var body: some View {
+        List {
+            Section {
+                Link("Bilibili", destination: URL(string: "https://space.bilibili.com/8359112?spm_id_from=333.337.search-card.all.click")!)
+                    .foregroundStyle(DebateTheme.ink)
+
+                Link("YouTube", destination: URL(string: "https://www.youtube.com/channel/UC7kzrV66xA9-mbExYbd42EA")!)
+                    .foregroundStyle(DebateTheme.ink)
+            }
+            .listRowBackground(DebateTheme.panel)
+        }
+        .scrollContentBackground(.hidden)
+        .listStyle(.insetGrouped)
+        .background(DebateTheme.pageGradient.ignoresSafeArea())
+        .navigationTitle(systemLocalizedText(zh: "联系支持", en: "Contact Support"))
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -1393,6 +1907,7 @@ private struct ChatExportSnapshotView: View {
         .padding(24)
         .frame(width: exportCanvasWidth, alignment: .leading)
         .background(DebateTheme.pageGradient)
+        .environment(\.debateExportRendering, true)
     }
 }
 

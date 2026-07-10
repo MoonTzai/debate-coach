@@ -19,7 +19,7 @@
 		A10000102026070900000001 /* SKILL-EN.md in Resources */ = {isa = PBXBuildFile; fileRef = A10000202026070900000001 /* SKILL-EN.md */; };
 		A10000112026070900000002 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000122026070900000002 /* DesignSystem.swift */; };
 		A10000132026071000000002 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000142026071000000002 /* Assets.xcassets */; };
-		A10000152026071000000003 /* last.png in Resources */ = {isa = PBXBuildFile; fileRef = A10000162026071000000003 /* last.png */; };
+		A10000152026071000000003 /* Assets/Logo/last.png in Resources */ = {isa = PBXBuildFile; fileRef = A10000162026071000000003 /* Assets/Logo/last.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,9 +29,9 @@
 		A10000132026070900000001 /* AppSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStore.swift; sourceTree = "<group>"; };
 		A10000142026070900000001 /* PromptLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptLoader.swift; sourceTree = "<group>"; };
 		A10000142026071000000002 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A10000162026071000000003 /* last.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Assets/Logo/last.png; sourceTree = "<group>"; };
 		A10000152026070900000001 /* ChatAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatAPIClient.swift; sourceTree = "<group>"; };
 		A10000162026070900000001 /* SessionTransfer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionTransfer.swift; sourceTree = "<group>"; };
+		A10000162026071000000003 /* Assets/Logo/last.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Assets/Logo/last.png; sourceTree = "<group>"; };
 		A10000172026070900000001 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		A10000182026070900000001 /* DebateCoachIOS/Documents/PrivacyPolicy.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DebateCoachIOS/Documents/PrivacyPolicy.md; sourceTree = SOURCE_ROOT; };
 		A10000192026070900000001 /* SKILL.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = SKILL.md; path = ../SKILL.md; sourceTree = "<group>"; };
@@ -71,7 +71,7 @@
 				A10000172026070900000001 /* RootView.swift */,
 				A10000122026070900000002 /* DesignSystem.swift */,
 				A10000142026071000000002 /* Assets.xcassets */,
-				A10000162026071000000003 /* last.png */,
+				A10000162026071000000003 /* Assets/Logo/last.png */,
 			);
 			path = DebateCoachIOS;
 			sourceTree = "<group>";
@@ -156,7 +156,7 @@
 				A10000092026070900000001 /* SKILL.md in Resources */,
 				A10000102026070900000001 /* SKILL-EN.md in Resources */,
 				A10000132026071000000002 /* Assets.xcassets in Resources */,
-				A10000152026071000000003 /* last.png in Resources */,
+				A10000152026071000000003 /* Assets/Logo/last.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,7 +246,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.14;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jinglingmoon.DebateCoachIOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -282,7 +282,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.14;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jinglingmoon.DebateCoachIOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;

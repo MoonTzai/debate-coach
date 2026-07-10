@@ -16,7 +16,9 @@ enum PromptLoaderError: LocalizedError {
 
 enum PromptLoader {
     static func load(language: AppLanguage) throws -> String {
-        let resourceName = language == .zh ? "SKILL" : "SKILL-EN"
+        // Keep iOS consistent with the HTML build:
+        // always send the raw bundled SKILL.md text as the system prompt.
+        let resourceName = "SKILL"
         guard let url = Bundle.main.url(forResource: resourceName, withExtension: "md") else {
             throw PromptLoaderError.missingResource(resourceName)
         }

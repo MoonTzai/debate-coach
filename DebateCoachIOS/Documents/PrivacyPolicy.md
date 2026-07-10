@@ -1,34 +1,87 @@
-# Privacy Policy
+# 隐私政策
 
-Debate-Coach for iOS stores your chat history locally on your device using Apple's local persistence frameworks.
+本隐私政策适用于 `Debate-Coach for iOS`。
 
-## What We Store
+我们非常重视你的隐私。本应用当前版本的核心设计原则是：**尽量本地处理、由用户自行配置模型接口、不给开发者额外收集不必要的数据**。
 
-- Your chat sessions and message history
-- Your selected model endpoint and model name
-- Your language, theme, and risk-consent preferences
-- Your API key in the iOS Keychain
+## 1. 我们会存储什么
 
-## What We Do Not Collect
+本应用会在你的设备本地存储以下信息，以保证功能正常运行：
 
-- We do not create a cloud account for you in this version
-- We do not sync your chats to a developer-operated server in this version
-- We do not add hidden prompt processing around the bundled skill text
+- 你的会话标题、聊天记录和消息内容
+- 你填写的模型接口地址（API Endpoint）和模型名称
+- 你的语言偏好、风险确认状态及其他基础设置
+- 你的 API Key
 
-## Model Provider Requests
+其中：
 
-When you send a message, the app forwards:
+- 聊天记录、会话信息和部分设置会保存在设备本地
+- API Key 会保存在 iOS Keychain 中，而不是明文写入普通本地文件
 
-- The bundled `SKILL.md` or `SKILL-EN.md` text as the system prompt
-- Your current chat session messages
-- The endpoint, model, and API key you configured
+## 2. 我们不会主动收集什么
 
-These requests are sent directly from the app to the model provider endpoint you configure. Your use of that endpoint is also governed by the provider's own privacy policy and terms.
+在当前版本中：
 
-## Export and Share
+- 我们不会为你创建云端账号
+- 我们不会把你的聊天记录同步到开发者自建服务器
+- 我们不会在 `SKILL.md` 原文之外，额外插入隐藏的路由逻辑或预处理内容
 
-If you export a session, the exported file is created locally and shared using iOS system sharing features that you control.
+## 3. 当你发送消息时，会发生什么
 
-## Contact
+当你在应用中发起一次对话请求时，应用会把以下内容直接发送到**你自己配置的模型服务接口**：
 
-Before App Store release, replace the in-app support email with your real support contact and publish a public privacy policy URL that matches the final product.
+- 应用内置的 `SKILL.md` 原文作为系统提示词
+- 你当前会话中的消息内容
+- 你填写的接口地址、模型名称和 API Key
+
+这些请求由应用**直接发送到你配置的第三方模型服务商**，而不是先发送到开发者自建中转服务器。
+
+因此请你注意：
+
+- 你的对话内容是否会被第三方服务商记录、分析或用于其他用途，取决于该服务商自己的隐私政策与服务条款
+- 使用 API 产生的费用、法律责任与合规风险，需由用户自行承担
+
+## 4. 导出与分享
+
+当你使用导出功能时：
+
+- 导出的 JSON、Markdown 或 JPG 文件会先在本地生成
+- 分享动作通过 iOS 系统分享面板完成
+- 你决定将导出文件分享给谁、分享到哪里
+
+我们不会因为你点击导出，而自动把这些内容上传到开发者服务器。
+
+## 5. 网络权限与连接检测
+
+为了提升连接稳定性，应用可能会在你保存配置或首次请求前，尝试对你配置的接口地址做一次轻量级网络连接准备或可达性检测。
+
+这类请求仅用于：
+
+- 触发本地网络权限弹窗（如适用）
+- 预热网络连接
+- 判断接口是否可访问
+
+这不代表开发者会额外保存你的对话内容。
+
+## 6. 数据删除
+
+你可以在应用内：
+
+- 清空当前会话
+- 删除历史会话
+- 在回收站中恢复或彻底移除已删除内容
+
+由于当前版本主要使用本地存储，只要你在本机删除相关内容，它们通常也会从本地应用数据中被移除。
+
+## 7. 未成年人说明
+
+如果你是未成年人，请在监护人指导下使用本应用，并谨慎配置和使用任何第三方 API 服务。
+
+## 8. 联系支持
+
+- Bilibili: https://space.bilibili.com/8359112?spm_id_from=333.337.search-card.all.click
+- YouTube: https://www.youtube.com/channel/UC7kzrV66xA9-mbExYbd42EA
+
+## 9. 政策更新
+
+如果未来应用功能、数据处理方式或支持渠道发生变化，本隐私政策也可能随之更新。更新后的版本会以应用内展示内容为准。
