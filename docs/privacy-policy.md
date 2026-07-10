@@ -1,3 +1,9 @@
+---
+layout: default
+title: 隐私政策
+permalink: /privacy-policy
+---
+
 # Debate-Coach 隐私政策
 
 更新日期：2026年7月10日
