@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>教练记录计时器</title>
+<style>
+:root{--bg:#0d0d0d;--card:#141414;--border:#222;--input-bg:#1a1a1a;--gold:#ffc000;--text:#eee;--gray:#999;--dark-gray:#555;--blue:#4fa8ee;--green:#6ecd71;--red:#ee5555;--radius:8px;--radius-sm:6px}
+body.light{--bg:#f5f5f5;--card:#fff;--border:#e0e0e0;--input-bg:#f0f0f0;--gold:#4f6bed;--text:#222;--gray:#666;--dark-gray:#999;--blue:#4f6bed;--green:#4caf50;--red:#e53935}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Microsoft YaHei','PingFang SC',sans-serif;height:100vh;display:flex;flex-direction:column}
+header{background:var(--card);padding:14px 24px 14px 80px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:relative}
+header h1{font-size:16px;color:var(--gold);position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap}
+main{flex:1;overflow-y:auto;padding:20px;max-width:920px;margin:0 auto;width:100%}
+.step-bar{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:20px;flex-wrap:wrap;font-size:13px}
+.step-bar .dot{width:10px;height:10px;border-radius:50%;background:var(--border);flex-shrink:0}
+.step-bar .dot.done{background:var(--green)}.step-bar .dot.current{background:var(--gold)}
+.step-bar .sep{color:var(--dark-gray);font-size:11px}.step-bar .label{color:var(--gray);font-size:12px}
+.step-bar .label.current{color:var(--gold);font-weight:bold}.step-bar .label.done{color:var(--green)}
+.round-name-center{text-align:center;font-size:18px;color:var(--gold);font-weight:bold;margin-bottom:20px}
+.start-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;gap:24px}
+.start-wrap .logo{font-size:36px}.start-wrap h2{color:var(--gold);font-size:22px}
+.start-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+.btn{background:var(--card);color:var(--gray);border:1px solid var(--border);padding:10px 20px;border-radius:var(--radius-sm);cursor:pointer;font-size:14px;font-family:inherit;transition:all .15s}
+.btn:hover{border-color:var(--gold);color:var(--gold)}
+.btn.gold{background:var(--gold);color:#000;border:none;font-weight:bold}.btn.gold:hover{opacity:.85}
+body.light .btn.gold{color:#fff}
+.btn-sm{background:var(--card);border:1px solid var(--border);color:var(--gray);padding:10px 14px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;font-family:inherit}
+.btn-sm:hover{border-color:var(--gold);color:var(--gold)}
+.btn-sm.danger{color:var(--red);border-color:transparent}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.card h3{color:var(--gold);font-size:15px;margin:0 0 8px 0;border-bottom:1px solid var(--border);padding-bottom:6px}
+.row-inp{display:flex;gap:10px;align-items:flex-start;margin:8px 0}
+.row-inp label{color:var(--gray);font-size:12px;min-width:70px;padding-top:9px;flex-shrink:0}
+.row-inp input,.row-inp textarea,.row-inp select{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:var(--radius-sm);font-size:13px;font-family:inherit;outline:none}
+.row-inp textarea{min-height:72px;resize:vertical;width:100%;word-wrap:break-word;white-space:pre-wrap}
+.row-inp input:focus,.row-inp textarea:focus,.row-inp select:focus{border-color:var(--gold)}
+.row-inp .time-inp{flex:0 0 auto;width:52px;text-align:center}
+select{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:var(--radius-sm);font-size:13px;font-family:inherit;outline:none}
+.round-config{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:10px 14px;background:var(--input-bg);border-radius:var(--radius-sm);font-size:13px}
+.round-config select{min-width:80px}.round-config input{width:48px;text-align:center}
+.timer-display{text-align:center;padding:20px;background:var(--bg);border-radius:var(--radius);margin-bottom:16px}
+.timer-display .time{font-size:64px;font-weight:bold;color:var(--gold);font-family:'Consolas',monospace}
+.timer-display .time.warn{color:var(--red)}.timer-display .time.paused{opacity:.5}
+.timer-display .label{font-size:14px;color:var(--gray);margin-top:4px}
+.timer-ctrl{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.timer-dual{display:flex;gap:4px;justify-content:center}
+.timer-dual>div{flex:1;text-align:center;padding:16px 8px;border-radius:var(--radius);cursor:pointer;border:2px solid transparent;overflow:hidden}
+.timer-dual>div.active{background:var(--input-bg);border-color:var(--gold)}
+.timer-dual .time{font-size:9vw;font-weight:bold;color:var(--gold);font-family:'Consolas',monospace;line-height:1;white-space:nowrap}
+.timer-dual .time.warn{color:var(--red)}
+.side-divider{border:none;border-top:2px dashed var(--border);margin:16px 0}
+.summary-box textarea{min-height:100px;font-size:14px;line-height:1.7;width:100%;word-wrap:break-word;white-space:pre-wrap}
+.export-group{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-top:16px}
+.export-group h3{color:var(--gold);font-size:14px;margin-bottom:10px}
+#footer-bar{padding:12px 20px;border-top:1px solid var(--border);flex-shrink:0;display:flex;justify-content:center;background:var(--card);align-items:center;position:relative;gap:8px;flex-wrap:wrap}
+#theme-toggle{background:transparent;border:1px solid var(--border);color:var(--gray);padding:10px 14px;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit}
+#theme-toggle:hover{border-color:var(--gold);color:var(--gold)}
+.hidden{display:none!important}.mt-8{margin-top:8px}.mt-12{margin-top:12px}
+.text-sm{font-size:12px}.text-gray{color:var(--gray)}
+@media(max-width:600px){
+  header{padding:10px 14px}header .btn-sm{position:static;font-size:11px;padding:6px 8px}#theme-toggle{font-size:11px;padding:6px 8px}header h1{font-size:13px;position:static;transform:none;width:100%;text-align:center}
+  main{padding:12px}.card{padding:14px}
+  .timer-display .time{font-size:42px}.timer-dual .time{font-size:32px}
+  .row-inp{flex-direction:column;gap:4px}.row-inp label{padding-top:0}
+  #footer-bar{padding:10px 14px}
+}
+</style>
+</head>
+<body class="light">
+<header>
+  <button onclick="window.top.location.reload()" class="btn-sm" style="position:absolute;left:20px">主页</button>
+  <h1>教练记录计时器 <span style="font-size:12px;color:var(--gray)" id="match-label"></span></h1>
+  <span><button id="theme-toggle" onclick="toggleTheme()">界面颜色</button></span>
+</header>
+<main id="main"></main>
+<div id="footer-bar">
+  <button onclick="goStart()" class="btn start-btn-left" style="padding:10px 12px">开始页</button>
+  <span id="footer-btns" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center"></span>
+</div>
+<script>
+var M=null,VIEW=0,roundIdx=0,STORAGE_KEY='coach_timer_v2';
+var ROUND_NAMES=['立论','申论/驳论','质询','对辩','盘问','攻辩小结','自由辩','总结陈词','其它'];
+var POSITIONS=['一辩','二辩','三辩','四辩','多人'];
+var MODES=[{v:'1',t:'单方发言倒计时'},{v:'2',t:'双方交替各自计时'},{v:'3a',t:'环节总时-计主动方'},{v:'3b',t:'环节总时-双方均计'}];
+
+function save(){if(M){M._updated=Date.now();localStorage.setItem(STORAGE_KEY,JSON.stringify(M));}}
+function newMatch(){return{title:'',date:new Date().toISOString(),rounds:[{name:'立论',mode:'1',speaker:'正方',position:'一辩',proMin:3,proSec:0,conMin:0,conSec:0,notesPro:'',notesCon:'',mergedNote:''}],assessment:{proStruct:'',conStruct:'',proArg:'',conArg:'',impression:'',value:'',overall:'',otherAssess:''}};}
+function loadMatch(){try{var s=localStorage.getItem(STORAGE_KEY);if(s){M=JSON.parse(s);return true;}}catch(e){}return false;}
+
+// Timer state
+var timerInterval=null,timerRunning=false,timerPaused=false;
+var proRemain=0,conRemain=0,activeSide='pro';// for dual mode
+
+function stopTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null}timerRunning=false;timerPaused=false;}
+function toggleTimer(mode){
+  if(timerRunning&&!timerPaused){timerPaused=true;stopTimer();updateTimerUI();return;}// pause
+  if(timerPaused){timerPaused=false;}// resume
+  if(mode==='dual'){runDual();}else{runSingle();}
+}
+
+// Views
+function goStart(){stopTimer();VIEW=0;render()}
+function goRound(idx){stopTimer();VIEW=1;roundIdx=idx;render()}
+function goSummary(){stopTimer();VIEW=2;render()}
+function render(){if(M){M.lastView=VIEW;M.lastRoundIdx=roundIdx}save();renderStepBar();var m=document.getElementById('main');var f=document.getElementById('footer-btns');document.getElementById('match-label').textContent=M&&M.title?M.title:'';if(VIEW===0)renderStart(m,f);else if(VIEW===1)renderRound(m,f,roundIdx);else if(VIEW===2)renderSummary(m,f);}
+
+function renderStepBar(){
+  var sb=document.getElementById('main').previousElementSibling;
+  if(!M||VIEW===0){if(sb&&sb.classList.contains('step-bar'))sb.classList.add('hidden');return;}
+  if(!sb||!sb.classList.contains('step-bar')){sb=document.createElement('div');sb.className='step-bar';document.getElementById('main').parentNode.insertBefore(sb,document.getElementById('main'));}
+  var total=M.rounds.length,h='<div class="step-bar">';
+  M.rounds.forEach(function(r,i){var cls='',lc='';if(VIEW===1&&i===roundIdx){cls=' current';lc=' current'}else if(VIEW===2||(VIEW===1&&i<roundIdx)){cls=' done';lc=' done'}h+='<span class="dot'+cls+'"></span><span class="label'+lc+'">'+(i+1)+'/'+total+'. '+r.name+'</span>';if(i<total-1)h+='<span class="sep">--</span>';});
+  h+='</div>';sb.outerHTML=h;
+}
+
+// Start
+function renderStart(m,f){f.innerHTML='';
+  var h='<div class="start-wrap"><div class="logo">⏱️</div><h2>教练记录计时器</h2><p class="text-gray">按环节倒计时 + 教练实时记录 + 赛后汇总评估</p><div class="start-actions">';
+  if(M)h+='<button class="btn gold" onclick="gotoLast()">继续上次训练</button>';
+  h+='<button class="btn'+(M?'':' gold')+'" onclick="startNew()">开始新训练</button>';
+  h+='<button class="btn-sm" onclick="document.getElementById(\'load-file\').click()">加载训练记录</button></div>';
+  h+='<input type="file" id="load-file" accept=".json" class="hidden" onchange="loadFromFile(this)">';
+  if(M)h+='<p class="text-sm text-gray mt-8">已有训练：'+(M.title||'未命名')+'</p>';
+  h+='<div style="margin-top:24px"><button class="btn-sm danger" onclick="clearAll()">清除全部缓存</button></div>';
+  h+='</div>';m.innerHTML=h;
+}
+function clearAll(){if(!confirm('确定清除全部缓存数据？此操作不可撤销。'))return;if(!confirm('再次确认：清除所有训练记录？'))return;localStorage.removeItem(STORAGE_KEY);localStorage.removeItem('coach_timer_v1');Object.keys(localStorage).forEach(function(k){if(k.indexOf('coach_timer')===0)localStorage.removeItem(k)});M=null;stopTimer();goStart();}
+function gotoLast(){if(M&&M.lastView!==undefined&&M.lastView>0){VIEW=M.lastView;if(VIEW===1)roundIdx=M.lastRoundIdx||0;render();}else if(M){VIEW=1;roundIdx=0;render();}}
+function startNew(){M=newMatch();VIEW=1;roundIdx=0;save();render();}
+function loadFromFile(input){if(!input.files||!input.files[0])return;var r=new FileReader();r.onload=function(e){try{var d=JSON.parse(e.target.result);if(d.rounds){M=d;save();VIEW=1;roundIdx=0;render();}}catch(ex){alert('无效文件');}};r.readAsText(input.files[0]);input.value='';}
+
+function fmtTime(s){var m=Math.floor(Math.max(0,s)/60),sec=Math.max(0,s)%60;return(m<10?'0':'')+m+':'+(sec<10?'0':'')+sec;}
+
+// Round
+function renderRound(m,f,idx){
+  stopTimer();
+  var r=M.rounds[idx];
+  if(!r.notesPro)r.notesPro='';if(!r.notesCon)r.notesCon='';if(!r.mergedNote)r.mergedNote='';
+  if(!r.position)r.position='';
+  var proDur=r.proMin*60+r.proSec;
+  var conDur=r.mode==='2'?(r.conMin*60+r.conSec):0;
+  proRemain=proDur;conRemain=conDur;activeSide='pro';
+
+  var h='<div class="round-name-center">'+r.name+'</div>';
+  // Config bar
+  h+='<div class="round-config">';
+  h+='<select onchange="onNameChange('+idx+',this.value)">'+ROUND_NAMES.map(function(x){return'<option '+(r.name===x?'selected':'')+'>'+x+'</option>';}).join('')+'</select>';
+  h+='<select onchange="onModeChange('+idx+',this.value)">'+MODES.map(function(x){return'<option value="'+x.v+'" '+(r.mode===x.v?'selected':'')+'>'+x.t+'</option>';}).join('')+'</select>';
+  h+='<select onchange="setR('+idx+',\'speaker\',this.value)"><option '+(r.speaker==='正方'?'selected':'')+'>正方</option><option '+(r.speaker==='反方'?'selected':'')+'>反方</option></select>';
+  h+='<select onchange="setR('+idx+',\'position\',this.value)"><option value="" '+(r.position===''?'selected':'')+'>辩位</option>'+POSITIONS.map(function(x){return'<option '+(r.position===x?'selected':'')+'>'+x+'</option>';}).join('')+'</select>';
+  if(r.mode==='2'){
+    h+='正<input class=time-inp type=number value="'+r.proMin+'" onchange="setR('+idx+',\'proMin\',+this.value)" min=0>分<input class=time-inp type=number value="'+r.proSec+'" onchange="setR('+idx+',\'proSec\',+this.value)" min=0 max=59>秒';
+    h+='反<input class=time-inp type=number value="'+r.conMin+'" onchange="setR('+idx+',\'conMin\',+this.value)" min=0>分<input class=time-inp type=number value="'+r.conSec+'" onchange="setR('+idx+',\'conSec\',+this.value)" min=0 max=59>秒';
+  }else{
+    h+='<input class=time-inp type=number value="'+r.proMin+'" onchange="setR('+idx+',\'proMin\',+this.value)" min=0>分<input class=time-inp type=number value="'+r.proSec+'" onchange="setR('+idx+',\'proSec\',+this.value)" min=0 max=59>秒';
+  }
+  h+='<button class="btn-sm" onclick="goRound('+idx+')" title="应用时间设置">设置</button>';
+  h+='</div>';
+
+  // Timer
+  h+='<div class="card timer-display">';
+  if(r.mode==='2'){
+    h+='<div class="timer-dual"><div id="dual-pro" class="active" onclick="switchDualSide(\'pro\')"><div class="label">正方 '+(r.speaker==='正方'?r.position:'')+'</div><div class="time" id="t-pro">'+fmtTime(proDur)+'</div></div><div class="label" style="align-self:center;font-weight:bold;color:var(--gold)">VS</div><div id="dual-con" onclick="switchDualSide(\'con\')"><div class="label">反方 '+(r.speaker==='反方'?r.position:'')+'</div><div class="time" id="t-con">'+fmtTime(conDur)+'</div></div></div>';
+    h+='<div class="timer-ctrl"><button class="btn-sm" onclick="muted=!muted;this.textContent=muted?\'🔇 静音\':\'🔊 响铃\'">'+(muted?'🔇 静音':'🔊 响铃')+'</button><button class="btn gold" id="btn-toggle" onclick="toggleTimer(\'dual\')">开始计时</button><button class="btn-sm" onclick="if(timerRunning){switchDualSide(activeSide===\'pro\'?\'con\':\'pro\')}">切换发言方</button><button class="btn-sm" onclick="stopTimer();goRound('+idx+')">重置</button></div>';
+  }else{
+    h+='<div><div class="label">'+r.speaker+(r.position?' · '+r.position:'')+' · '+r.name+'</div><div class="time" id="t-main">'+fmtTime(proDur)+'</div></div>';
+    h+='<div class="timer-ctrl"><button class="btn-sm" onclick="muted=!muted;this.textContent=muted?\'🔇 静音\':\'🔊 响铃\'">'+(muted?'🔇 静音':'🔊 响铃')+'</button><button class="btn gold" id="btn-toggle" onclick="toggleTimer(\'single\')">开始计时</button><button class="btn-sm" onclick="stopTimer();goRound('+idx+')">重置</button></div>';
+  }
+  h+='</div>';
+
+  // Notes
+  h+='<div class="card"><h3>正方记录</h3><div class="row-inp"><textarea oninput="setR('+idx+',\'notesPro\',this.value)" placeholder="请输入">'+esc(r.notesPro)+'</textarea></div></div>';
+  h+='<div class="card"><h3>反方记录</h3><div class="row-inp"><textarea oninput="setR('+idx+',\'notesCon\',this.value)" placeholder="请输入">'+esc(r.notesCon)+'</textarea></div></div>';
+  h+='<div class="card"><h3>合并备注</h3><div class="row-inp"><textarea oninput="setR('+idx+',\'mergedNote\',this.value)" placeholder="请输入">'+esc(r.mergedNote)+'</textarea></div></div>';
+  m.innerHTML=h;
+  if(timerPaused){document.getElementById('btn-toggle').textContent='继续计时';}
+
+  f.innerHTML='';
+  f.innerHTML+='<button class="btn" onclick="goPrev('+idx+')">← 上一环节</button>';
+  f.innerHTML+='<button class="btn gold" onclick="goNext('+idx+')">下一环节 →</button>';
+  f.innerHTML+='<button class="btn-sm" style="margin-left:8px" onclick="goSummary()">训练结束，汇总</button>';
+}
+
+function onNameChange(idx,val){
+  M.rounds[idx].name=val;
+  // Auto-switch mode
+  if(['立论','申论/驳论','攻辩小结','总结陈词'].indexOf(val)>=0)M.rounds[idx].mode='1';
+  else if(['自由辩','对辩'].indexOf(val)>=0)M.rounds[idx].mode='2';
+  save();render();
+}
+function setR(idx,field,val){M.rounds[idx][field]=val;save();}
+function onModeChange(idx,val){M.rounds[idx].mode=val;save();goRound(idx);}
+function goPrev(idx){stopTimer();if(idx<=0){goStart();return;}VIEW=1;roundIdx=idx-1;render();}
+function goNext(idx){stopTimer();var n=idx+1;if(!M.rounds[n]){M.rounds.splice(n,0,JSON.parse(JSON.stringify(M.rounds[idx])));M.rounds[n].name='环节';save();}VIEW=1;roundIdx=n;render();}
+
+// Timer logic
+function runSingle(){
+  stopTimer();timerRunning=true;timerPaused=false;
+  updateTimerUI();
+  timerInterval=setInterval(function(){
+    proRemain--;
+    var el=document.getElementById('t-main');if(el){el.textContent=fmtTime(proRemain);if(proRemain<=30)el.classList.add('warn');}
+    if(proRemain===30)playBeep('warn');
+    if(proRemain<=0){stopTimer();playBeep('end');alert('时间到！');updateTimerUI();}
+  },1000);
+}
+function runDual(){
+  stopTimer();timerRunning=true;timerPaused=false;
+  updateTimerUI();
+  timerInterval=setInterval(function(){
+    if(activeSide==='pro'){proRemain--;var el=document.getElementById('t-pro');if(el){el.textContent=fmtTime(proRemain);if(proRemain<=30)el.classList.add('warn');}if(proRemain===30)playBeep('warn');if(proRemain<=0){activeSide='con';switchDualSide('con');}}
+    else{conRemain--;var el=document.getElementById('t-con');if(el){el.textContent=fmtTime(conRemain);if(conRemain<=30)el.classList.add('warn');}if(conRemain===30)playBeep('warn');if(conRemain<=0){activeSide='pro';switchDualSide('pro');}}
+    if(proRemain<=0&&conRemain<=0){stopTimer();playBeep('end');alert('双方时间均到！');updateTimerUI();}
+  },1000);
+}
+function switchDualSide(side){activeSide=side;var ep=document.getElementById('dual-pro'),ec=document.getElementById('dual-con');if(ep){ep.className=side==='pro'?'active':'';}if(ec){ec.className=side==='con'?'active':'';}}
+function updateTimerUI(){
+  var btn=document.getElementById('btn-toggle');if(!btn)return;
+  if(!timerRunning){btn.textContent='开始计时';}
+  else if(timerPaused){btn.textContent='继续计时';}
+  else{btn.textContent='暂停';}
+}
+
+// Summary
+function renderSummary(m,f){
+  stopTimer();save();
+  var summaryText=buildSummary();M._summaryText=summaryText;save();
+  var h='<div class="round-name-center">训练汇总</div>';
+  h+='<div class="card summary-box"><h3>按环节汇总</h3><textarea oninput="M._summaryText=this.value;save()">'+esc(summaryText)+'</textarea></div>';
+  var a=M.assessment;
+  h+='<div class="card"><h3>论证完成度评估</h3>';
+  h+=assess('正方架构完成度','proStruct');h+=assess('反方架构完成度','conStruct');
+  h+=assess('正方论证质量','proArg');h+=assess('反方论证质量','conArg');h+='</div>';
+  h+='<div class="card"><h3>心证评估</h3>';
+  h+=assess('一般情绪/印象','impression');h+=assess('讨论价值','value');h+=assess('总体定性','overall');h+='</div>';
+  h+='<div class="card"><h3>其它评估</h3>'+assess('其它评估','otherAssess')+'</div>';
+  h+='<div class="export-group"><h3>汇总导出上述全部内容</h3><p class="text-gray text-sm">以下格式均包含完整训练记录和评估：</p><div style="display:flex;gap:8px;flex-wrap:wrap">';
+  h+='<button class="btn-sm" onclick="exportMatch(\'md\')">导出 MD</button><button class="btn-sm" onclick="exportMatch(\'html\')">导出 HTML</button>';
+  h+='<button class="btn-sm" onclick="exportMatch(\'csv\')">导出 CSV</button><button class="btn-sm" onclick="exportMatch(\'txt\')">导出 TXT</button>';
+  h+='<button class="btn-sm" style="color:var(--gold);border-color:var(--gold)" onclick="exportMatch(\'json\')">导出 JSON <span class="text-sm text-gray">（仅有此格式支持导入历史记录）</span></button></div></div>';
+  m.innerHTML=h;
+  f.innerHTML='<button class="btn" onclick="goPrev('+(M.rounds.length-1)+')">← 上一环节</button>';
+}
+function buildSummary(){
+  var lines=[],total=M.rounds.length;
+  M.rounds.forEach(function(r,i){
+    var speaker=r.speaker+(r.position?' · '+r.position:'');
+    lines.push((i+1)+'/'+total+'. '+r.name+' — '+speaker);
+    lines.push('计时模式：'+(MODES.find(function(m){return m.v===r.mode})||{t:r.mode}).t);
+    lines.push('设定时长：'+r.proMin+'分'+r.proSec+'秒'+(r.mode==='2'?'（正方）/ '+r.conMin+'分'+r.conSec+'秒（反方）':''));
+    if(r.notesPro)lines.push('正方记录：'+r.notesPro);
+    if(r.notesCon)lines.push('反方记录：'+r.notesCon);
+    if(r.mergedNote)lines.push('备注：'+r.mergedNote);
+    lines.push('');
+  });
+  return lines.join('\n');
+}
+function assess(label,key){var v=M.assessment[key]||'';return'<div class="row-inp"><label>'+label+'</label><textarea oninput="M.assessment[\''+key+'\']=this.value;save()" placeholder="请输入">'+esc(v)+'</textarea></div>';}
+
+// Export - matching flowing tool
+async function exportMatch(fmt){
+  if(!M)return;
+  var title=M.title||'训练记录',dateStr=new Date().toLocaleString(),content='';
+  if(fmt==='txt'||fmt==='md'){
+    content='# '+title+'\n\n'+dateStr+'\n\n';
+    var total=M.rounds.length;
+    M.rounds.forEach(function(r,i){
+      var speaker=r.speaker+(r.position?' · '+r.position:'');
+      content+='## '+(i+1)+'/'+total+'. '+r.name+' — '+speaker+'\n\n';
+      content+='计时：'+r.proMin+'分'+r.proSec+'秒'+(r.mode==='2'?' / '+r.conMin+'分'+r.conSec+'秒（反方）':'')+'\n\n';
+      if(r.notesPro)content+='正方记录：'+r.notesPro+'\n\n';
+      if(r.notesCon)content+='反方记录：'+r.notesCon+'\n\n';
+      if(r.mergedNote)content+='备注：'+r.mergedNote+'\n\n';
+    });
+    content+='\n=== 论证完成度评估 ===\n'+assessSections();
+  }else if(fmt==='html'){
+    content='<!DOCTYPE html><html><head><meta charset=UTF-8><title>'+title+'</title></head><body><h1>'+title+'</h1><p>'+dateStr+'</p>';
+    var total=M.rounds.length;
+    M.rounds.forEach(function(r,i){var speaker=r.speaker+(r.position?' · '+r.position:'');content+='<h2>'+(i+1)+'/'+total+'. '+r.name+' — '+speaker+'</h2><p>计时：'+r.proMin+'分'+r.proSec+'秒'+(r.mode==='2'?' / '+r.conMin+'分'+r.conSec+'秒（反方）':'')+'</p>';if(r.notesPro)content+='<h3>正方记录</h3><p>'+nl2br(r.notesPro)+'</p>';if(r.notesCon)content+='<h3>反方记录</h3><p>'+nl2br(r.notesCon)+'</p>';if(r.mergedNote)content+='<h3>备注</h3><p>'+nl2br(r.mergedNote)+'</p>';});
+    content+='<h2>论证完成度评估</h2><ul><li>正方架构完成度：'+(M.assessment.proStruct||'')+'</li><li>反方架构完成度：'+(M.assessment.conStruct||'')+'</li><li>正方论证质量：'+(M.assessment.proArg||'')+'</li><li>反方论证质量：'+(M.assessment.conArg||'')+'</li></ul><h2>心证评估</h2><ul><li>一般情绪/印象：'+(M.assessment.impression||'')+'</li><li>讨论价值：'+(M.assessment.value||'')+'</li><li>总体定性：'+(M.assessment.overall||'')+'</li></ul><h2>其它评估</h2><p>'+(M.assessment.otherAssess||'')+'</p></body></html>';
+  }else if(fmt==='csv'){
+    content='环节序号,环节名,辩手,正方记录,反方记录,备注\n';
+    var total=M.rounds.length;
+    M.rounds.forEach(function(r,i){var speaker=r.speaker+(r.position?' · '+r.position:'');content+=(i+1)+'/'+total+',"'+r.name+'","'+speaker+'","'+(r.notesPro||'')+'","'+(r.notesCon||'')+'","'+(r.mergedNote||'')+'"\n';});
+    content+='\n评估项,内容\n';var a=M.assessment;
+    content+='正方架构完成度,"'+(a.proStruct||'')+'"\n反方架构完成度,"'+(a.conStruct||'')+'"\n正方论证质量,"'+(a.proArg||'')+'"\n反方论证质量,"'+(a.conArg||'')+'"\n一般情绪/印象,"'+(a.impression||'')+'"\n讨论价值,"'+(a.value||'')+'"\n总体定性,"'+(a.overall||'')+'"\n其它评估,"'+(a.otherAssess||'')+'"\n';
+  }else if(fmt==='json'){
+    var out=JSON.parse(JSON.stringify(M));delete out._updated;delete out._summaryText;content=JSON.stringify(out,null,2);
+  }
+  var mime='text/plain;charset=utf-8',ext='txt';
+  if(fmt==='md')ext='md';else if(fmt==='html'){ext='html';mime='text/html;charset=utf-8'}else if(fmt==='csv'){ext='csv';mime='text/csv;charset=utf-8'}else if(fmt==='json'){ext='json';mime='application/json'}
+  var fname='教练计时-'+title+'-'+new Date().toISOString().slice(0,10)+'.'+ext;
+  await doExport(content,mime,fname);
+}
+async function doExport(content,mime,fname){
+  save();
+  var ext=fname.split('.').pop();
+  var blob=new Blob(['﻿'+content],{type:mime+';charset=utf-8'});
+  if(typeof Capacitor!=='undefined'&&Capacitor.Plugins&&Capacitor.Plugins.Filesystem){
+    try{var C=Capacitor,FS=C.Plugins.Filesystem;
+      var result=await FS.writeFile({path:'Debate-Coach/'+fname,data:ext==='csv'?'﻿'+content:content,directory:'CACHE',recursive:true,encoding:'utf8'});
+      try{var Share=C.Plugins.Share;if(Share&&Share.share)Share.share({title:'导出训练记录',url:result.uri});}catch(e2){}
+      alert('已导出：'+fname);return;
+    }catch(e){alert('导出失败：'+e.message);return;}
+  }
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;a.click();URL.revokeObjectURL(a.href);
+}
+function assessSections(){var a=M.assessment;return'正方架构完成度：'+(a.proStruct||'')+'\n反方架构完成度：'+(a.conStruct||'')+'\n正方论证质量：'+(a.proArg||'')+'\n反方论证质量：'+(a.conArg||'')+'\n\n一般情绪/印象：'+(a.impression||'')+'\n讨论价值：'+(a.value||'')+'\n总体定性：'+(a.overall||'')+'\n\n其它评估：'+(a.otherAssess||'');}
+function esc(s){if(!s)return'';return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function nl2br(s){if(!s)return'';return s.replace(/\n/g,'<br>');}
+var muted=false;
+function playBeep(type){if(muted)return;
+  try{var C=window.AudioContext||window.webkitAudioContext;var ctx=new C();
+    function pip(freq,delay){
+      var o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.frequency.value=freq;g.gain.value=.25;o.type='square';
+      o.start();setTimeout(function(){o.stop();},80);
+    }
+    if(type==='warn'){pip(800,0);}
+    else{pip(800,0);setTimeout(function(){pip(800,150);},150);setTimeout(function(){pip(800,300);},300);setTimeout(function(){pip(1200,450);},450);}
+  }catch(e){}
+  if(typeof Capacitor!=='undefined'&&Capacitor.Plugins&&Capacitor.Plugins.LocalNotifications){
+    try{Capacitor.Plugins.LocalNotifications.schedule({notifications:[{id:Date.now(),title:'计时器',body:type==='warn'?'30秒警告':'时间到！',schedule:{at:new Date(Date.now()+100)}}]});}catch(e2){}
+  }
+}
+function toggleTheme(){document.body.classList.toggle('light');}
+
+(function(){if(loadMatch()){if(M.lastView&&M.lastView>0){VIEW=M.lastView;if(VIEW===1)roundIdx=M.lastRoundIdx||0;render();}else goStart();}else goStart();})();
+</script>
+</body>
+</html>

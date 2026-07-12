@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>备赛整合 · 标准化辩案工作台</title>
+<style>
+:root {
+  --bg: #0d0d0d; --card: #141414; --border: #222; --input-bg: #1a1a1a;
+  --gold: #ffc000; --text: #eee; --gray: #999; --dark-gray: #555;
+  --blue: #4fa8ee; --green: #6ecd71; --red: #ee5555;
+  --radius: 8px; --radius-sm: 6px;
+}
+body.light {
+  --bg: #f5f5f5; --card: #fff; --border: #e0e0e0; --input-bg: #f0f0f0;
+  --gold: #4f6bed; --text: #222; --gray: #666; --dark-gray: #999;
+  --blue: #4f6bed; --green: #4caf50; --red: #e53935;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'Microsoft YaHei','PingFang SC',sans-serif; height: 100vh; display: flex; flex-direction: column; }
+header { background: var(--card); padding: 14px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+header h1 { font-size: 16px; color: var(--gold); }
+header .step-label { font-size: 12px; color: var(--gray); }
+main { flex: 1; overflow-y: auto; padding: 20px; max-width: 920px; margin: 0 auto; width: 100%; }
+
+.step-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+.step-card h2 { color: var(--gold); font-size: 18px; margin-bottom: 8px; }
+.step-card h3 { color: var(--gold); font-size: 15px; margin: 20px 0 8px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+.step-card h4 { color: var(--text); font-size: 13px; margin: 12px 0 4px; }
+.meta { color: var(--gray); font-size: 12px; margin-bottom: 10px; }
+.coach-msg { background: var(--input-bg); border-left: 3px solid var(--gold); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 12px 0; font-size: 15px; line-height: 1.7; }
+.coach-msg .tag { color: var(--gold); font-weight: bold; }
+.part-label { display: inline-block; background: var(--border); color: var(--gold); padding: 2px 10px; border-radius: 12px; font-size: 11px; margin-right: 8px; vertical-align: middle; }
+
+table.t { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 13px; }
+table.t th { background: var(--input-bg); color: var(--gold); padding: 8px 10px; border: 1px solid var(--border); text-align: left; font-weight: normal; font-size: 12px; }
+table.t td { padding: 6px; border: 1px solid var(--border); vertical-align: top; }
+table.t td input, table.t td textarea, table.t td select { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 7px 10px; border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; outline: none; }
+table.t td input:focus, table.t td textarea:focus, table.t td select:focus { border-color: var(--gold); }
+table.t td textarea { min-height: 48px; resize: vertical; }
+table.t td select { padding: 6px 8px; }
+
+.progress-bar { display: flex; gap: 3px; margin-bottom: 20px; }
+.progress-dot { flex: 1; height: 4px; background: var(--border); border-radius: 2px; }
+.progress-dot.done { background: var(--green); }
+.progress-dot.current { background: var(--gold); }
+
+.row-inp { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0; }
+.row-inp label { color: var(--gray); font-size: 12px; min-width: 70px; padding-top: 9px; flex-shrink: 0; }
+.row-inp input, .row-inp textarea { flex: 1; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; outline: none; }
+.row-inp input:focus, .row-inp textarea:focus { border-color: var(--gold); }
+.row-inp textarea { min-height: 48px; resize: vertical; }
+
+.btn-sm { background: var(--card); border: 1px solid var(--border); color: var(--gray); padding: 4px 10px; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; font-family: inherit; }
+.btn-sm:hover { border-color: var(--gold); color: var(--gold); }
+.btn-sm.danger { color: var(--red); border-color: transparent; }
+.btn-sm.danger:hover { border-color: var(--red); }
+.btn-add { background: var(--card); border: 1px solid var(--border); color: var(--gray); padding: 6px 16px; border-radius: var(--radius-sm); cursor: pointer; font-size: 13px; font-family: inherit; transition: all 0.15s; }
+.btn-add:hover { border-color: var(--gold); color: var(--gold); }
+.btn-add.gold { border-color: var(--gold); color: var(--gold); }
+.btn-add.gold:hover { background: var(--gold); color: #000; }
+body.light .btn-add.gold:hover { background: var(--gold); color: #fff; }
+.add-row-wrap { text-align: right; padding: 6px 0 2px; }
+
+.btn-r { display: flex; gap: 8px; margin: 12px 0; }
+.btn { background: var(--card); color: var(--gray); border: 1px solid var(--border); padding: 10px 20px; border-radius: var(--radius-sm); cursor: pointer; font-size: 14px; font-family: inherit; transition: all 0.15s; }
+.btn:hover { border-color: var(--gold); color: var(--gold); }
+.btn.gold { background: var(--gold); color: #000; border: none; font-weight: bold; }
+.btn.gold:hover { opacity: 0.85; }
+body.light .btn.gold { color: #fff; }
+.btn.green { background: var(--green); color: #fff; border: none; font-weight: bold; }
+.btn.green:hover { opacity: 0.85; }
+
+.output-panel { background: var(--input-bg); border: 1px solid var(--gold); border-radius: var(--radius); padding: 16px; margin: 12px 0; max-height: 400px; overflow-y: auto; white-space: pre-wrap; font-family: 'Consolas','Microsoft YaHei',monospace; font-size: 13px; line-height: 1.6; color: var(--text); display: none; }
+.fmt-row { display:flex;gap:10px;justify-content:center;margin:8px 0; }
+.fmt-btn { flex:1;max-width:150px;background:var(--input-bg);border:1px solid var(--border);color:var(--text);padding:14px 10px;border-radius:var(--radius-sm);cursor:pointer;font-family:inherit;text-align:center; }
+.fmt-btn:hover { border-color:var(--gold); }
+.fmt-btn b { display:block;font-size:16px;color:var(--gold);margin-bottom:6px; }
+.fmt-btn span { display:block;font-size:11px;color:var(--gray);line-height:1.3; }
+.output-panel.show { display: block; }
+
+#theme-toggle { background: transparent; border: 1px solid var(--border); color: var(--gray); padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; font-family: inherit; }
+#theme-toggle:hover, #clear-data:hover { border-color: var(--gold); color: var(--gold); }
+#clear-data { background: transparent; border: 1px solid var(--border); color: var(--gray); padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; font-family: inherit; margin-left: 8px; }
+.section-block { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin: 10px 0; position: relative; }
+.section-block .remove-btn { position: absolute; top: 10px; right: 10px; }
+
+
+/* Responsive */
+@media (max-width:600px) {
+  header { padding: 10px 14px; }
+  header h1 { font-size: 14px; }
+  main { padding: 12px; }
+  .step-card { padding: 14px; }
+  table.t { font-size: 11px; }
+  table.t td input, table.t td textarea { font-size: 11px; padding: 5px 7px; }
+  .row-inp { flex-direction: column; gap: 4px; }
+  .row-inp label { padding-top: 0; }
+}
+</style>
+</head>
+<body class="light">
+<header><h1>备赛整合 · 标准化辩案工作台 <span class="step-label" id="step-label"></span></h1><span style="display:flex;gap:8px;align-items:center"><button id="theme-toggle" onclick="document.body.classList.toggle('light');this.textContent='界面颜色'" title="切换深色/浅色主题">界面颜色</button><button id="clear-data" onclick="if(confirm('确定清除所有填写数据？此操作不可恢复。')){localStorage.removeItem('estage_v2');location.reload();}" title="清除本地数据" style="color:var(--red)">清除数据</button></span></header>
+<main id="content"></main>
+<div style="padding:12px 20px;border-top:1px solid var(--border);flex-shrink:0;display:flex;justify-content:center;background:var(--card);align-items:center;position:relative">
+  <button onclick="window.top.location.reload()" class="btn" style="padding:10px 12px;position:absolute;left:20px">主页</button>
+  <span style="display:flex;gap:12px;align-items:center">
+  <button onclick="prevStep()" id="btn-prev" class="btn">← 上一步</button>
+  <span style="color:var(--gray);font-size:13px" id="page-num"></span>
+  <button onclick="nextStep()" id="btn-next" class="btn gold">下一步 →</button>
+  </span>
+</div>
+
+<script>
+(function(){if(typeof Capacitor==='undefined'){var s=document.createElement('script');s.src='https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';document.head.appendChild(s);}})();
+</script>
+<script>
+const STEPS = [
+  { id:'E0', title:'总览' },{ id:'E1', title:'资料搜集', part:'Part1' },
+  { id:'E2', title:'资料汇编1.0', part:'Part2' },{ id:'E3', title:'论点穷举', part:'Part3' },
+  { id:'E4', title:'论证架构', part:'Part4' },{ id:'E5', title:'我方防守', part:'Part5' },
+  { id:'E6', title:'我方攻击', part:'Part6' },{ id:'E7', title:'自由辩套题', part:'Part7' },
+  { id:'E8', title:'资料汇编2.0', part:'Part8' },{ id:'E9', title:'导出辩案', part:'Part9' },
+];
+let current = 0;
+
+// ---- DATA STORE ----
+let D = {};
+try { const s=localStorage.getItem('estage_v2'); if(s) D=JSON.parse(s); } catch(e) {}
+function save() { try { localStorage.setItem('estage_v2', JSON.stringify(D)); } catch(e) {} }
+function g(k,dflt) { return D[k]!==undefined ? D[k] : (dflt||''); }
+function s(k,v) { D[k]=v; save(); }
+function si(k,i,v) { s(k+'_'+i, v); }
+function gi(k,i,dflt) { return g(k+'_'+i, dflt); }
+
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function I(key,ph) { return `<input data-k="${key}" placeholder="${ph||''}" value="${esc(g(key))}" oninput="s('${key}',this.value)">`; }
+function T(key,ph) { return `<textarea data-k="${key}" placeholder="${ph||''}" oninput="s('${key}',this.value)">${esc(g(key))}</textarea>`; }
+function S(key,opts) { const v=g(key,opts[0]); return `<select data-k="${key}" onchange="s('${key}',this.value)">${opts.map(o=>`<option ${o===v?'selected':''}>${o}</option>`).join('')}</select>`; }
+function II(prefix,i,ph) { return `<input data-k="${prefix}_${i}" placeholder="${ph||''}" value="${esc(gi(prefix,i))}" oninput="si('${prefix}','${i}',this.value)">`; }
+function TI(prefix,i,ph) { return `<textarea data-k="${prefix}_${i}" placeholder="${ph||''}" oninput="si('${prefix}','${i}',this.value)">${esc(gi(prefix,i))}</textarea>`; }
+
+// Dynamic list utils
+function ensureList(key, defaultCount) {
+  if (!D[key+'_count']) s(key+'_count', defaultCount);
+}
+function getCount(key) { return parseInt(g(key+'_count'))||0; }
+
+function rowCount(key){
+  let n=0;
+  while(gi(key+'_atk',n)||gi(key+'_res',n)||gi(key+'_arg',n)||gi(key+'_s',n)||gi(key+'_q',n))n++;
+  return n||parseInt(g(key+'_count'))||0;
+}
+function rowCount2(key,field){
+  let n=0;
+  while(gi(key+'_'+field,n))n++;
+  return n||parseInt(g(key+'_count'))||0;
+}
+function addItem(key) { const c=getCount(key); s(key+'_count', c+1); render(); }
+function removeItem(key, idx) {
+  const c=getCount(key);
+  // Shift items above idx down
+  for (let i=idx; i<c-1; i++) {
+    for (let f of D._fields||[]) {
+      // Nope, just shift by brute force in render
+    }
+  }
+  s(key+'_count', Math.max(0, c-1));
+  render();
+}
+
+function progressBar() {
+  let d='';
+  for(let i=0;i<STEPS.length;i++) d+=`<div class="progress-dot ${i<current?'done':i===current?'current':''}"></div>`;
+  return `<div class="progress-bar">${d}</div>`;
+}
+
+// ---- E0 ----
+function rE0() {
+  return progressBar()+`
+  <div class="step-card"><h2>备赛整合工作台</h2>
+  <p style="font-size:15px;line-height:1.7;color:var(--text);margin-bottom:12px">本工具系根据<b style="color:var(--gold)">《辩论筑基》标准化辩案模板</b>、逐表填写、最终导出完整辩案的辅助小工具，也可按顺序辅助引导备赛流程。</p><p style="font-size:15px;line-height:1.7;color:var(--text);margin-bottom:12px">每张表都支持动态增删行——有多少关键词就加多少行，有多少辩位就加多少行。</p>
+  <div class="coach-msg"><span class="tag">用法</span> 从左到右挨个填。每步填完点下一步。到 E9 点「导出辩案」生成完整辩案文档。</div>
+  <h3>九张工作表</h3>
+  <table class="t"><tr><th style="width:40px">#</th><th>工作表</th><th>核心产出</th></tr>
+  <tr><td>1</td><td>资料搜集</td><td>关键词解释 + 类似案例 + 热点事件 + 专业理论（行数自定）</td></tr>
+  <tr><td>2</td><td>资料汇编1.0</td><td>按论证方向归类去重（方向数自定）</td></tr>
+  <tr><td>3</td><td>论点穷举</td><td>"因为…所以…" 不限条数</td></tr>
+  <tr><td>4</td><td>论证架构</td><td>定义 → 标准B0 → 分论点(N个) → 环节任务(N行,自由填写)</td></tr>
+  <tr><td>5</td><td>我方防守</td><td>每个我方论点 × 多路径 × 四层回应链</td></tr>
+  <tr><td>6</td><td>我方攻击</td><td>每个对方论点 × 三种反驳类型</td></tr>
+  <tr><td>7</td><td>自由辩套题</td><td>N个战场 × (问→追×2→归→转)</td></tr>
+  <tr><td>8</td><td>资料汇编2.0</td><td>按Part4架构重新归类</td></tr>
+  <tr><td>9</td><td>导出辩案</td><td>一致性检查 → 编译输出完整辩案文档</td></tr></table>
+  <div class="btn-r"><button class="btn gold" onclick="nextStep()">开始 →</button></div></div>`;
+}
+
+// ---- E1: Part1 资料搜集 ----
+function rE1() {
+  ensureList('e1_kw',3); ensureList('e1_case',2); ensureList('e1_news',2); ensureList('e1_theory',2);
+  let h=progressBar()+`<div class="step-card"><h2><span class="part-label">Part1</span>资料搜集</h2>`;
+  const blocks=[
+    {name:'关键词解释',key:'e1_kw',desc:'辩题每个关键词至少3条不同来源的解释', hasKw:true},
+    {name:'类似案例/调查',key:'e1_case',desc:'和辩题相关的公共事件、学术调查、历史案例', hasKw:false},
+    {name:'热点/近期事件',key:'e1_news',desc:'近1-2年与辩题相关的新闻', hasKw:false},
+    {name:'专业理论/学术研究',key:'e1_theory',desc:'学术理论、法律条文、专业数据', hasKw:false},
+  ];
+  blocks.forEach(b=>{
+    const n=getCount(b.key);
+    h+=`<h3>${b.name}</h3><p class="meta">${b.desc}</p>`;
+    if (b.hasKw) {
+      h+=`<table class="t"><tr><th style="width:30px">#</th><th style="width:80px">关键词</th><th>一句话概括</th><th>关键句粘贴</th><th style="width:100px">作者/机构/时间</th><th style="width:80px">来源</th><th style="width:100px">网址</th><th style="width:30px"></th></tr>`;
+    } else {
+      h+=`<table class="t"><tr><th style="width:30px">#</th><th>一句话概括</th><th>关键句粘贴</th><th style="width:100px">作者/机构/时间</th><th style="width:80px">来源</th><th style="width:100px">网址</th><th style="width:30px"></th></tr>`;
+    }
+    for(let i=0;i<n;i++){
+      if (b.hasKw) {
+        h+=`<tr><td>${i+1}</td><td>${II(b.key+'_kw',i)}</td><td>${II(b.key+'_s',i)}</td><td>${TI(b.key+'_q',i)}</td><td>${II(b.key+'_a',i)}</td><td>${II(b.key+'_src',i)}</td><td>${II(b.key+'_url',i)}</td><td>${n>1?`<button class="btn-sm danger" onclick="removeRow('${b.key}',${i})">×</button>`:''}</td></tr>`;
+      } else {
+        h+=`<tr><td>${i+1}</td><td>${II(b.key+'_s',i)}</td><td>${TI(b.key+'_q',i)}</td><td>${II(b.key+'_a',i)}</td><td>${II(b.key+'_src',i)}</td><td>${II(b.key+'_url',i)}</td><td>${n>1?`<button class="btn-sm danger" onclick="removeRow('${b.key}',${i})">×</button>`:''}</td></tr>`;
+      }
+    }
+    h+=`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${b.key}')">+1行</button></div>`;
+  });
+  return h+`</div>`;
+}
+function removeOpp(o){
+  var n=parseInt(g('e6_opp_count'))||0;
+  if(n<=1) return;
+  var last=n-1;
+  if(o!==last){
+    si('e6_opp_chain',o,gi('e6_opp_chain',last));
+    si('e6_opp_ev',o,gi('e6_opp_ev',last));
+    for(var ti=0;ti<3;ti++){
+      si('e6_atk',o+'_'+ti,gi('e6_atk',last+'_'+ti));
+      si('e6_ev',o+'_'+ti,gi('e6_ev',last+'_'+ti));
+      si('e6_arg',o+'_'+ti,gi('e6_arg',last+'_'+ti));
+    }
+  }
+  s('e6_opp_count',n-1);
+  render();
+}
+function removeRow(key,idx) {
+  const n=getCount(key);
+  // Copy last item to idx, then decrement count
+  if (n<=1) return;
+  const fields=['s','q','a','src','url'];
+  for (let i=idx; i<n-1; i++) {
+    fields.forEach(f=>{ si(key+'_'+f, i, gi(key+'_'+f, i+1)); });
+  }
+  s(key+'_count', n-1);
+  render();
+}
+
+// ---- E2: Part2 资料汇编1.0 ----
+function rE2() {
+  ensureList('e2_dir',3);
+  const nd=getCount('e2_dir');
+  let h=progressBar()+`<div class="step-card"><h2><span class="part-label">Part2</span>资料汇编1.0 — 去重合并归类</h2>
+  <p class="meta">按论证方向归类。方向数和每方向的资料数自由增减。</p>`;
+  for(let d=0;d<nd;d++){
+    ensureList('e2_d'+d,3);
+    const ni=getCount('e2_d'+d);
+    h+=`<div class="section-block"><h4>论证方向 ${d+1} <button class="btn-sm danger remove-btn" onclick="removeRow('e2_dir',${d})">×方向</button></h4>
+    <div class="row-inp"><label>方向名</label>${II('e2_dirname',d,'例：支持分论点1 / 范围支撑')}</div>
+    <table class="t"><tr><th style="width:30px">#</th><th>资料摘要</th><th>关键句</th><th>来源</th><th>网址</th><th style="width:30px"></th></tr>`;
+    for(let i=0;i<ni;i++){
+      h+=`<tr><td>${i+1}</td><td>${II('e2_d'+d+'_s',i)}</td><td>${TI('e2_d'+d+'_q',i)}</td><td>${II('e2_d'+d+'_src',i)}</td><td>${II('e2_d'+d+'_url',i)}</td><td>${ni>1?`<button class="btn-sm danger" onclick="removeRow('e2_d${d}',${i})">×</button>`:''}</td></tr>`;
+    }
+    h+=`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('e2_d${d}')">+1行</button></div></div>`;
+  }
+  h+=`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e2_dir')">+1个方向</button></div>`;
+  return h+`</div>`;
+}
+
+// ---- E3: Part3 论点穷举 ----
+function rE3() {
+  ensureList('e3_args',20);
+  const n=getCount('e3_args');
+  let h=progressBar()+`<div class="step-card"><h2><span class="part-label">Part3</span>论点穷举清单</h2>
+  <p class="meta">不筛选不评判——把能想到的所有论证方向全列出来（"因为…所以…"格式）。</p>
+  <table class="t"><tr><th style="width:30px">#</th><th style="width:40%">因为</th><th style="width:40%">所以</th><th style="width:60px">方向</th><th style="width:30px"></th></tr>`;
+  for(let i=0;i<n;i++){
+    h+=`<tr><td>${i+1}</td><td>${II('e3_because',i)}</td><td>${II('e3_so',i)}</td><td>${(()=>{const v=gi('e3_side',i,'我方');return `<select data-k="e3_side_${i}" onchange="si('e3_side','${i}',this.value)"><option ${v==='我方'?'selected':''}>我方</option><option ${v==='对方'?'selected':''}>对方</option></select>`})()}</td><td>${n>1?`<button class="btn-sm danger" onclick="removeRow('e3_args',${i})">×</button>`:''}</td></tr>`;
+  }
+  return h+`</table><div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e3_args')">+1行</button></div></div>`;
+}
+
+// ---- E4: Part4 论证架构 ----
+function dynBlock(key, idx, total, label, titleFields) {
+  // titleFields: [{label,fieldKey,placeholder,isTextarea}]
+  // Each block has its own dynamic evidence rows: key+'_ev_'+idx count
+  const evKey = key+'_'+idx;
+  ensureList(evKey, 2);
+  const nev = getCount(evKey);
+  let h = `<div class="section-block"><b style="color:var(--gold);font-size:13px">${label}</b> ${total>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('${key}',${idx})">×</button>`:''}`;
+  titleFields.forEach(tf => {
+    if (tf.isTextarea) {
+      h += `<div class="row-inp"><label>${tf.label}</label>${TI(key+'_'+tf.fieldKey, idx, tf.placeholder||'')}</div>`;
+    } else {
+      h += `<div class="row-inp"><label>${tf.label}</label>${II(key+'_'+tf.fieldKey, idx, tf.placeholder||'')}</div>`;
+    }
+  });
+  h += `<table class="t"><tr><th style="width:30px">#</th><th>论证</th><th>证据</th><th style="width:30px"></th></tr>`;
+  for(let i=0;i<nev;i++){
+    h += `<tr><td>${i+1}</td><td>${TI(evKey+'_arg',i)}</td><td>${II(evKey+'_ev',i)}</td><td>${nev>1?`<button class="btn-sm danger" onclick="removeRow('${evKey}',${i})">×</button>`:''}</td></tr>`;
+  }
+  h += `</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${evKey}')">+1行</button></div></div>`;
+  return h;
+}
+
+function rE4() {
+  ensureList('e4_defs',2); ensureList('e4_subpoints',3); ensureList('e4_extra',0);
+  const nd=getCount('e4_defs'), np=getCount('e4_subpoints'), ne=getCount('e4_extra');
+  let h=progressBar()+`<div class="step-card"><h2><span class="part-label">Part4</span>论证架构 + 环节任务分配</h2>`;
+
+  h+=`<h3>定义/讨论范围</h3><p class="meta">关键词数量自定。每个关键词内部论证行数自定——每行填一条论证和对应证据。</p>`;
+  for(let d=0;d<nd;d++){
+    h+=dynBlock('e4_defs',d,nd,'关键词 '+(d+1),[
+      {label:'关键词',fieldKey:'kw',placeholder:'辩题中的具体词语'},
+      {label:'定义内容',fieldKey:'val',placeholder:'我方对这个关键词的定义',isTextarea:true}
+    ]);
+  }
+  h+=`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e4_defs')">+1个关键词</button></div>`;
+
+  // B0
+  h+=`<h3>标准 B0</h3><div class="row-inp"><label>B0</label>${I('e4_b0','我方成立的最直接/最大/最重要的理由')}</div>
+  <div class="row-inp"><label>标准合理性</label>${T('e4_b0_arg1','凭什么用这个标准来判断')}</div>`;
+  ensureList('e4_b0_ev',2);
+  const nb0ev=getCount('e4_b0_ev');
+  h+=`<table class="t"><tr><th style="width:30px">#</th><th>论证</th><th>证据</th><th style="width:30px"></th></tr>`;
+  for(let i=0;i<nb0ev;i++){
+    h+=`<tr><td>${i+1}</td><td>${TI('e4_b0_ev_arg',i)}</td><td>${II('e4_b0_ev_ev',i)}</td><td>${nb0ev>1?`<button class="btn-sm danger" onclick="removeRow('e4_b0_ev',${i})">×</button>`:''}</td></tr>`;
+  }
+  h+=`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('e4_b0_ev')">+1行</button></div>`;
+
+  // Sub-points
+  h+=`<h3>分论点</h3>`;
+  for(let p=0;p<np;p++){
+    h+=dynBlock('e4_subpoints',p,np,'分论点'+(p+1),[
+      {label:'论点句',fieldKey:'chain',placeholder:'',isTextarea:true}
+    ]);
+  }
+  h+=`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e4_subpoints')">+1个分论点</button></div>`;
+
+  // Extra
+  h+=`<h3>其它补充</h3><p class="meta">架构中需要拿下但不在上述分类中的额外前提、条件或说明</p>`;
+  for(let e=0;e<ne;e++){
+    h+=dynBlock('e4_extra',e,ne,'补充'+(e+1),[
+      {label:'内容',fieldKey:'title',placeholder:''}
+    ]);
+  }
+  h+=`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e4_extra')">+1条补充</button></div>`;
+
+  // Session tasks
+  ensureList('e4_tasks',4);
+  const nt=getCount('e4_tasks');
+  h+=`<h3>各环节任务分配</h3><p class="meta">辩位/环节名称、任务描述、时长全部自由填写。</p>
+  <table class="t"><tr><th style="width:80px">辩位</th><th style="width:100px">环节</th><th>任务描述</th><th style="width:60px">计划时长</th><th style="width:30px"></th></tr>`;
+  for(let i=0;i<nt;i++){
+    h+=`<tr><td>${II('e4_t_pos',i,'一辩')}</td><td>${II('e4_t_seg',i,'立论陈词')}</td><td>${TI('e4_t_task',i)}</td><td>${II('e4_t_time',i,'3min')}</td><td>${nt>1?`<button class="btn-sm danger" onclick="removeRow('e4_tasks',${i})">×</button>`:''}</td></tr>`;
+  }
+  h+=`</table><div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e4_tasks')">+1行</button></div>`;
+  return h+`</div>`;
+}
+
+// ---- E5: Part5 我方防守 ----
+function defBlock(key, idx, total, label) {
+  // Dynamic rows: 对方可能攻击 | 对方可能论据 | 我方回应 | 我方论据
+  const evKey = key+'_'+idx;
+  ensureList(evKey, 2);
+  const nev = getCount(evKey);
+  let h = `<div class="section-block"><b style="color:var(--gold);font-size:13px">${label}</b> ${total>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('${key}',${idx})">×</button>`:''}
+  <table class="t"><tr><th>对方可能攻击</th><th>对方可能论据</th><th>我方回应</th><th>我方论据</th><th style="width:30px"></th></tr>`;
+  for(let i=0;i<nev;i++){
+    h+=`<tr><td>${TI(evKey+'_atk',i)}</td><td>${II(evKey+'_oev',i)}</td><td>${TI(evKey+'_res',i)}</td><td>${II(evKey+'_mev',i)}</td><td>${nev>1?`<button class="btn-sm danger" onclick="removeRow('${evKey}',${i})">×</button>`:''}</td></tr>`;
+  }
+  h+=`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${evKey}')">+1行</button></div></div>`;
+  return h;
+}
+
+function scopeBlock(key, label) {
+  // Discussion scope: unified table - 对方可能攻击 | 对方可能论据 | 我方回应 | 我方论据
+  ensureList(key+'_rows', 2);
+  const nr = getCount(key+'_rows');
+  let h = `<div class="section-block"><b style="color:var(--gold);font-size:13px">${label}</b>
+  <table class="t"><tr><th>对方可能攻击</th><th>对方可能论据</th><th>我方回应</th><th>我方论据</th><th style="width:30px"></th></tr>`;
+  for(let i=0;i<nr;i++){
+    h+=`<tr><td>${TI(key+'_rows_atk',i)}</td><td>${II(key+'_rows_oev',i)}</td><td>${TI(key+'_rows_res',i)}</td><td>${II(key+'_rows_mev',i)}</td><td>${nr>1?`<button class="btn-sm danger" onclick="removeRow('${key}_rows',${i})">×</button>`:''}</td></tr>`;
+  }
+  h+=`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${key}_rows')">+1行</button></div></div>`;
+  return h;
+}
+
+function customBlock(key, idx, total) {
+  // Custom defense block: 我方防守的点 | 对方可能攻击 | 对方可能论据 | 我方回应及论据
+  const evKey = key+'_'+idx;
+  ensureList(evKey, 2);
+  const nev = getCount(evKey);
+  let h = `<div class="section-block"><b style="color:var(--gold);font-size:13px">自定义防守 ${idx+1}</b> ${total>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('${key}',${idx})">×</button>`:''}
+  <div class="row-inp"><label>我方防守的点</label>${II(key+'_pt',idx,'例如：分论点1 / 标准B0 / 某个关键论据')}</div>
+  <table class="t"><tr><th>对方可能攻击</th><th>对方可能论据</th><th>我方回应及论据</th><th style="width:30px"></th></tr>`;
+  for(let i=0;i<nev;i++){
+    h+=`<tr><td>${TI(evKey+'_atk',i)}</td><td>${II(evKey+'_oev',i)}</td><td>${TI(evKey+'_res',i)}</td><td>${nev>1?`<button class="btn-sm danger" onclick="removeRow('${evKey}',${i})">×</button>`:''}</td></tr>`;
+  }
+  h+=`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${evKey}')">+1行</button></div></div>`;
+  return h;
+}
+
+function rE5() {
+  ensureList('e5_custom',0);
+  const nc=getCount('e5_custom');
+  let h=progressBar()+`<div class="step-card"><h2><span class="part-label">Part5</span>我方防守体系</h2>
+  <p class="meta">所有模块内部行数自定——有多少攻击路径就加多少行。每行四列：对方可能攻击 | 对方可能论据 | 我方回应 | 我方论据。</p>`;
+
+  // 固有定义域
+  h+=`<h3>固有定义域</h3>`;
+  h+=defBlock('e5_domain',0,2,'定义过宽/过窄');
+  h+=defBlock('e5_domain',1,2,'定义回避核心争议');
+
+  // 讨论范围切入
+  h+=`<h3>讨论范围切入</h3>`;
+  h+=scopeBlock('e5_scope','讨论范围切入防守');
+
+  // 标准B0
+  h+=`<h3>标准 B0 防守</h3>`;
+  h+=defBlock('e5_b0',0,2,'B→C推不通');
+  h+=defBlock('e5_b0',1,2,'B不重要（有更重要的判准）');
+
+  // 分论点防守 (dynamic)
+  ensureList('e5_subp',3);
+  const np=getCount('e5_subp');
+  h+=`<h3>分论点防守</h3>`;
+  for(let p=0;p<np;p++){
+    h+=`<div class="section-block"><b style="color:var(--gold);font-size:13px">分论点${p+1}防守</b> ${np>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('e5_subp',${p})">×</button>`:''}
+    <div class="row-inp"><label>论点句</label>${TI('e5_subp_pt',p)}</div>`;
+    // 3 paths each with dynamic rows
+    ['A→B（事实反驳）','B→C（逻辑反驳）','B不重要（价值反驳）'].forEach((path,pi)=>{
+      const evKey='e5_subp_'+p+'_'+pi;
+      ensureList(evKey,2);
+      const nev=getCount(evKey);
+      h+=`<div style="margin:6px 0;padding:8px;background:var(--bg);border-radius:6px"><b style="color:var(--gold);font-size:11px">${path}</b>
+      <table class="t"><tr><th>对方可能攻击</th><th>对方可能论据</th><th>我方回应</th><th>我方论据</th><th style="width:30px"></th></tr>`;
+      for(let i=0;i<nev;i++){
+        h+=`<tr><td>${TI(evKey+'_atk',i)}</td><td>${II(evKey+'_oev',i)}</td><td>${TI(evKey+'_res',i)}</td><td>${II(evKey+'_mev',i)}</td><td>${nev>1?`<button class="btn-sm danger" onclick="removeRow('${evKey}',${i})">×</button>`:''}</td></tr>`;
+      }
+      h+=`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${evKey}')">+1行</button></div></div>`;
+    });
+    h+=`</div>`;
+  }
+  h+=`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e5_subp')">+1个分论点防守</button></div>`;
+
+  // Custom blocks
+  h+=`<h3>其它防守点</h3>`;
+  for(let c=0;c<nc;c++){
+    h+=customBlock('e5_custom',c,nc);
+  }
+  h+=`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e5_custom')">+1个防守点</button></div>`;
+  return h+`</div>`;
+}
+
+// ---- E6: Part6 我方攻击 ----
+function rE6() {
+  ensureList('e6_opp',3);
+  const no=getCount('e6_opp');
+  let h=progressBar()+`<div class="step-card"><h2><span class="part-label">Part6</span>我方攻击体系</h2>
+  <p class="meta">按对方可能论点穷举攻击路径，每个论点配三种反驳类型+证据+编号G系列</p>`;
+  for(let o=0;o<no;o++){
+    h+=`<div class="section-block"><h4>对方论点 ${o+1} ${no>1?`<button class="btn-sm danger remove-btn" onclick="removeOpp(${o})">×</button>`:''}</h4>
+    <div class="row-inp"><label>对方论证</label>${TI('e6_opp_chain',o,'完整A→B→C链条')}</div>
+    <div class="row-inp"><label>对方证据</label>${II('e6_opp_ev',o,'对方最可能引用的证据')}</div>
+    <table class="t"><tr><th>反驳类型</th><th>攻击路径（我方怎么打）</th><th>证据</th><th>论证</th><th style="width:50px">编号</th></tr>`;
+    ['A→B（事实）','B→C（逻辑）','B不重要（价值）'].forEach((t,ti)=>{
+      h+=`<tr><td style="font-size:12px">${t}</td><td>${TI('e6_atk',o+'_'+ti)}</td><td>${II('e6_ev',o+'_'+ti)}</td><td>${II('e6_arg',o+'_'+ti)}</td><td>G${o+1}${ti+1}1</td></tr>`;
+    });
+    h+=`</table></div>`;
+  }
+  h+=`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e6_opp')">+1个对方论点</button></div>`;
+  return h+`</div>`;
+}
+
+// ---- E7: Part7 自由辩套题 ----
+function rE7() {
+  ensureList('e7_bf',3);
+  const nb=getCount('e7_bf');
+  let h=progressBar()+`<div class="step-card"><h2><span class="part-label">Part7</span>自由辩套题</h2>
+  <p class="meta">每个战场：问（锁定立场）→ 追×2（预判回应追问）→ 归（收束到我方）→ 转（切下一战场）</p>`;
+  for(let b=0;b<nb;b++){
+    h+=`<div class="section-block"><h4>战场 ${b+1} ${nb>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('e7_bf',${b})">×</button>`:''}</h4>
+    <div class="row-inp"><label>战场</label>${II('e7_name',b,'')}</div>
+    <table class="t"><tr><th style="width:20px">#</th><th style="width:60px">功能</th><th>内容</th><th style="width:120px">预判回应</th></tr>
+    <tr><td>1</td><td style="color:var(--gold)">问</td><td>${TI('e7_ask',b)}</td><td>${II('e7_ask_resp',b)}</td></tr>
+    <tr><td>2</td><td style="color:var(--blue)">追1</td><td>${TI('e7_ch1',b)}</td><td>${II('e7_ch1_resp',b)}</td></tr>
+    <tr><td>3</td><td style="color:var(--blue)">追2</td><td>${TI('e7_ch2',b)}</td><td>${II('e7_ch2_resp',b)}</td></tr>
+    <tr><td>4</td><td style="color:var(--green)">归</td><td>${TI('e7_ret',b)}</td><td>—</td></tr>
+    <tr><td>5</td><td style="color:var(--gray)">转</td><td>${II('e7_trans',b,'过渡句，切入下一战场')}</td><td>—</td></tr></table></div>`;
+  }
+  return h+`</div>`;
+}
+
+// ---- E8: Part8 资料汇编2.0 ----
+function rE8() {
+  ensureList('e8_cats',5);
+  const nc=getCount('e8_cats');
+  const defNames=['定义/讨论范围','标准B0','分论点1','分论点2','分论点3'];
+  let h=progressBar()+`<div class="step-card"><h2><span class="part-label">Part8</span>资料汇编2.0</h2>
+  <p class="meta">按Part4架构重新归类。每类资料数自定。</p>`;
+  for(let c=0;c<nc;c++){
+    ensureList('e8_c'+c,2);
+    const ni=rowCount2('e8_c'+c,'s');
+    const catName=gi('e8_catname',c,defNames[c]||'分类'+(c+1));
+    if(D['e8_catname_'+c]===undefined) si('e8_catname',c,defNames[c]||'分类'+(c+1));
+    h+=`<div class="section-block"><h4>${esc(catName)} ${nc>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('e8_cats',${c})">×</button>`:''}</h4>
+    <div class="row-inp"><label>分类名</label><input data-k="e8_catname_${c}" value="${esc(catName)}" oninput="si('e8_catname','${c}',this.value)"></div>
+    <table class="t"><tr><th style="width:30px">#</th><th>资料摘要</th><th>关键句</th><th>来源</th><th style="width:60px">对应编号</th><th style="width:30px"></th></tr>`;
+    for(let i=0;i<ni;i++){
+      h+=`<tr><td>${i+1}</td><td>${II('e8_c'+c+'_s',i)}</td><td>${TI('e8_c'+c+'_q',i)}</td><td>${II('e8_c'+c+'_src',i)}</td><td>${II('e8_c'+c+'_code',i,'F/G编号')}</td><td>${ni>1?`<button class="btn-sm danger" onclick="removeRow('e8_c${c}',${i})">×</button>`:''}</td></tr>`;
+    }
+    h+=`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('e8_c${c}')">+1行</button></div></div>`;
+  }
+  h+=`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e8_cats')">+1个分类</button></div>`;
+  return h+`</div>`;
+}
+
+// ---- E9: Part9 导出 ----
+function rE9() {
+  let h=progressBar()+`<div class="step-card"><h2><span class="part-label">Part9</span>成文整合 — 导出辩案</h2>`;
+  h+=`<h3>一致性检查</h3><table class="t"><tr><th>检查项</th><th style="width:60px">状态</th><th>备注</th></tr>`;
+  ['信息一致性：各表B0/分论点措辞统一','论证连贯性：论证顺序与Part4最佳序一致','攻防一致性：成文稿对齐Part6攻击路径','各环节时间分配确定，环节时长与稿件字数匹配','自由辩闭环：每个战场有问-追-归完整链','资料稿件打印、服装准备就绪'].forEach((c,i)=>{
+    h+=`<tr><td>${c}</td><td>${S('e9_c'+i,['✓','✗','⚠'])}</td><td>${I('e9_n'+i)}</td></tr>`;
+  });
+  h+=`</table><h3>导出辩案</h3><div class="fmt-row">${[
+  ['xlsx','📊 Excel','限电脑端'],
+  ['md','📄 MD','AI 可读'],
+  ['txt','纯文本','通用兼容'],
+  ['html','🌐 HTML','浏览器打开']
+].map(([fmt,label,desc])=>'<button class="fmt-btn" onclick="doExport(\''+fmt+'\')"><b>'+label+'</b><span>'+desc+'</span></button>').join('')}</div><div class="output-panel" id="op"></div></div>`;
+  return h;
+}
+
+var isApp = typeof Capacitor !== 'undefined';
+// ---- EXPORT ----
+async function doExport(fmt) {
+  save();
+  var content='', ext='', mime='';
+  if (fmt==='md') { content=genMD(); ext='md'; mime='text/markdown'; }
+  else if (fmt==='html') { content=genHTMLTable(); ext='html'; mime='text/html'; }
+  else if (fmt==='xlsx') { if(isApp||typeof XLSX==='undefined'){content=buildCSV();ext='csv';mime='text/csv';}else{genXLSX();return;} }
+  else { content=genTXT(); ext='txt'; mime='text/plain'; }
+  var name='辩论筑基-标准化辩案-'+new Date().toISOString().slice(0,10)+'.'+ext;
+  var blob=new Blob(['﻿'+content],{type:mime+';charset=utf-8'});
+  if(typeof Capacitor!=='undefined'&&Capacitor.Plugins&&Capacitor.Plugins.Filesystem){
+    try{var C=Capacitor,FS=C.Plugins.Filesystem;
+      var result=await FS.writeFile({path:'Debate-Coach/'+name,data:ext==='csv'?'﻿'+content:content,directory:'CACHE',recursive:true,encoding:'utf8'});
+      try{var Share=C.Plugins.Share;if(Share&&Share.share)Share.share({title:'导出辩案',url:result.uri});}catch(e2){}
+      alert('已导出：'+name);return;
+    }catch(e){alert('导出失败：'+e.message);return;}
+  }
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=name;a.click();URL.revokeObjectURL(a.href);
+}
+
+function rc(key) {
+  var n=parseInt(g(key+'_count'))||0;
+  if (n>0) return n;
+  while (gi(key+'_atk',n)||gi(key+'_res',n)||gi(key+'_arg',n)||gi(key+'_s',n)) n++;
+  return n;
+}
+function rcField(key, field) {
+  var n=parseInt(g(key+'_count'))||0;
+  if (n>0) return n;
+  while (D[key+'_'+field+'_'+n] !== undefined) n++;
+  return n;
+}
+
+// ---- SHARED DATA ----
+function p5x(s,label,key,idx){for(var j=0;j<rc(key+'_'+idx);j++)s.push([label,g(key+'_'+idx+'_atk_'+j)||'',g(key+'_'+idx+'_oev_'+j)||'',g(key+'_'+idx+'_res_'+j)||'',g(key+'_'+idx+'_mev_'+j)||'']);}
+function buildParts(){
+  var P=[],s,i,d,p,pi,c,b;
+  // P1
+  s=[['分类','序号','关键词','摘要','关键句','作者','来源','网址']];
+  [{k:'e1_kw',n:'关键词解释'},{k:'e1_case',n:'类似案例'},{k:'e1_news',n:'热点事件'},{k:'e1_theory',n:'专业理论'}].forEach(function(c){for(i=0;i<rcField(c.k,'s');i++)s.push([c.n,i+1,g(c.k+'_kw_'+i)||'',g(c.k+'_s_'+i)||'',g(c.k+'_q_'+i)||'',g(c.k+'_a_'+i)||'',g(c.k+'_src_'+i)||'',g(c.k+'_url_'+i)||'']);});
+  P.push({title:'Part1 资料搜集',rows:s});
+  // P2
+  s=[['方向','#','摘要','关键句','来源','网址']];
+  for(d=0;d<rcField('e2_dir','dirname');d++){for(i=0;i<rcField('e2_d'+d,'s');i++)s.push([g('e2_dirname_'+d)||'方向'+(d+1),i+1,g('e2_d'+d+'_s_'+i)||'',g('e2_d'+d+'_q_'+i)||'',g('e2_d'+d+'_src_'+i)||'',g('e2_d'+d+'_url_'+i)||'']);}
+  P.push({title:'Part2 资料汇编',rows:s});
+  // P3
+  s=[['#','因为','所以','方向']];
+  for(i=0;i<rcField('e3_args','because');i++)s.push([i+1,g('e3_because_'+i)||'',g('e3_so_'+i)||'',g('e3_side_'+i)||'']);
+  P.push({title:'Part3 论点穷举',rows:s});
+  // P4
+  s=[['模块','项目','论证','证据']];
+  for(d=0;d<rcField('e4_defs','kw');d++){for(i=0;i<rc('e4_defs_'+d);i++)s.push(['定义',(g('e4_def_kw_'+d)||'')+': '+(g('e4_def_val_'+d)||''),g('e4_defs_'+d+'_arg_'+i)||'',g('e4_defs_'+d+'_ev_'+i)||'']);}
+  s.push(['标准B0','B0',g('e4_b0')||'','']);s.push(['标准B0','标准合理性',g('e4_b0_arg1')||'','']);
+  for(i=0;i<rc('e4_b0_ev');i++)s.push(['标准B0','证据',g('e4_b0_ev_arg_'+i)||'',g('e4_b0_ev_ev_'+i)||'']);
+  for(p=0;p<rcField('e4_subpoints','chain');p++){for(i=0;i<rc('e4_subpoints_'+p);i++)s.push(['分论点'+(p+1),g('e4_p_chain_'+p)||'',g('e4_subpoints_'+p+'_arg_'+i)||'',g('e4_subpoints_'+p+'_ev_'+i)||'']);}
+  for(i=0;i<rcField('e4_tasks','pos');i++)s.push(['环节任务',g('e4_t_pos_'+i)||'',(g('e4_t_seg_'+i)||'')+': '+(g('e4_t_task_'+i)||''),g('e4_t_time_'+i)||'']);
+  P.push({title:'Part4 架构',rows:s});
+  // P5
+  s=[['模块','对方可能攻击','对方可能论据','我方回应','我方论据']];
+  p5x(s,'固有定义域-过宽/过窄','e5_domain',0);p5x(s,'固有定义域-回避核心争议','e5_domain',1);
+  for(i=0;i<rc('e5_scope_rows');i++)s.push(['讨论范围切入',g('e5_scope_rows_atk_'+i)||'',g('e5_scope_rows_oev_'+i)||'',g('e5_scope_rows_res_'+i)||'',g('e5_scope_rows_mev_'+i)||'']);
+  p5x(s,'标准B0-B→C推不通','e5_b0',0);p5x(s,'标准B0-B不重要','e5_b0',1);
+  for(p=0;p<rcField('e5_subp','pt');p++){for(pi=0;pi<3;pi++){for(j=0;j<rc('e5_subp_'+p+'_'+pi);j++)s.push([(g('e5_subp_pt_'+p)||'分论点'+(p+1))+' - '+['A→B','B→C','B不重要'][pi],g('e5_subp_'+p+'_'+pi+'_atk_'+j)||'',g('e5_subp_'+p+'_'+pi+'_oev_'+j)||'',g('e5_subp_'+p+'_'+pi+'_res_'+j)||'',g('e5_subp_'+p+'_'+pi+'_mev_'+j)||'']);}}
+  for(c=0;c<rcField('e5_custom','pt');c++){for(j=0;j<rc('e5_custom_'+c);j++)s.push([g('e5_custom_pt_'+c)||'防守点'+(c+1),g('e5_custom_'+c+'_atk_'+j)||'',g('e5_custom_'+c+'_oev_'+j)||'',g('e5_custom_'+c+'_res_'+j)||'','']);}
+  P.push({title:'Part5 防守',rows:s});
+  // P6
+  s=[['对方论点','反驳类型','攻击路径','证据','论证','编号']];
+  for(var oo=0;oo<rcField('e6_opp','chain');oo++){for(var ti=0;ti<3;ti++)s.push([g('e6_opp_chain_'+oo)||'对方论点'+(oo+1),['A→B','B→C','B不重要'][ti],g('e6_atk_'+oo+'_'+ti)||'',g('e6_ev_'+oo+'_'+ti)||'',g('e6_arg_'+oo+'_'+ti)||'','G'+oo+(ti+1)+'1']);}
+  P.push({title:'Part6 攻击',rows:s});
+  // P7
+  s=[['战场','功能','内容','预判回应']];
+  for(b=0;b<rcField('e7_bf','name');b++){var nm=g('e7_name_'+b)||'战场'+(b+1);s.push([nm,'问',g('e7_ask_'+b)||'',g('e7_ask_resp_'+b)||'']);s.push([nm,'追1',g('e7_ch1_'+b)||'',g('e7_ch1_resp_'+b)||'']);s.push([nm,'追2',g('e7_ch2_'+b)||'',g('e7_ch2_resp_'+b)||'']);s.push([nm,'归',g('e7_ret_'+b)||'','']);s.push([nm,'转',g('e7_trans_'+b)||'','']);}
+  P.push({title:'Part7 自由辩',rows:s});
+  // P8
+  s=[['分类','#','摘要','关键句','来源','编号']];
+  for(c=0;c<rcField('e8_cats','catname');c++){for(i=0;i<rcField('e8_c'+c,'s');i++)s.push([g('e8_catname_'+c)||'分类'+(c+1),i+1,g('e8_c'+c+'_s_'+i)||'',g('e8_c'+c+'_q_'+i)||'',g('e8_c'+c+'_src_'+i)||'',g('e8_c'+c+'_code_'+i)||'']);}
+  P.push({title:'Part8 资料2.0',rows:s});
+  // P9
+  s=[['检查项','状态','备注']];
+  for(i=0;i<6;i++)s.push([['信息一致性','论证连贯性','攻防一致性','各环节时间分配','自由辩闭环','资料稿件打印准备'][i],g('e9_c'+i)||'?',g('e9_n'+i)||'']);
+  P.push({title:'Part9 检查清单',rows:s});
+  return P;
+}
+
+// ---- TXT ----
+function genTXT() {
+  var d=new Date().toLocaleDateString();
+  var o='标准化辩案\n日期：'+d+'\n'+'='.repeat(50)+'\n\n';
+
+  // P1
+  o+='Part1 · 资料搜集\n';
+  [{k:'e1_kw',n:'关键词解释',kw:true},{k:'e1_case',n:'类似案例',kw:false},{k:'e1_news',n:'热点事件',kw:false},{k:'e1_theory',n:'专业理论',kw:false}].forEach(function(c){
+    o+='\n【'+c.n+'】\n';
+    for(var i=0;i<rcField(c.k,'s');i++){
+      o+='  '+(i+1)+'. '+(c.kw?(g(c.k+'_kw_'+i)||'')+' | ':'')+(g(c.k+'_s_'+i)||'')+((g(c.k+'_a_'+i)||'')?' | '+(g(c.k+'_a_'+i)||''):'')+'\n     '+(g(c.k+'_q_'+i)||'').substring(0,150)+'\n';
+    }
+  });
+
+  // P2
+  o+='\nPart2 · 资料汇编1.0\n';
+  for(var dir=0;dir<rcField('e2_dir','dirname');dir++){
+    o+='\n【'+(g('e2_dirname_'+dir)||'方向'+(dir+1))+'】\n';
+    for(var i=0;i<rcField('e2_d'+dir,'s');i++){
+      o+='  '+(i+1)+'. '+(g('e2_d'+dir+'_s_'+i)||'')+'\n';
+    }
+  }
+
+  // P3
+  o+='\nPart3 · 论点穷举\n';
+  for(var i=0;i<rcField('e3_args','because');i++){
+    o+='  '+(i+1)+'. ['+(g('e3_side_'+i)||'')+'] 因为'+(g('e3_because_'+i)||'')+'，所以'+(g('e3_so_'+i)||'')+'\n';
+  }
+
+  // P4
+  o+='\nPart4 · 论证架构\n';
+  o+='【定义/讨论范围】\n';
+  for(var kw=0;kw<rcField('e4_defs','kw');kw++){
+    o+='  关键词'+(kw+1)+'：'+(g('e4_def_kw_'+kw)||'')+' — '+(g('e4_def_val_'+kw)||'')+'\n';
+    for(var i=0;i<rc('e4_defs_'+kw);i++){
+      o+='    论证：'+(g('e4_defs_'+kw+'_arg_'+i)||'')+' | 证据：'+(g('e4_defs_'+kw+'_ev_'+i)||'')+'\n';
+    }
+  }
+  o+='【标准 B0】'+(g('e4_b0')||'')+'\n';
+  o+='  标准合理性：'+(g('e4_b0_arg1')||'')+'\n';
+  for(var i=0;i<rc('e4_b0_ev');i++){
+    o+='    论证：'+(g('e4_b0_ev_arg_'+i)||'')+' | 证据：'+(g('e4_b0_ev_ev_'+i)||'')+'\n';
+  }
+  o+='【分论点】\n';
+  for(var p=0;p<rcField('e4_subpoints','chain');p++){
+    o+='  分论点'+(p+1)+'：'+(g('e4_p_chain_'+p)||'')+'\n';
+    for(var i=0;i<rc('e4_subpoints_'+p);i++){
+      o+='    论证：'+(g('e4_subpoints_'+p+'_arg_'+i)||'')+' | 证据：'+(g('e4_subpoints_'+p+'_ev_'+i)||'')+'\n';
+    }
+  }
+  o+='【各环节任务】\n';
+  for(var i=0;i<rcField('e4_tasks','pos');i++){
+    o+='  '+(g('e4_t_pos_'+i)||'')+' · '+(g('e4_t_seg_'+i)||'')+' | '+(g('e4_t_task_'+i)||'').substring(0,60)+' | '+(g('e4_t_time_'+i)||'')+'\n';
+  }
+
+  // P5
+  o+='\nPart5 · 我方防守\n';
+  function p5row(label,key,idx){
+    for(var i=0;i<rc(key+'_'+idx);i++){
+      o+='  【'+label+'】攻击：'+(g(key+'_'+idx+'_atk_'+i)||'').substring(0,80)+' → 回应：'+(g(key+'_'+idx+'_res_'+i)||'').substring(0,100)+'\n';
+    }
+  }
+  p5row('固有定义域-定义过宽/过窄','e5_domain',0);
+  p5row('固有定义域-定义回避核心争议','e5_domain',1);
+  o+='  【讨论范围切入】\n';
+  for(var i=0;i<rc('e5_scope_rows');i++){
+    o+='    攻击：'+(g('e5_scope_rows_atk_'+i)||'').substring(0,80)+' → 回应：'+(g('e5_scope_rows_res_'+i)||'').substring(0,100)+'\n';
+  }
+  p5row('标准B0-B→C推不通','e5_b0',0);
+  p5row('标准B0-B不重要','e5_b0',1);
+  for(var p=0;p<rcField('e5_subp','pt');p++){
+    o+='\n【'+(g('e5_subp_pt_'+p)||'分论点'+(p+1))+'】\n';
+    ['A→B','B→C','B不重要'].forEach(function(path,pi){
+      for(var i=0;i<rc('e5_subp_'+p+'_'+pi);i++){
+        o+='  '+path+' | 攻击：'+(g('e5_subp_'+p+'_'+pi+'_atk_'+i)||'').substring(0,60)+' → 回应：'+(g('e5_subp_'+p+'_'+pi+'_res_'+i)||'').substring(0,80)+'\n';
+      }
+    });
+  }
+  for(var c=0;c<rcField('e5_custom','pt');c++){
+    o+='\n【'+(g('e5_custom_pt_'+c)||'防守点'+(c+1))+'】\n';
+    for(var i=0;i<rc('e5_custom_'+c);i++){
+      o+='  攻击：'+(g('e5_custom_'+c+'_atk_'+i)||'').substring(0,80)+' → 回应：'+(g('e5_custom_'+c+'_res_'+i)||'').substring(0,100)+'\n';
+    }
+  }
+
+  // P6 - ALL rows exported, no skip
+  o+='\nPart6 · 我方攻击\n';
+  for(var oo=0;oo<rcField('e6_opp','chain');oo++){
+    o+='\n【对方论点'+(oo+1)+'】'+(g('e6_opp_chain_'+oo)||'').substring(0,100)+'\n';
+    ['A→B','B→C','B不重要'].forEach(function(t,ti){
+      o+='  [G'+(oo)+(ti+1)+'1] '+t+': '+(g('e6_atk_'+oo+'_'+ti)||'').substring(0,100)+'\n';
+    });
+  }
+
+  // P7 - ALL battlefields exported, no skip
+  o+='\nPart7 · 自由辩套题\n';
+  for(var b=0;b<rcField('e7_bf','name');b++){
+    o+='\n【战场'+(b+1)+'：'+(g('e7_name_'+b)||'')+'】\n';
+    o+='  问：'+(g('e7_ask_'+b)||'')+'\n';
+    o+='  追1：'+(g('e7_ch1_'+b)||'')+'\n';
+    o+='  追2：'+(g('e7_ch2_'+b)||'')+'\n';
+    o+='  归：'+(g('e7_ret_'+b)||'')+'\n';
+    o+='  转：'+(g('e7_trans_'+b)||'')+'\n';
+  }
+
+  // P8
+  o+='\nPart8 · 资料汇编2.0\n';
+  for(var c=0;c<rcField('e8_cats','catname');c++){
+    o+='\n【'+(g('e8_catname_'+c)||'分类'+(c+1))+'】\n';
+    for(var i=0;i<rcField('e8_c'+c,'s');i++){
+      o+='  '+(i+1)+'. '+(g('e8_c'+c+'_s_'+i)||'')+' ['+(g('e8_c'+c+'_code_'+i)||'')+']\n';
+    }
+  }
+
+  o+='\n'+'='.repeat(50)+'\n  辩案导出完成\n'+'='.repeat(50)+'\n';
+  return o;
+}
+function genMD() {
+  var o='# 标准化辩案\n\n日期：'+new Date().toLocaleDateString()+'\n\n';
+  var P=buildParts();
+  P.forEach(function(p){
+    o+='## '+p.title+'\n\n';
+    var rows=p.rows;
+    for(var r=0;r<rows.length;r++){
+      o+='| '+rows[r].map(function(c){return String(c||'').replace(/\|/g,'\\|');}).join(' | ')+' |\n';
+      if(r===0){o+='|'+rows[r].map(function(){return '------';}).join('|')+'|\n';}
+    }
+    o+='\n';
+  });
+  o+='\n---\n*辩案导出完成*\n';
+  return o;
+}
+
+function genHTMLTable(){
+  var o='<html><head><meta charset=UTF-8><title>标准化辩案</title><style>body{font-family:Microsoft YaHei,sans-serif;max-width:900px;margin:0 auto;padding:20px}h1{text-align:center}h2{color:#555;border-bottom:2px solid #ddd;margin-top:24px}table{width:100%;border-collapse:collapse;margin:8px 0;font-size:13px}td,th{border:1px solid #ddd;padding:6px 10px;text-align:left;vertical-align:top}th{background:#f5f5f5;font-weight:bold}tr:nth-child(even){background:#fafafa}</style></head><body>';
+  o+='<h1>标准化辩案</h1><p>日期：'+new Date().toLocaleDateString()+'</p>';
+  var P=buildParts();
+  P.forEach(function(p){
+    o+='<h2>'+p.title+'</h2><table>';
+    for(var r=0;r<p.rows.length;r++){
+      o+='<tr>';
+      for(var c=0;c<p.rows[r].length;c++){var tag=r===0?'th':'td';o+='<'+tag+'>'+String(p.rows[r][c]||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</'+tag+'>';}
+      o+='</tr>';
+    }
+    o+='</table><br>';
+  });
+  o+='</body></html>';return o;
+}
+
+// ---- XLSX ----
+function genXLSX() {
+  if (typeof XLSX==='undefined') { var o2=genHTMLTable();var blob2=new Blob([o2],{type:'application/vnd.ms-excel'});var name2='辩论筑基-标准化辩案-'+new Date().toISOString().slice(0,10)+'.xls';var a2=document.createElement('a');a2.href=URL.createObjectURL(blob2);a2.download=name2;a2.click();URL.revokeObjectURL(a2.href);return; }
+  var wb=XLSX.utils.book_new();
+  var cols=function(hdr){ return hdr.map(function(h){ return {wch:Math.max(h.length+4,12)}; }); };
+  var P=buildParts();
+  P.forEach(function(p){
+    var ws=XLSX.utils.aoa_to_sheet(p.rows);
+    if(p.rows.length>1) ws['!cols']=cols(p.rows[0]);
+    XLSX.utils.book_append_sheet(wb,ws,p.title);
+  });
+  XLSX.writeFile(wb,'辩论筑基-标准化辩案-'+new Date().toISOString().slice(0,10)+'.xlsx');
+}
+
+function buildCSV(){
+  function esc(v){v=String(v||"");return (v.indexOf(",")>=0||v.indexOf("\"")>=0||v.indexOf("\n")>=0)?"\""+v.replace(/"/g,"\"\"")+"\"":v;}
+  var o="",P=buildParts();
+  P.forEach(function(p){
+    o+=p.title+"\n";
+    for(var r=0;r<p.rows.length;r++){o+=p.rows[r].map(esc).join(",")+"\n";}
+    o+="\n";
+  });
+  return o;
+}
+// ---- NAV ----
+function render() {
+  const step=STEPS[current];
+  document.getElementById('step-label').textContent=step.id+' · '+step.title;
+  document.getElementById('page-num').textContent=(current+1)+'/'+STEPS.length;
+  document.getElementById('btn-prev').style.display=current===0?'none':'inline-block';
+  document.getElementById('btn-next').textContent=current===STEPS.length-1?'✓ 完成':'下一步 →';
+  const rs={E0:rE0,E1:rE1,E2:rE2,E3:rE3,E4:rE4,E5:rE5,E6:rE6,E7:rE7,E8:rE8,E9:rE9};
+  document.getElementById('content').innerHTML=(rs[step.id]||rE0)();
+}
+function nextStep(){save();if(current<STEPS.length-1){current++;render();}}
+function prevStep(){save();if(current>0){current--;render();}}
+render();
+</script>
+</body>
+</html>

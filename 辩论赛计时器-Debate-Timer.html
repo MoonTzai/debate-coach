@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>辩论赛计时器</title>
+<style>
+:root{--bg:#0d0d0d;--card:#141414;--border:#222;--input-bg:#1a1a1a;--gold:#ffc000;--text:#eee;--gray:#999;--dark-gray:#555;--blue:#4fa8ee;--green:#6ecd71;--red:#ee5555;--radius:8px;--radius-sm:6px}
+body.light{--bg:#f5f5f5;--card:#fff;--border:#e0e0e0;--input-bg:#f0f0f0;--gold:#4f6bed;--text:#222;--gray:#666;--dark-gray:#999;--blue:#4f6bed;--green:#4caf50;--red:#e53935}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Microsoft YaHei','PingFang SC',sans-serif;height:100vh;display:flex;flex-direction:column}
+header{background:var(--card);padding:14px 24px 14px 80px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:relative}
+header h1{font-size:max(16px,1.5vw);color:var(--gold);position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap}
+main{flex:1;overflow-y:auto;padding:8px 8px;max-width:100%;margin:0 auto;width:100%}
+main .round-name-center{margin-bottom:8px}
+.step-bar{display:flex;align-items:center;justify-content:center;gap:6px;margin:8px 0 8px 0;flex-wrap:wrap;font-size:13px}
+.step-bar .dot{width:10px;height:10px;border-radius:50%;background:var(--border);flex-shrink:0}
+.step-bar .dot.done{background:var(--green)}.step-bar .dot.current{background:var(--gold)}
+.step-bar .sep{color:var(--dark-gray);font-size:11px}.step-bar .label{color:var(--gray);font-size:12px}
+.step-bar .label.current{color:var(--gold);font-weight:bold}.step-bar .label.done{color:var(--green)}
+.round-name-center{text-align:center;font-size:18px;color:var(--gold);font-weight:bold;margin-bottom:20px}
+.btn{background:var(--card);color:var(--gray);border:1px solid var(--border);padding:10px 20px;border-radius:var(--radius-sm);cursor:pointer;font-size:14px;font-family:inherit;transition:all .15s}
+.btn:hover{border-color:var(--gold);color:var(--gold)}
+.btn.gold{background:var(--gold);color:#000;border:none;font-weight:bold}.btn.gold:hover{opacity:.85}
+body.light .btn.gold{color:#fff}
+.btn.accent{background:var(--gold);color:#000;border:none;font-weight:bold}.btn.accent:hover{opacity:.85}
+body.light .btn.accent{color:#fff}
+.btn-sm{background:var(--card);border:1px solid var(--border);color:var(--gray);padding:10px 14px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;font-family:inherit}
+.btn-sm:hover{border-color:var(--gold);color:var(--gold)}
+.btn-sm.danger{color:var(--red);border-color:var(--red)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.card h3{color:var(--gold);font-size:15px;margin:0 0 8px 0;border-bottom:1px solid var(--border);padding-bottom:6px}
+.row-inp{display:flex;gap:10px;align-items:flex-start;margin:8px 0}
+.row-inp label{color:var(--gray);font-size:12px;min-width:70px;padding-top:9px;flex-shrink:0}
+.row-inp input,.row-inp select{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:var(--radius-sm);font-size:13px;font-family:inherit;outline:none}
+.row-inp input:focus,.row-inp select:focus{border-color:var(--gold)}
+select{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:var(--radius-sm);font-size:13px;font-family:inherit;outline:none}
+.timer-main{text-align:center;padding:8px 4px;background:var(--bg);border-radius:var(--radius);margin-bottom:4px;display:flex;flex-direction:column;justify-content:center;height:22vw}
+.timer-main .big-time{font-size:18vw;font-weight:bold;color:var(--gold);font-family:'Consolas',monospace;line-height:1}
+.timer-main .big-time.warn{color:var(--red)}.timer-main .big-time.paused{opacity:.5}
+.timer-main .sub-label{font-size:max(16px,1.5vw);color:var(--gray);margin-top:4px}
+.timer-dual{display:flex;gap:0;justify-content:center;align-items:stretch;padding:0;height:100%}
+.timer-dual>div{flex:1;text-align:center;padding:0;border-radius:var(--radius);cursor:pointer;border:2px solid transparent;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.timer-dual>div.active{background:var(--input-bg);border-color:var(--gold)}
+.timer-dual .time{font-size:11vw;font-weight:bold;color:var(--gold);font-family:'Consolas',monospace;line-height:1;white-space:nowrap}
+.timer-dual .vs-sep{font-size:max(24px,1.6vw);font-weight:bold;color:var(--gold);align-self:center;flex-shrink:0;padding:0 0}
+.timer-dual .time.warn{color:var(--red)}
+.timer-ctrl{display:flex;gap:8px;justify-content:center;margin-top:2px;flex-wrap:wrap;padding:0 4%}
+.pool-info{display:flex;gap:20px;justify-content:center;font-size:max(14px,1.2vw);color:var(--gray);margin-top:2px;padding:0 4%}
+#footer-bar{padding:12px 20px;border-top:1px solid var(--border);flex-shrink:0;display:flex;justify-content:center;background:var(--card);align-items:center;position:relative;gap:8px;flex-wrap:wrap}
+#theme-toggle{background:transparent;border:1px solid var(--border);color:var(--gray);padding:10px 14px;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit}
+#theme-toggle:hover{border-color:var(--gold);color:var(--gold)}
+.hidden{display:none!important}.mt-8{margin-top:8px}.mt-12{margin-top:12px}.text-sm{font-size:12px}.text-gray{color:var(--gray)}
+@media(max-width:600px){
+  header{padding:10px 14px}header .btn-sm{position:static;font-size:11px;padding:6px 8px}#theme-toggle{font-size:11px;padding:6px 8px}header h1{font-size:13px;position:static;transform:none;width:100%;text-align:center}
+  main{padding:12px}.card{padding:14px}
+  .timer-main{height:auto;min-height:140px}.timer-main .big-time{font-size:56px}.timer-dual{height:auto;min-height:120px}.timer-dual .time{font-size:52px}.timer-dual .vs-sep{font-size:18px}
+  .row-inp{flex-direction:column;gap:4px}.row-inp label{padding-top:0}
+  .row-inp input[type=number]{width:auto!important;min-width:50px}
+  .round-config{flex-direction:column;align-items:stretch;gap:6px}
+  .round-config input{width:auto!important;min-width:40px}
+}
+</style>
+</head>
+<body class="light">
+<header>
+  <button onclick="window.top.location.reload()" class="btn-sm" style="position:absolute;left:20px">主页</button>
+  <h1 id="header-title">辩论赛计时器</h1>
+  <span><button id="theme-toggle" onclick="toggleTheme()">界面颜色</button><button class="btn-sm" id="fullscreen-btn" onclick="if(document.fullscreenElement){document.exitFullscreen()}else{document.documentElement.requestFullscreen()}" title="全屏快捷键F11">全屏/快捷键F11</button></span>
+</header>
+<main id="main"></main>
+<div id="footer-bar"><span id="footer-btns" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center"></span></div>
+<script>
+var FORMAT=null,MATCH=null,VIEW=0,roundIdx=0;
+var STORAGE_KEY='debate_timer_v2',FORMATS_KEY='debate_timer_formats';
+var MODES=[{v:'1',t:'单方倒计时'},{v:'2',t:'双方交替各自计时'},{v:'3a',t:'环节总时-计主动方'},{v:'3b',t:'环节总时-双方均计'}];
+
+// Timer state
+var timerInterval=null,timerRunning=false,timerPaused=false;
+var proRemain=0,conRemain=0,activeSide='pro',roundRemain=0;
+
+function stopTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null}timerRunning=false;timerPaused=false;}
+function fmtTime(s){var m=Math.floor(Math.max(0,s)/60),sec=Math.max(0,s)%60;return(m<10?'0':'')+m+':'+(sec<10?'0':'')+sec;}
+function esc(s){if(!s)return'';return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+var muted=false;
+var testTone=0;
+function testSoundBtn(btn){
+  var wasMuted=muted;muted=false;
+  if(testTone===0){playBeep('warn');testTone=1;btn.textContent='🔔 0s试音';}
+  else{playBeep('end');testTone=0;btn.textContent='🔔 30s试音';}
+  muted=wasMuted;
+}
+var DING_B64="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";var _dingAudio=null;
+function playBeep(type){if(muted)return;
+  if(type==='end'){
+    try{if(!_dingAudio)_dingAudio=new Audio('data:audio/mpeg;base64,'+DING_B64);_dingAudio.currentTime=0;_dingAudio.play();}catch(e){}
+  }else{
+    try{var C=window.AudioContext||window.webkitAudioContext;var ctx=new C();
+      function pip(freq,delay){
+        var o=ctx.createOscillator(),g=ctx.createGain();
+        o.connect(g);g.connect(ctx.destination);
+        o.frequency.value=freq;g.gain.value=.25;o.type='square';
+        o.start();setTimeout(function(){o.stop();},80);
+      }
+      if(type==='warn'){pip(800,0);}
+      else{pip(800,0);setTimeout(function(){pip(800,150);},150);setTimeout(function(){pip(800,300);},300);setTimeout(function(){pip(1200,450);},450);}
+    }catch(e){}
+  }
+  if(typeof Capacitor!=='undefined'&&Capacitor.Plugins&&Capacitor.Plugins.LocalNotifications){
+    try{Capacitor.Plugins.LocalNotifications.schedule({notifications:[{id:Date.now(),title:'计时器',body:type==='warn'?'30秒警告':'时间到！',schedule:{at:new Date(Date.now()+100)}}]});}catch(e2){}
+  }
+}
+function toggleTheme(){document.body.classList.toggle('light');}
+
+// Views
+function onModeChange(idx,val){
+  FORMAT.rounds[idx].mode=val;
+  if(val==='2')FORMAT.rounds[idx].speaker='双方';
+  goFormatEdit();
+}
+function onSpeakerChange(idx,val){FORMAT.rounds[idx].speaker=val;goFormatEdit();}
+function togglePool(val){
+  FORMAT.timePool.enabled=val==='1';
+  FORMAT.rounds.forEach(function(r){r.fromPool=FORMAT.timePool.enabled;});
+  goFormatEdit();
+}
+function addRound(){
+  FORMAT.rounds.push({name:'环节',mode:'1',speaker:'正方',duration:180,durSec:0,proDuration:120,proSec:0,conDuration:120,conSec:0,fromPool:FORMAT.timePool.enabled});
+  goFormatEdit();
+}
+function deleteRound(i){FORMAT.rounds.splice(i,1);goFormatEdit();}
+
+function goStart(){stopTimer();document.getElementById('header-title').textContent='辩论赛计时器';VIEW=0;render()}
+function goFormatEdit(){stopTimer();VIEW=1;render()}
+function goMatch(){stopTimer();if(!MATCH){if(!FORMAT)return;saveCurrentFormat();MATCH={proPool:FORMAT.timePool.enabled?FORMAT.timePool.pro:0,conPool:FORMAT.timePool.enabled?FORMAT.timePool.con:0,currentRound:0};}VIEW=2;roundIdx=MATCH.currentRound;render()}
+function render(){var m=document.getElementById('main'),f=document.getElementById('footer-btns');if(VIEW===0)renderStart(m,f);else if(VIEW===1)renderFormatEdit(m,f);else if(VIEW===2)renderMatch(m,f);}
+
+// Start
+function renderStart(m,f){
+  f.innerHTML='';
+  var h='<div class="start-wrap" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;gap:24px">';
+  h+='<div style="font-size:36px">⏱️</div><h2 style="color:var(--gold);font-size:22px">辩论赛计时器</h2>';
+  h+='<p class="text-gray">适配单方发言 · 双方交替 · 质询盘问 · 时间池/共计时赛制</p>';
+  h+='<div class="start-actions" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">';
+  h+='<button class="btn gold" onclick="newFormat()">新建赛制</button>';
+  if(FORMAT)h+='<button class="btn" onclick="goMatch()">使用当前赛事/赛制开始</button>';
+  h+='<button class="btn-sm" onclick="document.getElementById(\'load-fmt\').click()">加载赛制文件</button>';
+  h+='</div><input type="file" id="load-fmt" accept=".json" class="hidden" onchange="loadFormatFile(this)">';
+  if(FORMAT)h+='<p class="text-sm text-gray mt-8">当前赛事/赛制：'+FORMAT.name+'（'+FORMAT.rounds.length+'个环节'+(FORMAT.timePool.enabled?'，时间池/共计时赛制':'')+'）</p>';
+  h+='<div style="margin-top:24px"><button class="btn-sm danger" onclick="clearAll()">清除全部缓存</button></div>';
+  h+=renderFormatList()+'</div>';m.innerHTML=h;
+}
+async function exportFormat(){
+  if(!FORMAT||!FORMAT.name){alert('请先输入赛制名称');return;}
+  var out=JSON.parse(JSON.stringify(FORMAT));delete out._updated;
+  var content=JSON.stringify(out,null,2);
+  var fname=(FORMAT.name||'赛制')+'.json';
+  var blob=new Blob(['﻿'+content],{type:'application/json;charset=utf-8'});
+  if(typeof Capacitor!=='undefined'&&Capacitor.Plugins&&Capacitor.Plugins.Filesystem){
+    try{var C=Capacitor,FS=C.Plugins.Filesystem;
+      var result=await FS.writeFile({path:'Debate-Coach/'+fname,data:content,directory:'CACHE',recursive:true,encoding:'utf8'});
+      try{var Share=C.Plugins.Share;if(Share&&Share.share)Share.share({title:'导出赛制',url:result.uri});}catch(e2){}
+      alert('已导出：'+fname);return;
+    }catch(e){alert('导出失败：'+e.message);return;}
+  }
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;a.click();URL.revokeObjectURL(a.href);
+}
+function clearAll(){if(!confirm('确定清除全部缓存数据？此操作不可撤销。'))return;if(!confirm('再次确认：清除所有赛制和比赛数据？'))return;localStorage.removeItem('debate_fmt_current');try{var list=JSON.parse(localStorage.getItem(FORMATS_KEY)||'[]');list.forEach(function(item){localStorage.removeItem('debate_fmt_'+item.key)});localStorage.removeItem(FORMATS_KEY)}catch(e){}FORMAT=null;MATCH=null;goStart();}
+function newFormat(){FORMAT={name:'',proTeam:'',conTeam:'',timePool:{enabled:false,pro:0,con:0},rounds:[]};MATCH=null;goFormatEdit();}
+function loadFormatFile(input){if(!input.files||!input.files[0])return;var r=new FileReader();r.onload=function(e){try{var d=JSON.parse(e.target.result);if(d.rounds){FORMAT=d;MATCH=null;saveCurrentFormat();goStart();}}catch(ex){alert('无效文件');}};r.readAsText(input.files[0]);input.value='';}
+
+function renderFormatList(){
+  try{var list=JSON.parse(localStorage.getItem(FORMATS_KEY)||'[]');if(!list.length)return'';
+    var h='<div class="card" style="max-width:500px;text-align:left;margin-top:20px"><h3>已保存赛制</h3>';
+    list.forEach(function(item){h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)"><span style="cursor:pointer" onclick="loadSavedFormat(\''+item.key+'\')">'+item.name+'（'+item.count+'环节'+(item.pool?'，时间池':'')+'）</span><button class="btn-sm danger" onclick="deleteSavedFormat(\''+item.key+'\')">删除</button></div>';});
+    h+='</div>';return h;
+  }catch(e){return'';}
+}
+function loadSavedFormat(key){try{var s=localStorage.getItem('debate_fmt_'+key);if(s){FORMAT=JSON.parse(s);MATCH=null;saveCurrentFormat();goStart();}}catch(e){}}
+function deleteSavedFormat(key){if(!confirm('删除此赛制？'))return;localStorage.removeItem('debate_fmt_'+key);try{var list=JSON.parse(localStorage.getItem(FORMATS_KEY)||'[]');list=list.filter(function(x){return x.key!==key});localStorage.setItem(FORMATS_KEY,JSON.stringify(list));}catch(e){}render();}
+function flushFormatInputs(){
+  // Force all number inputs to write their values to FORMAT before save/render
+  if(!FORMAT)return;
+  var allInputs=document.querySelectorAll('input[type=number]');
+  for(var i=0;i<allInputs.length;i++){allInputs[i].dispatchEvent(new Event('input',{bubbles:true}));}
+  if(document.activeElement&&document.activeElement.tagName==='INPUT')document.activeElement.blur();
+}
+function saveCurrentFormat(){if(!FORMAT||!FORMAT.name)return;flushFormatInputs();localStorage.setItem('debate_fmt_current',JSON.stringify(FORMAT));try{var list=JSON.parse(localStorage.getItem(FORMATS_KEY)||'[]');var key='fmt_'+Date.now();localStorage.setItem('debate_fmt_'+key,JSON.stringify(FORMAT));var existing=list.findIndex(function(x){return x.name===FORMAT.name});var entry={key:key,name:FORMAT.name,count:FORMAT.rounds.length,pool:FORMAT.timePool.enabled};if(existing>=0)list[existing]=entry;else list.push(entry);if(list.length>30)list=list.slice(-30);localStorage.setItem(FORMATS_KEY,JSON.stringify(list));}catch(e){}}
+
+// Format Editor
+function renderFormatEdit(m,f){
+  if(!FORMAT)FORMAT={name:'',proTeam:'',conTeam:'',timePool:{enabled:false,pro:0,con:0},rounds:[]};
+  var h='<div class="card"><h3>自定义赛制</h3>';
+  h+='<div class="row-inp"><label>顶部标题</label><input value="'+esc(FORMAT.name||'')+'" oninput="FORMAT.name=this.value" placeholder="赛事/辩题/双方队伍等拟作为标题的名字"></div>';
+  // Time pool
+  h+='<div class="row-inp"><label>时间池/共计时赛制</label><select onchange="togglePool(this.value)"><option value="0" '+(FORMAT.timePool.enabled?'':'selected')+'>不启用</option><option value="1" '+(FORMAT.timePool.enabled?'selected':'')+'>启用</option></select>';
+  if(FORMAT.timePool.enabled){
+    h+='<span style="font-size:12px;color:var(--gray)">正方池</span><input type=number value="'+Math.floor(FORMAT.timePool.pro/60)+'" oninput="FORMAT.timePool.pro=this.value*60+(FORMAT.timePool.pro%60)" style="width:40px" min=0>分<input type=number value="'+(FORMAT.timePool.pro%60)+'" oninput="FORMAT.timePool.pro=Math.floor(FORMAT.timePool.pro/60)*60+(+this.value)" style="width:40px" min=0 max=59>秒';
+    h+='<span style="font-size:12px;color:var(--gray);margin-left:8px">反方池</span><input type=number value="'+Math.floor(FORMAT.timePool.con/60)+'" oninput="FORMAT.timePool.con=this.value*60+(FORMAT.timePool.con%60)" style="width:40px" min=0>分<input type=number value="'+(FORMAT.timePool.con%60)+'" oninput="FORMAT.timePool.con=Math.floor(FORMAT.timePool.con/60)*60+(+this.value)" style="width:40px" min=0 max=59>秒';
+    h+='<button class="btn-sm" onclick="flushFormatInputs();goFormatEdit()" title="应用池设置">设置</button>';
+    h+='<p class="text-sm text-gray mt-8">启用后，每个环节可勾选"从池扣除"。比赛时池剩余时间实时显示，池耗尽将无法进行后续环节。</p>';
+  }
+  h+='</div>';
+  h+='<div class="row-inp"><label>正方</label><input value="'+esc(FORMAT.proTeam||'')+'" oninput="FORMAT.proTeam=this.value" placeholder="可以填队伍名/持方，注意别太长"></div>';
+  h+='<div class="row-inp"><label>反方</label><input value="'+esc(FORMAT.conTeam||'')+'" oninput="FORMAT.conTeam=this.value" placeholder="可以填队伍名/持方，注意别太长"></div>';
+  h+='</div></div>';
+  // Rounds
+  if(FORMAT.rounds.length===0)h+='<p class="text-gray text-sm" style="text-align:center;padding:20px">尚未添加环节，点击下方按钮开始构建赛制</p>';
+  FORMAT.rounds.forEach(function(r,i){
+    h+='<div class="card" style="padding:12px"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">';
+    h+='<b>'+(i+1)+'.</b> <input value="'+esc(r.name)+'" oninput="FORMAT.rounds['+i+'].name=this.value" style="width:90px" placeholder="环节名">';
+    h+='<select onchange="onModeChange('+i+',this.value)">'+MODES.map(function(x){return'<option value="'+x.v+'" '+(r.mode===x.v?'selected':'')+'>'+x.t+'</option>';}).join('')+'</select>';
+    h+='<select onchange="onSpeakerChange('+i+',this.value)"><option '+(r.speaker==='正方'?'selected':'')+'>正方</option><option '+(r.speaker==='反方'?'selected':'')+'>反方</option><option '+(r.speaker==='双方'?'selected':'')+'>双方</option></select>';
+    if(FORMAT.timePool.enabled){h+='<label style="font-size:12px"><input type=checkbox '+(r.fromPool?'checked':'')+' oninput="FORMAT.rounds['+i+'].fromPool=this.checked;goFormatEdit()">从池扣除</label>';}
+    if(!r.fromPool||!FORMAT.timePool.enabled){
+      if(r.mode==='2'){h+='正<input type=number value="'+Math.floor((r.proDuration||120)/60)+'" oninput="FORMAT.rounds['+i+'].proDuration=this.value*60+FORMAT.rounds['+i+'].proSec" style="width:40px" min=0>分<input type=number value="'+(r.proSec||0)+'" oninput="FORMAT.rounds['+i+'].proSec=+this.value" style="width:40px" min=0 max=59>秒 反<input type=number value="'+Math.floor((r.conDuration||120)/60)+'" oninput="FORMAT.rounds['+i+'].conDuration=this.value*60+FORMAT.rounds['+i+'].conSec" style="width:40px" min=0>分<input type=number value="'+(r.conSec||0)+'" oninput="FORMAT.rounds['+i+'].conSec=+this.value" style="width:40px" min=0 max=59>秒';}
+      else{h+='<input type=number value="'+Math.floor((r.duration||180)/60)+'" oninput="FORMAT.rounds['+i+'].duration=this.value*60+FORMAT.rounds['+i+'].durSec" style="width:40px" min=0>分<input type=number value="'+(r.durSec||0)+'" oninput="FORMAT.rounds['+i+'].durSec=+this.value" style="width:40px" min=0 max=59>秒';}
+      h+='<button class="btn-sm" onclick="flushFormatInputs();goFormatEdit()" title="应用时间设置">设置</button>';
+    }
+    h+='<button class="btn-sm danger" onclick="deleteRound('+i+')">×</button></div></div>';
+  });
+  h+='<button class="btn-sm" onclick="addRound()">+ 添加环节</button>';
+  m.innerHTML=h;
+  f.innerHTML='<button class="btn gold" onclick="if(!FORMAT.name){alert(\'顶部标题未设置（第一项）\');return;}MATCH=null;goMatch()">保存并开始</button><button class="btn-sm" onclick="exportFormat()">导出赛制</button><button class="btn" onclick="goStart()">返回</button>';
+}
+
+// Match runner
+function renderMatch(m,f){
+  stopTimer();
+  document.getElementById('header-title').textContent=FORMAT.name||'辩论赛计时器';
+  var r=FORMAT.rounds[roundIdx];MATCH.currentRound=roundIdx;
+  if(!r.durSec)r.durSec=0;if(!r.proSec)r.proSec=0;if(!r.conSec)r.conSec=0;
+  if(!r.proDuration)r.proDuration=r.duration||180;if(!r.conDuration)r.conDuration=r.duration||180;
+  if(r.fromPool&&FORMAT.timePool.enabled){
+    MATCH._snapPro=MATCH.proPool;MATCH._snapCon=MATCH.conPool;
+    if(r.speaker==='双方'){proRemain=MATCH.proPool;conRemain=MATCH.conPool;}
+    else if(r.speaker==='正方'){proRemain=MATCH.proPool;conRemain=r.mode==='2'?MATCH.conPool:0;}
+    else{proRemain=MATCH.conPool;conRemain=r.mode==='2'?MATCH.proPool:0;}
+  }else{
+    proRemain=r.mode==='2'?(r.proDuration||120):(r.duration||180);
+    conRemain=r.mode==='2'?(r.conDuration||120):0;
+  }
+
+  var h='<div class="card timer-main">';
+  if(r.mode==='2'){
+    h+='<div class="timer-dual"><div id="dual-pro" class="active" onclick="switchSide(\'pro\')"><div class="sub-label">'+(FORMAT.proTeam?'正方 · '+FORMAT.proTeam:'正方')+'</div><div class="time" id="t-pro">'+fmtTime(proRemain)+'</div></div><div class="vs-sep">VS</div><div id="dual-con" onclick="switchSide(\'con\')"><div class="sub-label">'+(FORMAT.conTeam?'反方 · '+FORMAT.conTeam:'反方')+'</div><div class="time" id="t-con">'+fmtTime(conRemain)+'</div></div></div>';
+  }else{
+    h+='<div><div class="sub-label">'+(r.speaker==='正方'?(FORMAT.proTeam?'正方 · '+FORMAT.proTeam:'正方'):r.speaker==='反方'?(FORMAT.conTeam?'反方 · '+FORMAT.conTeam:'反方'):r.speaker)+' · '+r.name+'</div><div class="big-time" id="t-main">'+fmtTime(proRemain)+'</div></div>';
+  }
+  if(FORMAT.timePool.enabled){h+='<div class="pool-info"><span id="pool-pro">正方池剩余：'+fmtTime(MATCH.proPool)+'</span><span id="pool-con">反方池剩余：'+fmtTime(MATCH.conPool)+'</span></div>';}
+  h+='</div>'; // close timer-main
+  // Controls outside timer card
+  if(r.mode==='2'){
+    h+='<div class="timer-ctrl"><button class="btn-sm" onclick="testSoundBtn(this)">🔔 30s试音</button><button class="btn gold" id="btn-toggle" onclick="toggleDual()">开始计时</button><button class="btn-sm" onclick="if(timerRunning){switchSide(activeSide===\'pro\'?\'con\':\'pro\')}" id="switch-btn">切换发言方</button><button class="btn-sm" onclick="resetRound()">重置</button><button class="btn-sm" onclick="if(confirm(\'重置所有环节计时？赛制和内容不受影响。\')){stopTimer();MATCH.proPool=FORMAT.timePool.pro;MATCH.conPool=FORMAT.timePool.con;goMatch()}">重置所有环节</button></div>';
+  }else{
+    h+='<div class="timer-ctrl"><button class="btn-sm" onclick="testSoundBtn(this)">🔔 30s试音</button><button class="btn gold" id="btn-toggle" onclick="toggleSingle()">开始计时</button><button class="btn-sm" onclick="resetRound()">重置</button><button class="btn-sm" onclick="if(confirm(\'重置所有环节计时？赛制和内容不受影响。\')){stopTimer();MATCH.proPool=FORMAT.timePool.pro;MATCH.conPool=FORMAT.timePool.con;goMatch()}">重置所有环节</button></div>';
+  }
+  m.innerHTML=h;
+  if(timerPaused){var btn=document.getElementById('btn-toggle');if(btn)btn.textContent='暂停/继续';}
+
+  // Step bar above main
+  var sbEl=document.getElementById('main').previousElementSibling;
+  if(!sbEl||!sbEl.classList.contains('step-bar')){sbEl=document.createElement('div');sbEl.className='step-bar';document.getElementById('main').parentNode.insertBefore(sbEl,document.getElementById('main'));}
+  var sbH='<div class="step-bar">';
+  FORMAT.rounds.forEach(function(rr,i){var cls=i===roundIdx?' current':'',lc=i===roundIdx?' current':'';if(i<roundIdx){cls=' done';lc=' done'}sbH+='<span class="dot'+cls+'"></span><span class="label'+lc+'">'+(i+1)+'/'+FORMAT.rounds.length+'. '+rr.name+'</span>';if(i<FORMAT.rounds.length-1)sbH+='<span class="sep">--</span>';});
+  sbH+='</div>';sbEl.outerHTML=sbH;
+
+  f.innerHTML='';
+  f.innerHTML+='<button class="btn" onclick="goMatchRound('+(roundIdx-1)+')">← 上一环节</button>';
+  f.innerHTML+='<button class="btn gold" onclick="goMatchRound('+(roundIdx+1)+')">下一环节 →</button>';
+  f.innerHTML+='<button class="btn-sm" style="margin-left:8px" onclick="if(confirm(\'返回赛制编辑？当前比赛进度将保留。\')){stopTimer();goFormatEdit();}">编辑赛制</button>';
+  f.innerHTML+='<button class="btn-sm danger" style="margin-left:8px" onclick="endMatch()">结束比赛</button>';
+}
+function endMatch(){
+  stopTimer();
+  if(!confirm('确定结束比赛？'))return;
+  if(FORMAT&&FORMAT.name&&confirm('是否导出当前赛制「'+FORMAT.name+'」？')){
+    exportFormat();
+  }
+  goStart();
+}
+function goMatchRound(idx){stopTimer();if(idx<0||idx>=FORMAT.rounds.length)return;roundIdx=idx;MATCH.currentRound=idx;render();}
+
+// Timer logic
+function toggleSingle(){
+  if(timerRunning&&!timerPaused){timerPaused=true;stopTimer();updateToggleBtn();return;}
+  timerPaused=false;runSingle();updateToggleBtn();
+}
+function toggleDual(){
+  if(timerRunning&&!timerPaused){timerPaused=true;stopTimer();updateToggleBtn();return;}
+  timerPaused=false;runDual();updateToggleBtn();
+}
+function updateToggleBtn(){var btn=document.getElementById('btn-toggle');var sw=document.getElementById('switch-btn');if(!btn)return;if(!timerRunning){btn.textContent='开始计时';btn.className='btn gold';if(sw){sw.className='btn-sm';}}else if(timerPaused){btn.textContent='暂停/继续';btn.className='btn gold';if(sw){sw.className='btn-sm';}}else{btn.textContent='暂停/继续';btn.className='btn';if(sw){sw.className='btn accent';}}}
+function runSingle(){
+  stopTimer();timerRunning=true;timerPaused=false;
+  var r=FORMAT.rounds[roundIdx],fromPool=r.fromPool&&FORMAT.timePool.enabled;
+  timerInterval=setInterval(function(){
+    proRemain--;var el=document.getElementById('t-main');if(el){el.textContent=fmtTime(proRemain);if(proRemain<=30)el.classList.add('warn');}
+    if(fromPool){if(r.speaker==='正方')MATCH.proPool--;else MATCH.conPool--;updatePoolDisplay();}
+    if(proRemain===30)playBeep('warn');
+    if(proRemain<=0){stopTimer();playBeep('end');setTimeout(function(){alert('时间到！');},250);updateToggleBtn();}
+  },1000);
+}
+function runDual(){
+  stopTimer();timerRunning=true;timerPaused=false;activeSide='pro';
+  var r=FORMAT.rounds[roundIdx],fromPool=r.fromPool&&FORMAT.timePool.enabled;
+  timerInterval=setInterval(function(){
+    if(activeSide==='pro'){proRemain--;var el=document.getElementById('t-pro');if(el){el.textContent=fmtTime(proRemain);if(proRemain<=30)el.classList.add('warn');}if(fromPool)MATCH.proPool--;updatePoolDisplay();if(proRemain===30)playBeep('warn');if(proRemain<=0){playBeep('end');activeSide='con';switchSide('con');}}
+    else{conRemain--;var el=document.getElementById('t-con');if(el){el.textContent=fmtTime(conRemain);if(conRemain<=30)el.classList.add('warn');}if(fromPool)MATCH.conPool--;updatePoolDisplay();if(conRemain===30)playBeep('warn');if(conRemain<=0){playBeep('end');activeSide='pro';switchSide('pro');}}
+    if(proRemain<=0&&conRemain<=0){stopTimer();playBeep('end');setTimeout(function(){alert('双方时间均到！');},250);updateToggleBtn();}
+  },1000);
+}
+function updatePoolDisplay(){
+  var ep=document.getElementById('pool-pro');if(ep)ep.textContent='正方池剩余：'+fmtTime(MATCH.proPool);
+  var ec=document.getElementById('pool-con');if(ec)ec.textContent='反方池剩余：'+fmtTime(MATCH.conPool);
+}
+function resetRound(){
+  stopTimer();
+  if(MATCH._snapPro!==undefined){MATCH.proPool=MATCH._snapPro;MATCH.conPool=MATCH._snapCon;}
+  goMatch();
+}
+function switchSide(side){activeSide=side;var ep=document.getElementById('dual-pro'),ec=document.getElementById('dual-con');if(ep)ep.className=side==='pro'?'active':'';if(ec)ec.className=side==='con'?'active':'';}
+
+(function(){try{var s=localStorage.getItem('debate_fmt_current');if(s)FORMAT=JSON.parse(s);}catch(e){}goStart();})();
+if(typeof Capacitor!=='undefined'){var fb=document.getElementById('fullscreen-btn');if(fb)fb.style.display='none';}
+</script>
+</body>
+</html>
