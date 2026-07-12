@@ -45,12 +45,12 @@ select{background:var(--bg);border:1px solid var(--border);color:var(--text);pad
 .timer-display .label{font-size:14px;color:var(--gray);margin-top:4px}
 .timer-ctrl{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
 .timer-dual{display:flex;gap:4px;justify-content:center}
-.timer-dual>div{flex:1;text-align:center;padding:16px 8px;border-radius:var(--radius);cursor:pointer;border:2px solid transparent;overflow:hidden}
+.timer-dual>div{flex:1;text-align:center;padding:16px 8px;border-radius:var(--radius);cursor:pointer;border:2px solid transparent}
 .timer-dual>div.active{background:var(--input-bg);border-color:var(--gold)}
-.timer-dual .time{font-size:9vw;font-weight:bold;color:var(--gold);font-family:'Consolas',monospace;line-height:1;white-space:nowrap}
+.timer-dual .time{font-size:min(9vw,64px);font-weight:bold;color:var(--gold);font-family:'Consolas',monospace;line-height:1;white-space:nowrap}
 .timer-dual .time.warn{color:var(--red)}
 .side-divider{border:none;border-top:2px dashed var(--border);margin:16px 0}
-.summary-box textarea{min-height:100px;font-size:14px;line-height:1.7;width:100%;word-wrap:break-word;white-space:pre-wrap}
+.summary-box textarea{min-height:100px;font-size:14px;line-height:1.7;width:100%;word-wrap:break-word;white-space:pre-wrap;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius-sm);outline:none;padding:8px 12px;font-family:inherit}
 .export-group{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-top:16px}
 .export-group h3{color:var(--gold);font-size:14px;margin-bottom:10px}
 #footer-bar{padding:12px 20px;border-top:1px solid var(--border);flex-shrink:0;display:flex;justify-content:center;background:var(--card);align-items:center;position:relative;gap:8px;flex-wrap:wrap}
@@ -211,8 +211,8 @@ function runDual(){
   stopTimer();timerRunning=true;timerPaused=false;
   updateTimerUI();
   timerInterval=setInterval(function(){
-    if(activeSide==='pro'){proRemain--;var el=document.getElementById('t-pro');if(el){el.textContent=fmtTime(proRemain);if(proRemain<=30)el.classList.add('warn');}if(proRemain===30)playBeep('warn');if(proRemain<=0){activeSide='con';switchDualSide('con');}}
-    else{conRemain--;var el=document.getElementById('t-con');if(el){el.textContent=fmtTime(conRemain);if(conRemain<=30)el.classList.add('warn');}if(conRemain===30)playBeep('warn');if(conRemain<=0){activeSide='pro';switchDualSide('pro');}}
+    if(activeSide==='pro'){proRemain--;var el=document.getElementById('t-pro');if(el){el.textContent=fmtTime(proRemain);if(proRemain<=30)el.classList.add('warn');}if(proRemain===30)playBeep('warn');if(proRemain<=0){playBeep('end');activeSide='con';switchDualSide('con');}}
+    else{conRemain--;var el=document.getElementById('t-con');if(el){el.textContent=fmtTime(conRemain);if(conRemain<=30)el.classList.add('warn');}if(conRemain===30)playBeep('warn');if(conRemain<=0){playBeep('end');activeSide='pro';switchDualSide('pro');}}
     if(proRemain<=0&&conRemain<=0){stopTimer();playBeep('end');setTimeout(function(){alert('双方时间均到！');},250);updateTimerUI();}
   },1000);
 }
