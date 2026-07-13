@@ -50,11 +50,25 @@ select{background:var(--bg);border:1px solid var(--border);color:var(--text);pad
 #footer-bar{padding:12px 20px;border-top:1px solid var(--border);flex-shrink:0;display:flex;justify-content:center;background:var(--card);align-items:center;position:relative;gap:8px;flex-wrap:wrap}
 #theme-toggle{background:transparent;border:1px solid var(--border);color:var(--gray);padding:10px 14px;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit}
 #theme-toggle:hover{border-color:var(--gold);color:var(--gold)}
+.passive-timer-area{display:none!important}
+.timer-split{display:flex;gap:0;justify-content:center;align-items:stretch;padding:0;height:100%}
+.timer-split .active-side{flex:3;text-align:center;padding:8px 4px;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.timer-split .passive-side{flex:1;text-align:center;padding:4px;border-left:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;align-items:center;background:var(--input-bg);min-width:70px}
+.timer-split .active-side .time{font-size:13vw;font-weight:bold;color:var(--gold);font-family:'Consolas',monospace;line-height:1;white-space:nowrap}
+.timer-split .active-side .time.warn{color:var(--red)}
+.timer-split .active-side .sub-label{font-size:max(14px,1.4vw);color:var(--gray);margin-bottom:0}
+.timer-split .passive-side .p-label{font-size:max(14px,1.4vw);color:var(--gray);margin-bottom:0;white-space:nowrap}
+.timer-split .passive-side .p-time{font-size:max(28px,4vw);font-weight:bold;color:var(--blue);font-family:'Consolas',monospace;line-height:1;white-space:nowrap}
+.passive-log{display:none!important}
+.round-card{transition:opacity .15s,transform .15s}.round-card.dragging{opacity:.4;transform:scale(.98)}
+.round-card.drag-over{border-top:3px solid var(--gold)!important;margin-top:-3px}
+.drag-handle{cursor:grab;color:var(--dark-gray);font-size:18px;user-select:none;padding:0 4px;line-height:1}
+.drag-handle:active{cursor:grabbing}
 .hidden{display:none!important}.mt-8{margin-top:8px}.mt-12{margin-top:12px}.text-sm{font-size:12px}.text-gray{color:var(--gray)}
 @media(max-width:600px){
   header{padding:10px 14px}header .btn-sm{position:static;font-size:11px;padding:6px 8px}#theme-toggle{font-size:11px;padding:6px 8px}header h1{font-size:13px;position:static;transform:none;width:100%;text-align:center}
   main{padding:12px}.card{padding:14px}
-  .timer-main{height:auto;min-height:140px}.timer-main .big-time{font-size:56px}.timer-dual{height:auto;min-height:120px}.timer-dual .time{font-size:52px}.timer-dual .vs-sep{font-size:18px}
+  .timer-main{height:auto;min-height:140px}.timer-main .big-time{font-size:56px}.timer-dual{height:auto;min-height:120px}.timer-dual .time{font-size:52px}.timer-dual .vs-sep{font-size:18px}.timer-split{height:auto;min-height:120px}.timer-split .active-side .time{font-size:52px}.timer-split .active-side .sub-label{font-size:16px}.timer-split .passive-side .p-time{font-size:32px}.timer-split .passive-side .p-label{font-size:16px}
   .row-inp{flex-direction:column;gap:4px}.row-inp label{padding-top:0}
   .row-inp input[type=number]{width:auto!important;min-width:50px}
   .round-config{flex-direction:column;align-items:stretch;gap:6px}
@@ -78,6 +92,7 @@ var MODES=[{v:'1',t:'单方倒计时'},{v:'2',t:'双方交替各自计时'},{v:'
 // Timer state
 var timerInterval=null,timerRunning=false,timerPaused=false;
 var proRemain=0,conRemain=0,activeSide='pro',roundRemain=0;
+var passiveElapsed=0,passiveRemain=0,passiveInterval=null,passiveLimitMode=false;
 
 function stopTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null}timerRunning=false;timerPaused=false;}
 function fmtTime(s){var m=Math.floor(Math.max(0,s)/60),sec=Math.max(0,s)%60;return(m<10?'0':'')+m+':'+(sec<10?'0':'')+sec;}
@@ -116,6 +131,7 @@ function toggleTheme(){document.body.classList.toggle('light');}
 function onModeChange(idx,val){
   FORMAT.rounds[idx].mode=val;
   if(val==='2')FORMAT.rounds[idx].speaker='双方';
+  else if(FORMAT.rounds[idx].speaker==='双方')FORMAT.rounds[idx].speaker='正方';
   goFormatEdit();
 }
 function onSpeakerChange(idx,val){FORMAT.rounds[idx].speaker=val;goFormatEdit();}
@@ -125,14 +141,14 @@ function togglePool(val){
   goFormatEdit();
 }
 function addRound(){
-  FORMAT.rounds.push({name:'环节',mode:'1',speaker:'正方',duration:180,durSec:0,proDuration:120,proSec:0,conDuration:120,conSec:0,fromPool:FORMAT.timePool.enabled});
+  FORMAT.rounds.push({name:'环节',mode:'1',speaker:'正方',duration:180,durSec:0,proDuration:120,proSec:0,conDuration:120,conSec:0,passiveLimit:false,passiveDuration:20,fromPool:FORMAT.timePool.enabled});
   goFormatEdit();
 }
 function deleteRound(i){FORMAT.rounds.splice(i,1);goFormatEdit();}
 
 function goStart(){stopTimer();document.getElementById('header-title').textContent='辩论赛计时器';VIEW=0;render()}
 function goFormatEdit(){stopTimer();VIEW=1;render()}
-function goMatch(){stopTimer();if(!MATCH){if(!FORMAT)return;saveCurrentFormat();MATCH={proPool:FORMAT.timePool.enabled?FORMAT.timePool.pro:0,conPool:FORMAT.timePool.enabled?FORMAT.timePool.con:0,currentRound:0};}VIEW=2;roundIdx=MATCH.currentRound;render()}
+function goMatch(){stopTimer();clearPassiveHistory();if(!MATCH){if(!FORMAT)return;saveCurrentFormat();MATCH={proPool:FORMAT.timePool.enabled?FORMAT.timePool.pro:0,conPool:FORMAT.timePool.enabled?FORMAT.timePool.con:0,currentRound:0};}VIEW=2;roundIdx=MATCH.currentRound;render()}
 function render(){var m=document.getElementById('main'),f=document.getElementById('footer-btns');if(VIEW===0)renderStart(m,f);else if(VIEW===1)renderFormatEdit(m,f);else if(VIEW===2)renderMatch(m,f);}
 
 // Start
@@ -178,6 +194,13 @@ function renderFormatList(){
 }
 function loadSavedFormat(key){try{var s=localStorage.getItem('debate_fmt_'+key);if(s){FORMAT=JSON.parse(s);MATCH=null;saveCurrentFormat();goStart();}}catch(e){}}
 function deleteSavedFormat(key){if(!confirm('删除此赛制？'))return;localStorage.removeItem('debate_fmt_'+key);try{var list=JSON.parse(localStorage.getItem(FORMATS_KEY)||'[]');list=list.filter(function(x){return x.key!==key});localStorage.setItem(FORMATS_KEY,JSON.stringify(list));}catch(e){}render();}
+var dragIdx=-1;
+function onDragStart(idx,e){dragIdx=idx;e.currentTarget.classList.add('dragging');e.dataTransfer.effectAllowed='move';}
+function onDragEnd(e){e.currentTarget.classList.remove('dragging');dragIdx=-1;document.querySelectorAll('.round-card').forEach(function(c){c.classList.remove('drag-over');});}
+function onDragOver(idx,e){e.preventDefault();if(idx!==dragIdx){document.querySelectorAll('.round-card').forEach(function(c){c.classList.remove('drag-over');});e.currentTarget.classList.add('drag-over');}}
+function onDragLeave(e){if(!e.currentTarget.contains(e.relatedTarget))e.currentTarget.classList.remove('drag-over');}
+function onDrop(idx,e){e.preventDefault();e.currentTarget.classList.remove('drag-over');if(dragIdx<0||dragIdx===idx)return;var item=FORMAT.rounds.splice(dragIdx,1)[0];FORMAT.rounds.splice(idx,0,item);dragIdx=-1;goFormatEdit();}
+
 function flushFormatInputs(){
   // Force all number inputs to write their values to FORMAT before save/render
   if(!FORMAT)return;
@@ -207,21 +230,31 @@ function renderFormatEdit(m,f){
   // Rounds
   if(FORMAT.rounds.length===0)h+='<p class="text-gray text-sm" style="text-align:center;padding:20px">尚未添加环节，点击下方按钮开始构建赛制</p>';
   FORMAT.rounds.forEach(function(r,i){
-    h+='<div class="card" style="padding:12px"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">';
-    h+='<b>'+(i+1)+'.</b> <input value="'+esc(r.name)+'" oninput="FORMAT.rounds['+i+'].name=this.value" style="width:90px" placeholder="环节名">';
+    h+='<div class="card round-card" style="padding:12px" draggable="true" ondragstart="onDragStart('+i+',event)" ondragend="onDragEnd(event)" ondragover="onDragOver('+i+',event)" ondragleave="onDragLeave(event)" ondrop="onDrop('+i+',event)"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">';
+    h+='<span class="drag-handle" title="拖动排序">⋮⋮</span><b>'+(i+1)+'.</b> <input value="'+esc(r.name)+'" oninput="FORMAT.rounds['+i+'].name=this.value" style="width:90px" placeholder="环节名">';
     h+='<select onchange="onModeChange('+i+',this.value)">'+MODES.map(function(x){return'<option value="'+x.v+'" '+(r.mode===x.v?'selected':'')+'>'+x.t+'</option>';}).join('')+'</select>';
-    h+='<select onchange="onSpeakerChange('+i+',this.value)"><option '+(r.speaker==='正方'?'selected':'')+'>正方</option><option '+(r.speaker==='反方'?'selected':'')+'>反方</option><option '+(r.speaker==='双方'?'selected':'')+'>双方</option></select>';
+    var speakerOpts=r.mode==='2'?'<option>双方</option>':'<option '+(r.speaker==='正方'?'selected':'')+'>正方</option><option '+(r.speaker==='反方'?'selected':'')+'>反方</option>';h+='<select onchange="onSpeakerChange('+i+',this.value)">'+speakerOpts+'</select>';
     if(FORMAT.timePool.enabled){h+='<label style="font-size:12px"><input type=checkbox '+(r.fromPool?'checked':'')+' oninput="FORMAT.rounds['+i+'].fromPool=this.checked;goFormatEdit()">从池扣除</label>';}
     if(!r.fromPool||!FORMAT.timePool.enabled){
       if(r.mode==='2'){h+='正<input type=number value="'+Math.floor((r.proDuration||120)/60)+'" oninput="FORMAT.rounds['+i+'].proDuration=this.value*60+FORMAT.rounds['+i+'].proSec" style="width:40px" min=0>分<input type=number value="'+(r.proSec||0)+'" oninput="FORMAT.rounds['+i+'].proSec=+this.value" style="width:40px" min=0 max=59>秒 反<input type=number value="'+Math.floor((r.conDuration||120)/60)+'" oninput="FORMAT.rounds['+i+'].conDuration=this.value*60+FORMAT.rounds['+i+'].conSec" style="width:40px" min=0>分<input type=number value="'+(r.conSec||0)+'" oninput="FORMAT.rounds['+i+'].conSec=+this.value" style="width:40px" min=0 max=59>秒';}
       else{h+='<input type=number value="'+Math.floor((r.duration||180)/60)+'" oninput="FORMAT.rounds['+i+'].duration=this.value*60+FORMAT.rounds['+i+'].durSec" style="width:40px" min=0>分<input type=number value="'+(r.durSec||0)+'" oninput="FORMAT.rounds['+i+'].durSec=+this.value" style="width:40px" min=0 max=59>秒';}
       h+='<button class="btn-sm" onclick="flushFormatInputs();goFormatEdit()" title="应用时间设置">设置</button>';
     }
-    h+='<button class="btn-sm danger" onclick="deleteRound('+i+')">×</button></div></div>';
+    h+='<button class="btn-sm danger" onclick="deleteRound('+i+')">×</button></div>';
+    if(r.mode==='3a'){
+      h+='<div style="margin-top:6px;display:flex;align-items:center;gap:6px;font-size:12px">';
+      h+='<label><input type=checkbox '+(r.passiveLimit?'checked':'')+' oninput="FORMAT.rounds['+i+'].passiveLimit=this.checked;goFormatEdit()"> 限制被动方每回合时间</label>';
+      if(r.passiveLimit){
+        var pd=(r.passiveDuration||20);
+        h+='<input type=number value="'+pd+'" oninput="FORMAT.rounds['+i+'].passiveDuration=+this.value" style="width:40px" min=1 max=999>秒';
+      }
+      h+='</div>';
+    }
+    h+='</div>';
   });
   h+='<button class="btn-sm" onclick="addRound()">+ 添加环节</button>';
   m.innerHTML=h;
-  f.innerHTML='<button class="btn gold" onclick="if(!FORMAT.name){alert(\'顶部标题未设置（第一项）\');return;}MATCH=null;goMatch()">保存并开始</button><button class="btn-sm" onclick="exportFormat()">导出赛制</button><button class="btn" onclick="goStart()">返回</button>';
+  f.innerHTML='<button class="btn gold" onclick="if(!FORMAT.name){alert(\'顶部标题未设置（第一项）\');return;}flushFormatInputs();MATCH=null;goMatch()">保存并开始</button><button class="btn-sm" onclick="exportFormat()">导出赛制</button><button class="btn" onclick="goStart()">返回</button>';
 }
 
 // Match runner
@@ -244,6 +277,13 @@ function renderMatch(m,f){
   var h='<div class="card timer-main">';
   if(r.mode==='2'){
     h+='<div class="timer-dual"><div id="dual-pro" class="active" onclick="switchSide(\'pro\')"><div class="sub-label">'+(FORMAT.proTeam?'正方 · '+FORMAT.proTeam:'正方')+'</div><div class="time" id="t-pro">'+fmtTime(proRemain)+'</div></div><div class="vs-sep">VS</div><div id="dual-con" onclick="switchSide(\'con\')"><div class="sub-label">'+(FORMAT.conTeam?'反方 · '+FORMAT.conTeam:'反方')+'</div><div class="time" id="t-con">'+fmtTime(conRemain)+'</div></div></div>';
+  }else if(r.mode==='3a'){
+    var isConActive=r.speaker==='反方';
+    var activeTeam=isConActive?(FORMAT.conTeam?'反方 · '+FORMAT.conTeam:'反方'):(FORMAT.proTeam?'正方 · '+FORMAT.proTeam:'正方');
+    var passiveTeam=isConActive?(FORMAT.proTeam?'正方 · '+FORMAT.proTeam:'正方'):(FORMAT.conTeam?'反方 · '+FORMAT.conTeam:'反方');
+    var rev=isConActive?' row-reverse':'';
+    var passiveInit=r.passiveLimit&&r.passiveDuration?fmtTime(r.passiveDuration):'0s';
+    h+='<div class="timer-split" style="flex-direction:'+rev+'"><div class="active-side"><div class="sub-label">'+activeTeam+' · '+r.name+'</div><div class="time" id="t-main">'+fmtTime(proRemain)+'</div></div><div class="passive-side" style="border-left:'+(isConActive?'0':'')+';border-right:'+(isConActive?'1px solid var(--border)':'')+'"><div class="p-label">'+passiveTeam+'回答</div><div class="p-time" id="passive-time">'+passiveInit+'</div></div></div>';
   }else{
     h+='<div><div class="sub-label">'+(r.speaker==='正方'?(FORMAT.proTeam?'正方 · '+FORMAT.proTeam:'正方'):r.speaker==='反方'?(FORMAT.conTeam?'反方 · '+FORMAT.conTeam:'反方'):r.speaker)+' · '+r.name+'</div><div class="big-time" id="t-main">'+fmtTime(proRemain)+'</div></div>';
   }
@@ -279,12 +319,19 @@ function endMatch(){
   }
   goStart();
 }
-function goMatchRound(idx){stopTimer();if(idx<0||idx>=FORMAT.rounds.length)return;roundIdx=idx;MATCH.currentRound=idx;render();}
+function goMatchRound(idx){stopTimer();clearPassiveHistory();if(idx<0||idx>=FORMAT.rounds.length)return;roundIdx=idx;MATCH.currentRound=idx;render();}
 
 // Timer logic
 function toggleSingle(){
-  if(timerRunning&&!timerPaused){timerPaused=true;stopTimer();updateToggleBtn();return;}
-  timerPaused=false;runSingle();updateToggleBtn();
+  if(timerRunning&&!timerPaused){
+    stopTimer();timerPaused=true;
+    startPassiveTimer();
+    updateToggleBtn();return;
+  }
+  var wasPaused=timerPaused;
+  timerPaused=false;
+  if(wasPaused)stopPassiveTimer();
+  runSingle();updateToggleBtn();
 }
 function toggleDual(){
   if(timerRunning&&!timerPaused){timerPaused=true;stopTimer();updateToggleBtn();return;}
@@ -298,7 +345,7 @@ function runSingle(){
     proRemain--;var el=document.getElementById('t-main');if(el){el.textContent=fmtTime(proRemain);if(proRemain<=30)el.classList.add('warn');}
     if(fromPool){if(r.speaker==='正方')MATCH.proPool--;else MATCH.conPool--;updatePoolDisplay();}
     if(proRemain===30)playBeep('warn');
-    if(proRemain<=0){stopTimer();playBeep('end');setTimeout(function(){alert('时间到！');},250);updateToggleBtn();}
+    if(proRemain<=0){stopTimer();stopPassiveTimer();playBeep('end');setTimeout(function(){alert('时间到！');},250);updateToggleBtn();}
   },1000);
 }
 function runDual(){
@@ -315,11 +362,66 @@ function updatePoolDisplay(){
   var ec=document.getElementById('pool-con');if(ec)ec.textContent='反方池剩余：'+fmtTime(MATCH.conPool);
 }
 function resetRound(){
-  stopTimer();
+  stopTimer();clearPassiveHistory();
   if(MATCH._snapPro!==undefined){MATCH.proPool=MATCH._snapPro;MATCH.conPool=MATCH._snapCon;}
   goMatch();
 }
 function switchSide(side){activeSide=side;var ep=document.getElementById('dual-pro'),ec=document.getElementById('dual-con');if(ep)ep.className=side==='pro'?'active':'';if(ec)ec.className=side==='con'?'active':'';}
+
+// ── 被动方发言计时（mode 3a 专用）──────────────────────────────────────────────
+function startPassiveTimer(){
+  if(passiveInterval){clearInterval(passiveInterval);}
+  var r=FORMAT.rounds[roundIdx];
+  passiveLimitMode=!!(r.passiveLimit&&r.passiveDuration);
+  if(passiveLimitMode){
+    passiveRemain=r.passiveDuration||20;
+  }else{
+    passiveElapsed=0;
+  }
+  updatePassiveDisplay();
+  passiveInterval=setInterval(function(){
+    if(passiveLimitMode){
+      passiveRemain--;
+      updatePassiveDisplay();
+      if(passiveRemain===30)playBeep('warn');
+      if(passiveRemain<=0){stopPassiveTimer();playBeep('end');}
+    }else{
+      passiveElapsed++;
+      updatePassiveDisplay();
+    }
+  },1000);
+}
+function stopPassiveTimer(){
+  if(passiveInterval){clearInterval(passiveInterval);passiveInterval=null;}
+  passiveElapsed=0;passiveRemain=0;passiveLimitMode=false;
+  updatePassiveDisplay();
+}
+function clearPassiveHistory(){
+  stopPassiveTimer();
+}
+function updatePassiveDisplay(){
+  var el=document.getElementById('passive-time');
+  if(!el)return;
+  if(passiveInterval){
+    if(passiveLimitMode){
+      el.textContent=fmtTime(passiveRemain);
+      if(passiveRemain<=30)el.style.color='var(--red)';
+      else el.style.color='';
+    }else{
+      el.textContent=passiveElapsed+'s';
+      el.style.color='';
+    }
+  }else{
+    var r=FORMAT.rounds[roundIdx];
+    if(r&&r.mode==='3a'&&r.passiveLimit&&r.passiveDuration){
+      el.textContent=fmtTime(r.passiveDuration);
+      el.style.color='';
+    }else{
+      el.textContent='0s';
+      el.style.color='';
+    }
+  }
+}
 
 (function(){try{var s=localStorage.getItem('debate_fmt_current');if(s)FORMAT=JSON.parse(s);}catch(e){}goStart();})();
 if(typeof Capacitor!=='undefined'){var fb=document.getElementById('fullscreen-btn');if(fb)fb.style.display='none';}
