@@ -156,21 +156,54 @@ Three paths: (1) Causal inversion — it's not cause → effect, but effect → 
 
 ## Terminology Standard
 
-For the complete project-wide terminology standard, full old→new mapping table, prohibition levels, exemption conditions, and self-check hooks, see **TERMINOLOGY.md** (project root). The following are the most commonly used core mappings:
+> The following is the complete terminology mapping table, prohibition levels, usage rules, and self-check hooks. Any judgment involving terminology shall reference this as the standard.
 
-| Old Term (Deprecated) | New Term | Level |
-|-----------------------|----------|:---:|
-| judge enjoys | has a clear decisive logic | 🔴 |
-| judge suffers | lacks a converged decisive anchor | 🔴 |
-| Concession-Counter (tactical) | Absorption / Reversal | 🔴 |
-| Concession-Based Case Construction | Structural Clash Architecture Method | 🔴 |
-| Press-Defend-Evade-Concede | Habitual Clash / Structural Clash | 🟡 |
-| Overlapping Refutation | Existence vs. Degree | 🔴 |
-| Integrated Offense-Defense | Structural Clash (pre-system description) | 🟡 |
+### Usage Rules
 
-TERMINOLOGY.md is the single source of truth for terminology. This table lists only the most common items; see TERMINOLOGY.md for the complete mapping.
+| Level | Meaning | In Coaching Protocol | In Q&A / Explanation |
+|:---:|------|:---:|:---:|
+| 🔴 Hard Prohibition | Prohibited as active operational term | Absolutely do not use | **May use** (as historical term being discussed) |
+| 🟡 Downgraded | Not recommended, allowed in bridge contexts | Only with "formerly called" tag | Same as left |
+| 🟢 Exempt | Independent concept, not in update scope | Use normally | Use normally |
 
-> ⚠️ "Radical Concession" and the "Concede" in Press-Defend-Evade-Concede are independent concepts.
+> ⚠️ **Key Distinction**: All terms are exempt from prohibition when answering "what is X?" type questions. Prohibitions only constrain the coach's active use of the term in organizing interrogation, analysis, and post-mortem.
+
+### Terminology Mapping Table
+
+| Old Term | New Term | Level | Exemption |
+|----------|----------|:---:|-----------|
+| judge enjoys | has a clear decisive logic | 🔴 | None |
+| judge suffers | lacks a converged decisive anchor | 🔴 | None |
+| Concession-Counter (tactical) | Absorption / Reversal | 🔴 | Radical Concession (Three Realms), "Concede" in Press-Defend-Evade-Concede (refutation posture) |
+| Concession-Based Case Construction | Structural Clash Architecture Method | 🔴 | None |
+| Concession-Counter | Absorption / Reversal (or Structural Clash) | 🔴 | Radical Concession excluded |
+| Press-Defend-Evade-Concede | Habitual Clash / Structural Clash (binary) | 🟡 | Historical mapping passages preserved |
+| Press-Defend-Evade-Concede · Attack+Concede (B3' reference) | Habitual Clash refutation + Structural Clash response | 🟡 | None |
+| "Definitional Domain" (abbreviation) | Inherent Definitional Domain (full term) | 🔴 | Standalone prohibition exists |
+| "包" as everyday verb | Include in scope / Belongs to core prototype / Belongs to periphery | 🔴 | "Definitional Overreach" as term may be used |
+| Overlapping Refutation | Existence vs. Degree (Refinement and Adjustment of Refutation) | 🔴 | Original from Lecture 2; selective progression, not per-round mandatory |
+| Integrated Offense-Defense | Structural Clash (pre-system description) | 🟡 | Offense-Defense-Integrated style is pre-system empirical summary of Structural Clash |
+
+> ⚠️ "Radical Concession" (Three Realms of Case-Building, third level) and the "Concede" in Press-Defend-Evade-Concede (post-refutation tactical posture) are independent system concepts, not within this update scope.
+
+### Coach Prohibition Rules (Full Text)
+
+**1. Mainline Description (corresponding to "judge enjoys/judge suffers")**
+> Prohibited from using subjective vocabulary like "judge enjoys" or "judge suffers" to describe Mainline forms. Type 1 Mainline must use "has a clear decisive logic"; Type 2 Mainline must use "lacks a converged decisive anchor."
+
+**2. Structural Clash Operations (corresponding to "Concession-Counter")**
+> Prohibited from using "Concession-Counter" as an active operational term in coaching interrogation. When discussing Structural Clash, use Absorption and Reversal. Only when the debater proactively asks "what is Concession-Counter" may the coach reference the knowledge base text to explain its pre-system origins and mapping to Absorption/Reversal. "Radical Concession" (Three Realms of Case-Building, third level) in the knowledge base is an independent concept and not subject to this restriction.
+
+**3. Post-Refutation Response Framework (corresponding to "Press-Defend-Evade-Concede")**
+> Prohibited from using "Press-Defend-Evade-Concede" as an active classification framework in coaching interrogation. Use the Habitual Clash / Structural Clash binary. Only when discussing the historical classification of post-refutation responses may the coach mention "formerly called Press-Defend-Evade-Concede."
+
+### Self-Check Hooks
+
+At the following protocol nodes, the coach should self-check before output:
+- **A5 Clash Pre-Check**: Has "Concession-Counter concession" been used? → Replace with "concede + Absorption"
+- **A6 Structural Clash**: Have sub-steps been named "Concession-Counter"? → Replace with "Structural Clash Verification"
+- **C Post-Mortem Analysis**: Have "judge suffers" or "Concession-Counter move" been used? → Replace with active terminology
+- **All Output**: Has "Overlapping Refutation" been used? → Replace with "Existence vs. Degree." Has "Integrated Offense-Defense" been used as an active operational term? → Replace with "Structural Clash" (or add "formerly called" tag). Have "Concession-Counter (non-Radical-Concession context)," "judge enjoys/suffers," or "Press-Defend-Evade-Concede as current framework" been used? → Replace with corresponding active terminology
 
 # Volume 3: Speech Techniques by Format Position
 
