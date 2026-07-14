@@ -2067,7 +2067,7 @@ async function newChat() {
   chat.appendChild(msg2);
 }
 
-function closePage() { if(typeof Capacitor!=='undefined'||location.href.indexOf('debate-coach-web')>=0) location.reload(); else document.body.innerHTML='<div style=\"display:flex;align-items:center;justify-content:center;height:100vh;color:var(--gray);font-size:16px;font-family:inherit;\">页面可安全关闭</div>'; }
+function closePage() { if(typeof Capacitor!=='undefined'||location.href.toLowerCase().indexOf('debate-coach-web')>=0) location.reload(); else document.body.innerHTML='<div style=\"display:flex;align-items:center;justify-content:center;height:100vh;color:var(--gray);font-size:16px;font-family:inherit;\">页面可安全关闭</div>'; }
 
 function cancelApiKey() {
   localStorage.removeItem('debate_coach_risk_accepted');
