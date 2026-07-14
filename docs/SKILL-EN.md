@@ -941,7 +941,7 @@ After passing, say done and enter A7.
 
 ### A7 Mainline Pre-Judgment
 
-Knowledge foundation: Lecture 5.1, Mainline Concept + Lecture 6.1. Mainline: A->B->C, where B = {B1, B-prime-1, ..., Bn, B-prime-n}. Type 1 (Convergent -- has answer, clear decisive logic) / Type 2 (Parallel -- mutual pecking, lacks converged decisive anchor) / Type 0 (Disconnected). **Structural Clash is the key to a Type 1 Mainline** (Lecture 6.1): without Structural Clash (Absorption / Reversal), there is no way to genuinely converge both sides valid points; the Mainline can only be Type 2 mutual pecking. How well A6 is done directly determines whether A7 can point toward Type 1. Lecture 5.4, Mainline Transformation: Type 2 to Type 1 = introducing reason B-prime such that both sides existing parts added together yield a unique new conclusion. The Three Dimensions of Mainline (Proof / Persuasion / Third-Party) -- the same Mainline may yield different victory or defeat under different dimensions.
+Knowledge foundation: Lecture 5.1, Mainline Concept + Lecture 6.1. Mainline: A->B->C, where B = {B1, B-prime-1, ..., Bn, B-prime-n}. Type 1 (Convergent -- has answer, clear decisive logic) / Type 2 (Parallel Mainline — lacks converged decisive anchor) / Type 0 (Disconnected). **Structural Clash is the key to a Type 1 Mainline** (Lecture 6.1): without Structural Clash (Absorption / Reversal), there is no way to genuinely converge both sides valid points; the Mainline can only be Type 2 mutual pecking. How well A6 is done directly determines whether A7 can point toward Type 1. Lecture 5.4, Mainline Transformation: Type 2 to Type 1 = introducing reason B-prime such that both sides existing parts added together yield a unique new conclusion. The Three Dimensions of Mainline (Proof / Persuasion / Third-Party) -- the same Mainline may yield different victory or defeat under different dimensions.
 
 **The Mainline essence is also an argument.** The Standard B0 you established in A3 is the micro-B (case-building level); what you face in A7 is the macro-B = {B1, B-prime-1, ..., Bn, B-prime-n} (full-match level). The same A->B->C logic, two scales (Pro Lecture 4, Four-in-One).
 
@@ -1374,19 +1374,66 @@ Effective throughout the entire process:
 
 ## Phase C: Post-Mortem
 
-Use when the user mentions "post-mortem" or a match already played.
+> ⚡ Output self-check: Have any legacy terms been used? → Replace with DUG standard terms.
+>
+> 📄 **Default output as HTML**, with "Theme" toggle button, default light theme.
 
-**C1.** Was this match Mainline Type 1 (Convergent -- has answer) or Type 2 (Parallel -- mutual pecking)? Was there a moment when transformation to Type 1 could have occurred -- that instant of "if I had said this sentence, both sides could have found aintersection point"?
+Use when the user mentions "post-mortem" or a match already played. The purpose of post-mortem is to help the user **understand what actually happened in this match** — not to retell who said what, but to dissect the structure.
 
-**C2.** from the Three-Dimensional Model -- Proof dimension (logical self-consistency and clash completion), Persuasion dimension (audience identification and value resonance), Third-Party dimension (operational fluency and rule utilization) -- what were the strengths and weaknesses in each? Which of the six Judge Archetypes (Guardian / Seeker / Critic / Judge / Technician / Artist) would this match judge more biased toward? Did your approach match their preferences?
+**C0. Material Acquisition (must execute first).** Before any analysis, confirm what materials are available:
 
-**C3.** If you could play again, would switching the entry direction of the Scope of Discussion be better? Where does the content fall on the Lv0-Lv6 interval?
+> "Post-mortem requires match records. Which do you have?
+> - 📝 **Transcript / Verbatim Text** (most recommended — paste directly or upload file)
+> - 🎥 **Match Video / Audio** (if your AI client supports media analysis)
+> - 💬 **From Memory** (least effective but can still discuss the broad picture)
+>
+> ⚠️ Full-match transcript analysis may consume significant tokens. Web/APP clients cannot read local files — please paste transcript text directly."
 
-**C8. Judge Adjudication Framework (for writing post-match judge reports).** Three-part structure — (1) Win-Loss Judgment (required): identify the decisive point → explain point by point → summarize; (2) Technical Review (optional): comment on specific technical moves, **must declare this does not affect the result**; (3) Motion Thought Sharing (optional): "how would you debate this motion if you got it."
+Once materials are ready → proceed to C1.
 
-**C9. Judge Cognition Analysis (understanding the judge through the Mainline framework).** (1) Where does the judge sit on the three-dimensional coordinate? Which of the six archetypes (Guardian / Seeker / Critic / Judge / Technician / Artist) do they lean toward? (2) Which side's closing more successfully "controlled the narrative" — guided the judge's cognition of this match's Mainline? (3) The judge's actual Mainline vs. the A7 predicted Mainline — at which step did the gap emerge? (AC understanding? Standard selection? Structural accommodation space?)
+**C1. Verdict Overview.** The post-mortem must begin with a clear win-loss judgment and criterion statement. Do not "identify the decisive point and then explain" — instead, **first state the judging criterion you are using, then explain the outcome based on that criterion**. One-line verdict + score + "Criterion for this match" statement + **reason for choosing this criterion** (why this criterion fits this particular match — motion type, format characteristics, which dimension of the actual debate performance is most decisive). The criterion can and should vary from match to match.
 
-**Note: Post-mortem and post-match discussion are different.** If the user only says "let's discuss that match" without committing to structured post-mortem, first ask C1 — "Do you think this match was Type 1 or Type 2?" — to guide the user toward Mainline awareness, then decide how much of C2-C9 to unfold based on the user's depth of interest. Judge-perspective analysis (C8/C9) and debater-perspective post-mortem (C1-C3) do not replace each other — first ask the user which they need.
+**C2. Mainline Type Diagnosis.** Diagnose this match in one sentence:
+
+| Type | Characteristic | One-Sentence Identification |
+|---|---|---|
+| Type 0 | Both sides purely push their own case, no interaction | Cannot find a single round of genuine clash |
+| Type 2 | Intense clash but two parallel tracks | Extensive single-point dismantling, but both architectures never collide and reconstruct — looks like fighting, actually running on separate tracks |
+| Type 1 | Both architectures converge into a single Mainline | At least one moment occurred: one side acknowledged the other's reasonable point, reinterpreted through their own framework, arrived at a unified conclusion |
+
+**Training Value Diagnosis**: Type 0 = novice building push-forward awareness (best starting point); Type 2 = intermediate training short-strike clash and on-the-spot reaction (most common in high-level competition); Type 1 = advanced training content quality (requires teammate consensus and judge ability to follow, high idealistic component). The type a debater produced reflects their current training stage.
+
+**C3. Mainline Panorama.** Use an arrow-flow diagram + text to show how both sides' Mainlines each developed from opening to conclusion. "Affirmative Mainline: A → B → C → conclusion" + "Opposition Mainline: α → β → γ → conclusion", with the clash zone and sole intersection point marked in between. At the bottom, use colored text to summarize the basis for the Mainline type judgment.
+
+**C4. Both-Sides Perspective Identification.** Reconstruct both sides' choices on two layers —
+
+Scope of Discussion layer: Which proper subset did each side focus on? Did either side evade the opponent's most favorable scope?
+Standard B0 layer: What B0 did each side choose — through this B0, whose importance was raised and whose lowered?
+Clash diagnosis: Did the two standards genuinely collide, or was each running on its own track?
+
+**C4-A Four-Quadrant Driving-Force Diagnosis.** Perform cause-direction/effect-direction judgment on the value each side pushed. Which quadrant does each value fall into — what force drives people to accept it? Intrinsic Value (cause-direction · before B0 · driving force) or Positional Interest (effect-direction · after B0 · position reinforcement)?
+
+**C5. Two-Dimensional Architecture Diagram.** Use a two-column table to reconstruct both sides' core logical chains (A→B→C), then ask: Do these two architectures intersect? Does any point from the opponent happen to also support your side?
+
+**C6. Key Clash Adjudication.** Dissect the match's most critical clash points round by round. For each: winner + why + how to fight it better next time. The table must include a "Mainline Link" column — each clash point tagged with which layer of the affirmative case / which question of the opposition rebuttal it corresponds to, forming a direct link to the C3 Mainline Panorama arrows.
+
+| # | Clash Point | Mainline Link | Winner | Reasoning | Better Approach |
+|---|---|---|---|---|---|
+| 1 | [Description] | [Which Aff layer / Opp question] | Aff/Opp | [Why this side won logically] | [How the losing side should have fought] |
+
+After listing all, summarize: Overall tendency of key clashes — one-sided, or each side won some but one side's wins were all decisive while the other's were peripheral?
+
+**C7. Structural Clash Opportunity Points (the most valuable part of post-mortem).** Identify the moment closest to Type 1 transformation — "If [person] had said [sentence] at [segment], both architectures could have collided and reconstructed." Describe the Absorption or Reversal: (1) Which reasonable point of the opponent to acknowledge; (2) How to reinterpret it through one's own framework; (3) What unified conclusion emerges. For Type 1 matches, find "which Structural Clash truly decided the outcome"; for Type 2 matches, find "which transformation opportunity was missed." **Note: Do not set up a separate "closing evaluation" step. If the moment closest to Type 1 transformation happens to occur during the final segment, mention it naturally here without emphasizing the position.**
+
+**C8. Three-Dimensional Model Review.** Use "Proof Side" (logical self-consistency / clash completion), "Persuasion Side" (audience identification / value resonance), and "Third-Party Side" (operational fluency / rule utilization) to assess each side's strengths and weaknesses. Include 1-2 specific examples per side illustrating typical performance on that side. Which of the six Judge Archetypes does the judge lean toward? Did the approach match?
+
+**C9. Alternative Developments.** Would switching the entry direction of the Scope of Discussion be better? Does the architecture leave room for Structural Clash? Where does the content fall on the Lv0-Lv6 interval? If the stances were swapped, could both architectures still hold?
+
+**C10. Debater Performance & Thought Sharing.** Comment on both sides' technical execution — which moves were outstanding, which errors were fatal. End with "Motion Thought Sharing": "How would you debate this motion if you got it?"
+
+**C11. Overall Assessment.** Use a continuous narrative paragraph to conclude the post-mortem: what level this match reached under your chosen criterion; the outcome logic under your criterion (and if different from the actual result, explain why — different criterion or different adjudication under the same criterion); the match's cognitive contribution to the motion itself (content level Lv0-Lv6); its place in debate history / training value. Not a checklist — a final characterization and positioning of this match.
+
+**Note: Post-mortem and post-match discussion are different.** If the user only says "let's discuss that match" without committing to structured post-mortem, first use C2 to ask — "Do you think this match was Type 1 or Type 2?" — to guide the user toward Mainline awareness, then decide how much of the subsequent steps to unfold based on the user's depth of interest. Judge-perspective analysis (C10/C11) and debater-perspective post-mortem (C1-C9) do not replace each other — first ask the user which they need.
 
 ---
 
