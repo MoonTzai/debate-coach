@@ -1,5 +1,8 @@
 # Debate-Coach Project
 
+## ⛔ 最高优先级：修改前必须先确认
+**对本项目任何文件做任何修改之前，必须先向用户说明要改什么、怎么改、为什么改，等用户明确同意后再动手。** 包括但不限于：编辑 SKILL.md、修改网页、调整协议流程、删除内容、重构章节。禁止"先改再说"。讨论和分析不需要确认，但一碰文件就必须停手等用户点头。
+
 ## 🏗️ 开发工作区架构（最高优先级）
 **本项目（`Debate-Coach-Backup/`）是唯一开发工作区。所有日常开发、修改、测试、构建在此进行。**
 
@@ -22,6 +25,9 @@ Debate-Coach-Backup/          Debate-Coach/
 
 ## 🚫 最高优先级：禁止 Python 脚本修改代码
 **禁止用任何 Python 脚本（patch_gfl.py、rebuild_en.py、build_zones.py 等）修改 JS/HTML。** 转义层级不可控，已导致循环坏档和 API Token 浪费。唯一安全方式：Edit 工具手改母版 + 浏览器验证 + node 做纯 base64 编码。
+
+## ⛔ 最高优先级：禁止推送到 GitHub 不存在的文件
+**同步到 Debate-Coach 发布仓库时，只更新 GitHub 已存在的文件。** GitHub 已明确删除的文件（TERMINOLOGY.md、debate-coach-web-zh.html、debate-coach-web-en.html）禁止重新推送。新增文件需用户逐次明确授权后才能加入 Git 追踪。判断标准：`git ls-tree -r --name-only HEAD` 的输出 = 可更新白名单。
 
 ## 📦 APK 打包（每次必读，禁止猜测 JDK 路径）
 **JDK 位置（不在 Program Files，在用户目录！）：**
@@ -98,54 +104,72 @@ fs.writeFileSync(cwd+'/debate-coach-web.html',updated,'utf-8');"
 
 **全项目术语标准参见 `TERMINOLOGY.md`**——包含完整旧→新映射表、禁令级别、豁免条件、自检钩子。所有禁令不影响对旧术语的答疑解释（讨论该概念本身时不受限）。
 
-## 知识库修改遍历清单
+## 知识库修改遍历清单（三轨隔离）
 
-**修改 SKILL.md / SKILL-EN.md 时，必须同步以下全部文件：**
+知识库分为三个独立轨道，**互不穿越**——修改哪个轨道的文件，只走该轨道的同步链：
 
-### 第一层：母版（直接修改）
-1. `.claude/skills/debate-coach/SKILL.md` ← Skill 加载源
-2. `.claude/skills/debate-coach/SKILL-EN.md` ← 同上（英文版）
-3. `CLAUDE.md` ← 项目级规则（如需新增约束）
-4. `TERMINOLOGY.md` ← 术语真相源（如涉及术语变更）
+---
 
-### 第二层：镜像副本（覆盖同步）
-5. `SKILL.md`（根目录）
-6. `SKILL-EN.md`（根目录）
-7. `docs/SKILL.md`
-8. `docs/SKILL-EN.md`
+### 轨道 A：Claude Code 知识库（SKILL.md / SKILL-EN.md）
 
-### 第三层：网页版（B64 解码→替换→重编码）
-9. `debate-coach-web.html` → `ZH_B64`（中文版嵌入）
-10. `debate-coach-web.html` → `EN_B64`（英文版嵌入）
-11. `debate-coach-web-zh.html`（单页中文版，纯文本直接改）
+**源文件**：`SKILL.md` / `SKILL-EN.md`（根目录）
 
-### 第四层：APK（复制母版 + Gradle 构建）
-12. `APK/www/index.html` ← 覆盖
-13. `APK/android/app/src/main/assets/public/index.html` ← 覆盖
-14. `APK/android/` → `./gradlew assembleDebug` → 输出 `app-debug.apk`
-15. `Debate-Coach-v7.6.14.apk`（根目录）← 覆盖
+修改 SKILL.md 或 SKILL-EN.md 后，同步：
+1. `.claude/skills/debate-coach/SKILL.md` ← 覆盖（Skill 加载源）
+2. `.claude/skills/debate-coach/SKILL-EN.md` ← 覆盖
+3. `docs/SKILL.md` ← 覆盖（镜像）
+4. `docs/SKILL-EN.md` ← 覆盖（镜像）
+5. `C:/Claude/Project/Debate-Coach/SKILL.md` ← 覆盖（GitHub 发布仓库）
+6. `C:/Claude/Project/Debate-Coach/SKILL-EN.md` ← 覆盖
+7. `C:/Claude/Project/Debate-Coach/docs/SKILL.md` ← 覆盖
+8. `C:/Claude/Project/Debate-Coach/docs/SKILL-EN.md` ← 覆盖
+9. `CLAUDE.md` ← 如新增项目级约束
+10. `TERMINOLOGY.md` ← 如涉及术语变更
 
-### 第五层：GitHub 发布仓库
-16. `C:/Claude/Project/Debate-Coach/` 下对应文件全部同步 → `git commit` + `git push`
+**严禁**：修改 SKILL.md 后去碰 `debate-coach-web.html` 或 `评委与复盘AI.html`——它们有自己的知识库。
 
-### 可能涉及的附属文档（按需）
-- `Memory/字幕学习-完整差异报告.md`
-- `B-Phase-Handoff.md` / `B-Phase-Flow-Tree-Final.md` / `B-Phase-Correction-Checklist.md`
-- `README.md`
-- `Output/Debate-Coach-流程全景.md`
-- `Output/裁判判准-筑基教练-260714.md` + `.html`
-- `Output/handoff-terminology-fix/`
+---
 
-### ⛔ 不动的文件
+### 轨道 B：网页版教练知识库（Skill-Web.md）
+
+**源文件**：`Skill-Web.md`（根目录）
+
+修改教练教学规则后，同步：
+1. `debate-coach-web.html` → B64 解码 → 替换 ZH_B64 中的系统提示词 → 重编码写回
+2. `APK/www/index.html` ← 覆盖 `debate-coach-web.html`
+3. `APK/android/` → `npx cap sync` → `./gradlew assembleDebug` → 输出 APK
+4. 根目录 APK 文件 ← 覆盖
+5. `C:/Claude/Project/Debate-Coach/Debate-Coach-web.html` ← 覆盖（GitHub 发布仓库）
+
+**严禁**：修改网页版教练知识库后去碰 SKILL.md——Claude Code 的知识库和网页版的知识库是两套独立系统。
+
+---
+
+### 轨道 C：裁判所分析框架（Skill-Judge.md）
+
+**源文件**：`Skill-Judge.md`（根目录）
+
+修改裁判分析规则后，同步：
+1. `Output/评委与复盘AI.html` → Edit 工具手改 `buildSystemPrompt` 函数
+2. `debate-coach-web.html` → B64 编码替换 `JUDGE_B64`
+3. `APK/www/index.html` ← 覆盖
+4. `APK/android/` → `npx cap sync` → `./gradlew assembleDebug` → 输出 APK
+5. `Output/评委与复盘AI-final-*.html` ← 覆盖（定版备份）
+6. `Output/milestone-*-protected/评委与复盘AI.html` ← 需授权后覆盖
+7. `C:/Claude/Project/Debate-Coach/Debate-Coach-web.html` ← 覆盖（GitHub 发布仓库，含更新后的 JUDGE_B64）
+
+**严禁**：修改裁判分析规则后去碰 SKILL.md——裁判所的知识库和 Claude Code 的知识库是两套独立系统。
+
+---
+
+### ⛔ 不动文件
 - `Output/milestone-*-protected/`（chmod 444；修改需用户明确授权）
 - `Output/软件著作权登记/`（法律文件）
 - `Source/`（课件分析原文）
 - `翻译备份/`（历史对照）
-- `Output/experiment-n50/`、`Output/paper-anti-methodology/`（实验/论文数据）
-- `Output/金钱辩复盘/`（特定复盘输出）
 
 ### 修改方法约束
 - 纯文本（SKILL.md 等）：Edit 工具手改
 - B64 编码（网页版）：node 解码→替换→重编码（禁止 Python 脚本）
-- 验证：每次修改后浏览器打开 `debate-coach-web.html` 确认
+- 验证：每次修改后浏览器打开确认
 - 保护版：先 `chmod 644` 解锁，改完 `chmod 444` 恢复
