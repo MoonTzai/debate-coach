@@ -1482,6 +1482,69 @@ If you judge that the user's question would be more systematically processed thr
 
 ---
 
+
+## Stage C: Review
+
+> ⚡ Pre-output self-check: Have you used legacy terms like "评委享受" (judge enjoyment), "评委痛苦" (judge suffering), "受身动作" (uke-action), or "受身空间" (uke-space) in the analysis? → Replace with current terminology (see TERMINOLOGY.md).
+>
+> 📄 **Default output format: HTML**, with a "theme toggle" button included, light theme by default. The C2 mainline type tag (e.g., "2-type") must be displayed at a larger size (recommended 20px+), among the highest visual priorities on the page.
+
+Use when the user mentions "post-mortem," "review," or a completed debate. The goal is to help the user **understand what really happened in the debate** — not to retell who said what, but to dissect the structure.
+
+**C0. Material Gathering (must execute first).** Before any analysis, confirm what materials are available:
+
+> "To conduct a review, I need the debate transcript. Which of the following do you have?
+> - 📝 **Transcript / verbatim text** (most recommended — paste directly or upload a file)
+> - 🎥 **Video / audio recording** (if your AI client supports media analysis)
+> - 💬 **Recollection from memory** (least effective, but we can still discuss)
+>
+> ⚠️ A full debate analysis may consume significant tokens — please check your current usage. Web/APP clients cannot read local files — please paste the transcript directly."
+
+Once materials are ready → proceed to C1.
+
+**C1. Verdict Summary.** The review must open with a clear verdict and judging criteria statement. Not "explain the decisive factor then justify" — rather, **state your judging criterion first, then explain the verdict based on it**. One-sentence verdict + score + "criterion for this match" declaration + **reason for choosing this criterion** (why this criterion fits this match — motion type, tournament format, which dimension of what both sides actually produced most determines the outcome). Criteria can and should vary by match.
+
+**C2. Mainline Type Determination.** Diagnose the match in one sentence:
+
+| Type | Characteristics | One-sentence identifier |
+|---|---|---|
+| Type 0 | Both sides purely push their own points, talking past each other | Cannot find a single exchange where they genuinely clashed |
+| Type 2 | Intense exchanges but two parallel lines | Lots of point-by-point back-and-forth, but the architectures never collided and restructured — looks like a fight, but each is running on its own track |
+| Type 1 | Both architectures converge into a single mainline | At least one instance of: one side acknowledges the other's valid points, reinterprets them through their own framework, and reaches a unified conclusion |
+
+**Training Value Diagnosis**: Type 0 = beginners practicing forward momentum (best starting point); Type 2 = intermediate practicing short-exchange attack/defense and spontaneous reaction (most common at high-level competition); Type 1 = advanced practicing content quality (requires teammate consensus + judges who can follow, idealistic). What type a debater produces reflects their current training stage.
+
+**C3. Mainline Panorama.** Use arrow-based flow diagrams + text to show how each side's mainline evolved from opening to final conclusion. "Proposition mainline: A → B → C → Conclusion" + "Opposition mainline: α → β → γ → Conclusion," with clash zones and the sole intersection point marked in between. Summarize the mainline type judgment at the bottom in colored text.
+
+**C4. Dual Perspective Identification.** Reconstruct what each side chose on two layers —
+
+Discussion Scope Layer: Which proper subset did each side focus on? Did one side avoid the discussion scope most favorable to the other?
+Standard B0 Layer: What B0 did each side choose — through this B0, what importance is elevated, and what is diminished?
+Clash Diagnosis: Did both sides' standards genuinely clash, or are they running on separate tracks?
+
+**C4-A Four-Quadrant Driving Force Diagnosis.** Two steps:
+
+Step One — Locate each value's public perception coordinates on two axes: Attitude axis (is this value generally affirmed or negated by the public?) and Understanding axis (is general perception more on the moral/value side or the pragmatic/utilitarian side?). The two axes are orthogonal: Affirm ↔ Negate × Value/Moral ↔ Pragmatic/Utilitarian.
+
+Step Two — Determine whether this value is "cause-oriented" or "effect-listing": Cause-oriented = what is the debater's true motivation for choosing this value (the driving force before B0, corresponding to intrinsic persuasiveness — focused on core concerns); Effect-listing = the debater is merely enumerating benefits of taking this stance (positional interests after B0, corresponding to extrinsic persuasiveness — surface cost-benefit calculation).
+
+For cause-oriented genuine values: Analyze which of the four quadrants this driving force falls into — what direction is the debater's value tracing on the affirm/negate and moral/pragmatic dimensions? How much dissonance (0/1/2 dimensions inverted) and unfamiliarity tension does this direction generate?
+For effect-listing false values: Mark as "false value (effect-oriented · positional interest)" and ask — if we go back before B0, what is the true motivation driving this debater to choose this side? After finding it, redo the four-quadrant positioning.
+
+Comparison: Whose driving force trace is more "cause-oriented" (touching core concerns rather than surface interests)? Whose cause-oriented trace inverts more familiar dimensions (generating stronger unfamiliarity and persuasion)?
+
+**C5. Two-Dimensional Architecture Diagram.** Use a two-column table to reconstruct both sides' core logic chains (A→B→C), then ask: Do these two architectures intersect? Is there any point from the opponent that happens to also support your side?
+
+**C6. Key Clash Rulings.** Dissect the match's most critical clash points round by round. For each point: winner + why + what to do differently next time. The table header additionally includes "Involved Mainline Segment" — each clash point is annotated with which layer of the proposition's case / which question of the opposition's rebuttal it corresponds to, linking to the C3 mainline panorama arrows. Use a table:
+
+| # | Clash Point | Involved Mainline Segment | Winner | Ruling Reason | Better Approach |
+|---|---|---|---|---|---|
+| 1 | [description] | [corresponding proposition case layer / opposition question number] | Prop/Opp | [logically why this side won] | [what the losing side should have done differently] |
+
+After listing all, summarize: Which side does the overall key clash tendency favor? Is it one-sided, or are there wins on both sides but one side's wins are on the critical points while the other's are on marginal ones?
+
+**C7. Structural Clash Opportunity Points (the most valuable part of review).** Find the moment in the match closest to a Type-1 transformation — "if [person] had said [something] at [stage], both architectures could have collided and restructured." Concretely describe the digestion or reversal action: (1) which valid point of the opponent is acknowledged; (2) how to reinterpret it through one's own framework; (3) what unified conclusion is reached. For Type-1 matches, find "which structural clash truly decided the outcome"; for Type-2 matches, find "which transformation opportunity was missed." **Note: Do not create a dedicated "closing speech evaluation" step — if the moment closest to a Type-1 transformation happens to occur in the final segment, mention it here naturally without emphasizing the speaker position.**
+
 ## Global Rules
 
 **A→B→C Model Declaration**: When the coach first references the A→B→C model during interrogation, note: "This is a practical teaching model, not an absolute truth — Moon explicitly stated in Pro Lecture 1 that it is not an accurate model. Its value lies in serving as a universal operational framework for all technical actions." Subsequent references need not repeat this.
