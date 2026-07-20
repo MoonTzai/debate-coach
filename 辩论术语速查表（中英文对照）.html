@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>辩论术语速查表（中英文对照）</title>
+<style>
+:root{--bg:#f5f5f5;--card:#fff;--border:#e0e0e0;--gold:#4f6bed;--text:#222;--gray:#666;--input-bg:#f0f0f0;--warn-bg:#fff3cd;--warn-border:#ffc107;--eng:#8e44ad}
+body.dark{--bg:#0d0d0d;--card:#141414;--border:#222;--gold:#ffc000;--text:#eee;--gray:#999;--input-bg:#1a1a1a;--warn-bg:#2a2000;--warn-border:#664400;--eng:#c39bdb}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Microsoft YaHei",sans-serif;max-width:1100px;margin:0 auto;padding:20px;padding-top:80px;background:var(--bg);color:var(--text)}
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--card);border-bottom:1px solid var(--border);padding:0}
+header .bar{max-width:1100px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header .btn{background:var(--card);border:1px solid var(--border);color:var(--gray);padding:8px 14px;border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit;white-space:nowrap;transition:all .2s}
+header .btn:hover{border-color:var(--gold);color:var(--gold)}
+header .title{font-size:16px;font-weight:bold;color:var(--gold);margin-right:auto}
+header .search{flex:1 1 200px;min-width:160px;background:var(--input-bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-size:13px;font-family:inherit;outline:none;max-width:300px}
+header .search:focus{border-color:var(--gold)}
+header .search::placeholder{color:var(--gray)}
+.disclaimer{font-size:14px;text-align:center;background:var(--warn-bg);border:1px solid var(--warn-border);padding:10px 16px;border-radius:4px;margin-bottom:20px;color:var(--text)}
+h1{text-align:center;color:var(--gold);border-bottom:2px solid var(--gold);padding-bottom:10px;margin-bottom:20px;font-size:22px}
+h2{color:var(--gold);margin-top:40px;border-left:4px solid var(--gold);padding-left:12px}
+table{width:100%;border-collapse:collapse;margin:16px 0;background:var(--card);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+th{background:var(--gold);color:#fff;padding:10px 8px;text-align:left;font-size:13px}
+td{padding:8px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:top;overflow-wrap:break-word;color:var(--text)}
+td:first-child{width:4%;text-align:center;font-weight:bold}
+td:nth-child(2){font-weight:bold;width:14%}
+td:nth-child(3){font-family:Georgia,serif;color:var(--eng);width:20%}
+td:nth-child(4){width:38%}
+td:nth-child(5){font-size:11px;color:var(--gray);width:24%}
+tr.sub td:first-child{color:var(--gray)}
+tr.sub td:nth-child(2){padding-left:28px}
+tr.eng td{font-weight:normal;font-style:italic;color:var(--gray)}
+.no-match{display:none}
+</style></head><body>
+<script>if(localStorage.getItem("debate_coach_theme")==="dark")document.body.classList.add("dark")</script>
+<header>
+<div class=bar>
+<button class=btn onclick="window.top.location.reload()" title="返回入口">← 返回</button>
+<span class=title>辩论术语速查表</span>
+<input class=search id=search placeholder="搜索术语…" oninput="doSearch()">
+<button class=btn onclick="doSearch()">搜索</button>
+<button class=btn onclick="var d=document.body.classList.toggle('dark');localStorage.setItem('debate_coach_theme',d?'dark':'light')">界面颜色</button>
+</div>
+</header>
+<h1>辩论术语速查表（中英文对照）</h1>
+<div class="disclaimer">⚠️ 本内容由 AI 生成，未核验准确性，仅供参考</div>
+<h2>一、《辩论筑基》体系核心概念</h2>
+<table>
+<tr><th>#</th><th>中文</th><th>英文</th><th>定义</th><th>出处</th></tr>
+<tr><td rowspan="2">1</td><td rowspan="2">A→B→C 论点结构</td><td rowspan="2">A→B→C Argument Architecture</td><td>将论证分解为主体（A）、理由（B）、结论（C）的三元结构。A 为主体/持方对象，B 为理由/第三因素（独立于 A 且非从 A 推导），C 为结论。该结构是《辩论筑基》体系的底层语法，论点的基本单元、立论的架构骨架、交锋的操作界面、主线的认知载体均统一于此模型</td><td rowspan="2">精灵·Moon《辩论筑基》Pro 第 1-4 讲</td></tr>
+<tr class="eng"><td>The foundational grammar of the system: A is the subject/stance object, B is the independent reason/third factor (not derived from A), C is the conclusion. All debate operations—argument, case, clash, mainline—are instances of this structure at different scales</td></tr>
+<tr><td rowspan="2">2</td><td rowspan="2">B-prime (B')</td><td rowspan="2">B-prime</td><td>使得结构性交锋得以完成的，能统合双方理由后仍然得出我方结论的更重要的理由。B' 并非凭空构想——来自价值阶梯的上层追问或反方向挖掘。在消化中 B' 用于展示对方的东西不重要而我方满足它，在反转中 B' 用于展示对方的东西恰恰支持我方。形式化：({A→B}∪{α→β})→B'→C。B' 的本质是与 A4 深化后的价值驱动力同源——不是战术工具，是价值论证的延伸</td><td rowspan="2">精灵·Moon《辩论筑基》Pro 第 3 讲、第 6.1.1 讲</td></tr>
+<tr class="eng"><td>The more important reason that enables Structural Clash to be completed: it subsumes both sides' reasons and still yields the conclusion for one's own side. B' originates from the upper levels or reverse direction of the Value Ladder. Form: ({A→B} ∪ {α→β}) → B' → C</td></tr>
+<tr><td rowspan="2">3</td><td rowspan="2">B' 质量自检</td><td rowspan="2">B-prime Quality Check</td><td>结构性交锋对更重要的理由 B' 的质量的三个检验维度：1. 攻防一体（B' 是否一个动作同时回应了 α→β 并加固了 A→B）、2. 覆盖预判（B' 这个单一逻辑能否覆盖对方一般情况下的合理之处）、3. 与价值同源（B' 是否与价值深化后的驱动力谱系一致甚至是同一个东西）。三道全过则 B' 天然既是标准合理性、也是价值点、也是结构性交锋可用的更重要理由，三点合一的 Bx</td><td rowspan="2">精灵·Moon《辩论筑基》Pro 第 3 讲</td></tr>
+<tr class="eng"><td>Three quality checks: (1) Clash-Construction Unity—does B' simultaneously respond to α→β and reinforce A→B in a single move? (2) Coverage—can this single logic cover all the opponent's reasonable points exhaustively? (3) Same Source as Value—is B' genealogically continuous with the driving force deepened in A4? All three pass → B' is simultaneously Standard Reasonableness, Value Point, and the more important reason for Structural Clash</td></tr>
+<tr><td rowspan="2">4</td><td rowspan="2">辩论的三个维度</td><td rowspan="2">Three Dimensions of Debate</td><td>证明维度（逻辑推理与论证完备性）、说服维度（观众认同与认知体验）、第三方维度（规则完成与场域完成）。同一主线在不同维度下可能得出不同胜负判断——此为主线的相对性</td><td rowspan="2">精灵·Moon《辩论筑基》第 5.1 讲</td></tr>
+<tr class="eng"><td>Three independent evaluative dimensions of a mainline: Proof (logical reasoning & argument completeness), Persuasion (audience identification & cognitive experience), Third-Party (rule fulfillment & forum completion). The same mainline may yield different verdicts across dimensions—the relativity of the mainline</td></tr>
+<tr><td rowspan="2">5</td><td rowspan="2">辩论三维度的六向度</td><td rowspan="2">Six Directions of the Three Dimensions</td><td>证明维度（证伪与证成）、说服维度（理性与感性）、第三方维度（场面感与意义感）——每个维度拆为两个向度，共六个向度用于诊断主线的强弱分布</td><td rowspan="2">精灵·Moon《辩论筑基》第 5.1 讲</td></tr>
+<tr class="eng"><td>Each dimension splits into two directions: Proof = Falsification + Verification; Persuasion = Rational + Perceptual; Third-Party = Situational + Meaning. Six directions for diagnosing mainline strength distribution</td></tr>
+<tr class="sub"><td rowspan="2"></td><td rowspan="2">(1) 证伪</td><td rowspan="2">Falsification</td><td>证明维度的两个向度之一。核心问题是"你的论证本身完不完整"——己方论证的自洽性与攻防完成度</td><td rowspan="2">精灵·Moon《辩论筑基》第 5.1 讲</td></tr>
+<tr class="sub eng"><td>Proof dimension: Self-consistency and clash-completion. Core question: "Is your argument structurally complete?"</td></tr>
+<tr class="sub"><td rowspan="2"></td><td rowspan="2">(2) 证成</td><td rowspan="2">Verification</td><td>证明维度的两个向度之一。关注己方论证的自主证立能力与推进力度——不依赖对方犯错即可独立站立的论证强度</td><td rowspan="2">精灵·Moon《辩论筑基》第 5.1 讲</td></tr>
+<tr class="sub eng"><td>Proof dimension: Independent verification capacity and propulsion force—the ability to stand without relying on opponent error</td></tr>
+<tr class="sub"><td rowspan="2"></td><td rowspan="2">(3) 理性</td><td rowspan="2">Rational Persuasion</td><td>说服维度的两个向度之一。诉诸听众的常识判断与经验共鸣——论证是否与一般人的朴素理解相符</td><td rowspan="2">精灵·Moon《辩论筑基》第 5.1 讲</td></tr>
+<tr class="sub eng"><td>Persuasion dimension: Appeals to common sense and experiential resonance—whether the argument aligns with ordinary understanding</td></tr>
+<tr class="sub"><td rowspan="2"></td><td rowspan="2">(4) 感性</td><td rowspan="2">Perceptual Persuasion</td><td>说服维度的两个向度之一。通过创设新情境或提供新视角使听众产生顿悟——不依赖已有常识而依靠框架重建改变听众的感知</td><td rowspan="2">精灵·Moon《辩论筑基》第 5.1 讲</td></tr>
+<tr class="sub eng"><td>Persuasion dimension: Creates new contexts or perspectives to generate insight—relies on frame reconstruction rather than existing common sense</td></tr>
+<tr class="sub"><td rowspan="2"></td><td rowspan="2">(5) 场面感</td><td rowspan="2">Situational Sense</td><td>第三方维度的两个向度之一。关注辩手在竞赛规则框架内的动作完成度——包括环节职责履行、时间管理、规则运用等竞赛执行力要素</td><td rowspan="2">精灵·Moon《辩论筑基》第 5.1 讲</td></tr>
+<tr class="sub eng"><td>Third-Party dimension: Execution completeness within competitive rules—role fulfillment, time management, rule application</td></tr>
+<tr class="sub"><td rowspan="2"></td><td rowspan="2">(6) 意义感</td><td rowspan="2">Meaning Sense</td><td>第三方维度的两个向度之一。关注辩论内容的学术深度与讨论价值——超越了竞赛输赢的知识贡献与思想启发</td><td rowspan="2">精灵·Moon《辩论筑基》第 5.1 讲</td></tr>
+<tr class="sub eng"><td>Third-Party dimension: Academic depth and discussion value beyond winning—the intellectual contribution the debate provides</td></tr>
+<tr><td rowspan="2">6</td><td rowspan="2">标准 / 判准 (B0)</td><td rowspan="2">Criterion (B0)</td><td>持方成立的最直接、最顶层、最根本的理由，即"凭什么持方A→C 成立"的答案。标准必然有倾向，公允标准等于废标准。公允应归因于标准的合理性而非标准本身。B0 与 A、C 的关系为：A→B0→C，其中 B0 是连接 A 与 C 的独立桥梁</td><td rowspan="2">精灵·Moon《辩论筑基》Pro 第 2 讲</td></tr>
+<tr class="eng"><td>The most direct, top-level, fundamental reason why a stance holds. The criterion must lean toward one's side—a neutral criterion is a useless criterion. Neutrality should be attributed to the reasonableness of the criterion, not the criterion itself</td></tr>
+<tr><td rowspan="2">7</td><td rowspan="2">标准合理性</td><td rowspan="2">Standard Reasonableness</td><td>B0→C 这一箭头的合理性，即"为什么这个标准能推出这个结论"。标准合理性的本质是价值驱动力——选 B0 背后的"为什么"。通过价值阶梯向上追问找到上位理由（BB0）来支撑</td><td rowspan="2">精灵·Moon《辩论筑基》Pro 第 2 讲</td></tr>
+<tr class="eng"><td>The reasonableness of the B0→C arrow: why this criterion leads to this conclusion. Its essence is value driving force—the "why" behind choosing B0</td></tr>
+<tr><td rowspan="2">8</td><td rowspan="2">标准化三步动作</td><td rowspan="2">Standardized Three-Step Action</td><td>Part1 确认/框定/引入 → Part2 例证/推论/质疑 → Part3 将论证结果收束回己方立场并向观众展示。这是一种各环节通用的概括性的技术动作套路，具体落实因应具体环节的不同而调整。</td><td rowspan="2">精灵·Moon《辩论筑基》第 2.2 讲</td></tr>
+<tr class="eng"><td>A generalized technical action pattern applicable across all speech formats. Any argument or refutation can be distilled into three steps: Part1 Confirm/Frame/Introduce → Part2 Illustrate/Infer/Challenge → Part3 Synthesize the conclusion back to one's stance and present to the audience. Its specific implementation adapts to the particular speech format at hand</td></tr>
+<tr><td rowspan="2">9</td><td rowspan="2">并集式</td><td rowspan="2">Union Type</td><td>立论架构中分论点切分的三种结构之一。若干并列的方面合起来构成全集，每个方面独立证明标准满足。如"中国+外国=全世界，所以标准满足"</td><td rowspan="2">精灵·Moon《辩论筑基》第 4.4 讲</td></tr>
+<tr class="eng"><td>One of three structures for Sub-Argument division: several parallel aspects jointly constitute a complete set, each independently proving the criterion is satisfied</td></tr>
+<tr><td rowspan="2">10</td><td rowspan="2">不协调而获视角</td><td rowspan="2">Perspective by Incongruity</td><td>Kenneth Burke 修辞学核心概念。通过故意将通常不相关或不协调的术语并置，打破惯有辞屏的限制从而发现新真理。是《辩论筑基》体系视角切入四象限、价值挖掘、结构性交锋的哲学根基</td><td rowspan="2">Burke, K. (1935). *Permanence and Change*；精灵·Moon《辩论筑基》第 1.5 讲</td></tr>
+<tr class="eng"><td>Kenneth Burke's core rhetorical concept: deliberately juxtaposing normally unrelated or incongruous terms to break through habitual terministic screens and discover new truths. The philosophical foundation of the Four-Quadrant Framework, value excavation, and Structural Clash</td></tr>
+<tr><td rowspan="2">11</td><td rowspan="2">辞屏</td><td rowspan="2">Terministic Screen</td><td>Burke 修辞学核心概念。任何术语体系都是对现实的选择与偏转——同时照亮某些东西、遮蔽另一些东西。辩论的操作本质即通过切换辞屏改变认知框架</td><td rowspan="2">Burke, K. (1966). *Language as Symbolic Action*；精灵·Moon《辩论筑基》第 1.3 讲</td></tr>
+<tr class="eng"><td>Burke's core concept: every terminological system is a selection and deflection of reality—simultaneously illuminating some things while obscuring others. The operational essence of debate is switching terministic screens to alter cognitive frames</td></tr>
+<tr><td rowspan="2">12</td><td rowspan="2">二型主线</td><td rowspan="2">Type 2 Mainline</td><td>平行型主线。双方各自的架构和论证主线未发生结构性交锋，保持为两条平行的主线并在各自的主线上推进、攻防，缺乏结构性交锋产生的决胜推论或锚点。双方无法容纳对方的合理之处，双方架构从未碰撞重构</td><td rowspan="2">精灵·Moon《辩论筑基》第 5.1 讲</td></tr>
+<tr class="eng"><td>Parallel mainline: both sides' architectures and argumentation lines do not undergo Structural Clash; they remain as two parallel lines advancing and clashing on separate tracks, lacking the decisive inference or anchor point that Structural Clash produces</td></tr>
+<tr><td rowspan="2">13</td><td rowspan="2">反驳</td><td rowspan="2">Refutation</td><td>指出对方论证在事实、逻辑或价值层面存在缺陷的论证行为。《辩论筑基》体系将反驳归纳为三种路径：A未必→B（攻击事实层面的因果关联）、B未必→C（攻击逻辑层面的推导有效性）、B不重要（攻击价值层面的优先级排序）。三种路径穷举后构成完整的反驳体系——任何对对方论证的有效攻击必然落入这三种路径之一</td><td rowspan="2">精灵·Moon《辩论筑基》第 1 讲</td></tr>
+<tr class="eng"><td>Pointing out defects in the opponent's argument at the factual, logical, or value level. Three exhaustive paths: A may not lead to B, B may not lead to C, B is not important</td></tr>
+<tr><td rowspan="2">14</td><td rowspan="2">反转</td><td rowspan="2">Reversal</td><td>结构性交锋的操作之一。承认对方 α→β 成立后论证 α→β 恰恰支持我方 C 成立。形式化优于消化：能打反转必能打消化，能打消化未必能打反转。反转不当操作最易滑向包着打</td><td rowspan="2">精灵·Moon《辩论筑基》第 6.1.1 讲</td></tr>
+<tr class="eng"><td>One of two Structural Clash operations: concede α→β holds, then argue that α→β precisely supports C. Formal advantage over Absorption: if you can execute Reversal, you can certainly execute Absorption</td></tr>
+<tr><td rowspan="2">15</td><td rowspan="2">分论点</td><td rowspan="2">Sub-Argument</td><td>分维度具体论证标准满足的一级论点，即论证 A→B0（这一箭头）的成立。分论点切分为三种结构：并集式（若干方面合起来构成全集）、线性式（逐层推进构成全线）、价值补强式（前两点论证+第三点价值点加固 B0→C）</td><td rowspan="2">精灵·Moon《辩论筑基》第 4.4 讲、Pro 第 2 讲</td></tr>
+<tr class="eng"><td>A first-level argument that dimensionally demonstrates the criterion is satisfied, i.e., proving the A→B0 arrow. Three structures: Union, Linear, Value-Reinforcement</td></tr>
+<tr><td rowspan="2">16</td><td rowspan="2">攻防</td><td rowspan="2">Offense-Defense Clash</td><td>辩论双方通过论证己方与反驳对方来争夺论证优势的基础交互框架。在《辩论筑基》体系中，攻防并非孤立的"进攻"或"防守"动作，而是同一论证行为的两个面相——每一次有效的己方推进自然地构成对对方的攻击，每一次精准的对方法反驳同时为自身立场腾出成立空间。攻防训练的核心目标不是"打赢对手"，而是"让己方立场的成立空间最大化"</td><td rowspan="2">精灵·Moon《辩论筑基》第 2 讲、第 6 讲</td></tr>
+<tr class="eng"><td>The foundational interactive framework in which both sides contest argumentative advantage through advancing their own case and refuting the opponent's. Offense and defense are two faces of the same argumentative act—the core objective is not "defeating the opponent" but "maximizing the standing space of one's own stance"</td></tr>
+<tr><td rowspan="2">17</td><td rowspan="2">固有定义域</td><td rowspan="2">Inherent Definitional Domain</td><td>辩题关键词在一般理性人常识理解下所指的大致范围。以 Rosch 原型理论为基础——范畴按"原型-边缘梯度"组织，模糊但非任意。属于定义双层结构的第一层：先确定"这个词本身是什么意思"，再决定"聚焦哪个侧面"</td><td rowspan="2">精灵·Moon《辩论筑基》第 5.1 讲；Rosch, E. (1978). Principles of Categorization. In E. Rosch & B. B. Lloyd (Eds.), *Cognition and Categorization*. Hillsdale, NJ: Lawrence Erlbaum.</td></tr>
+<tr class="eng"><td>The approximate scope to which a motion's key terms refer under ordinary rational common-sense understanding. Based on Rosch's prototype theory—categories organized along a prototype-to-periphery gradient, fuzzy but not arbitrary</td></tr>
+<tr><td rowspan="2">18</td><td rowspan="2">假价值 / 立场利益</td><td rowspan="2">False Value / Stance Interest</td><td>诞生在 B0 之后，是站了持方后找到的额外好处，用于强化认同而非推动选择。假价值的评判标准是"比利好论证"——平行式论证，容易偏离架构、"尬上价值"。在假价值上做结构性交锋会很吃力</td><td rowspan="2">精灵·Moon《辩论筑基》第 6.1 讲</td></tr>
+<tr class="eng"><td>Born after B0, an extra benefit found after taking the stance, used to reinforce identification rather than drive choice. Judged by "comparing benefit论证"—parallel argumentation prone to deviating from the architecture</td></tr>
+<tr><td rowspan="2">19</td><td rowspan="2">价值补强式</td><td rowspan="2">Value-Reinforcement Type</td><td>立论架构中分论点切分的三种结构之一。前两个分论点论证标准满足（A→B0），第三个分论点作为价值点补强标准合理性（B0→C）。与之并列的是并集式和线性式</td><td rowspan="2">精灵·Moon《辩论筑基》第 4.4 讲</td></tr>
+<tr class="eng"><td>One of three structures for Sub-Argument division: first two points argue criterion satisfaction (A→B0), third point as Value Point reinforces criterion reasonableness (B0→C)</td></tr>
+<tr><td rowspan="2">20</td><td rowspan="2">价值点</td><td rowspan="2">Value Point</td><td>分论点结构中的第三种形态——价值补强式的第三个分论点。功能是补强 B0→C 的合理性，本质是回答"为什么应该用这个标准看问题"——即标准合理性本身</td><td rowspan="2">精灵·Moon《辩论筑基》第 7 讲</td></tr>
+<tr class="eng"><td>The third form within Sub-Argument structure: the third sub-argument in the Value-Reinforcement pattern. Its function is to strengthen the reasonableness of B0→C</td></tr>
+<tr><td rowspan="2">21</td><td rowspan="2">价值阶梯</td><td rowspan="2">Value Ladder</td><td>上位与下位的层层追问链条。上位追问"背后为什么"→抽象价值→增加标准深度；下位追问"所以会怎样"→具体事实→增厚论点维度。可任意升降格——选定一层当 B0，往上找为标准合理性，往下找为分论点</td><td rowspan="2">精灵·Moon《辩论筑基》第 4.2 讲、Pro 第 2 讲</td></tr>
+<tr class="eng"><td>A chain of upward and downward inquiry: upward asks "why behind" → abstract value → increases criterion depth; downward asks "so what" → concrete facts → thickens argument dimensions</td></tr>
+<tr><td rowspan="2">22</td><td rowspan="2">交锋</td><td rowspan="2">Clash</td><td>辩论双方论证在逻辑、事实或价值层面的直接对抗。《辩论筑基》体系将交锋分为习惯性交锋（仅单方视角的推证或拆解）与结构性交锋（容纳双方合理之处后通过引入更重要的理由重新组织论证）。交锋不是"反驳对方"的同义词——后者是战术动作，前者是论证碰撞的客观结构</td><td rowspan="2">精灵·Moon《辩论筑基》Pro 第 3 讲</td></tr>
+<tr class="eng"><td>Direct confrontation of both sides' arguments at the level of logic, fact, or value. Divided into Habitual Clash (single-perspective) and Structural Clash (accommodating both sides' reasonable points). Clash is not synonymous with refutation</td></tr>
+<tr><td rowspan="2">23</td><td rowspan="2">结构性交锋</td><td rowspan="2">Structural Clash</td><td>《辩论筑基》体系的交锋二分法之一。操作目标为 (AC+αγ)→(B+β)→B'→C/¬γ——综合双方的定义和理由，引入更重要的理由 B' 重新组织论证后仍得出我方成立/你方不成立。本质不是消灭对方论证，而是容纳对方合理之处后通过引入 B' 重构论证。结构性交锋是产生一型主线的必要条件</td><td rowspan="2">精灵·Moon《辩论筑基》第 5.3 讲、Pro 第 3 讲</td></tr>
+<tr class="eng"><td>One of two Clash types. Operational target: (AC+αγ)→(B+β)→B'→C/¬γ—synthesizing both sides' definitions and reasons, introducing B' to reconstruct the argument while still yielding one's own conclusion</td></tr>
+<tr><td rowspan="2">24</td><td rowspan="2">流氓论 / 霸道定义 / 包辩题 / 包定义 / 包着打</td><td rowspan="2">Definitional Overreach</td><td>通过突破辩题固有定义（域）的定义，使得对方的优势在该定义之下，能得证我方立场。判定三要素：突破的是固有定义（域） + 新定义（域）在大众认知下对己方有利 + 无充分的合理性论证，三者缺一不可。流氓论即通过这种操作出的立论架构</td><td rowspan="2">精灵·Moon《辩论筑基》第 6.1.1 讲</td></tr>
+<tr class="eng"><td>An operation that breaks through the Inherent Definitional Domain, making the opponent's advantage prove one's own stance under the new definition. Three elements: breaches the inherent domain + the new domain is advantageous to one's side under popular understanding + lacks sufficient reasonable justification</td></tr>
+<tr><td rowspan="2">25</td><td rowspan="2">上位批判</td><td rowspan="2">Higher-Order Critique</td><td>《辩论筑基》体系的追问方法。上位=沿价值阶梯向上追问"背后为什么"，批判=往和大众认知相反的方向找。二者的结果向结构性交锋产出 B'。操作原则与视角切入四象限同源，是四象限在价值阶梯上的动态化</td><td rowspan="2">精灵·Moon《辩论筑基》第 6.2 讲</td></tr>
+<tr class="eng"><td>Ascending along the Value Ladder to ask "why behind" + Critiquing toward the opposite of popular understanding. Results feed downstream to produce B' for Structural Clash</td></tr>
+<tr><td rowspan="2">26</td><td rowspan="2">视角切入四象限</td><td rowspan="2">Four-Quadrant Framework</td><td>视角切入的操作工具。两轴正交：X 轴=功利/现实↔道德/价值，Y 轴=肯定/赞扬↔否定/贬低。四象限各自对应不同的反转维度数（0/1/2 维），不协调感强度逐象限递增。用于穷举追溯"什么力量在推动大家认可这个价值"</td><td rowspan="2">精灵·Moon《辩论筑基》第 1.5 讲</td></tr>
+<tr class="eng"><td>A perspective-entry tool: X-axis = utilitarian/realistic ↔ moral/value; Y-axis = affirmative/praising ↔ negative/disparaging. Each quadrant corresponds to a different number of reversed dimensions, with incongruity intensity increasing progressively</td></tr>
+<tr><td rowspan="2">27</td><td rowspan="2">受身</td><td rowspan="2">Concession-Counter</td><td>作为技术时，指承认对方合理之处，在此基础上寻找更重要的理由切入视角、重新诠释，使得可以不用反驳而是容纳对方的合理之处，最后结论仍然为己方结论的论证策略。作为攻防和论证结构时，指使用了受身技术后，用来承接、容纳对方合理之处并转向输出我方结论的"承接攻击"论证环。受身一般有个例、切割和超越三个方向——个例与切割是消化的子集，超越即反转。受身的本质是结构性交锋在技术层面的独立呈现，在《辩论筑基》体系中不作为现役操作术语推荐使用，建议全面理解结构性交锋的概念</td><td rowspan="2">精灵·Moon《辩论筑基》第 8.1.3 讲</td></tr>
+<tr class="eng"><td>As a technique: acknowledging the opponent's reasonable points, then finding a more important reason to reframe, so that one can accommodate rather than refute, while the conclusion still supports one's own side. As a structure: the "attack-receiving" argument ring. Three directions: Instance and Splitting are subsets of Absorption; Transcendence is Reversal</td></tr>
+<tr><td rowspan="2">28</td><td rowspan="2">讨论范围</td><td rowspan="2">Scope of Discussion</td><td>在固有定义域的常识边界内，聚焦于辩题的特定人群和情境的操作。核心公式：论点+战场→持方成立。没有讨论范围，任何论点都处于 55 开的平衡态。讨论范围不是第二步——它是整个立论能成立的前提</td><td rowspan="2">精灵·Moon《辩论筑基》Pro 第 2 讲</td></tr>
+<tr class="eng"><td>Within the common-sense boundaries of the Inherent Definitional Domain, the operation of focusing on specific populations and contexts. Core formula: argument + battlefield → stance holds. Without a Scope of Discussion, every argument sits at 50-50 equilibrium</td></tr>
+<tr><td rowspan="2">29</td><td rowspan="2">习惯性交锋</td><td rowspan="2">Habitual Clash</td><td>《辩论筑基》体系的交锋二分法之一。指仅从己方架构出发的单方交锋模式——要么自说自话（只推己方），要么纯拆对方（只驳斥对方）。菜鸟常在此层面打转，虽为获胜的必要条件但并未推进"真正持方"的论证</td><td rowspan="2">精灵·Moon《辩论筑基》Pro 第 3 讲</td></tr>
+<tr class="eng"><td>One of two Clash types: a single-perspective clash mode operating only from one's own architecture—either talking past each other or purely dismantling the opponent without outputting one's own case</td></tr>
+<tr><td rowspan="2">30</td><td rowspan="2">线性式</td><td rowspan="2">Linear Type</td><td>立论架构中分论点切分的三种结构之一。推论逐层推进构成全线，每一步从前一步推导，最终到达标准满足</td><td rowspan="2">精灵·Moon《辩论筑基》第 4.4 讲</td></tr>
+<tr class="eng"><td>One of three structures for Sub-Argument division: inference advances layer by layer forming a complete line, each step deriving from the previous, ultimately reaching criterion satisfaction</td></tr>
+<tr><td rowspan="2">31</td><td rowspan="2">消化</td><td rowspan="2">Absorption</td><td>结构性交锋的操作之一。承认对方 α→β 成立后引入更重要的理由 B'，展示对方的东西不满足这个 B'（不重要）而我方满足 B'，最终结论仍是我方成立。形式化：({A→B}∪{α→β})→B'→C。消化不是消灭是容纳</td><td rowspan="2">精灵·Moon《辩论筑基》第 6.1.1 讲</td></tr>
+<tr class="eng"><td>One of two Structural Clash operations: concede α→β holds, then introduce a more important reason B', showing the opponent's material fails to satisfy B' (unimportant) while one's own side satisfies B'. Form: ({A→B}∪{α→β})→B'→C. Absorption is accommodation, not destruction</td></tr>
+<tr><td rowspan="2">32</td><td rowspan="2">演绎塔</td><td rowspan="2">Deductive Tower</td><td>精灵自创概念。对论证的"现代/辞屏学派"理解——3D 立体的辞屏嵌套结构，而非 2D 线性的箭头链。每个关键词（辞屏）均可向任意方向进一步演绎。与逻辑链的区别：逻辑链穷举箭头（适用于习惯性交锋），演绎塔穷举辞屏（适用于结构性交锋）</td><td rowspan="2">精灵·Moon《辩论筑基》Pro 第 3 讲</td></tr>
+<tr class="eng"><td>Moon's original concept: a 3D stereoscopic terministic-screen nesting structure for understanding argumentation. Differs from the Logical Chain: the Logical Chain exhausts arrows (for Habitual Clash), the Deductive Tower exhausts terministic screens (for Structural Clash)</td></tr>
+<tr><td rowspan="2">33</td><td rowspan="2">一型主线</td><td rowspan="2">Type 1 Mainline</td><td>聚合型主线。双方各自的架构和论证主线因发生结构性交锋而汇聚为一条主线并继续推进，优势方能容纳对方的合理之处，有清晰的结构性交锋和决胜逻辑</td><td rowspan="2">精灵·Moon《辩论筑基》第 5.1 讲</td></tr>
+<tr class="eng"><td>Convergent mainline: both sides' architectures and argumentation lines converge into a single line through Structural Clash and continue advancing; the prevailing side can accommodate the opponent's reasonable points</td></tr>
+<tr><td rowspan="2">34</td><td rowspan="2">真价值</td><td rowspan="2">Genuine Value</td><td>诞生在判准/B0 之前，是推动选择的动力。真价值的评判标准是"比推动力"——主线式论证，通过揭示因果形成修辞动力，不偏离架构。区别于假价值：假价值诞生在 B0 之后，是强化认同的加强而非选择的原因</td><td rowspan="2">精灵·Moon《辩论筑基》第 6.1 讲、第 7 讲</td></tr>
+<tr class="eng"><td>Born before the criterion/B0, the driving force behind choosing the stance. Judged by "comparing driving force"—mainline-style argumentation that forms rhetorical power through revealing causality, without deviating from the architecture</td></tr>
+<tr><td rowspan="2">35</td><td rowspan="2">主线</td><td rowspan="2">Mainline</td><td>由双方交锋串接而成的全场认知链条。本质也是论点——B={B1,B'1,…,Bn,B'n}。主线判定的核心标准为是否具有清晰的决胜逻辑。主线的三维度：证明（逻辑）、说服（朴素理解）、第三方（举证规则）</td><td rowspan="2">精灵·Moon《辩论筑基》第 5.1 讲、第 5.4 讲</td></tr>
+<tr class="eng"><td>The full-match cognitive chain formed by stringing together both sides' clashes. Its essence is also an argument—B={B1,B'1,…,Bn,B'n}. Core criterion: whether it possesses a clear decisive logic. Three dimensions: Proof, Persuasion, Third-Party</td></tr>
+<tr><td rowspan="2">36</td><td rowspan="2">主线转型</td><td rowspan="2">Mainline Transformation</td><td>二型主线转为一型主线的操作。引入理由 B' 使"双方既有的部分"加在一起后得出唯一的新结论（我方成立）。前提：现有架构与主线必须有"能承认对方合理之处成立"的空间</td><td rowspan="2">精灵·Moon《辩论筑基》第 5.4 讲、第 6.2-6.3.1 讲</td></tr>
+<tr class="eng"><td>The operation of converting a Type 2 Mainline into a Type 1: introducing reason B' such that both sides' existing parts added together yield a single new conclusion (one's own side). Prerequisite: the existing architecture must have space to acknowledge the opponent's reasonable points</td></tr>
+<tr><td rowspan="2">37</td><td rowspan="2">辩论环节</td><td rowspan="2">Debate Speech Formats</td><td>华语传辩标准赛制中各阶段的发言类型与功能定位</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>The speech types and functional positioning of each phase in the standard Chinese debate format</td></tr>
+<tr class="sub"><td rowspan="2"></td><td rowspan="2">立论</td><td rowspan="2">Constructive Speech</td><td>辩论中用于陈述己方核心论证框架的发言环节。一般包括完整的主论点和分论点、论据与推论、价值点</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="sub eng"><td>Speech phase for presenting one's core argumentative framework, including main arguments, sub-arguments, evidence, reasoning, and value points</td></tr>
+<tr class="sub"><td rowspan="2"></td><td rowspan="2">质询与答辩</td><td rowspan="2">Cross-Examination</td><td>一方辩手向对方辩手提出问题并要求对方即时回答的交互环节</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="sub eng"><td>Interactive phase where one debater questions the opponent and demands immediate responses</td></tr>
+<tr class="sub"><td rowspan="2"></td><td rowspan="2">对辩</td><td rowspan="2">Direct Confrontation</td><td>双方辩手两两对位，交替发言进行直接交锋的环节</td><td rowspan="2">华语辩论赛制</td></tr>
+<tr class="sub eng"><td>Two debaters paired off, alternating speeches for direct clash</td></tr>
+<tr class="sub"><td rowspan="2"></td><td rowspan="2">盘问</td><td rowspan="2">Deposition</td><td>由一方连续提问、另一方连续回答的定向质询环节</td><td rowspan="2">华语辩论赛制</td></tr>
+<tr class="sub eng"><td>Directed questioning phase where one side asks continuously and the other answers continuously</td></tr>
+<tr class="sub"><td rowspan="2"></td><td rowspan="2">攻辩小结</td><td rowspan="2">Summary Speech</td><td>在质询或对辩环节结束后，对己方攻防成果进行归纳总结的短发言环节</td><td rowspan="2">华语辩论赛制</td></tr>
+<tr class="sub eng"><td>Short speech summarizing one's offensive and defensive achievements after cross-examination or direct confrontation</td></tr>
+<tr class="sub"><td rowspan="2"></td><td rowspan="2">自由辩</td><td rowspan="2">Free Debate</td><td>双方所有辩手可自由起立交替发言的高强度交锋环节</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="sub eng"><td>High-intensity clash phase where all debaters may freely rise and take turns speaking</td></tr>
+<tr class="sub"><td rowspan="2"></td><td rowspan="2">结辩</td><td rowspan="2">Closing Speech</td><td>比赛中最后进行的总结性发言环节，负责统合全场主线并输出最终价值判断</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="sub eng"><td>Final speech of the match, synthesizing the full-match mainline and delivering the ultimate value judgment</td></tr>
+</table>
+<h2>二、逻辑基础</h2>
+<table>
+<tr><th>#</th><th>中文</th><th>英文</th><th>定义</th><th>出处</th></tr>
+<tr><td rowspan="2">38</td><td rowspan="2">论证</td><td rowspan="2">Argumentation</td><td>运用论据证明主张的过程。在语用论辩学（Pragma-Dialectics）中，论证被定义为旨在解决意见分歧的言语的、社会的、理性的活动</td><td rowspan="2">van Eemeren, F. H. & Grootendorst, R. (2004). *A Systematic Theory of Argumentation*</td></tr>
+<tr class="eng"><td>The process of using grounds to prove a claim. A verbal, social, and rational activity aimed at resolving a difference of opinion</td></tr>
+<tr><td rowspan="2">39</td><td rowspan="2">矛盾律</td><td rowspan="2">Law of Contradiction</td><td>逻辑学三大基本定律之一。在同一思维过程中，两个相互矛盾的判断不能同时为真，其中至少有一个是假的。符号表达：¬(P∧¬P)</td><td rowspan="2">Aristotle. *Metaphysics*, Book Γ</td></tr>
+<tr class="eng"><td>Two contradictory judgments cannot both be true. Notation: ¬(P∧¬P)</td></tr>
+<tr><td rowspan="2">40</td><td rowspan="2">内涵</td><td rowspan="2">Intension / Connotation</td><td>一个词项所表达的一组属性，这些属性决定了该词项适用于哪些对象。内涵规定了概念的定义性特征——一个概念的内涵对其外延具有决定作用</td><td rowspan="2">Copi, I. M., Cohen, C., & McMahon, K. (2014). *Introduction to Logic*, 14th ed.</td></tr>
+<tr class="eng"><td>The set of attributes a concept reflects—the content of the concept</td></tr>
+<tr><td rowspan="2">41</td><td rowspan="2">排中律</td><td rowspan="2">Law of Excluded Middle</td><td>逻辑学三大基本定律之一。在同一思维过程中，两个相互矛盾的思想不能同假，必有一真。符号表达：P∨¬P</td><td rowspan="2">Aristotle. *Metaphysics*, Book Γ</td></tr>
+<tr class="eng"><td>Two contradictory ideas cannot both be false—one must be true. Notation: P∨¬P</td></tr>
+<tr><td rowspan="2">42</td><td rowspan="2">全称命题</td><td rowspan="2">Universal Proposition</td><td>断定某类对象中的每一个对象都具有某种性质的命题。在全称命题中，主词是周延的。与存在命题相对</td><td rowspan="2">Copi et al. (2014)</td></tr>
+<tr class="eng"><td>A proposition asserting that every member of a class possesses a certain property</td></tr>
+<tr><td rowspan="2">43</td><td rowspan="2">同一律</td><td rowspan="2">Law of Identity</td><td>逻辑学三大基本定律之一。在同一思维过程中每个思想必须保持确定的同一性：如果P则P。违反同一律的典型形式为偷换概念——在同一论证中用不同的含义使用同一词语致使推理形式表面上有效而实则无效</td><td rowspan="2">Aristotle. *Metaphysics*, Book Γ</td></tr>
+<tr class="eng"><td>Every thought must maintain determinate identity within the same thought process</td></tr>
+<tr><td rowspan="2">44</td><td rowspan="2">推论</td><td rowspan="2">Reasoning / Inference</td><td>将根据与主张串联起来的合理过程。推论必须合乎逻辑规则与理性标准，否则将导致"推不出"（Non Sequitur）的逻辑错误</td><td rowspan="2">Copi et al. (2014)</td></tr>
+<tr class="eng"><td>The rational process linking grounds to a claim</td></tr>
+<tr><td rowspan="2">45</td><td rowspan="2">外延</td><td rowspan="2">Extension / Denotation</td><td>一个词项所适用的所有对象的集合。外延由该词项的内涵决定：内涵规定的属性筛选出所有符合这些属性的对象构成外延。在辩论中的界定概念操作实质上是同时规定一个词的内涵范围和外延范围</td><td rowspan="2">Frege, G. (1892). "On Sense and Reference"</td></tr>
+<tr class="eng"><td>The scope of application of a term—the set of all objects the concept refers to</td></tr>
+<tr><td rowspan="2">46</td><td rowspan="2">伪命题</td><td rowspan="2">False Proposition</td><td>在某一真值体系中不成立的命题。有两种类型：其一为不符合客观事实（经验假命题），其二为不符合一般事理和科学道理（逻辑假命题）。与无法判断真假的"无意义命题"相区别</td><td rowspan="2">Copi et al. (2014)</td></tr>
+<tr class="eng"><td>A proposition that fails in a given truth-value system: empirically false or logically false</td></tr>
+<tr><td rowspan="2">47</td><td rowspan="2">相关性</td><td rowspan="2">Correlation</td><td>两个变量之间的统计关联程度。关键逻辑约束：相关性不等于因果性——两变量相关可能由于反向因果、第三共同变量或纯属巧合。辩论中常以混淆相关与因果构成错误归因</td><td rowspan="2">Moore, D. S., McCabe, G. P., & Craig, B. A. (2021). *Introduction to the Practice of Statistics*, 10th ed.</td></tr>
+<tr class="eng"><td>Statistical degree of association between two variables. Correlation does not imply causation</td></tr>
+<tr><td rowspan="2">48</td><td rowspan="2">直接证据</td><td rowspan="2">Direct Evidence</td><td>无需任何推理即可直接证明待证事实的证据。与间接证据相对：后者仅能证明从属事实，需与其他证据联合通过推理过程方可指向待证事实</td><td rowspan="2">Wigmore, J. H. (1937). *The Science of Judicial Proof*</td></tr>
+<tr class="eng"><td>Evidence that can independently prove a fact or claim without requiring inference</td></tr>
+<tr><td rowspan="1">49</td><td rowspan="1">主张</td><td rowspan="1">Claim</td><td>提出论证的人希望他人相信的结论，包含对"什么"的回答。在 Toulmin 论证模型中，主张是论证的终点——根据（Ground）经由推论（Warrant）所支持的结论。主张区别于断言：主张附有可检验的证据或理由</td><td rowspan="1">Toulmin, S. (1958). *The Uses of Argument*</td></tr>
+</table>
+<h2>三、举证责任与推定</h2>
+<table>
+<tr><th>#</th><th>中文</th><th>英文</th><th>定义</th><th>出处</th></tr>
+<tr><td rowspan="2">50</td><td rowspan="2">撤回自认</td><td rowspan="2">Withdrawal of Stipulation</td><td>在经对方同意或持反证证明双方共识系基于重大误解而达成、且所自认内容与客观事实明显不符时，原已成立的自认可被撤回。单方面撤回自认不被允许</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>Stipulations may be withdrawn upon mutual consent or when proven based on a significant misunderstanding</td></tr>
+<tr><td rowspan="2">51</td><td rowspan="2">初步不成立</td><td rowspan="2">Prima Facie Failure</td><td>正方未能在立论阶段完成初步举证责任的后果。经反方一辩明确指出其论证缺失后，评委即裁定正方"初步不成立"，反方直接获胜且后续辩位发言不再审议。唯一的例外是反方自行提出相抗计划——此时反方也须承担自身的初步成立义务</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>Consequence of the affirmative failing to meet the prima facie burden. The affirmative loses immediately</td></tr>
+<tr><td rowspan="2">52</td><td rowspan="2">初步成立</td><td rowspan="2">Prima Facie Case</td><td>正方一辩在立论结束时须达到的最低论证门槛。须成功论证需、根、解、损益比，并明确提出具体的行动计划及其实施要点。完成初步成立意味着举证责任从正方暂时转移至反方，反方须承担反驳责任。该标准源于拉丁法谚"表面证据即已足够"</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>Minimum threshold the affirmative must meet at the conclusion of the first constructive speech</td></tr>
+<tr><td rowspan="2">53</td><td rowspan="2">单一举证责任</td><td rowspan="2">Specific Burden of Proof</td><td>关于辩论中任何单一争议点的证明义务。分配规则为：谁将主张引入辩论，谁即承担该主张的举证责任。该项义务随论证推进而在双方之间动态转移——一方提出新主张后，对方须有效回应方可将举证责任回推</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>Proof obligation for any single point of contention. Whoever introduces a claim bears its burden</td></tr>
+<tr><td rowspan="2">54</td><td rowspan="2">单一推定</td><td rowspan="2">Specific Presumption</td><td>关于任何单一争议点的默认认知状态。辩论开始前，评委对任何特定争议点均以"不知"为起点——即使评委个人已知某项事实，在该事实被某一方提出并论证之前，评委在程序上默认该事实不存在。经过有效论证方可改变此推定状态</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>The default cognitive state for any single point of contention—judges default to not knowing</td></tr>
+<tr><td rowspan="2">55</td><td rowspan="2">反驳责任</td><td rowspan="2">Burden of Rebuttal</td><td>论证被对方提出的论证削弱的一方须承担的回应义务。分配规则：反驳责任落在其辩论方案被对方论证削弱的那个阵营。反驳责任不同于举证责任——前者为回应义务，后者为证明义务</td><td rowspan="2">Whately, R. (1828)；Rescher, N. (1977)</td></tr>
+<tr class="eng"><td>The obligation to respond when one's argument has been weakened by the opposing side</td></tr>
+<tr><td rowspan="2">56</td><td rowspan="2">反证</td><td rowspan="2">Counterevidence</td><td>对待证事实不负证明责任的一方为证明该事实不存在或不真实而提供证据。区别于反驳——反驳针对对方论证的逻辑缺陷，反证针对对方主张的事实基础。反证的存在使举证责任分配成为辩论中关键的程序机制</td><td rowspan="2">Wigmore, J. H. (1937). *The Science of Judicial Proof*</td></tr>
+<tr class="eng"><td>Evidence provided by the party not bearing the burden of proof to demonstrate a fact does not exist</td></tr>
+<tr><td rowspan="2">57</td><td rowspan="2">强制认可权</td><td rowspan="2">Fiat</td><td>政策辩论中正方享有的程序性权利——只要方案合理就推定为"应当"获得通过。Fiat 的学理依据是：辩论探讨的是"应当与否"（规范性判断），而非预测"会否发生"（实证性判断）。反方不得以政治可行性作为反对理由</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>Procedural right of the affirmative: as long as the plan is reasonable, it is deemed as one that should be adopted</td></tr>
+<tr><td rowspan="2">58</td><td rowspan="2">推定</td><td rowspan="2">Presumption</td><td>法律与辩论中的程序性机制——在缺乏充分证据推翻前，接受某一默认立场。推论（Inference）来自证据的证明力，推定来自程序规则本身。推定的核心功能是分配举证责任：推定对谁不利，谁就承担推翻推定的义务</td><td rowspan="2">Rescher, N. (1977). *Dialectics*；Whately, R. (1828). *Elements of Rhetoric*</td></tr>
+<tr class="eng"><td>Procedural mechanism: prior to sufficient counter-evidence, a default position is accepted</td></tr>
+<tr><td rowspan="2">59</td><td rowspan="2">无罪推定</td><td rowspan="2">Presumption of Innocence</td><td>刑事法基本原则：在未经法庭依法确定有罪以前任何人应被假定为无罪。该原则具有双重功能——程序上的举证责任分配（控方证明被告有罪）和裁判上的认知纪律（以无辜为逻辑起点开启审查）。辩论中主要用于论证举证责任的源初分配逻辑</td><td rowspan="2">Blackstone, W. (1765). *Commentaries on the Laws of England*；LaFave, W. R. et al. (2017). *Criminal Procedure*, 6th ed.</td></tr>
+<tr class="eng"><td>Any person shall be presumed innocent until proven guilty according to law</td></tr>
+<tr><td rowspan="2">60</td><td rowspan="2">整体举证责任</td><td rowspan="2">Overall Burden of Proof</td><td>政策辩论中分配给正方（或提出相抗计划之反方）的初始证明义务。正方须就需求性、根属性、解决力、损益比四个核心议题成功建立论证，以推翻反方依据现状享有的推定优势。未完成整体举证责任则正方将败于初步不成立</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate: Critical Thinking for Reasoned Decision Making*, 13th ed.</td></tr>
+<tr class="eng"><td>The initial burden assigned to the affirmative. Must establish Harm, Inherency, Solvency, and Net Benefit</td></tr>
+<tr><td rowspan="2">61</td><td rowspan="2">自认</td><td rowspan="2">Stipulation / Admission</td><td>双方在辩论中明确达成共识的事实。自认一旦成立即直接改变评委推定状态，免除该事实的进一步举证责任。法官应当以辩论双方自认的事实作为裁判依据——这是辩论程序效率原则的体现</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>Facts explicitly agreed upon by both sides during the debate, directly altering the presumption state</td></tr>
+</table>
+<h2>四、政策辩论核心议题</h2>
+<table>
+<tr><th>#</th><th>中文</th><th>英文</th><th>定义</th><th>出处</th></tr>
+<tr><td rowspan="2">62</td><td rowspan="2">程序理论</td><td rowspan="2">Theory</td><td>针对对方在辩论过程中的行为是否符合公平辩论规范提出异议的论证类别。不讨论辩题本身的内容，讨论的是辩论行为本身是否公正。违反 Theory 规范可能导致相关论证被整体排除</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate*, 13th ed.</td></tr>
+<tr class="eng"><td>An argument category challenging whether the opponent's conduct conforms to fair debate norms</td></tr>
+<tr><td rowspan="2">63</td><td rowspan="2">掉论点</td><td rowspan="2">Dropped Argument</td><td>辩论中一方提出论点后另一方未作任何回应即视为默认成立的程序性原则。对方未回应的论点在后续轮次中原则上不能再被反驳——除非该论点本身已被其他有效论证间接覆盖</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate*, 13th ed.</td></tr>
+<tr class="eng"><td>The procedural principle that an argument left unresponded to is deemed conceded</td></tr>
+<tr><td rowspan="2">64</td><td rowspan="2">根属性</td><td rowspan="2">Inherency</td><td>需求为何无法通过现有政策体系自行解决。分为结构根属（制度性障碍）、态度根属（行为者态度导致的障碍）和存在根属（事实上存在但未被意识到）。根属性论证的核心是证明"有立法必要"</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>Why the harm cannot be resolved through the existing policy framework</td></tr>
+<tr><td rowspan="2">65</td><td rowspan="2">合题性</td><td rowspan="2">Topicality</td><td>正方方案是否在辩题规定的讨论范围内。当一方的方案实质上超出了辩题边界，另一方可提出合题性指控，主张该方案不应被审议</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>Whether the affirmative plan falls within the scope of the motion</td></tr>
+<tr><td rowspan="2">66</td><td rowspan="2">解决力</td><td rowspan="2">Solvency</td><td>提出的方案能否有效解决需求。论证须包括具体的实施计划和证据支持。计划的提出应遵守"此时此地原则"——方案在辩题规定的空间范围内须可行</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>Whether the proposed plan can effectively solve the identified harm</td></tr>
+<tr><td rowspan="2">67</td><td rowspan="2">可辩性</td><td rowspan="2">Debatability</td><td>辩题设计的基本质量标准。在条件均等的情况下，正反双方应具有相似的获胜机会。如果一方的立场使对方完全无法有效论证，该辩题不具备可辩性</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>Both sides should have a similar chance of winning under equal conditions</td></tr>
+<tr><td rowspan="2">68</td><td rowspan="2">链接反转</td><td rowspan="2">Link Turn</td><td>论证对方所主张的正方方案优势恰恰是将导致对方所声称的劣势的证据。操作逻辑为正方的方案效果本身即劣势的来源</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate*, 13th ed.</td></tr>
+<tr class="eng"><td>Arguing that the advantage claimed for the affirmative plan is precisely evidence of the disadvantage</td></tr>
+<tr><td rowspan="2">69</td><td rowspan="2">劣势</td><td rowspan="2">Disadvantage (DA)</td><td>政策辩论中正方方案实施后将产生的负面后果。反方通过论证 Disadvantage 证明正方方案的成本超过收益。典型结构为 Uniqueness（现状下该劣势尚未发生）+ Link（正方方案将触发该劣势）+ Impact（该劣势的后果严重且不可逆）</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate*, 13th ed.</td></tr>
+<tr class="eng"><td>Negative consequences that would result from implementing the affirmative plan</td></tr>
+<tr><td rowspan="2">70</td><td rowspan="2">明确分界线</td><td rowspan="2">Brightline</td><td>判断某项标准或规则是否足够清晰的测试。一项标准应当能够不依赖裁判的主观裁量而客观适用——模糊标准的对立面</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate*, 13th ed.</td></tr>
+<tr class="eng"><td>A test for whether a criterion or rule is sufficiently clear to be applied objectively</td></tr>
+<tr><td rowspan="2">71</td><td rowspan="2">权衡机制</td><td rowspan="2">Weighing Mechanism</td><td>价值辩或政策辩中比较双方论证相对强度的标准化论证框架。核心功能是为裁判提供超越个人直觉的客观评判依据。常见维度包括幅度、概率、时间维度、可逆性与受影响人群范围</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate*, 13th ed.</td></tr>
+<tr class="eng"><td>A standardized argumentative framework for comparing the relative strength of both sides</td></tr>
+<tr><td rowspan="2">72</td><td rowspan="2">损益比</td><td rowspan="2">Net Benefit</td><td>方案的整体利益是否大于其成本及副作用。正方通过论证需、根、解构建优势，反方可通过论证对方方案导致的新弊端（Disadvantage）来证明净收益为负</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>Whether the overall benefit of the plan exceeds its costs and side effects</td></tr>
+<tr><td rowspan="2">73</td><td rowspan="2">现状</td><td rowspan="2">Status Quo</td><td>事物的现存状态。在政策辩论中，改变现状的一方（通常为正方）承担举证责任。反方选择维持现状即享有初始整体推定优势</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>The existing state of affairs. The side changing the status quo bears the burden of proof</td></tr>
+<tr><td rowspan="2">74</td><td rowspan="2">相抗计划</td><td rowspan="2">Counterplan</td><td>政策辩论中反方可采取的替代性政策方案。反方提出相抗计划意味其同样承担整体举证责任——须证明相抗计划自身的需求性、根属性、解决力。与修正现状的核心区别在于变动幅度：相抗计划对现状进行大幅更动，修正现状仅为小幅调整。若反方方案实质构成对现状的大幅变动但变动幅度小于正方，仍应视为相抗计划并承担举证责任</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>An alternative policy proposal the negative may offer, bearing its own prima facie burden</td></tr>
+<tr><td rowspan="2">75</td><td rowspan="2">修正现状</td><td rowspan="2">Minor Repairs</td><td>反方在不改变现状基本架构的前提下提出的小幅调整方案。目的是展示问题可以在现有体系内解决，无须采取正方的大幅变革方案。修正现状不承担与正方等同的举证责任</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>Small adjustments the negative proposes without fundamentally altering the status quo</td></tr>
+<tr><td rowspan="2">76</td><td rowspan="2">需求性</td><td rowspan="2">Harm / Need</td><td>现状下存在何种重大损害或重大利益无法获取。论证须包括需求的质（程度——多严重）与需求的量（范围——多少人受益）。需求性是推翻现状推定的第一关</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>The existence of a significant harm or loss of benefit under the status quo</td></tr>
+<tr><td rowspan="2">77</td><td rowspan="2">影响反转</td><td rowspan="2">Impact Turn</td><td>论证对方所声称的负面前景实际上是积极结果。操作逻辑为对方的劣势实为利益</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate*, 13th ed.</td></tr>
+<tr class="eng"><td>Arguing that what the opponent claims as a negative outcome is actually a positive result</td></tr>
+<tr><td rowspan="2">78</td><td rowspan="2">影响计算</td><td rowspan="2">Impact Calculus</td><td>比较双方论证所主张的后果的系统性方法。将双方各自论证的影响按幅度、概率、时间范围和可逆性四个维度进行标准化换算与比较。不是提出新论证而是在既有论证基础上执行比较性权衡</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate*, 13th ed.</td></tr>
+<tr class="eng"><td>A systematic method for comparing the impacts claimed by both sides</td></tr>
+<tr><td rowspan="2">79</td><td rowspan="2">组合测试</td><td rowspan="2">Permutation (Perm)</td><td>检验反方提出的相抗计划是否与正方方案在逻辑上互斥的方法。若相抗计划可行且不与正方方案冲突则双方可同时实施——反方的排他性论证被破</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate*, 13th ed.</td></tr>
+<tr class="eng"><td>Testing whether the counterplan is logically mutually exclusive with the affirmative plan</td></tr>
+<tr><td rowspan="2">80</td><td rowspan="2">Kritik (K)</td><td rowspan="2">Kritik</td><td>不直接反驳对方的事实主张或逻辑推导，而是质疑对方论证所依赖的根本前提、预设或价值框架的论证策略。Kritik 的目标不是证明对方错了，而是揭示对方论证赖以成立的基础在认识论、伦理学或政治哲学层面不可接受。与 Topicality 和 Disadvantage 构成反方的三大主流策略</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate*, 13th ed.</td></tr>
+<tr class="eng"><td>An argument strategy questioning the fundamental premises or value framework the opponent relies upon</td></tr>
+</table>
+<h2>五、辩论分类</h2>
+<table>
+<tr><th>#</th><th>中文</th><th>英文</th><th>定义</th><th>出处</th></tr>
+<tr><td rowspan="2">81</td><td rowspan="2">单辩题</td><td rowspan="2">Single Motion</td><td>逻辑结构为二选一的辩题。正反双方的主张互斥，只能且必须同意其中一方</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>A motion where the choice is binary—only one side must be agreed with</td></tr>
+<tr><td rowspan="2">82</td><td rowspan="2">价值辩论</td><td rowspan="2">Value Debate</td><td>以某种价值判断为辩题的辩论形式。核心议题为价值排序和评判标准。在价值辩论中，双方需要在价值阶梯上建立各自的价值判准并进行比较</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>A debate format centered on value judgments and value rankings</td></tr>
+<tr><td rowspan="2">83</td><td rowspan="2">事实辩论</td><td rowspan="2">Fact Debate</td><td>以某种客观事实是否成立为辩题的辩论形式。核心议题为证据的充分性和论证的可靠性。与政策辩论和价值辩论共同构成辩论的三大基本类型</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>A debate format centered on whether an objective fact is true or false</td></tr>
+<tr><td rowspan="2">84</td><td rowspan="2">双辩题</td><td rowspan="2">Dual Motion</td><td>正反双方的主张均有可能同时成立的辩题类型。双方都有改变现状的主张，并非简单的非此即彼</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>A motion where both sides may simultaneously have valid claims</td></tr>
+<tr><td rowspan="2">85</td><td rowspan="2">政策辩论</td><td rowspan="2">Policy Debate</td><td>以某项具体政策行动为辩题的辩论形式。核心议题为需、根、解、损益比。正方案必须提出具体的实施计划。源于英美议会辩论传统</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>A debate format centered on whether a specific policy action should be taken</td></tr>
+<tr><td rowspan="2">86</td><td rowspan="2">准政策辩</td><td rowspan="2">Quasi-Policy Debate</td><td>以某项政策的价值为辩题的辩论形式。形式上探讨的是价值判断（"好不好"），实质上讨论的是政策方向</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>A proposition that makes a value judgment about a policy</td></tr>
+</table>
+<h2>六、论证类型</h2>
+<table>
+<tr><th>#</th><th>中文</th><th>英文</th><th>定义</th><th>出处</th></tr>
+<tr><td rowspan="2">87</td><td rowspan="2">归谬</td><td rowspan="2">Reductio ad Absurdum</td><td>将对方论证的前提或结论推至逻辑极端，以揭示其必然导致荒谬或自相矛盾的推理方法。在论辩中，先假设对方论点成立，由此推导出与公认事实或对方自身承诺相矛盾的结果，从而反证原论点不能成立。属于间接反驳——不直接攻击对方论据，而是展示其逻辑后果不可接受</td><td rowspan="2">Copi, I. M., Cohen, C., & McMahon, K. (2014). *Introduction to Logic*, 14th ed.</td></tr>
+<tr class="eng"><td>Pushing the opponent's premise or conclusion to its logical extreme to reveal absurdity</td></tr>
+<tr><td rowspan="2">88</td><td rowspan="2">滑坡论证</td><td rowspan="2">Slippery Slope</td><td>主张采取某一行动将引发连锁反应，最终导致极端且不可接受的后果。滑坡论证的错误不在于因果链本身（因果链可能是合理的），而在于夸大每个环节的因果必然性——将"可能"偷换为"必然"</td><td rowspan="2">Walton, D. (1992). *Slippery Slope Arguments*</td></tr>
+<tr class="eng"><td>Claiming that taking an action will trigger a chain reaction leading to an extreme outcome</td></tr>
+<tr><td rowspan="2">89</td><td rowspan="2">迹象论证</td><td rowspan="2">Argument from Sign</td><td>通过可观察的迹象推断背后不可直接观察的状态或属性。迹象论证在逻辑上属于溯因推理（Abduction）——从结果追溯原因</td><td rowspan="2">Aristotle. *Rhetoric*；Peirce, C. S. (1931). *Collected Papers*</td></tr>
+<tr class="eng"><td>Inferring an unobservable state or property from observable signs</td></tr>
+<tr><td rowspan="2">90</td><td rowspan="2">举例论证</td><td rowspan="2">Argument from Example</td><td>通过举出一个或多个具体实例来论证一个一般性命题。举例论证在逻辑上属于归纳推理——从个别到一般。单一实例只能提出假说，不能独立完成证明</td><td rowspan="2">Aristotle. *Rhetoric*；Copi et al. (2014)</td></tr>
+<tr class="eng"><td>Using one or more specific instances to prove a general proposition</td></tr>
+<tr><td rowspan="2">91</td><td rowspan="2">类比论证</td><td rowspan="2">Argument from Analogy</td><td>通过比较两个不同领域事物之间的结构相似性，推断若一者在某方面成立则另一者也在该方面成立。类比论证属于归纳推理，其论证强度取决于比较项之间的相关相似性与相关差异性之比</td><td rowspan="2">Aristotle. *Rhetoric*, Book II；Copi et al. (2014)</td></tr>
+<tr class="eng"><td>Inferring that if two things share structural similarity, what holds for one also holds for the other</td></tr>
+<tr><td rowspan="2">92</td><td rowspan="2">事实证明</td><td rowspan="2">Factual Proof</td><td>以现实中存在的事物或事件作为直接证据的论证方式。事实证明属于直接证据——能够独立证明论点/事实，不需要推理中介。区别于间接证据</td><td rowspan="2">Wigmore, J. H. (1937). *The Science of Judicial Proof*</td></tr>
+<tr class="eng"><td>Using actually existing things or events as direct evidence</td></tr>
+<tr><td rowspan="2">93</td><td rowspan="2">循环论证</td><td rowspan="2">Circular Argument</td><td>论证的前提预设了结论的真值，导致论证结构回到出发点而未能提供独立于结论的理由支持。拉丁语名称为 Petitio Principii（乞题）。在逻辑上不构成有效论证</td><td rowspan="2">Aristotle. *Sophistical Refutations*；Copi et al. (2014)</td></tr>
+<tr class="eng"><td>An argument whose premises presuppose the truth of its conclusion</td></tr>
+<tr><td rowspan="2">94</td><td rowspan="2">因果论证</td><td rowspan="2">Argument from Causality</td><td>通过建立两个事件之间的因果关系来进行论证。因果论证须满足三个条件：时序在先（因在果前）、相关性（因与果统计相关）、排除替代原因（无第三条共同原因）。违反第三个条件即构成错误归因</td><td rowspan="2">Hume, D. (1748). *An Enquiry Concerning Human Understanding*；Copi et al. (2014)</td></tr>
+<tr class="eng"><td>Establishing a causal relationship between two events</td></tr>
+</table>
+<h2>七、逻辑谬误</h2>
+<table>
+<tr><th>#</th><th>中文</th><th>英文</th><th>定义</th><th>出处</th></tr>
+<tr><td rowspan="2">95</td><td rowspan="2">布佛论证</td><td rowspan="2">Bulverism</td><td>C. S. Lewis 于 1941 年提出并命名的非形式谬误。论证结构为：先假定对方观点为错，再分析对方为何持有此错误观点（通常归因于心理动机或社会因素），最后以此为依据断定该观点确实为错。其自毁性质在于：任何人的立场背后都存在心理原因，若分析动机即可否决主张，则无可信主张</td><td rowspan="2">Lewis, C. S. (1941). *Bulverism*</td></tr>
+<tr class="eng"><td>Assuming the opponent's view is wrong, then explaining why they hold it, and concluding it is indeed wrong. Named by C.S. Lewis</td></tr>
+<tr><td rowspan="2">96</td><td rowspan="2">错误归因</td><td rowspan="2">False Cause / Post Hoc Ergo Propter Hoc</td><td>仅因两事件时间先后或统计相关即推断其因果关系。"在此之后"不因此"由于此"。与因果论证的区别在于：错误归因未排除替代原因和巧合解释</td><td rowspan="2">Hume, D. (1748)；Copi et al. (2014)</td></tr>
+<tr class="eng"><td>Inferring causation from mere correlation or temporal sequence</td></tr>
+<tr><td rowspan="2">97</td><td rowspan="2">稻草人</td><td rowspan="2">Strawman</td><td>歪曲、夸大或简化对方立场以制造更易攻击的目标，然后攻击该虚假目标并宣称驳倒了对方。稻草人谬误的关键在于不忠实于对方实际主张——必须对原论证进行改写或简化</td><td rowspan="2">Copi et al. (2014)；Walton, D. (1996). "The Straw Man Fallacy"</td></tr>
+<tr class="eng"><td>Distorting or exaggerating the opponent's position to create an easier target</td></tr>
+<tr><td rowspan="2">98</td><td rowspan="2">赌徒谬误</td><td rowspan="2">Gambler's Fallacy</td><td>将概率独立的随机事件误认为存在"补偿性"的关联。典型的错误推理："已经连续五次正面了，所以下一次更可能是反面"。事实上每次投掷独立，概率恒为 1/2</td><td rowspan="2">Laplace, P. S. (1814). *A Philosophical Essay on Probabilities*</td></tr>
+<tr class="eng"><td>Mistakenly believing that independent random events are correlated</td></tr>
+<tr><td rowspan="2">99</td><td rowspan="2">个人怀疑</td><td rowspan="2">Argument from Personal Incredulity</td><td>以自己无法理解或想象某一命题的成立来否定该命题的非形式谬误。典型表述为"我想不通这怎么可能，所以它不可能是真的"。谬误的核心在于论证者的主观认知能力不构成命题真假的判准——一个命题可以完全成立而某个人无法理解它。与诉诸无知相关但侧重点不同：诉诸无知以未被证明为真即为假为逻辑，个人怀疑以我主观上觉得不可能为逻辑</td><td rowspan="2">Copi, I. M., Cohen, C., & McMahon, K. (2014). *Introduction to Logic*, 14th ed.</td></tr>
+<tr class="eng"><td>Rejecting a proposition based solely on one's own inability to understand or imagine it</td></tr>
+<tr><td rowspan="2">100</td><td rowspan="2">混淆</td><td rowspan="2">Conflation / Category Mistake</td><td>将属于不同逻辑范畴或概念层级的两个或以上独立事项当作同一事项来处理。Ryle 系统阐述：当我们将属于一个逻辑类型的概念当作属于另一个逻辑类型来使用时即产生范畴错误，例如将团队精神与传球、射门并列列举。在辩论中常表现为将事实层面的相关性等同于逻辑层面的因果性，或将部分实例归纳直接等同于全体论断</td><td rowspan="2">Ryle, G. (1949). *The Concept of Mind*</td></tr>
+<tr class="eng"><td>Treating two or more independent matters as a single matter, or misapplying logical categories</td></tr>
+<tr><td rowspan="2">101</td><td rowspan="2">基本概率谬误</td><td rowspan="2">Base Rate Fallacy</td><td>在评估单一事例的概率时，忽略相关的统计基础概率而过度依赖个案特征的认知偏误。典型表现为已知人群中律师占3%却根据对其人格的模糊描述即判断其极可能为律师，完全无视先验概率。Kahneman 和 Tversky 于 1973 年以代表性启发式解释其机制</td><td rowspan="2">Kahneman, D., & Tversky, A. (1973). On the Psychology of Prediction. *Psychological Review*, 80(4), 237–251.</td></tr>
+<tr class="eng"><td>Ignoring relevant statistical base-rate information in favor of case-specific information</td></tr>
+<tr><td rowspan="2">102</td><td rowspan="2">恐吓论据</td><td rowspan="2">Argumentum ad Baculum</td><td>以威胁、暴力或不利后果作为理由迫使对方接受结论的论证方式。拉丁语意为诉诸棍棒。当代非形式逻辑学要求以对话类型和语用条件评估其合理性：在协商型对话中温和威胁可被接受，在批判性讨论中其为谬误。与诉诸权威不同——后者引述第三方权威，前者施加直接威胁</td><td rowspan="2">Walton, D. (2000). *Scare Tactics*. Kluwer.</td></tr>
+<tr class="eng"><td>Using threat or force as a reason to compel acceptance of a conclusion. Latin: argumentum ad baculum</td></tr>
+<tr><td rowspan="2">103</td><td rowspan="2">扣帽子</td><td rowspan="2">Name-Calling / Labeling</td><td>以贬义标签替代实质论证的非形式谬误。攻击者通过将对方立场归入某种已被污名化的类别以回避对论证内容的检验，属于 Ad Hominem 的一种变体。典型形式为只有X才会支持Y——实际上X这个标签与Y是否成立在逻辑上无关。与稻草人的区别：扣帽子是给对方贴标签，稻草人是歪曲对方论点使之更易攻击</td><td rowspan="2">Copi, I. M., Cohen, C., & McMahon, K. (2014). *Introduction to Logic*, 14th ed.</td></tr>
+<tr class="eng"><td>Substituting a derogatory label for substantive argumentation—a variant of Ad Hominem</td></tr>
+<tr><td rowspan="2">104</td><td rowspan="2">模糊标准</td><td rowspan="2">Ambiguous Criterion</td><td>评判标准缺乏明确的操作性定义，导致标准的适用不可检验、不可重复、不可证伪。在辩论中，模糊标准使评判失去依据——当标准模糊时，数据也失去意义</td><td rowspan="2">Copi et al. (2014)</td></tr>
+<tr class="eng"><td>A criterion lacking clear operational definition, rendering its application untestable</td></tr>
+<tr><td rowspan="2">105</td><td rowspan="2">涅槃谬误</td><td rowspan="2">Nirvana Fallacy</td><td>以完美的理想状态为参照，拒绝任何不完美的现实方案。又称"追求完美的谬误"（Perfect Solution Fallacy）。谬误的逻辑在于：现实方案的不完美不能证明该方案不可取——除非存在更好的可行替代方案</td><td rowspan="2">Demsetz, H. (1969). "Information and Efficiency: Another Viewpoint"</td></tr>
+<tr class="eng"><td>Rejecting any imperfect solution by comparing it to an idealized perfect state</td></tr>
+<tr><td rowspan="2">106</td><td rowspan="2">人身攻击</td><td rowspan="2">Ad Hominem</td><td>以攻击论证提出者的人格、动机、处境或背景来替代对论证本身的检验。分为三种子类型：辱骂型（直接攻击人格）、处境型（以对方处境质疑动机）、你也一样型（Tu Quoque，以对方行为不一致来否定其主张）。Ad Hominem 回避了论证的实质内容</td><td rowspan="2">Aristotle. *Sophistical Refutations*；Copi et al. (2014)</td></tr>
+<tr class="eng"><td>Attacking the opponent personally rather than their argument</td></tr>
+<tr><td rowspan="2">107</td><td rowspan="2">时代误置</td><td rowspan="2">Anachronism</td><td>将属于某一历史时期的概念、观念、制度或评价标准错误地应用于另一历史时期。在历史辩论中，时代误置导致对历史事件或人物的不公平评判</td><td rowspan="2">Fischer, D. H. (1970). *Historians' Fallacies*</td></tr>
+<tr class="eng"><td>Wrongly applying concepts or standards from one historical period to another</td></tr>
+<tr><td rowspan="2">108</td><td rowspan="2">双重标准</td><td rowspan="2">Double Standard</td><td>对本质上相同的情况适用不同的评判标准或原则。在论证中违反了"相似情况应相似对待"的一致性要求</td><td rowspan="2">Copi et al. (2014)</td></tr>
+<tr class="eng"><td>Applying different standards or principles to essentially identical situations</td></tr>
+<tr><td rowspan="2">109</td><td rowspan="2">四项谬误</td><td rowspan="2">Quaternio Terminorum</td><td>标准直言三段论须恰好有三个词项（大项、中项、小项），出现四个词项时推理无效。多出的词项通常来自偷换概念（中项在两种不同意义上被使用）</td><td rowspan="2">Aristotle. *Prior Analytics*；Copi et al. (2014)</td></tr>
+<tr class="eng"><td>A standard syllogism requires exactly three terms; four terms renders the reasoning invalid</td></tr>
+<tr><td rowspan="2">110</td><td rowspan="2">诉诸纯洁</td><td rowspan="2">No True Scotsman</td><td>面对反例时临时修改定义以排斥反例，使原命题在逻辑上免于被证伪。由 Antony Flew 于 1975 年命名。这是 Ad Hoc 假设在定义领域的特殊表现——通过不断缩小概念外延来保护核心主张</td><td rowspan="2">Flew, A. (1975). *Thinking About Thinking*</td></tr>
+<tr class="eng"><td>Temporarily modifying a definition to exclude a counterexample</td></tr>
+<tr><td rowspan="2">111</td><td rowspan="2">诉诸公众</td><td rowspan="2">Appeal to Popularity</td><td>以多数人相信或接受某观点来论证该观点的正确性。拉丁语名称 Argumentum ad Populum。谬误在于：一个命题是否为真不取决于相信它的人数多少</td><td rowspan="2">Copi et al. (2014)</td></tr>
+<tr class="eng"><td>Using the popularity of a belief as evidence for its truth</td></tr>
+<tr><td rowspan="2">112</td><td rowspan="2">诉诸权威</td><td rowspan="2">Appeal to Authority</td><td>引用某一领域的权威来支持另一不相关领域的论断。拉丁语名称 Argumentum ad Verecundiam。有效的诉诸权威须满足：权威在相关领域确有专长、该领域内存在广泛共识、权威的陈述可被独立验证</td><td rowspan="2">Locke, J. (1690). *An Essay Concerning Human Understanding*；Copi et al. (2014)</td></tr>
+<tr class="eng"><td>Citing an authority outside their area of expertise to support a claim</td></tr>
+<tr><td rowspan="2">113</td><td rowspan="2">诉诸无知</td><td rowspan="2">Appeal to Ignorance</td><td>以某命题未被证明为假来论证其为真，或以未被证明为真来论证其为假。拉丁语名称 Argumentum ad Ignorantiam。谬误的关键在于将"证据的缺失"等同于"缺失的证据"——举证责任方未完成举证不等于反方主张成立</td><td rowspan="2">Copi et al. (2014)；Walton, D. (1996). *Arguments from Ignorance*</td></tr>
+<tr class="eng"><td>Arguing that a proposition is true because it has not been proven false, or vice versa</td></tr>
+<tr><td rowspan="2">114</td><td rowspan="2">逃避话题</td><td rowspan="2">Evasion</td><td>对议题避而不谈，以回避讨论而非直接应对。在辩论中属于程序性违规——逃避话题不等于反驳，前者拒绝参与讨论，后者回应论证内容</td><td rowspan="2">Copi et al. (2014)</td></tr>
+<tr class="eng"><td>Avoiding a topic rather than engaging with it directly</td></tr>
+<tr><td rowspan="2">115</td><td rowspan="2">偷换概念</td><td rowspan="2">Equivocation</td><td>在同一论证过程中，同一词语或短语在不同步骤中改变了含义，导致推理的形式看似有效实则无效。三段论中构成四项谬误的常见手段</td><td rowspan="2">Aristotle. *Sophistical Refutations*；Copi et al. (2014)</td></tr>
+<tr class="eng"><td>Using the same word or phrase with different meanings at different steps</td></tr>
+<tr><td rowspan="2">116</td><td rowspan="2">偷换议题</td><td rowspan="2">Topic Shift</td><td>在讨论中未经声明即改变讨论主题，将原本议题替换为对己方更有利的议题。与偷换概念的区别：前者改变讨论的主题，后者改变词语的含义</td><td rowspan="2">Copi et al. (2014)</td></tr>
+<tr class="eng"><td>Unannounced shifting of the discussion topic to one more favorable to one's own side</td></tr>
+<tr><td rowspan="2">117</td><td rowspan="2">推不出</td><td rowspan="2">Non Sequitur</td><td>论证的前提无法逻辑地推出其结论。是逻辑形式无效的总称——前提与结论之间缺乏逻辑上的推断关系。在拉丁语中意为"不跟随"</td><td rowspan="2">Copi et al. (2014)</td></tr>
+<tr class="eng"><td>The premises of an argument fail to logically entail its conclusion</td></tr>
+<tr><td rowspan="2">118</td><td rowspan="2">以偏概全（标准术语：轻率概括）</td><td rowspan="2">Hasty Generalization</td><td>从不足以代表总体的样本推断出关于总体的结论。样本过小、样本有偏或样本与结论的因果关系不成立均可导致此谬误。在统计学上属于采样误差，在逻辑学上属于不当归纳</td><td rowspan="2">Aristotle. *Sophistical Refutations*；Copi et al. (2014)</td></tr>
+<tr class="eng"><td>Drawing a conclusion about a population from an insufficient sample</td></tr>
+</table>
+<h2>八、辩论战术与概念</h2>
+<table>
+<tr><th>#</th><th>中文</th><th>英文</th><th>定义</th><th>出处</th></tr>
+<tr><td rowspan="2">119</td><td rowspan="2">边际效应</td><td rowspan="2">Diminishing Marginal Returns</td><td>在一定技术水平下连续增加某一可变投入而其他投入固定不变时新增产出终将逐步递减。在政策辩论中用于论证额外资源投入超过阈值后不再产生等比例效益，需求性的论证不应忽略边际条件</td><td rowspan="2">Samuelson, P. A., & Nordhaus, W. D. (2010). *Economics*, 19th ed.</td></tr>
+<tr class="eng"><td>Continuously adding one variable input while others are fixed—the additional output will eventually decline</td></tr>
+<tr><td rowspan="2">120</td><td rowspan="2">低打</td><td rowspan="2">Grounded Framing</td><td>辩论发言中面对听众已普遍否定或存疑的价值时所采用的低姿态表达策略。以现实约束、实际后果和社会成本为核心修辞路径——向听众展示我理解你们的顾虑，这不是高高在上的道德说教，而是基于现实条件的审慎判断。通过降低道德压迫感来赢取听众信任，消解对方可能发动的不接地气、何不食肉糜式攻击。与之相对的是高打</td><td rowspan="2">精灵·Moon《辩论筑基》第 5.2 讲</td></tr>
+<tr class="eng"><td>Low-posture advocacy when the audience's values are skeptical or negative toward one's own value</td></tr>
+<tr><td rowspan="2">121</td><td rowspan="2">底线</td><td rowspan="2">Bottom Line</td><td>辩论中己方不可退让的立场下限。超出底线范围的论点可根据场上形势灵活取舍或重新框定，但底线本身被突破意味着己方论证核心支柱倒塌，整体论证框架将失去立足点。底线须在备赛阶段由全队协商确定并统一执行，场上任何辩手不得擅自放弃或改变已设定的底线</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate: Critical Thinking for Reasoned Decision Making*, 13th ed.</td></tr>
+<tr class="eng"><td>The lowest position that one cannot concede—if breached, the entire argumentative framework collapses</td></tr>
+<tr><td rowspan="2">122</td><td rowspan="2">短打</td><td rowspan="2">Short Strike</td><td>辩论中以高频率、短时长问题连续攻击单一论点的进攻战术。每个问题控制在 10 秒以内，快速切换追问角度，不给对方充分展开回应的时间窗口。核心目的不是拆解论证本身，而是通过时间压迫迫使对方暴露逻辑断裂或自相矛盾</td><td rowspan="2">《短打与强推》</td></tr>
+<tr class="eng"><td>High-frequency, short-duration questioning to attack a single point—each question under 10 seconds. Not limited to free debate</td></tr>
+<tr><td rowspan="2">123</td><td rowspan="2">法律滞后</td><td rowspan="2">Legal Lag</td><td>成文法在适应社会变迁时的固有延迟。法律的制定受立法时的认知水平限制，而社会持续发展，新情况可能超出原有法律框架。在辩论中引用法律滞后时应注意：滞后性不能单独作为质疑法律合理性的充分依据</td><td rowspan="2">Hart, H. L. A. (1961). *The Concept of Law*</td></tr>
+<tr class="eng"><td>The inherent delay of statutory law in adapting to social change</td></tr>
+<tr><td rowspan="2">124</td><td rowspan="2">高打</td><td rowspan="2">Elevated Framing</td><td>辩论发言中面对听众已普遍肯定的价值时所采用的高姿态表达策略。以道德正当性和应然性为核心修辞路径——突出己方主张的崇高性、必然性、不容置疑性，而非纠缠于现实条件的可行性计算。属于《辩论筑基》公众叙述向七工具之一，适用于己方价值在公众认知坐标中处于肯定×道德象限的情境。与之相对的是低打</td><td rowspan="2">精灵·Moon《辩论筑基》第 5.2 讲</td></tr>
+<tr class="eng"><td>High-posture advocacy when the audience's values align positively with one's own value</td></tr>
+<tr><td rowspan="2">125</td><td rowspan="2">工具论</td><td rowspan="2">Instrumentalism</td><td>关于技术的哲学立场。主张技术本身是中性的——不涉及内在的善恶价值，技术的伦理意义完全来自使用者赋予的目的和使用方式</td><td rowspan="2">Feenberg, A. (1991). *Critical Theory of Technology*</td></tr>
+<tr class="eng"><td>The philosophical position that technology is neutral—its ethical meaning comes from the user's purpose</td></tr>
+<tr><td rowspan="2">126</td><td rowspan="2">公文书的真实性推定</td><td rowspan="2">Presumption of Authenticity</td><td>国家机关或具有社会管理职能的组织在其职权范围内制作的文书推定其所记载事项为真实但允许以相反证据推翻。在辩论中引用公文书内容时可援引此推定降低举证负担但仍须承认反证可能性</td><td rowspan="2">McCormick on Evidence (2013), 7th ed., 307</td></tr>
+<tr class="eng"><td>Documents produced by state organs are presumed authentic unless rebutted by contrary evidence</td></tr>
+<tr><td rowspan="2">127</td><td rowspan="2">价值排序</td><td rowspan="2">Value Ranking</td><td>在价值辩论中用于判定胜负的核心机制。双方各自建立评判标准后，通过比较两种标准何者更为优先或重要来决定辩题胜负</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>The core mechanism for deciding victory in value debate: comparing which standard is more important</td></tr>
+<tr><td rowspan="2">128</td><td rowspan="2">教条</td><td rowspan="2">Dogmatism</td><td>由权威确立并被不加批判地接受为一组固定且狭义的原则体系。在辩论中引用教条精神意味着以某权威已如此规定替代对命题本身的理性检验，拒绝接受新证据或反例。教条与公理的区别：公理是理论体系内不证自明的基本命题（可修正），教条是排斥一切修改可能性的僵硬信仰</td><td rowspan="2">认识论教材</td></tr>
+<tr class="eng"><td>A set of fixed and narrow principles accepted uncritically on authority alone</td></tr>
+<tr><td rowspan="2">129</td><td rowspan="2">界定概念</td><td rowspan="2">Concept Delimitation</td><td>明确词语的含义和外延，确保所有讨论参与者在同一意义上使用概念。在辩论中，概念界定是论证的前提——未界定清楚的概念会导致偷换概念、四项谬误等逻辑错误</td><td rowspan="2">Copi et al. (2014)</td></tr>
+<tr class="eng"><td>Clarifying the meaning and extension of a term to ensure all participants use concepts in the same sense</td></tr>
+<tr><td rowspan="2">130</td><td rowspan="2">可行性</td><td rowspan="2">Feasibility</td><td>评估某项政策或方案是否具备实施的技术、经济、政治及行政条件的分析维度。不同于解决力——解决力回答能否解决问题，可行性回答方案本身能否被执行。政策辩论中正方须证明方案在辩题规定的空间与时间范围内可行</td><td rowspan="2">Patton, C. V. et al. (2015). *Basic Methods of Policy Analysis and Planning*, 3rd ed.</td></tr>
+<tr class="eng"><td>Evaluating whether a policy or plan has the technical, economic, political, and administrative conditions for implementation</td></tr>
+<tr><td rowspan="2">131</td><td rowspan="2">框定</td><td rowspan="2">Framing</td><td>对讨论范围的限定操作——通过划定时间、情境、标准、对象、方式等参数来确定辩论的边界。框定的目的是让问题的讨论有可操作的范围而非漫无边际</td><td rowspan="2">Entman, R. M. (1993). "Framing: Toward Clarification of a Fractured Paradigm"</td></tr>
+<tr class="eng"><td>Delimiting the scope of discussion by specifying time, context, standard, object, and method parameters</td></tr>
+<tr><td rowspan="2">132</td><td rowspan="2">捆绑</td><td rowspan="2">Bundling</td><td>将多个概念或议题合并为一个论述单元的论证技术。与切割对立：切割追求区分，捆绑追求整合</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>Merging multiple concepts or issues into a single argumentative unit</td></tr>
+<tr><td rowspan="2">133</td><td rowspan="2">立场跳动</td><td rowspan="2">Position Shift / Contradiction</td><td>辩论中后发言辩手所主张之内容与己方先前辩手之发言发生矛盾的情形。辩论应以一致立场推进论证——前后矛盾直接损害己方案件的可信度</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate*, 13th ed.</td></tr>
+<tr class="eng"><td>A later speaker contradicting their own side's previous speaker</td></tr>
+<tr><td rowspan="2">134</td><td rowspan="2">利弊分析</td><td rowspan="2">Cost-Benefit Analysis</td><td>通过系统比较各项可选方案的全部预期收益与全部预期成本（含直接、间接、机会成本），以净效益最大化为标准做出决策的评估方法。为政策辩论中损益比论证的理论基础——正方构建优势与反方揭示弊端均应参照此框架</td><td rowspan="2">Boardman, A. E. et al. (2018). *Cost-Benefit Analysis: Concepts and Practice*, 5th ed.</td></tr>
+<tr class="eng"><td>Systematically comparing all expected benefits against all expected costs</td></tr>
+<tr><td rowspan="2">135</td><td rowspan="2">两难处境</td><td rowspan="2">Dilemma</td><td>以二者选一的形式使对方无论选择哪一方均导出对己方有利的结论。逻辑形式为：如果P则Q，如果非P则Q，因此无论如何Q。又称双刀论法</td><td rowspan="2">Copi, I. M., Cohen, C., & McMahon, K. (2014). *Introduction to Logic*, 14th ed.</td></tr>
+<tr class="eng"><td>A situation where only two options exist and both are unfavorable to one's own side</td></tr>
+<tr><td rowspan="2">136</td><td rowspan="2">劣币驱逐良币</td><td rowspan="2">Gresham's Law</td><td>经济学基本定律：当两种实际价值不同的货币以相同法定比价流通时，实际价值较低的货币将实际价值较高的货币逐出流通。辩论中隐喻：在制度缺失时质量较低的选择会系统性排挤质量较高的选择</td><td rowspan="2">Samuelson, P. A. & Nordhaus, W. D. (2010). *Economics*, 19th ed.</td></tr>
+<tr class="eng"><td>Gresham's Law—bad money drives out good. Lower quality options systematically crowd out higher quality ones</td></tr>
+<tr><td rowspan="2">137</td><td rowspan="2">论海战术</td><td rowspan="2">Spread / Argumentative Overload</td><td>通过提出大量论证以淹没对方回应能力的战术。论证数量被当作战略武器——有限发言时间内对方无法逐一有效回应。风险在于论证质量因数量扩张而被稀释</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate*, 13th ed.</td></tr>
+<tr class="eng"><td>Overwhelming the opponent with a large quantity of arguments, each with minimal analysis</td></tr>
+<tr><td rowspan="2">138</td><td rowspan="2">论域</td><td rowspan="2">Universe of Discourse</td><td>逻辑学概念。某一讨论中涉及的所有可能对象的集合。在辩论中，论域是辩题词汇和概念适用范围的边界</td><td rowspan="2">Frege, G. (1892). "On Sense and Reference"</td></tr>
+<tr class="eng"><td>The complete set of all possible objects discussed within a given context</td></tr>
+<tr><td rowspan="2">139</td><td rowspan="2">逻辑自治</td><td rowspan="2">Logical Consistency</td><td>一个理论或命题集合在形式上不包含任何矛盾的属性——无法同时推导出P和非P。逻辑自洽是任何有效论证的最低必要条件</td><td rowspan="2">Copi, I. M., Cohen, C., & McMahon, K. (2014). *Introduction to Logic*, 14th ed.</td></tr>
+<tr class="eng"><td>A theory not contradictory in its own linguistic statements—no logical inconsistencies found</td></tr>
+<tr><td rowspan="2">140</td><td rowspan="2">马太效应</td><td rowspan="2">Matthew Effect</td><td>科学与社会中广泛存在的一种累积优势机制：已拥有优势的个体会获得更多优势，已处于劣势的个体会进一步失去已有资源。名称来源于《马太福音》</td><td rowspan="2">Merton, R. K. (1968). "The Matthew Effect in Science." *Science*, 159(3810), 56–63.</td></tr>
+<tr class="eng"><td>The rich get richer and the poor get poorer—a cumulative advantage mechanism</td></tr>
+<tr><td rowspan="2">141</td><td rowspan="2">捏造</td><td rowspan="2">Fabrication</td><td>辩论选手自行杜撰或编造不存在的证据并将其当作真实证据使用的行为。在竞赛辩论中被视为严重违反辩论伦理——故意提供虚假证据直接破坏了辩论制度的基本诚信前提</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate*, 13th ed.</td></tr>
+<tr class="eng"><td>Fabricating non-existent evidence and presenting it as real. A serious ethical violation in competitive debate</td></tr>
+<tr><td rowspan="2">142</td><td rowspan="2">破题</td><td rowspan="2">Case Analysis</td><td>对辩题进行关键词界定、争议焦点识别和论证方向规划的初步分析阶段。政策辩论中破题须确定需、根、解、损益比的论证框架；价值辩论中须确定评判标准和价值排序路径</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>Preliminary analysis of a motion: keyword definition, issue identification, and argument-direction planning</td></tr>
+<tr><td rowspan="2">143</td><td rowspan="2">强结</td><td rowspan="2">Assertive Closure</td><td>在任意互动环节中，在未与对方达成共识的情况下单方面宣告某一议题已经讨论完毕并强行切换至下一议题的战术。不同于强推（控制推论的节奏），强结控制的是议题的边界</td><td rowspan="2">精灵·Moon《辩论筑基》第 4 讲</td></tr>
+<tr class="eng"><td>Unilaterally declaring a topic closed and switching to the next without consensus. Not limited to free debate</td></tr>
+<tr><td rowspan="2">144</td><td rowspan="2">强推</td><td rowspan="2">Assertive Push</td><td>在未与对方就前提或定义达成共识的情况下，拒绝等待对方确认而直接推进己方的下一步推论或论证的战术。其战术价值在于掌握论证节奏的主导权、强制对方在自己的框架内回应。风险在于若裁判或观众识破前提未被认可，该推论链将被判定为无效。与强结同为控制论证方向的手段——强推控制推论的节奏，强结控制议题的边界</td><td rowspan="2">《短打与强推》</td></tr>
+<tr class="eng"><td>Advancing one's own next inference or argument without waiting for the opponent to agree on premises. Not limited to free debate</td></tr>
+<tr class="sub"><td rowspan="2"></td><td rowspan="2">(1) 问</td><td rowspan="2">Question</td><td>以极短促的问题向对方提出质询的基本进攻动作。不限于自由辩</td><td rowspan="2">《短打与强推》</td></tr>
+<tr class="sub eng"><td>Posing extremely brief questions as a basic offensive move. Not limited to free debate</td></tr>
+<tr class="sub"><td rowspan="2"></td><td rowspan="2">(2) 挡</td><td rowspan="2">Block</td><td>对对方的提问不直接回答、同类问题一次性回答或以简短逻辑拆解消解其攻击力的防守动作。不限于自由辩</td><td rowspan="2">《短打与强推》</td></tr>
+<tr class="sub eng"><td>Defensive move: not answering directly, answering similar questions together, or briefly dismantling the logic. Not limited to free debate</td></tr>
+<tr class="sub"><td rowspan="2"></td><td rowspan="2">(3) 追</td><td rowspan="2">Pursue</td><td>连续用两到三个相同逻辑的问题追问同一点的动作。不限于自由辩</td><td rowspan="2">《短打与强推》</td></tr>
+<tr class="sub eng"><td>Continuously pursuing the same point with two to three questions following the same logic. Not limited to free debate</td></tr>
+<tr class="sub"><td rowspan="2"></td><td rowspan="2">(4) 收</td><td rowspan="2">Close</td><td>将某一议题的结论明确归纳并宣告己方已取得该战场成果的动作。不限于自由辩</td><td rowspan="2">《短打与强推》</td></tr>
+<tr class="sub eng"><td>Explicitly summarizing the conclusion of a topic and declaring battlefield victory on that point. Not limited to free debate</td></tr>
+<tr class="sub"><td rowspan="2"></td><td rowspan="2">(5) 转</td><td rowspan="2">Transition</td><td>从一个已讨论完毕的议题切换到下一个议题的动作。不限于自由辩</td><td rowspan="2">《短打与强推》</td></tr>
+<tr class="sub eng"><td>Transitioning from a completed topic to the next topic. Not limited to free debate</td></tr>
+<tr><td rowspan="2">145</td><td rowspan="2">抢语境</td><td rowspan="2">Framing Primacy</td><td>通过率先设定讨论框架来获取论证主动权的战术。在辩论中，率先将争议词或争议点锚定在己方选择的日常熟悉情境中进行阐释的一方，能够塑造评委与听众对后续论证的默认理解方向。传播学中框架效应的核心机制在此适用：首次接受某一框架后，后续信息均倾向于在该框架内被理解与评价</td><td rowspan="2">Entman, R. M. (1993). "Framing: Toward Clarification of a Fractured Paradigm." *Journal of Communication*, 43(4), 51–58</td></tr>
+<tr class="eng"><td>Setting the discussion frame first to gain argumentative initiative</td></tr>
+<tr><td rowspan="2">146</td><td rowspan="2">切割</td><td rowspan="2">Splitting / Distinction</td><td>将本来可能被混为一谈的两个概念或议题区分开来，分别处理。切割在定义操作中的典型应用为：区分"合法化"与"非罪化"两个不同政策选项。切割和捆绑在辩论技术操作中为对立面</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>Distinguishing two concepts or issues that might otherwise be conflated</td></tr>
+<tr><td rowspan="2">147</td><td rowspan="2">缺失比较</td><td rowspan="2">One-Sided Impact Calculus</td><td>在比较型辩题中，一方仅论述己方优势的大小或对方劣势的次要性，但始终不执行直接的比较操作即宣布结论成立的结构性论证错误。例如论证"利大于弊"时仅反复证明"利很大"，回避正面回答"为什么这个利大于那个弊"的比较问题。这是一种不完全论证——缺少论证结论所需的必要条件</td><td rowspan="2">辩论学术圈术语</td></tr>
+<tr class="eng"><td>Only stating one's own advantages without performing direct comparison, yet announcing the conclusion</td></tr>
+<tr><td rowspan="2">148</td><td rowspan="2">拖时间</td><td rowspan="2">Time Suck</td><td>通过提出需要大量时间才能充分回应的复杂问题以消耗对方有限发言时间的战术。利用辩论赛制中双方时间平等分配的结构性特征——提出方以极简句式抛出问题（耗时极短），被问方需较长时间展开回应，造成双方在同一议题上的时间投入严重不对等</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate: Critical Thinking for Reasoned Decision Making*, 13th ed.</td></tr>
+<tr class="eng"><td>Exploiting asymmetric time rules: posing a complex question that takes the opponent much longer to answer</td></tr>
+<tr><td rowspan="2">149</td><td rowspan="2">妖论</td><td rowspan="2">Squirrelling</td><td>以反常、过度窄化或极具创意的方式定义辩题使己方获得不正当优势。为英国议会制辩论的核心术语——定义若与辩题字面矛盾或大幅缩减其自然覆盖范围即构成无效定义。子类型包括地域限定和时间限定</td><td rowspan="2">World Universities Debating Championship (WUDC) 2016 Rules</td></tr>
+<tr class="eng"><td>Unfairly defining the motion in an abnormal or overly narrow way to gain advantage (BP term)</td></tr>
+<tr><td rowspan="2">150</td><td rowspan="2">轶事证据</td><td rowspan="2">Anecdotal Evidence</td><td>以孤立、未经验证的个人经历或个案叙述为基础的非正式证据形式。单一或少数案例的存在不能逻辑地推导出关于总体的任何一般性结论。在严肃论证中仅可用作假设来源或例证补充</td><td rowspan="2">Copi, I. M., Cohen, C., & McMahon, K. (2014). *Introduction to Logic*, 14th ed.</td></tr>
+<tr class="eng"><td>Informal evidence based on isolated personal experience, lacking statistical representativeness</td></tr>
+<tr><td rowspan="2">151</td><td rowspan="2">诱导性问题</td><td rowspan="2">Leading Question</td><td>在提问中嵌入了预设答案或期望方向的询问方式，使被问者只能沿发问者的推导路径回答。在质询环节中诱导性问题是合法战术工具但过度使用以替代论证则违反诚信原则。英美证据法规则中对本方证人禁止使用</td><td rowspan="2">Federal Rules of Evidence 611(c)</td></tr>
+<tr class="eng"><td>A question embedding a presupposed answer, forcing the respondent along the questioner's line</td></tr>
+<tr><td rowspan="2">152</td><td rowspan="2">战场</td><td rowspan="2">Battlefield</td><td>辩论中所围绕的争论话题区域。根据辩题、对手、评委及各环节配合，将辩题分解为若干子议题进行分块攻防的战术组织方式</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate*</td></tr>
+<tr class="eng"><td>Organizing arguments into strategic topic areas for systematic attack and defense. Topic areas around which debate revolves</td></tr>
+<tr><td rowspan="2">153</td><td rowspan="2">战场划分</td><td rowspan="2">Battlefield Organization / Flow Strategy</td><td>在辩论比赛（主要是自由辩论）中依据预先编制的流水单将主张、推理、论据按主题区块依次展示的战术组织方式。战场的设置是战术的预设——辩手根据辩题、对手、评委及各环节配合决定战场划分策略。实质是将论证资源按战略意图进行分块组织，以实现论证推进的最大效率</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate*</td></tr>
+<tr class="eng"><td>Organization of claims, reasoning, and evidence by topic blocks in debate</td></tr>
+</table>
+<h2>九、裁判分类</h2>
+<table>
+<tr><th>#</th><th>中文</th><th>英文</th><th>定义</th><th>出处</th></tr>
+<tr><td rowspan="2">154</td><td rowspan="2">白纸裁</td><td rowspan="2">Tabula Rasa Judge</td><td>英美辩论裁判范式之一。裁判在进入赛场前清空自身关于辩题的专业知识与个人立场，仅在场上双方提出的论证范围内进行裁决。拉丁语 Tabula Rasa 意为"空白石板"。是程序公正原则在辩论裁判领域的体现</td><td rowspan="2">CEDA / NDT 辩论裁判范式；Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>A judge who clears their own knowledge and decides solely based on arguments presented in the round</td></tr>
+<tr><td rowspan="2">155</td><td rowspan="2">辩手裁</td><td rowspan="2">Technical Judge / Flow Judge</td><td>由具有辩论竞赛经验的辩手担任的裁判类型。以论点记录为依据逐点裁决，侧重对论证技术质量的评估——包括论证结构完整度、反驳精度、战场管理能力等。在美式辩论中对应 Flow Judge：严格依据场上论点记录裁决，不引入个人对辩题的知识或立场</td><td rowspan="2">Debate Land 2023 Judge Paradigm Taxonomy；Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>A judge with debate experience, focusing on technical argument quality. Flow Judge equivalent</td></tr>
+<tr><td rowspan="2">156</td><td rowspan="2">裁判回避</td><td rowspan="2">Judge Recusal</td><td>裁判在与辩方存在亲属关系、利害关系或其他可能影响公正评判的关系时应当主动回避的程序原则。目的是保障裁决的中立性和公正性</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>Judges must recuse themselves when they have conflicts of interest</td></tr>
+<tr><td rowspan="2">157</td><td rowspan="2">诚信原则</td><td rowspan="2">Good Faith Principle</td><td>辩论参与方应诚实、善意地参与论辩的伦理要求。辩手不得故意提供虚假证据，评委不得对双方提出的证据做任意取舍。诚信原则是辩论制度得以运行的伦理基础</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>Debaters must participate honestly and in good faith—no fabricated evidence</td></tr>
+<tr><td rowspan="2">158</td><td rowspan="2">技术裁</td><td rowspan="2">Technical Judge</td><td>由具有辩论经验的辩手担任的裁判类型。侧重对论证技术质量的评判——包括论证结构的完整度、反驳的精度、战场管理的能力等。对应美式辩论中的 Flow Judge——以论点记录为依据逐点裁决</td><td rowspan="2">Debate Land 2023 Judge Paradigm Taxonomy</td></tr>
+<tr class="eng"><td>A judge with debate experience, focusing on technical argument quality. Equivalent to Flow Judge</td></tr>
+<tr><td rowspan="2">159</td><td rowspan="2">客观裁</td><td rowspan="2">Objective Judge</td><td>以双方论证的客观表现为唯一评判依据的裁判类型。完全依据场上呈现的论点、论据与交锋记录进行裁决，排除个人偏好、专业背景与主观判断的介入。与主观裁和心证裁相对——后者主动介入主观判断。在裁判范式谱系中处于低介入端，接近白纸裁但允许裁判运用基本逻辑法则进行推理检验</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate*</td></tr>
+<tr class="eng"><td>A judge who decides based solely on the objective performance of both sides</td></tr>
+<tr><td rowspan="2">160</td><td rowspan="2">评议不公开</td><td rowspan="2">Private Deliberation</td><td>裁判组在比赛结束后独立评议的程序原则。裁判以比赛内容为基础认定辩论成果并做出判决。在评议中若产生意见分歧，默认以多数原则决议</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>The judging panel independently evaluates the debate based on its content after the round</td></tr>
+<tr><td rowspan="2">161</td><td rowspan="2">社会裁</td><td rowspan="2">Lay Judge</td><td>不具备专业辩论背景的裁判。主要依据社会经验和常识进行评判，容易受演说技巧、情感渲染等非论证因素影响。通常被认为较接近社会公众的认知方式</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>A judge without specialized debate training, relying on social experience and common sense</td></tr>
+<tr><td rowspan="2">162</td><td rowspan="2">心证裁</td><td rowspan="2">Interventionist Judge</td><td>裁判范式中处于高介入端的一种类型。允许裁判将自身经验、专业知识与价值判断作为积极要素纳入论证评估，不以场上双方提出的论证为唯一判据。干预主义裁判与白纸裁构成理论上的两极谱系——白纸裁判要求排除一切外在知识仅凭场上论证裁决，干预主义裁判则承认裁判的主观认知不可避免地参与评判过程</td><td rowspan="2">Freeley, A. J. & Steinberg, D. L. (2013). *Argumentation and Debate: Critical Thinking for Reasoned Decision Making*, 13th ed.</td></tr>
+<tr class="eng"><td>A judge who actively incorporates personal judgment and values into the evaluation of arguments</td></tr>
+<tr><td rowspan="2">163</td><td rowspan="2">专业裁</td><td rowspan="2">Expert Judge</td><td>在辩题涉及的专业领域具备专门知识的裁判。由于对特定议题已有深入涉猎和既定立场，可能因场上选手发言不符合其专业认知而直接拒斥论证。与白纸裁相对——白纸裁刻意排除专业知识，专业裁依赖专业知识</td><td rowspan="2">Freeley & Steinberg (2013)</td></tr>
+<tr class="eng"><td>A judge with specialized knowledge in the subject matter of the motion</td></tr>
+</table>
+<h2>十、哲学概念</h2>
+<table>
+<tr><th>#</th><th>中文</th><th>英文</th><th>定义</th><th>出处</th></tr>
+<tr><td rowspan="2">164</td><td rowspan="2">不可知论</td><td rowspan="2">Agnosticism</td><td>关于知识限度的哲学立场——主张某些命题（尤其是关于上帝、终极实在的命题）的真假在原则上不可知。由 Thomas Henry Huxley 于 1869 年创造此术语。在辩论中常被引用为论证的预设前提——但引用不可知论本身需要论证其成立</td><td rowspan="2">Huxley, T. H. (1869)</td></tr>
+<tr class="eng"><td>Certain propositions are in principle unknowable</td></tr>
+<tr><td rowspan="2">165</td><td rowspan="2">功利主义</td><td rowspan="2">Utilitarianism</td><td>以行为后果的总体效用为道德评判标准的伦理学理论。核心原则是"最大多数人的最大幸福"——一个行为的道德正确性取决于它所促进的总体幸福或福祉。由 Jeremy Bentham 提出，John Stuart Mill 发展完善。在辩论中常用于价值排序的终极标准——也是价值阶梯上溯到极限时的"元辩题"之一</td><td rowspan="2">Bentham, J. (1789). *An Introduction to the Principles of Morals and Legislation*；Mill, J. S. (1861). *Utilitarianism*</td></tr>
+<tr class="eng"><td>The ethical theory that the morally right action produces the greatest happiness for the greatest number</td></tr>
+<tr><td rowspan="2">166</td><td rowspan="2">绝对主义</td><td rowspan="2">Absolutism</td><td>伦理学立场——主张存在不依赖于任何条件、对所有理性主体都普遍适用的道德原则。在辩论中常与功利主义（后果论）或相对主义构成对立框架</td><td rowspan="2">Kant, I. (1785). *Groundwork of the Metaphysics of Morals*</td></tr>
+<tr class="eng"><td>There exist moral principles universally binding on all rational agents</td></tr>
+<tr><td rowspan="2">167</td><td rowspan="2">民粹主义</td><td rowspan="2">Populism</td><td>将社会根本性地划分为纯洁的人民与腐败的精英两个对立阵营并主张政治应表达人民普遍意志的思想体系。在辩论中引用民粹主义论证须注意诉诸大众情感本身不构成逻辑谬误——谬误在于以人民支持替代论证本身的理性检视</td><td rowspan="2">Mudde, C. (2004). The Populist Zeitgeist. *Government and Opposition*, 39(4), 541–563.</td></tr>
+<tr class="eng"><td>An ideology dividing society into the pure people versus the corrupt elite</td></tr>
+<tr><td rowspan="2">168</td><td rowspan="2">普世主义</td><td rowspan="2">Universalism</td><td>主张存在超越特定文化、历史与社会条件的普遍适用真理或道德原则的立场。在伦理学中以康德的绝对命令为典范——道德律令对一切理性存在者均具有约束力。在辩论中，普世主义与相对主义构成对立：普世主义主张同一标准适用于所有情境，相对主义主张标准依情境而定。价值辩论中常需要在两者之间做出论证选择</td><td rowspan="2">Kant, I. (1785). *Groundwork of the Metaphysics of Morals*</td></tr>
+<tr class="eng"><td>There exist universal truths or moral principles transcending specific conditions</td></tr>
+<tr><td rowspan="2">169</td><td rowspan="2">实然</td><td rowspan="2">Is / Descriptive</td><td>描述事物实际存在状态的范畴。回答"是什么"——基于经验观察与事实判断所得出的关于世界如何运作的命题。实然命题可通过经验证据和因果推理加以验证或证伪。在辩论中，实然论证的强度取决于证据质量与推理有效性。与应然构成哲学上的事实-价值区分——休谟指出从实然陈述直接推导应然结论是逻辑上不成立的跨越，摩尔进一步将此种推理错误命名为自然主义谬误</td><td rowspan="2">Hume, D. (1739). *A Treatise of Human Nature*；Moore, G. E. (1903). *Principia Ethica*</td></tr>
+<tr class="eng"><td>The descriptive category of how things actually are—based on empirical observation</td></tr>
+<tr><td rowspan="2">170</td><td rowspan="2">相对主义</td><td rowspan="2">Relativism</td><td>认知论与伦理学立场——主张真理、知识或道德价值的有效性相对于特定的文化、历史时期、社会群体或个人视角，不存在超越一切条件的绝对真理</td><td rowspan="2">Wong, D. (2006). *Natural Moralities*</td></tr>
+<tr class="eng"><td>Truth, knowledge, or moral validity is relative to culture, history, or individual perspective</td></tr>
+<tr><td rowspan="2">171</td><td rowspan="2">应然</td><td rowspan="2">Ought / Normative</td><td>规定事物应当如何存在的范畴。回答"应当怎样"——基于价值判断、道德原则或目的论预设所得出的关于理想状态的命题。应然命题无法单纯从实然命题中逻辑地导出：列举一百个是什么的事实，也无法在逻辑上证明任何一条应当如此的规范性结论。政策辩论中正方须同时完成应然论证（应当改变现状）和实然论证（现状存在损害且方案能够解决），两者的论证标准和方法论不可相互替代</td><td rowspan="2">Hume, D. (1739). *A Treatise of Human Nature*；Mackie, J. L. (1977). *Ethics: Inventing Right and Wrong*</td></tr>
+<tr class="eng"><td>The normative category of how things ought to be—based on value judgments</td></tr>
+</table>
+<script>
+function doSearch(){
+var q=document.getElementById('search').value.toLowerCase().trim();
+var tables=document.querySelectorAll('table');
+tables.forEach(function(t){
+var rows=t.querySelectorAll('tr');
+var anyVisible=false;
+rows.forEach(function(r){
+if(r.classList.contains('eng')){
+// English rows follow their parent - handled by the parent row's visibility
+return;
+}
+var engRow=r.nextElementSibling;
+var isEng=engRow&&engRow.classList.contains('eng');
+var text=(r.textContent||'').toLowerCase();
+if(!q||text.indexOf(q)>=0){
+r.classList.remove('no-match');
+if(isEng)engRow.classList.remove('no-match');
+anyVisible=true;
+}else{
+r.classList.add('no-match');
+if(isEng)engRow.classList.add('no-match');
+}
+});
+// Hide h2 if no visible rows
+var h2=t.previousElementSibling;
+if(h2&&h2.tagName==='H2'){
+h2.style.display=q&&!anyVisible?'none':'';
+}
+t.style.display=q&&!anyVisible?'none':'';
+});
+}
+</script>
+</body></html>
