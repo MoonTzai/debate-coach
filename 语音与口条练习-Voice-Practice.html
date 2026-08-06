@@ -11,6 +11,7 @@ body.dark{--bg:#0d0d0d;--card:#141414;--border:#222;--gold:#ffc000;--text:#eee;-
 body{background:var(--bg);color:var(--text);font-family:'Microsoft YaHei','PingFang SC',sans-serif;min-height:100vh}
 header{background:var(--card);padding:14px 24px 14px 80px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:relative;position:sticky;top:0;z-index:10}
 header h1{font-size:18px;color:var(--gold);position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap}
+.home-btn{position:absolute;left:20px}
 .btn-sm{background:var(--card);border:1px solid var(--border);color:var(--gray);padding:10px 14px;border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit}
 .btn-sm:hover{border-color:var(--gold);color:var(--gold)}
 nav{background:var(--card);padding:10px 20px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;justify-content:center;position:sticky;top:57px;z-index:9}
@@ -30,14 +31,14 @@ section h3{color:var(--gold);font-size:16px;margin:16px 0 8px}
 .content.open{display:block}
 #theme-toggle{background:transparent;border:1px solid var(--border);color:var(--gray);padding:10px 14px;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit}
 #theme-toggle:hover{border-color:var(--gold);color:var(--gold)}
-@media(max-width:600px){header{padding:10px 14px 10px 60px}header h1{font-size:15px;position:static;transform:none}nav{top:45px}}
+@media(max-width:600px){header{padding:10px 14px;flex-wrap:wrap;gap:6px}.home-btn{position:static;margin-right:auto}header h1{font-size:15px;position:static;transform:none;width:100%;text-align:center;order:5}header span{margin-left:auto}nav{top:auto;position:static}}
 </style>
 </head>
 <body>
 <header>
-  <button onclick="window.top.location.reload()" class="btn-sm" style="position:absolute;left:20px">主页</button>
+  <button onclick="window.top.location.reload()" class="btn-sm home-btn">主页</button>
   <h1>语音与口条练习</h1>
-  <span><button id="theme-toggle" onclick="toggleTheme()">界面颜色</button></span>
+  <span style="display:flex;gap:8px;align-items:center;margin-left:auto"><button id="theme-toggle" onclick="toggleTheme()">界面颜色</button></span>
 </header>
 <nav>
   <a href="#shengly" onclick="toggleSection('shengly');return false">▸ 声律启蒙</a>
