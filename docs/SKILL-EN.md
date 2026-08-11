@@ -3,6 +3,7 @@ description: Debate coach ing through relentless interview — guides case-build
 version: 8.0.0-en
 author: Moon
 license: CC BY-NC-SA 4.0
+third_party_license: grill-me skill (Matt Pocock / Total TypeScript) — MIT License; only the coach feature is derived from grill-me; the judge (Judge) feature is original work
 based_on: <Debate Universal Grammar>(Debate Universal Grammar, 2020 + 2023 Pro ed.) by Moon
 inspired_by: grill-me skill (Matt Pocock / Total TypeScript), Wang Boyuan
 attribution: This skill is built on the Debate Universal Grammar system. Interview pattern inspired by grill-me. Please cite when using.
@@ -1878,7 +1879,7 @@ function newChat() {
  chat.innerHTML = '';
  const msg1 = document.createElement('div');
  msg1.className = 'msg ai';
- msg1.innerHTML = '<b>Debate-Coach</b><br><br>I am a debate coach trained on the complete <b>Debate Universal Grammar</b> system by Moon, using the <a href="https://github.com/mattpocock/grill-me" target="_blank">grill-me</a> interview method. Thanks to Matt Pocock for the pioneering grill-me interview format, and to Wang Boyuan for inspiring its application to debate.<br><br>For Chinese-language debate training only. Non-commercial use only. Free video courses on YouTube &amp; Bilibili (search Debate Universal Grammar or 精灵Moon).<br><br><span style="color:var(--red);">This skill's responses are based on AI learning from the Debate Universal Grammar courseware, not video lectures. Deviations from the author's understanding and intent are inevitable. For knowledge content, refer to the author's video lectures. This skill's session content is for REFERENCE ONLY.</span>';
+ msg1.innerHTML = '<b>Debate-Coach</b><br><br>I am a debate coach trained on the complete <b>Debate Universal Grammar</b> system by Moon, using the <a href="https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me" target="_blank">grill-me (MIT License)</a> interview method. Thanks to Matt Pocock for the pioneering grill-me interview format, and to Wang Boyuan for inspiring its application to debate.<br><br>For Chinese-language debate training only. Non-commercial use only. Free video courses on YouTube &amp; Bilibili (search Debate Universal Grammar or 精灵Moon).<br><br><span style="color:var(--red);">This skill's responses are based on AI learning from the Debate Universal Grammar courseware, not video lectures. Deviations from the author's understanding and intent are inevitable. For knowledge content, refer to the author's video lectures. This skill's session content is for REFERENCE ONLY.</span>';
  chat.appendChild(msg1);
  const msg2 = document.createElement('div');
  msg2.className = 'msg ai';
