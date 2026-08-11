@@ -27,8 +27,11 @@ Under the following terms:
 Notices:
   - The《辩论筑基》courseware and its derivative frameworks contained in this
     skill are the intellectual property of 精靈Moon.
-  - The questioning protocol format is adapted from grill-me (Matt Pocock /
-    Total TypeScript), used with gratitude under its original open license.
+  - Only the coach functionality (the questioning/coaching protocol) is
+    adapted from grill-me (Matt Pocock / Total TypeScript), used with
+    gratitude under its original MIT License. The judge (裁判所 / 裁判)
+    functionality is original work and is not derived from grill-me. See the
+    third-party notice below.
   - The academic theories referenced (Burke's New Rhetoric, Rosch's Prototype
     Theory, Entman's Framing Theory, Sperber & Wilson's Relevance Theory) are
     cited under standard academic practice and are the property of their
@@ -36,3 +39,36 @@ Notices:
   - When using this skill to generate debate content that extensively reproduces
     筑基-specific terminology and frameworks, please attribute: "基于《辩论筑基》
     （精靈Moon著）"
+
+Third-Party License Notice — grill-me (MIT)
+
+The coach questioning protocol is adapted from grill-me
+(https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me),
+created by Matt Pocock (Total TypeScript), which is distributed under the
+following MIT License:
+
+MIT License
+
+Copyright (c) 2026 Matt Pocock
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Scope: only the coach functionality is built on grill-me. The judge
+functionality (裁判所 / 裁判) and the《辩论筑基》courseware and frameworks are
+original works governed by the CC BY-NC-SA 4.0 terms above.
