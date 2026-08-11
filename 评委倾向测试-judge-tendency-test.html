@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>评委人格测试 · 三维度六向度自测</title>
+<style>
+/* ===== Apple 风格 / 编辑风设计令牌 ===== */
+:root{
+  --space-1:8px;--space-2:16px;--space-3:24px;--space-4:32px;--space-5:40px;--space-6:48px;--space-7:64px;
+  --max-width:820px;
+  --bg:#eef1f6;          /* 冷蓝灰底 */
+  --card:#ffffff;
+  --ivory:#f7f9fc;
+  --paper:#f2f5fa;
+  --ink:#123a6d;         /* 权威深海军蓝 */
+  --ink-light:#2b5ea8;
+  --ink-soft:#e7eef8;    /* 冷蓝浅底（实色） */
+  --minor:#b0bfd4;       /* 弱势向度条：可见但退让 */
+  --gold:#6f7f99;        /* 钢蓝灰点缀，占比 <10% */
+  --gold-soft:#eef2f8;
+  --text-1:#1c2333;
+  --text-2:#39445a;
+  --text-3:#5f6b80;
+  --text-4:#8b95a8;
+  --line:#dde3ec;
+  --line-soft:#e8ecf3;
+  --shadow-sm:0 1px 3px rgba(18,40,80,.06);
+  --shadow-md:0 8px 30px rgba(18,40,80,.08);
+  --radius:20px;
+  --radius-sm:12px;
+  --sans:-apple-system,'SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif;
+  --serif:Georgia,'Songti SC','STSong','Source Han Serif SC','Noto Serif CJK SC','SimSun',serif;
+}
+body.dark{
+  --bg:#0c1017;--card:#141a26;--ivory:#171e2c;--paper:#121722;
+  --ink:#f0b429;--ink-light:#ffd166;--ink-soft:#2b2412;--minor:#5a4c2c;
+  --gold:#d9b25f;--gold-soft:#241d10;
+  --text-1:#ece8df;--text-2:#c8c2b2;--text-3:#98917f;--text-4:#6f6959;
+  --line:#232c3d;--line-soft:#1f2837;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.4);--shadow-md:0 8px 30px rgba(0,0,0,.4);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text-1);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+header{flex-shrink:0;display:flex;align-items:center;gap:var(--space-2);padding:var(--space-2) var(--space-4);background:var(--card);border-bottom:1px solid var(--line)}
+header h1{font-size:17px;font-weight:700;letter-spacing:-.2px;color:var(--text-1)}
+.badge{font-size:11px;font-weight:600;letter-spacing:.4px;color:var(--ink);background:var(--ink-soft);border-radius:40px;padding:3px 14px}
+.spacer{flex:1}
+.btn-sm{background:var(--card);border:1px solid var(--line);color:var(--text-2);padding:7px 18px;border-radius:40px;cursor:pointer;font-size:13px;font-family:var(--sans);transition:border-color .2s ease,color .2s ease}
+.btn-sm:hover{border-color:var(--ink);color:var(--ink)}
+.main{flex:1;width:100%;max-width:var(--max-width);margin:0 auto;padding:var(--space-5) 20px var(--space-7)}
+.foot{color:var(--text-4);font-size:12px;text-align:center;padding:var(--space-2);flex-shrink:0}
+h2.title{font-size:28px;font-weight:700;letter-spacing:-.3px;margin-bottom:var(--space-1);color:var(--text-1)}
+.sub{color:var(--text-3);font-size:14px;line-height:1.8;margin-bottom:var(--space-4)}
+.axis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--space-2);margin-bottom:var(--space-3)}
+.axis-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:var(--space-3) var(--space-3);box-shadow:var(--shadow-sm);transition:transform .25s ease,box-shadow .3s ease}
+.axis-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.axis-card h3{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:var(--space-1)}
+.axis-card .dim{font-size:13.5px;font-weight:600;color:var(--text-1);margin-bottom:var(--space-2)}
+.axis-card p{font-size:12.5px;color:var(--text-3);line-height:1.8}
+.details{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:var(--space-3) var(--space-3);margin-bottom:var(--space-3);box-shadow:var(--shadow-sm)}
+.details summary{cursor:pointer;font-size:14px;font-weight:600;color:var(--ink)}
+.details ul{padding:var(--space-2) 4px 2px 22px;display:flex;flex-direction:column;gap:var(--space-1)}
+.details li{font-size:13px;color:var(--text-3);line-height:1.8}
+.note{background:var(--gold-soft);border:1px solid var(--line);border-radius:var(--radius-sm);padding:var(--space-2) var(--space-3);font-size:12.5px;color:var(--text-2);line-height:1.8;margin-bottom:var(--space-3)}
+.btn-main{background:var(--ink);color:#fff;border:none;border-radius:60px;padding:13px 32px;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;box-shadow:var(--shadow-sm);transition:opacity .2s ease,transform .2s ease}
+body.dark .btn-main{background:var(--ink-light);color:#141413}
+.btn-main:hover{opacity:.85;transform:translateY(-1px)}
+.btn-main:active{opacity:.7;transform:scale(.98)}
+.btn-ghost{background:var(--card);border:1px solid var(--line);color:var(--text-2);border-radius:60px;padding:13px 24px;font-size:14px;font-family:var(--sans);cursor:pointer;transition:border-color .2s ease,color .2s ease}
+.btn-ghost:hover{border-color:var(--ink);color:var(--ink)}
+.row{display:flex;gap:var(--space-2);align-items:center;flex-wrap:wrap}
+.progress-wrap{margin-bottom:var(--space-3)}
+.progress-text{font-size:12px;color:var(--text-3);margin-bottom:var(--space-1)}
+.progress-bar{height:6px;background:var(--line);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:var(--ink);border-radius:4px;transition:width .25s ease}
+.qbox{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:var(--space-4);box-shadow:var(--shadow-sm)}
+.qscenario{font-size:15.5px;line-height:2;color:var(--text-1);margin-bottom:var(--space-3)}
+.qscenario,.opt,.sub,.profile p,.w-desc,.legend,.pole-note,.consist,.decl .hint,.cert-sum{line-break:strict}
+.qscenario .tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.4px;color:var(--ink);background:var(--ink-soft);border-radius:40px;padding:3px 14px;margin-bottom:var(--space-2)}
+.opt{width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:var(--space-2) var(--space-3);margin-bottom:var(--space-2);cursor:pointer;font-size:14.5px;line-height:1.8;color:var(--text-1);font-family:var(--sans);transition:border-color .2s ease,transform .2s ease,box-shadow .25s ease}
+.opt:hover{border-color:var(--ink);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.opt .opt-key{color:var(--ink);font-weight:700;margin-right:8px}
+.opt.sel{border-color:var(--ink);background:var(--ink-soft);box-shadow:0 0 0 1px var(--ink)}
+.intensity{margin-top:var(--space-1);padding-top:var(--space-3);border-top:1px solid var(--line-soft)}
+.intensity .lbl{font-size:13px;color:var(--text-3);margin-bottom:var(--space-2)}
+.int-row{display:flex;gap:var(--space-2);flex-wrap:wrap}
+.int-btn{flex:1;min-width:150px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:var(--space-2) var(--space-2);cursor:pointer;color:var(--text-2);font-size:13px;line-height:1.7;text-align:left;font-family:var(--sans);transition:border-color .2s ease}
+.int-btn:hover{border-color:var(--ink)}
+.int-btn .k{font-weight:700;color:var(--ink)}
+.int-btn.sel{border-color:var(--ink);background:var(--ink-soft);box-shadow:0 0 0 1px var(--ink)}
+.nav-row{display:flex;justify-content:space-between;margin-top:var(--space-4)}
+/* ===== 鉴定书：编辑风证书 ===== */
+.cert{position:relative;background:var(--card);border-radius:24px;padding:var(--space-6) var(--space-5) var(--space-5);text-align:center;box-shadow:var(--shadow-md);border:1px solid var(--line);margin-bottom:var(--space-3)}
+.cert-eyebrow{font-size:12px;font-weight:600;letter-spacing:3px;color:var(--text-4);text-transform:uppercase}
+.cert-head{font-family:var(--serif);font-size:30px;font-weight:600;letter-spacing:.3em;color:var(--ink);margin:var(--space-2) 0 var(--space-2);text-indent:.3em}
+.cert-rule{width:56px;height:2px;background:var(--gold);margin:0 auto var(--space-3)}
+.cert-serial{font-size:12px;font-family:Georgia,'Times New Roman',serif;color:var(--text-4);letter-spacing:1px}
+.stamp{position:absolute;right:var(--space-4);top:var(--space-4);width:64px;height:64px;border:1.5px solid var(--gold);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--gold);transform:rotate(-8deg);opacity:.85;background:var(--gold-soft)}
+.stamp .s1{font-size:16px;font-weight:700;font-family:Georgia,serif;line-height:1;letter-spacing:.5px}
+.stamp .s2{font-size:8px;letter-spacing:2px;margin-top:2px;font-weight:600}
+.type-code{display:flex;justify-content:center;align-items:flex-start;gap:36px;margin:var(--space-5) 0 var(--space-4)}
+.tl{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:64px}
+.tl b{font-family:Georgia,'Times New Roman',serif;font-size:84px;font-weight:400;line-height:1;color:var(--ink)}
+.tl small{font-size:12px;color:var(--text-3);letter-spacing:2px}
+.tl.x b{color:var(--text-4)}
+.tl-sep{font-family:Georgia,serif;font-size:28px;line-height:1;color:var(--gold);margin-top:34px}
+.nickname{font-size:30px;font-weight:700;letter-spacing:.5px;color:var(--text-1);margin-top:var(--space-1)}
+.nickname small{font-size:17px;font-weight:400;color:var(--gold);margin-left:10px;font-family:Georgia,serif;letter-spacing:.5px}
+.motto{font-size:16px;color:var(--text-3);margin:var(--space-2) 0 var(--space-2)}
+.motto b{color:var(--gold);font-weight:600}
+.cert-sum{font-size:12.5px;color:var(--text-4);letter-spacing:.5px}
+/* ===== 结果区 ===== */
+.axis-grid.stacked{grid-template-columns:1fr;gap:var(--space-2)}
+.axis-card.res{border-left:2px solid var(--ink)}
+.res-head{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-4);margin-bottom:var(--space-1)}
+.axis-row{display:flex;align-items:center;gap:var(--space-3);margin:var(--space-3) 0 var(--space-2)}
+.axis-pole{flex:1 1 0;min-width:0}
+.axis-pole.right{text-align:right}
+.pole-name{font-size:15px;font-weight:700;color:var(--text-3);margin-bottom:4px;font-variant-numeric:tabular-nums}
+.pole-name .pct{color:var(--ink);font-weight:700;margin-left:2px}
+.axis-pole.dominant .pole-name{color:var(--ink)}
+.pole-note{font-size:11.5px;color:var(--text-3);line-height:1.7}
+.axis-track{flex:1.8 1 0;min-width:200px}
+.axis-line{position:relative;height:12px}
+.axis-line::before{content:'';position:absolute;left:0;right:0;top:50%;height:2px;transform:translateY(-50%);background:var(--line);border-radius:2px}
+.axis-line::after{content:'';position:absolute;left:50%;top:-14px;bottom:-14px;width:1.5px;background:var(--text-4);transform:translateX(-50%);opacity:.9;z-index:0}
+.axis-bar{position:absolute;top:1px;height:10px;background:var(--minor);border-radius:8px;z-index:1}
+.axis-bar.dom{background:var(--ink)}
+.axis-bar.left{right:50%}
+.axis-bar.right{left:50%}
+.axis-origin{position:absolute;left:50%;top:50%;width:16px;height:16px;transform:translate(-50%,-50%);background:var(--card);border:2px solid var(--ink);border-radius:50%;z-index:2}
+.axis-score{text-align:center;font-size:12px;color:var(--text-3);margin-top:10px}
+.axis-score b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.bar-track{height:6px;background:var(--line-soft);border-radius:4px;overflow:hidden;margin-top:6px}
+.bar-fill{height:100%;background:var(--ink);border-radius:4px}
+.w-desc{font-size:12px;color:var(--text-3);line-height:1.85;margin-top:8px}
+.consist{font-size:12px;color:var(--text-3);line-height:1.8;margin-top:var(--space-2);padding-top:var(--space-2);border-top:1px solid var(--line-soft)}
+.profile{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:var(--space-4);margin:var(--space-2) 0;box-shadow:var(--shadow-sm)}
+.profile .p-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:var(--space-2)}
+.profile .p-head h3{font-size:19px;font-weight:600;color:var(--ink)}
+.profile .p-head .en{font-size:14px;color:var(--text-4);font-family:Georgia,serif}
+.profile .p-motto{border-left:2px solid var(--gold);padding:4px 0 4px 16px;color:var(--text-2);font-size:14px;margin:0 0 var(--space-3)}
+.profile p{font-size:14.5px;line-height:1.9;color:var(--text-2);margin-bottom:var(--space-2)}
+.chars-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:var(--space-2);padding-top:var(--space-2);border-top:1px solid var(--line-soft)}
+.chars-lbl{font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap}
+.chip{background:var(--ink-soft);color:var(--ink);border-radius:40px;padding:3px 12px;font-size:12px;font-weight:600;white-space:nowrap}
+.legend{font-size:12px;color:var(--text-3);line-height:2;background:var(--ivory);border:1px solid var(--line);border-radius:var(--radius-sm);padding:var(--space-2) var(--space-3);margin-bottom:var(--space-2)}
+.legend b{color:var(--ink);font-weight:600}
+.weights{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:var(--space-4);margin:var(--space-2) 0;box-shadow:var(--shadow-sm)}
+.weights h3{font-size:19px;font-weight:600;color:var(--ink);margin-bottom:var(--space-3)}
+.weights .w-sub{font-size:12px;color:var(--text-4);margin:-6px 0 16px;line-height:1.7}
+.w-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--space-3)}
+.w-item .w-name{font-size:12.5px;color:var(--text-2);margin-bottom:4px;display:flex;justify-content:space-between}
+.w-item .w-name .pct{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.share{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:var(--space-4);margin:var(--space-2) 0;box-shadow:var(--shadow-sm)}
+.share h3{font-size:19px;font-weight:600;color:var(--ink);margin-bottom:var(--space-2)}
+.share p{font-size:13px;color:var(--text-3);line-height:1.9;margin-bottom:var(--space-3)}
+.share img{width:100%;max-width:440px;display:block;margin:0 auto var(--space-3);border-radius:var(--radius-sm);border:1px solid var(--line);box-shadow:var(--shadow-md)}
+.decl{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:var(--space-4);margin:var(--space-2) 0;box-shadow:var(--shadow-sm)}
+.decl h3{font-size:19px;font-weight:600;color:var(--ink);margin-bottom:var(--space-2)}
+.decl textarea{width:100%;height:230px;background:var(--ivory);color:var(--text-2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:var(--space-2) var(--space-3);font-size:13px;line-height:1.9;font-family:var(--sans);resize:vertical;margin-bottom:var(--space-2)}
+.decl .hint{font-size:12px;color:var(--text-4);line-height:1.8;margin-top:var(--space-2)}
+body.dark .toast{background:var(--ink-light);color:#141413}
+.hidden{display:none!important}
+@media (max-width:700px){
+  .main{padding:var(--space-3) 14px var(--space-6)}
+  .cert{padding:var(--space-5) var(--space-3) var(--space-4)}
+  .type-code{gap:24px}
+  .tl b{font-size:68px}
+  .tl-sep{line-height:68px;font-size:20px}
+  .stamp{right:var(--space-2);top:var(--space-2)}
+  .qbox{padding:var(--space-3)}
+}
+@media (max-width:560px){
+  .axis-row{flex-direction:column;align-items:stretch;gap:var(--space-2)}
+  .axis-track{min-width:0}
+  .axis-pole.right{text-align:right}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1 id="hdr-title">评委人格测试</h1>
+  <div class="spacer"></div>
+  <button class="btn-sm" onclick="window.top.location.reload()" id="hdr-home">主页</button>
+  <button class="btn-sm" onclick="toggleLang()" id="lang-btn">EN</button>
+  <button class="btn-sm" onclick="toggleTheme()" id="hdr-theme">界面颜色</button>
+</header>
+<div id="app" class="main"></div>
+<div class="foot" id="hdr-foot">数据仅保存在本机浏览器</div>
+<script>
+var LS_KEY='debate_judge_tendency_v2';
+var LANG=(localStorage.getItem('debate_coach_lang')||'zh')==='en'?'en':'zh';
+var T={
+  themeBtn:['界面颜色','Theme'],
+  homeBtn:['主页','Home'],
+  introTitle:['测出你的评委人格：三字母代码','Find Your Judge Profile: A 3-Letter Code'],
+  introSub:['基于《辩论筑基》裁判体系与 Debate-Judge V1.0 设计。12 个判赛现场，每题两个选项都来自「好裁判会做的事」，只是取向不同。答完你会得到三个字母（C/J · G/S · T/A，X=中立），像 MBTI 一样好记、好分享，也能复制正式声明用于赛前入场。','Based on the Debate-Judge V1.0 framework. 12 judging scenarios — both options in each are things good judges do, just with different leanings. You get a three-letter code (C/J · G/S · T/A, X = flexible), shareable like an MBTI type, plus a formal declaration you can use before a match.'],
+  whyTitle:['为什么这样测？','Why this format?'],
+  why1:['旧版问「符不符合你」：六个方向都是好品质，大家都会选「大致符合」，测不出差别。','The old “does this describe you” format fails: all six directions are virtues, so everyone picks “roughly yes” — no discrimination.'],
+  why2:['新版每道题都给你两个「好裁判都会做」的选择，逼你只选一个——没有全选这条路。','Every item offers two things good judges would do and forces a choice — there is no “select all.”'],
+  why3:['题目都是具体场面，不问你抽象想法，更接近你真的坐在评委席上会怎么判。','Items are concrete scenes, not abstract self-ratings — closer to what you would actually do on the bench.'],
+  why4:['只比每一根轴内部偏哪边，不比谁更好；也不告诉你题目在测哪根轴，免得你猜到意图后「自我修正」。','Only relative preference within each axis is measured, not “how good you are”; the axis being tested stays hidden so you cannot game it.'],
+  why5:['A/B 位置在每根轴内严格对半轮换；先选方向、再选强度，强度用「会不会写进评语/判准」这类行为锚定，而不是空泛的「多确定」。','A/B positions are strictly balanced within every axis; after the direction, the weight step is anchored to behavior (would it go into your comments/criteria), not vague confidence.'],
+  note:['⚠️ 本工具是自我认识与赛前倾向声明的启发式工具，不是经学术验证的心理量表。结果会受具体情境影响，建议用 2-3 场真实比赛对照校准。','⚠️ This is a self-insight and pre-match declaration aid, not a validated psychological scale. Results vary by situation; cross-check with 2–3 real matches.'],
+  start:['开始测试（12 题 · 约 6 分钟）','Start (12 items · ~6 min)'],
+  resume:['继续上次进度（','Resume ('],
+  restart:['重新开始','Restart'],
+  itemOf:['第 ','Item '],
+  of:[' / ',' / '],
+  item:['题',''],
+  sceneTag:['判赛现场','Judging scene'],
+  weightLbl:['这一判法在你心里的分量（无对错，按你真实会怎么做选）：','How much weight would this ruling carry for you? (No right answer — choose what you would actually do)'],
+  mild:['轻微 · 1','Mild · 1'],
+  mildD:['只影响我心里对这一环的印象，不会写进评语或判准','Only shapes my private impression of this exchange; I would not put it in my comments or criteria'],
+  clear:['明显 · 2','Clear · 2'],
+  clearD:['我会把它明确写进判准说明，作为本场重要依据','I would write it into my judging criteria as an important basis for this round'],
+  strong:['强烈 · 3','Strong · 3'],
+  strongD:['这会成为本场裁决的主要判准之一，几乎每场这类局面我都这么判','This would be one of my primary criteria for the decision; I would rule this way in almost every such round'],
+  back:['上一题','Back'],
+  next:['下一题','Next'],
+  finish:['查看鉴定','See Result'],
+  certEyebrow:['《辩论筑基》· DEBATE JUDGE · 三维度六向度自测','《辩论筑基》· DEBATE JUDGE · 3-Axis · 6-Direction Self-Test'],
+  certHead:['评委人格鉴定书','JUDGE PROFILE CERTIFICATE'],
+  neutral:['中立','Neutral'],
+  neutralFull:['中立（灵活）','Flexible / Neutral'],
+  neutralDesc:['两向度权重接近，随情境浮动','Both directions are nearly balanced; it shifts with the situation'],
+  profileHead:['人物侧写 · ','JUDGE PROFILE · '],
+  animeLabel:['二次元投影：','Anime counterparts: '],
+  legend:['三字母 = 每根轴各取一端：<b>C</b> 批判者 Critic / <b>J</b> 审判者 Judge · <b>G</b> 卫道者 Guardian / <b>S</b> 问道者 Seeker · <b>T</b> 技术者 Technician / <b>A</b> 艺术者 Artist · <b>X</b> = 中立灵活。顺序：证明轴 · 说服轴 · 第三方轴。','The code takes one end of each axis: <b>C</b> Critic / <b>J</b> Judge · <b>G</b> Guardian / <b>S</b> Seeker · <b>T</b> Technician / <b>A</b> Artist · <b>X</b> = flexible. Order: Proof · Persuasion · Third-Party.'],
+  weightsTitle:['六向度权重','Six-Direction Weights'],
+  weightsSub:['百分比 = 你在该向度上的轴内相对权重；释义为通俗转写，另挂靠相关学科视角。','Percentages are your relative weight within each axis; explanations are plain-language glosses with academic hooks.'],
+  shareTitle:['鉴定结果分享','Share Result'],
+  saveShare:['保存 / 分享','Save / Share'],
+  editAns:['修改答案','Edit Answers'],
+  retest:['重新测试','Restart'],
+  declTitle:['给比赛用的正式声明','Formal Declaration (for the Chinese pipeline)'],
+  copyDecl:['复制正式声明','Copy Declaration'],
+  declHint:['本正式声明导入《辩论筑基》·Debate-Coach/Debate-Judge的复盘/评委流程，即可复刻倾向一致的诊断流程','This declaration stays in Chinese for compatibility with the 《辩论筑基》·Debate-Coach/Debate-Judge pipeline; import it there to reproduce a consistent diagnostic flow.'],
+  copied:['已复制','Copied'],
+  copyFail:['复制失败，请手动选择复制','Copy failed — select and copy manually'],
+  confirmReset:['确定清空全部答案重新测试？','Clear all answers and restart?'],
+  downloadStart:['已开始下载','Download started'],
+  capSaved:['已导出，文件保存在应用文档目录：Debate-Coach/','Exported. Saved to app documents: Debate-Coach/'],
+  foot:['数据仅保存在本机浏览器','Data stays in this browser'],
+  consist1:['四题方向一致，该轴倾向稳定。','All four items point the same way — this axis is stable.'],
+  consist2:['四题中有一题与另三题相反：倾向基本明确，但受具体情境影响。','Three of four point one way: the tendency is clear but situation-sensitive.'],
+  consist3:['四题两两相反：该轴没有稳定倾向，结果主要由选择强度拉开。','Two against two: no stable tendency — the result is driven mostly by chosen weights.'],
+  consistN:[' 净分接近零，实际判赛大概率随情境浮动。',' Net score is near zero — in practice this axis will likely float with the situation.'],
+  detailPrefix:['答题情况：','Your choices: '],
+  answerMild:['轻微','Mild'],
+  answerClear:['明显','Clear'],
+  answerStrong:['强烈','Strong'],
+  bandNeutral:['中立','Neutral'],
+  bandSlight:['轻微偏','Slight'],
+  bandMarked:['明显偏','Marked'],
+  bandStrong:['强烈偏','Strong'],
+  score:[' 分 · ',' pts · '],
+  neutralShort:['中立灵活','flexible'],
+  certSum:['证明轴：','Proof: '],
+  certSum2:[' · 说服轴：',' · Persuasion: '],
+  certSum3:[' · 第三方轴：',' · Third-Party: '],
+  profileFooter:['辩论筑基 · Debate Coach · Debate Judge · ','《辩论筑基》· Debate Coach · Debate Judge · '],
+  entryPre:['本场我以','For this match I enter as '],
+  entryPost:['身份入场。S2-S8的证据[支持/部分挑战/不改变]这个倾向。','. S2–S8 evidence [supports / partially challenges / does not change] this tendency.']
+};
+function t(k){var a=T[k];return LANG==='en'?(a&&a[1]!==undefined?a[1]:k):(a?a[0]:k);}
+var AXES={
+  proof:{name:'证明轴',nameEn:'Proof Axis',dim:'一条理由，怎样才算成立？',dimEn:'What makes a claim stand?',pos:'critic',neg:'judge',posCode:'批',negCode:'审',posEn:'C',negEn:'J',posEnName:'Critic',negEnName:'Judge',posName:'批判者',negName:'审判者',posNameEn:'Critic',negNameEn:'Judge',posNote:'看攻防——被拆倒才算输',negNote:'看自己——必须自己站得住',posNoteEn:'Attack decides — if nobody takes it down, it stands',negNoteEn:'Self-proof — every claim must stand on its own',posDesc:'欣赏主动拆解交锋，未被攻击的点视为成立',negDesc:'像法官看举证，必须充分自证',posDescEn:'Values active dismantling; unattacked points stand',negDescEn:'Like a judge weighing evidence; must fully prove itself',plain:'批判者：看攻防——被拆倒才算输，没被碰过就算赢。审判者：看自己——每个理由都得自己站得住，没人拆也不能免检。',plainEn:'Critic: attack decides — a claim knocked down loses, one never touched stands. Judge: self-proof decides — every claim must stand on its own, even if untouched.'},
+  persuasion:{name:'说服轴',nameEn:'Persuasion Axis',dim:'什么样的道理更打动你？',dimEn:'What kind of reasoning moves you?',pos:'guardian',neg:'seeker',posCode:'卫',negCode:'问',posEn:'G',negEn:'S',posEnName:'Guardian',negEnName:'Seeker',posName:'卫道者',negName:'问道者',posNameEn:'Guardian',negNameEn:'Seeker',posNote:'信常识、求稳妥',negNote:'爱新意、挑战常识',posNoteEn:'Trusts common sense and stability',negNoteEn:'Values new perspectives and bold thinking',posDesc:'赞赏客观、常识期待、安全满足',negDesc:'看重新视角、挑战常识、刺激启迪',posDescEn:'Values objectivity, common-sense expectations, safety & satisfaction',negDescEn:'Values new perspectives, challenging common sense, stimulation & enlightenment',plain:'卫道者：信常识——符合大家直觉、听起来稳妥的道理更可靠。问道者：爱新意——能让人「原来还能这么想」的视角更值钱。',plainEn:'Guardian: trusts common sense — what sounds reasonable and stable is more believable. Seeker: loves novelty — a view that makes you think “I never saw it that way” is worth more.'},
+  third:{name:'第三方轴',nameEn:'Third-Party Axis',dim:'你更在意比赛的过程还是余味？',dimEn:'Do you weigh the match or the aftertaste?',pos:'technician',neg:'artist',posCode:'技',negCode:'艺',posEn:'T',negEn:'A',posEnName:'Technician',negEnName:'Artist',posName:'技术者',negName:'艺术者',posNameEn:'Technician',negNameEn:'Artist',posNote:'看规则、看完成度',negNote:'看深度、看余味',posNoteEn:'Rules, rhythm, completion',negNoteEn:'Depth, resonance, meaning',posDesc:'追求赛会规则、赛场范式',negDesc:'注重审美、整体感觉',posDescEn:'Pursues tournament rules, format paradigms',negDescEn:'Values aesthetics, holistic impression',plain:'技术者：看规范——规则、节奏、回合完整，才像一场正式比赛。艺术者：看深度——打得漂亮不如留下东西，深刻才记得住。',plainEn:'Technician: values regulation — a clean, well-run match with complete rounds. Artist: values depth — spectacle fades, what remains matters.'}
+};
+var QUESTIONS=[
+  {id:'p1',axis:'proof',a:{pole:'critic',text:'攻防没打下来的点，就是对方的得分点。我不替反方补刀。'},b:{pole:'judge',text:'一条理由成不成立，得看它自己站不站得住。没人打它不等于它必然对，我会自己核一遍。'},scenario:'比赛进入尾声，正方一辩最看重的那条理由——「匿名会让人变得不负责任」——从头到尾没人反驳。反方把火力全放在别的战场。复盘时，反方说：「没打它，不代表它就对。」正方说：「没人拆，它当然站着。」',en:{scenario:'Late in the match, the affirmative’s central claim — “anonymity makes people irresponsible” — is never challenged. The negative focuses on other ground. In review, the negative says: “We didn’t attack it, so that doesn’t mean it’s true.” The affirmative says: “Nobody took it down, so it stands.”',a:'Points nobody attacks are points the other side keeps. I don’t attack for the negative.',b:'A claim stands on its own merits, not on whether it was attacked. I verify it myself.'}},
+  {id:'s1',axis:'persuasion',a:{pole:'guardian',text:'想推翻大家的直觉，就得拿出加倍的理由。它让我觉得别扭，我就得多要一点证据才肯信。'},b:{pole:'seeker',text:'能让我「咦」一声的新想法，本身就是本事。只要人家立得住，我不该因为它反常识就扣分。'},scenario:'正方上来就把辩题里的关键词换了个奇怪的定义，和观众的第一感觉完全相反。听起来很别扭，但后面一整场，他们把这个定义用得滴水不漏，没人能挑出毛病。反方始终按大家习惯的理解打。',en:{scenario:'The affirmative redefines a key term in a way that feels completely counterintuitive. It sounds odd, but they use it flawlessly all match and nobody breaks it. The negative sticks to the common reading.',a:'To overturn common intuition, you need much stronger support. It feels wrong to me, so I ask for more evidence before I trust it.',b:'A new idea that makes me go “huh” is a skill in itself. If it holds up, I won’t penalize it just for being counterintuitive.'}},
+  {id:'t1',axis:'third',a:{pole:'technician',text:'比赛打得干净利落、有来有回，这就是完成度。热闹不是缺点，是本事。'},b:{pole:'artist',text:'我会更看重谁把问题挖得更深：节奏慢一点可以接受，内容厚度才是比赛真正留下的东西。'},scenario:'反方今天像开了倍速：正方话音刚落，他们就接上，你来我往非常热闹，观众席掌声不断。但仔细听，他们翻来覆去都是那几句老话。正方回应慢半拍，节奏有点闷，可每一次开口，都把问题往深处挖了一截。',en:{scenario:'The negative answers instantly all match — fast, lively, applause. But listen closely: it’s the same old lines. The affirmative is slower and a bit dull, but every speech digs deeper.',a:'Clean, rapid exchange is completion. Liveliness is not a flaw; it’s a skill.',b:'I care more about who digs deeper. Slow pace is fine if the content is what lasts.'}},
+  {id:'p2',axis:'proof',a:{pole:'judge',text:'质疑归质疑，证据归证据。没拿出东西就否定别人的数据，这不能算赢。'},b:{pole:'critic',text:'对方点名的问题就是打出来的拳头，你不接就是挨了。这一下我判反方得手。'},scenario:'反方二辩突然发问：「你这份数据才几十个人，凭什么代表所有人？」他没有拿出任何材料，只说「这显然不够」。正方没有接话，直接开始讲下一个点。观众席有人小声说：「好像是该回应一下吧？」',en:{scenario:'The negative suddenly asks: “Your sample is only a few dozen people — how can it represent everyone?” They offer no evidence, just “obviously not enough.” The affirmative doesn’t respond and moves on. Someone whispers: “Shouldn’t they answer that?”',a:'A doubt is not evidence. You can’t defeat a statistic by merely doubting it.',b:'A question raised is a blow thrown. If you don’t answer it, you took the hit — I give the exchange to the negative.'}},
+  {id:'s2',axis:'persuasion',a:{pole:'seeker',text:'能让人「原来还能这么想」，说明这段叙事在听众那里真正成立了——触动本身就是说服的成果，应该算数。'},b:{pole:'guardian',text:'我会先把故事放在一边，检查它的理由密度：打动人是一回事，站得住是另一回事，论证不饱满就该减分。'},scenario:'结辩时，正方讲了一个真实得让人起鸡皮疙瘩的故事，台下安静了好几秒。但整场下来，反方的理由更多、铺得更满，只是讲得平淡。评委席上有人叹气：「这故事是真打动人，可论证呢？」',en:{scenario:'In closing, the affirmative tells a true story that makes the room go quiet. All match, though, the negative had more reasons, more coverage — just told flatly. Someone sighs: “The story moves you, but the reasoning?”',a:'Making people think “I never saw it that way” means the narrative truly landed — the shift itself is persuasion and should count.',b:'I set the story aside and check the reasoning density: moving is one thing, standing is another. Thin argumentation should be marked down.'}},
+  {id:'t2',axis:'third',a:{pole:'artist',text:'比赛的价值是让双方的好内容都打出来；利用规则空档让对手内容没机会展开，即使合规，我也会在整体评价里打一点折扣。'},b:{pole:'technician',text:'比赛本来就是在规则内博弈：规则允许的做法就是合法战术，我按规则框架评价，不额外惩罚，也不额外奖励。'},scenario:'正方发现赛制有个空子：某个环节只要提前举手，就能多拿两分钟。他们完全按规则来，反方只能干瞪眼，精心准备的内容没来得及讲完。赛后反方不服：「你们这是钻空子！」正方：「规则允许，怎么叫钻空子？」',en:{scenario:'The affirmative finds a loophole: raise your hand early and gain two extra minutes. Fully within the rules; the negative watches its best prepared content go undelivered. “That’s gaming the rules!” “The rules allow it — how is that gaming?”',a:'A match’s value is letting both sides’ best content get out. Even within the rules, shutting the opponent’s content down should cost something in my overall evaluation.',b:'A match is a game within rules: what the rules permit is legitimate tactics. I judge by the rulebook — no extra penalty, no extra reward.'}},
+  {id:'p3',axis:'proof',a:{pole:'judge',text:'每轮都接住了，链子没断，这个点就还算数。打得凶不等于打倒了。'},b:{pole:'critic',text:'连挨三拳只有招架没有还手，这个点早就被打软了。不能因为它没倒就当满分。'},scenario:'自由辩论里，反方揪着正方一个论点连打了三轮：第一轮说它前提错了，第二轮说它例子不对，第三轮说它结论跳步。正方每次都挡了一下，但一句反击都没有。比赛结束时，这个点没倒，但也摇摇晃晃。',en:{scenario:'In free debate, the negative attacks one affirmative point three times: premise wrong, example wrong, conclusion jumps. The affirmative parries each time but never counters. At the end, the point hasn’t collapsed — but it’s wobbling.',a:'Every parry kept the chain intact, so the point still counts. Fierce attack is not the same as a kill.',b:'Three hits with only blocks and no counter — the point is already softened. “Not dead” is not the same as full credit.'}},
+  {id:'s3',axis:'persuasion',a:{pole:'guardian',text:'结论要是跟大多数人的直觉拧着来，我就得警惕：是不是哪一步偷换了概念？越是顺，越要查。'},b:{pole:'seeker',text:'每一步都对，结论就不该因为「大家觉得怪」就作废。觉得怪，说不定只是常识没跟上。'},scenario:'反方用一套严密的推理，一步步推出一个反直觉的结论：「所以，我们越保护隐私，隐私反而越危险。」每一步听起来都对，但合在一起，台下普遍觉得哪里不对劲。反方辩手自信地看着评委。',en:{scenario:'The negative builds a rigorous chain to a counterintuitive conclusion: “So the more we protect privacy, the more dangerous it is.” Every step sounds right, but together it feels off to most of the room. The negative looks at you, confident.',a:'When a conclusion fights most people’s intuition, I get suspicious: did some step switch meanings? The smoother it sounds, the harder I check.',b:'If every step is right, the conclusion shouldn’t be discarded just because it feels odd. Feeling odd may just mean common sense hasn’t caught up.'}},
+  {id:'t3',axis:'third',a:{pole:'technician',text:'套路是大家约定俗成的尺子。你跳出尺子，我就不好量了，我不能因为「看不懂」就加分。'},b:{pole:'artist',text:'套路是服务比赛的，不是比赛的目的。能把人讲愣住还立得住，这种突破值得加分。'},scenario:'反方没有按常规套路立论，而是把整个辩题当成一个隐喻，重新讲了一个故事。一开始评委和对手都有点懵，不知道该拿什么标准衡量。但一整场下来，没人能真正击穿它。',en:{scenario:'The negative abandons the standard format and re-frames the whole motion as a metaphor, telling a story. Judges and opponents are confused at first — what yardstick applies? But all match, nobody can truly break it.',a:'Conventions are the ruler everyone agreed on. If you step off the ruler, I can’t measure you — and “I didn’t understand it” is not a reason to reward.',b:'Conventions serve the match; they aren’t the purpose. A bold reframe that stuns people and still stands deserves credit.'}},
+  {id:'p4',axis:'proof',a:{pole:'critic',text:'攻防各算各的：反方那个点被打掉了就掉分；正方那个点没人打，就还站着。我不替反方补刀，也不替正方自证。'},b:{pole:'judge',text:'漏洞就是漏洞，我不看谁先指出：两个点我都会独立核一遍，该扣的都扣，不能因为哪边没打就放过。'},scenario:'这场双方各有一个明显的逻辑漏洞。正方在自由辩论里当场指出了反方的漏洞，反方没接住；反方自始至终没有指出正方那个漏洞，正方也没有主动补强。',en:{scenario:'Both sides have an obvious logical flaw this match. In free debate, the affirmative points out the negative’s flaw on the spot; the negative can’t answer. But the negative never points out the affirmative’s flaw, and the affirmative never fixes it either.',a:'Attack and defense settle each claim separately: the negative’s flaw got hit and drops; the affirmative’s flaw was never hit, so it stands. I don’t attack for either side.',b:'A flaw is a flaw regardless of who points it out. I independently check both claims and mark both down — I don’t let one side off because the other missed it.'}},
+  {id:'s4',axis:'persuasion',a:{pole:'seeker',text:'让人不舒服不等于错；敢说不舒服的真话、还能把逻辑立住，这种挑战值得加分，而不是因为「不舒服」被扣分。'},b:{pole:'guardian',text:'让人不适的立场要付出更高的说服成本——大多数人感到安全和舒服，本身是说服力的一部分；它必须比常规论证强很多，我才愿意采信。'},scenario:'正方立了一个让全场都感到不适的立场——比如「网络匿名不该被保护」，逻辑完整、证据充分；反方讲的是大家都爱听的立场，但论证明显更单薄。观众席上不少人皱眉头。',en:{scenario:'The affirmative takes a position everyone finds uncomfortable — say, “online anonymity should not be protected” — complete and well-evidenced. The negative defends the likeable position but argues far more thinly. Many in the audience frown.',a:'Uncomfortable isn’t wrong. Speaking an uncomfortable truth and making it hold is worth credit, not penalty for discomfort.',b:'An uncomfortable position must pay a higher persuasive cost — comfort and safety are part of persuasion. It must be far stronger than a normal case before I accept it.'}},
+  {id:'t4',axis:'third',a:{pole:'artist',text:'内容精彩到让人意犹未尽，说明比赛实现了它的价值；规则瑕疵我会提示，但不该抹掉内容的分量。'},b:{pole:'technician',text:'时间纪律是比赛规则的一部分，频繁违规会破坏公平和可判性；不管内容多精彩，这笔账要体现在裁决里。'},scenario:'反方今天的节奏完全失控：申论超时、自由辩几次犯规，评委多次提醒。但每次开口内容都很精彩，观众意犹未尽，赛后有人说「要是再给他五分钟就好了」。',en:{scenario:'The negative’s time discipline collapses: constructive over time, repeated violations in free debate, multiple warnings. But every speech is brilliant, and people leave wanting more: “Give them five more minutes.”',a:'Content so good that people want more means the match achieved its value. I note the violations, but they shouldn’t erase the content’s weight.',b:'Time discipline is part of the rules; repeated violations damage fairness and judgeability. No matter how brilliant, the ledger has to reflect it.'}}
+];
+var EN={critic:'C',judge:'J',guardian:'G',seeker:'S',technician:'T',artist:'A'};
+var POLE_VIVID={
+  critic:'你骨子里是个看交锋的人：谁的理由被拆穿了，谁就掉分；没人拆的，就当作数。你讨厌评委替辩手补刀，也讨厌「没被打倒」这种暧昧话。',
+  judge:'你像一位坐在庭上的法官：每个理由都要自己站得住，证据链缺一环你都不踏实。攻防再热闹，也动摇不了你对「自己立住」的要求。',
+  guardian:'你信大多数人都能听懂的道理。一个新说法想推翻常识，就得拿出加倍的理由；讲得再花哨，不合常理你心里就有一杆秤。',
+  seeker:'你坐在台下，等的就是那个「原来还能这样想」的瞬间。重复的老话让你犯困，敢于挑战常识的新视角，你会忍不住多给一分。',
+  technician:'你把比赛当成一场比赛来看：规则、节奏、回合、完成度，都要清清楚楚。打得乱、钻空子、不合范式，你都会皱眉。',
+  artist:'你记住的不是比分，是比赛留下的余味。节奏好不好看是次要的，有没有挖到深处、有没有让人记住的东西，才是你心里的尺。'
+};
+var PROFILES={
+  CGT:{zh:'仲裁官',en:'The Arbiter',motto:'规矩和交锋，一样都不能少。',body:['你大概是评委席上最像「裁判」的人。你要求比赛打得像一场比赛：节奏清楚、回合分明、规则内见真章。辩手敢钻规则空子，你会在心里记一笔；把战场打得稀烂，你也绝不会因为热闹就手软。','你的判法很简单：谁主动拆、拆得准，谁就得分；没人碰过的理由，你也不替反方操心。你信奉常识，反感故弄玄虚——一套理论再漂亮，如果和大多数人的直觉拧着来，你就要它拿出双倍的证据。坐在你旁边的人会说：跟他打比赛，规矩最重要。']},
+  CGA:{zh:'文衡官',en:'The Humanist',motto:'把道理讲到人心里，也要讲得漂亮。',body:['你心里有两把尺：一把量道理，一把量美感。你要求论证符合常理、让人信服，但你也吃「讲得动人」这一套——如果一份理由既站得住，又能让人心里一动，你会毫不犹豫地给它加分。','你反感生硬的说教，也反感只煽情不讲理。你最欣赏的辩手，是把常识讲出层次、把道理讲出画面的人。比赛结束后你记得最清的，往往不是哪一环被打穿，而是哪句话让全场安静了几秒。']},
+  CST:{zh:'战术家',en:'The Tactician',motto:'棋盘上每颗子都有去处。',body:['你是评委席上的「棋手」：别人看热闹，你看回合。谁拆了谁的论、谁接住了谁的招、哪一步埋伏到了最后才亮出来，你都记在心里。交锋质量在你这里永远是第一权重。','同时你对「新」有胃口：老调重弹的立论让你提不起劲，真正敢换框架、敢走险棋的队伍，只要没被打穿，你愿意多给几分。但你不是浪漫派——新招也得按规则落在棋盘上，乱来和冒险，你分得很清。']},
+  CSA:{zh:'先驱者',en:'The Pioneer',motto:'把新想法拆到见骨，再写成诗。',body:['你是评委席上最有「审美」的进攻派。你享受一场真正刀光剑影的交锋：谁的理由被干净利落地斩断，你就为谁喝彩；没人拆的点，你也不会替对手补刀。你讨厌温吞水一样的比赛。','但你最珍惜的，不是砍得准，而是砍完之后留下的东西——一个让人「原来还能这么想」的新世界。你会为一场逻辑严密又出人意料的比赛打出高分，也会为一场热闹但空洞的比赛皱眉。对你来说，最好的辩论是「劈开常识，又立住自己」。']},
+  JGT:{zh:'大法官',en:'The Chief Justice',motto:'每个字都要立得住，才进得了判决书。',body:['你是评委席上最「稳」的存在。每个理由，你都要亲眼看着它自己站住才算数；证据不够、链条缺环、想当然的地方，你会一条条标出来。辩手想靠「对方没反驳」混过去，在你这里行不通。','你同样信常识和规则：比赛要打得规矩，道理要符合常理。你判的比赛，双方都会觉得「严」，但很少有人说你「偏」。你的判决书风格是：理由一条条列清楚，谁也别想糊弄过去。']},
+  JGA:{zh:'衡鉴师',en:'The Assessor',motto:'想得慢一点，看得深一点。',body:['你是评委席上「想得最慢」的人，但慢得有道理。每个论点你都要自己走一遍：证据链齐不齐？前提站不站得住？推理有没有跳步？你几乎不会凭第一印象打分，但一旦想清楚了，你也不会轻易被场面话带走。','同时你心里有柔软的一面：论证扎实之外，你还会看它有没有深度、有没有真正值得记住的东西。你欣赏那种「想得稳、说得透」的辩手，也会为一份沉甸甸的结辩多停留几秒。稳和深，是你判赛的两个关键词。']},
+  JST:{zh:'推演官',en:'The Adjudicator',motto:'既看规则，也看新招，只是不动声色。',body:['你像一位不露表情的棋手坐在评委席：规则、证据、回合，你都看得清清楚楚；与此同时，你也留意棋盘上有没有人走出新招。你既不迷信常识，也不迷信新颖——只迷信「每一步都立得住」。','你判赛时话不多，但心里有张表：谁的论证自己站住了，谁靠对方失误捡了分，谁真的走出了新东西。你可能是全场最冷静的评委，比赛再吵，你的笔也稳稳落在纸面上。']},
+  JSA:{zh:'哲思者',en:'The Philosopher',motto:'看得严，想得开，记得住。',body:['你既是最严格的法官，又是最投入的听众。你要求每个理由都自证其身，证据不足你绝不放行；但你也在等一场比赛讲出一个让人记住的故事。','你最爱的比赛，是「严丝合缝」和「荡气回肠」同时发生：论证没有漏洞，故事还有余味。你判出来的比赛，往往比分严谨，评语却像一篇短评——理性是骨架，感受是血肉，你两样都要。']}
+};
+var POLE_VIVID_EN={
+  critic:'I am someone who watches the clash: a reason that gets dismantled loses points; one nobody touched counts as standing. I hate judges who attack for the debaters, and I hate the vague excuse of “it was never knocked down.”',
+  judge:'I sit like a judge on the bench: every claim must stand on its own, and a missing link in the chain makes me uneasy. However fierce the clash, it does not lower my demand that a claim prove itself.',
+  guardian:'I trust the kind of reasoning most people can follow. A new claim that overturns common sense must bring double the evidence; however flashy, if it fights intuition my inner scale stays tilted.',
+  seeker:'I sit in the room waiting for that “I never saw it that way” moment. Recycled lines make me drowsy; a perspective bold enough to challenge common sense earns an extra point from me.',
+  technician:'I treat a match as a match: rules, rhythm, rounds, and completion all need to be clear. Messy play, rule-gaming, and off-format moves make me frown.',
+  artist:'I remember the aftertaste, not the scoreboard. Whether the pace was pretty matters less than whether it dug deep and left something worth remembering.'
+};
+var PROFILES_EN={
+  CGT:{motto:'Rules and clash — neither may be missing.',body:['I am probably the most “referee-like” person on the panel. I want the match to run like a match: clear rhythm, clean rounds, decisions inside the rules. A team that games the rules earns a mental note; a team that turns the stage into chaos does not get a pass just because it was entertaining.','My ruling is simple: whoever attacks actively and accurately earns points; reasons nobody touched still stand, and I do not rescue either side. I trust common sense and distrust pretension — if a theory fights the room’s intuition, it must bring double the evidence. People sitting next to me know: with me, rules matter most.']},
+  CGA:{motto:'Make reason land in people’s hearts — and make it beautiful.',body:['I carry two rulers: one for reasoning and one for beauty. A case should be sensible and convincing, but I also respond to being moved — if a reason both stands and makes the room feel something, I will not hesitate to reward it.','I dislike sterile preaching and I dislike pure emotion without reason. The debaters I admire most turn common sense into layers and reasoning into images. After a match, what stays with me is usually not which chain broke, but which line made the room go quiet.']},
+  CST:{motto:'Every piece on the board has a destination.',body:['I am the chess player on the panel: others watch the show, I watch the rounds. Who dismantled whose claim, who parried, which move was a setup — I keep score in my head. Clash quality is always my first weight.','At the same time, I have an appetite for the new: recycled cases bore me, and a team that dares a new frame — as long as it is not broken — earns extra credit. But I am no romantic: novelty still has to land on the board by the rules. I know the difference between a gamble and chaos.']},
+  CSA:{motto:'Cut new ideas to the bone, then write them as poetry.',body:['I am the offensive judge with an eye for aesthetics. I love a real swordfight: a claim cleanly cut down earns applause, and a point nobody touched still stands. Tepid matches bore me.','But what I treasure most is not the cutting — it is what survives the cut: a new world that makes people think “I never saw it that way.” I score a logically tight and surprising match highly, and I frown at spectacle with nothing behind it. For me, the best debate cuts through common sense and still stands on its own.']},
+  JGT:{motto:'Every word must stand on its own before it enters the judgment.',body:['I am the most “stable” presence on the panel. Every claim must stand on its own before my eyes; thin evidence, broken chains, and taken-for-granted leaps all get marked. “They didn’t attack it” never rescues a claim with me.','I trust common sense and rules: the match must be orderly and the reasoning must be sane. My decisions feel strict to both sides, but rarely biased. My style of judgment: list every reason, and let nobody bluff their way through.']},
+  JGA:{motto:'Think slower, see deeper.',body:['I am the slowest thinker on the panel, and deliberately so. I walk through every claim myself: is the chain complete? Does the premise hold? Did the reasoning skip a step? I almost never decide on first impression — but once I decide, rhetoric does not move me.','There is a softer side too: beyond solid argument, I look for depth and for something worth remembering. I admire debaters who reason steadily and speak clearly, and a weighty closing argument makes me pause. Stability and depth are my two keywords.']},
+  JST:{motto:'Watch rules and new moves alike — just without moving a muscle.',body:['I sit on the panel like a poker-faced adjudicator: rules, evidence, and rounds all clear in view — and I also watch for new moves on the board. I trust neither common sense nor novelty by itself; I trust only what stands at every step.','I speak little while judging, but there is a table in my head: whose case proved itself, who scored on the opponent’s error, who actually produced something new. I may be the calmest judge in the room; no matter how loud the match gets, my pen stays steady.']},
+  JSA:{motto:'Judge strictly, think openly, remember well.',body:['I am the strictest judge and the most invested listener at the same time. Every claim must prove itself or I do not admit it; but I am also waiting for a match to tell a story worth remembering.','My favorite match is one where rigor and resonance happen together: no holes in the reasoning, and an aftertaste to the story. The scores I give are strict, but my comments read like short essays — reason is the skeleton, feeling is the flesh, and I want both.']}
+};
+var CHARS={
+  CGT:[{n:'利威尔',w:'进击的巨人'},{n:'赤司征十郎',w:'黑子的篮球'},{n:'卫宫切嗣',w:'Fate/Zero'}],
+  CGA:[{n:'爱德华·艾尔利克',w:'钢之炼金术师'},{n:'御坂美琴',w:'某科学的超电磁炮'},{n:'蜘蛛侠',w:'漫威'}],
+  CST:[{n:'鲁路修·兰佩路基',w:'Code Geass'},{n:'罗伊·马斯坦',w:'钢之炼金术师'},{n:'库洛洛·鲁西鲁',w:'全职猎人'}],
+  CSA:[{n:'五条悟',w:'咒术回战'},{n:'蓝染惣右介',w:'死神'},{n:'杀老师',w:'暗杀教室'}],
+  JGT:[{n:'超人',w:'DC'},{n:'白胡子',w:'海贼王'},{n:'空条承太郎',w:'JOJO 的奇妙冒险'}],
+  JGA:[{n:'绯村剑心',w:'浪客剑心'},{n:'藤原佐为',w:'棋魂'},{n:'波风水门',w:'火影忍者'}],
+  JST:[{n:'工藤新一',w:'名侦探柯南'},{n:'蝙蝠侠',w:'DC'},{n:'石神千空',w:'石纪元'}],
+  JSA:[{n:'宇智波鼬',w:'火影忍者'},{n:'卫宫士郎',w:'Fate/stay night'},{n:'阿尔敏',w:'进击的巨人'}],
+  HYB:[{n:'坂田银时',w:'银魂'},{n:'旗木卡卡西',w:'火影忍者'},{n:'太宰治',w:'文豪野犬'}],
+  XXX:[{n:'蒙奇·D·路飞',w:'海贼王'},{n:'悟空',w:'龙珠'},{n:'漩涡鸣人',w:'火影忍者'}]
+};
+var CHARS_EN={
+  CGT:[{n:'Levi',w:'Attack on Titan'},{n:'Seijūrō Akashi',w:'Kuroko\'s Basketball'},{n:'Kiritsugu Emiya',w:'Fate/Zero'}],
+  CGA:[{n:'Edward Elric',w:'Fullmetal Alchemist'},{n:'Mikoto Misaka',w:'A Certain Scientific Railgun'},{n:'Spider-Man',w:'Marvel'}],
+  CST:[{n:'Lelouch Lamperouge',w:'Code Geass'},{n:'Roy Mustang',w:'Fullmetal Alchemist'},{n:'Chrollo Lucilfer',w:'Hunter × Hunter'}],
+  CSA:[{n:'Satoru Gojo',w:'Jujutsu Kaisen'},{n:'Sōsuke Aizen',w:'Bleach'},{n:'Koro-sensei',w:'Assassination Classroom'}],
+  JGT:[{n:'Superman',w:'DC'},{n:'Whitebeard',w:'One Piece'},{n:'Jotaro Kujo',w:'JoJo\'s Bizarre Adventure'}],
+  JGA:[{n:'Kenshin Himura',w:'Rurouni Kenshin'},{n:'Sai',w:'Hikaru no Go'},{n:'Minato Namikaze',w:'Naruto'}],
+  JST:[{n:'Shinichi Kudo',w:'Detective Conan'},{n:'Batman',w:'DC'},{n:'Senku Ishigami',w:'Dr. Stone'}],
+  JSA:[{n:'Itachi Uchiha',w:'Naruto'},{n:'Shirou Emiya',w:'Fate/stay night'},{n:'Armin Arlert',w:'Attack on Titan'}],
+  HYB:[{n:'Gintoki Sakata',w:'Gintama'},{n:'Kakashi Hatake',w:'Naruto'},{n:'Osamu Dazai',w:'Bungo Stray Dogs'}],
+  XXX:[{n:'Monkey D. Luffy',w:'One Piece'},{n:'Goku',w:'Dragon Ball'},{n:'Naruto Uzumaki',w:'Naruto'}]
+};
+var SIX=[
+  {axis:'proof',dir:'pos',name:'证伪',nameEn:'Falsification',pole:'批判者端',poleEn:'Critic side',desc:'看哪一方把对方的理由真正拆掉了：谁主动出击、把对手的论证打到核心，谁就得分；没人碰过的论点，按站着算。这背后是逻辑学里的证伪主义——波普尔认为，命题的科学价值恰恰在于它的可证伪性：话说得越具体、越冒险，原则上就越容易被反例推翻，也就越有内容；反过来，怎么都推不翻的说法反而没有分量。',descEn:'Which side actually took the opponent’s reasons down: whoever attacks and lands the kill keeps the point; reasons nobody touched stand as given. Behind this sits Popperian falsificationism — a claim’s value lies in how exposed it is to refutation, not in how good it sounds.'},
+  {axis:'proof',dir:'neg',name:'证成',nameEn:'Justification',pole:'审判者端',poleEn:'Judge side',desc:'看一条理由能不能自己站稳：前提、例子、结论，每一环都得撑得住，被攻击时守住了也算。这背后是认识论的辩护传统——知识不只是「真」，还得有拿得出手的理由；也像法学里的举证责任，主张的人要自己把证据摆齐。',descEn:'Whether a reason can stand on its own: premise, example, conclusion — every link must hold, and surviving an attack counts too. This echoes the epistemic tradition of justification — knowledge is not merely “true” but backed by reasons — and the legal idea that the burden of proof lies with the one who claims.'},
+  {axis:'persuasion',dir:'pos',name:'理性',nameEn:'Rationality',pole:'卫道者端',poleEn:'Guardian side',desc:'看论证是否「说得通」、符合普通人的常识。人更容易接受和自己已有认知框架一致的说法，这背后是认知心理学的确认偏误与认知流畅性——越顺的道理越容易被当真；修辞学里亚里士多德的 logos（逻辑诉诸）也是同一件事。',descEn:'Whether the reasoning “makes sense” to ordinary people. People accept what fits their existing frames — cognitive psychology calls this confirmation bias and processing fluency: the smoother the logic, the more easily it is believed. Aristotle’s logos is the same move in rhetoric.'},
+  {axis:'persuasion',dir:'neg',name:'感性',nameEn:'Emotion',pole:'问道者端',poleEn:'Seeker side',desc:'看论证有没有让人「原来还能这么想」的触动。语言不只在传递信息，也在重构听众理解世界的方式——这背后是认知语言学的框架效应（Lakoff：词语框定思维）、修辞学的 pathos（情感诉诸），以及心理学对顿悟体验的研究。',descEn:'Whether the argument moves people to think “I never saw it that way.” Language does not only transmit information; it reframes how we see the world — the cognitive-linguistic framing effect (Lakoff: words frame thought), rhetorical pathos, and psychological research on insight all point here.'},
+  {axis:'third',dir:'pos',name:'场面感',nameEn:'Spectacle',pole:'技术者端',poleEn:'Technician side',desc:'看比赛是不是打得像一场完整的比赛：回应及时、举证不落空、交锋有来有回、干脆利落。这背后是社会学的仪式秩序与制度理论——公共辩论的价值有一部分来自它作为仪式的完成度，规则与范式就是这套秩序的骨架。',descEn:'Whether the match runs like a complete match: timely replies, no dropped evidence, exchanges that end cleanly. Behind this is the sociology of ritual order and institutional theory — part of a public debate’s value is its completion as a ritual, and rules are the skeleton of that order.'},
+  {axis:'third',dir:'neg',name:'意义感',nameEn:'Meaning',pole:'艺术者端',poleEn:'Artist side',desc:'看比赛有没有挖到深处、留下值得记住的东西。同样是说话，有的只是在交换信息，有的却改变了一个概念在你心里的位置——这背后是哲学诠释学（伽达默尔的「视域融合」）、语义学的语用深度，以及审美判断：深刻不是华丽，而是让习以为常的东西重新值得追问。',descEn:'Whether the debate digs deep and leaves something worth keeping. Not all speaking is equal: some only exchange information, others shift a concept’s place in your mind — hermeneutics (Gadamer’s fusion of horizons), pragmatic depth in semantics, and aesthetic judgment all suggest that depth is not decoration but the point.'}
+];
+var state={i:0,answers:{}};
+function $(id){return document.getElementById(id);}
+function loadState(){try{var s=JSON.parse(localStorage.getItem(LS_KEY)||'null');if(s&&s.answers)state=s;}catch(e){}}
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify(state));}catch(e){}}
+function loadSerial(){
+  var s=localStorage.getItem('debate_judge_serial')||'';
+  if(!s||!/^\d{4}$/.test(s)){s=String(Math.floor(1000+Math.random()*9000));try{localStorage.setItem('debate_judge_serial',s);}catch(e){}}
+  return 'DBJ-2608-'+s;
+}
+function toggleTheme(){
+  var d=document.body.classList.toggle('dark');
+  localStorage.setItem('debate_coach_theme',d?'dark':'light');
+  if($('share-canvas')){
+    var nets={};['proof','persuasion','third'].forEach(function(k){nets[k]=axisScore(k);});
+    drawSharePreview(nets,profileOf(nets),typeCode(nets),loadSerial());
+  }
+}
+function applyStaticLang(){
+  $('hdr-title').textContent=LANG==='en'?'Judge Profile Test':'评委人格测试';
+  $('hdr-home').textContent=t('homeBtn');
+  $('hdr-theme').textContent=t('themeBtn');
+  $('hdr-foot').textContent=t('foot');
+  $('lang-btn').textContent=LANG==='zh'?'EN':'中文';
+  document.title=LANG==='en'?'Judge Profile Test · 3-Axis 6-Direction Self-Test':'评委人格测试 · 三维度六向度自测';
+}
+function toggleLang(){
+  LANG=LANG==='zh'?'en':'zh';
+  try{localStorage.setItem('debate_coach_lang',LANG);}catch(e){}
+  applyStaticLang();
+  var complete=QUESTIONS.every(function(q){return state.answers[q.id];});
+  if(complete)renderResult();
+  else if(Object.keys(state.answers).length>0)renderQ(state.i);
+  else renderIntro();
+}
+if(localStorage.getItem('debate_coach_theme')==='dark')document.body.classList.add('dark');
+
+function axisScore(k){
+  var net=0;
+  QUESTIONS.forEach(function(q){if(q.axis!==k)return;var an=state.answers[q.id];if(!an)return;var pole=q[an.opt].pole;net+=(pole===AXES[k].neg?1:-1)*an.s;});
+  return net;
+}
+function band(net){var a=Math.abs(net);if(a<=2)return{label:LANG==='en'?'Neutral':'中立',cls:'mid'};if(a<=5)return{label:LANG==='en'?'Slight':'轻微偏',cls:'mild'};if(a<=9)return{label:LANG==='en'?'Marked':'明显偏',cls:'strong'};return{label:LANG==='en'?'Strong':'强烈偏',cls:'max'};}
+function poleOf(k,net){return net>=0?AXES[k].neg:AXES[k].pos;}
+function poleName(k,net){if(Math.abs(net)<=2)return LANG==='en'?'Flexible / Neutral':'中立（灵活）';return net>=0?AXES[k][LANG==='en'?'negNameEn':'negName']:AXES[k][LANG==='en'?'posNameEn':'posName'];}
+function poleDesc(k,net){if(Math.abs(net)<=2)return LANG==='en'?'Both directions are nearly balanced; it shifts with the situation':'两向度权重接近，随情境浮动';return net>=0?AXES[k][LANG==='en'?'negDescEn':'negDesc']:AXES[k][LANG==='en'?'posDescEn':'posDesc'];}
+function poleNameZh(k,net){if(Math.abs(net)<=2)return'中立（灵活）';return net>=0?AXES[k].negName:AXES[k].posName;}
+function poleDescZh(k,net){if(Math.abs(net)<=2)return'两向度权重接近，随情境浮动';return net>=0?AXES[k].negDesc:AXES[k].posDesc;}
+function shortName(k,net){return poleName(k,net);}
+function codeOf(k,net){if(Math.abs(net)<=2)return'中';return net>=0?AXES[k].negCode:AXES[k].posCode;}
+function weights(k,net){var posW=Math.round((12-net)/24*100);posW=Math.max(0,Math.min(100,posW));return{pos:posW,neg:100-posW};}
+function typeCode(nets){return ['proof','persuasion','third'].map(function(k){if(Math.abs(nets[k])<=2)return'X';return nets[k]>=0?AXES[k].negEn:AXES[k].posEn;}).join('');}
+function profileOf(nets){
+  var code=typeCode(nets);
+  if(PROFILES[code]){
+    var pf=PROFILES[code],pfe=PROFILES_EN[code];
+    return {zh:pf.zh,en:pf.en,motto:pf.motto,mottoEn:pfe.motto,body:pf.body,body1:pf.body1||pf.body.map(function(p){return toFirstPerson(p);}),bodyEn:pfe.body,chars:CHARS[code],charsEn:CHARS_EN[code]};
+  }
+  var active=[];
+  ['proof','persuasion','third'].forEach(function(k){if(Math.abs(nets[k])>=3)active.push(nets[k]>=0?AXES[k].neg:AXES[k].pos);});
+  if(active.length===0){
+    return {zh:'即兴者',en:'The Improviser',motto:'没有固定剧本，看场面说话。',mottoEn:'No fixed script; read the room.',body:['你是评委席上的自由人：既不会被漂亮话冲昏头，也不会死守一套尺子。每场比赛你都是临时校准的——哪边说得更透、打得更完整、留下更多东西，哪边就得高分。','这不是没有主见，而是你的主见就是「具体问题具体分析」。建议你多打几场正式比赛，把每一次的判决理由记下来，你会慢慢发现自己其实有偏好。'],body1:['我是评委席上的自由人：既不会被漂亮话冲昏头，也不会死守一套尺子。每场比赛我都是临时校准的——哪边说得更透、打得更完整、留下更多东西，哪边就得高分。','这不是没有主见，而是我的主见就是「具体问题具体分析」。我该多打几场正式比赛，把每一次的判决理由记下来，慢慢发现自己其实有偏好。'],bodyEn:['I am the free agent on the panel: neither dazzled by beautiful words nor locked into one ruler. Every match recalibrates me — whichever side speaks more clearly, fights more completely, and leaves more behind wins the points.','This is not a lack of conviction; my conviction is to analyze case by case. I should keep a record of my reasons across several real matches — I will discover that I actually do have preferences.'],chars:CHARS.XXX,charsEn:CHARS_EN.XXX};
+  }
+  var intro=active.map(function(p){return POLE_VIVID[p];}).join(' ');
+  var intro1=active.map(function(p){return toFirstPerson(POLE_VIVID[p]);}).join(' ');
+  var introEn=active.map(function(p){return POLE_VIVID_EN[p];}).join(' ');
+  return {zh:'变奏者',en:'The Variant',motto:'一半有脚本，一半看场面。',mottoEn:'Half scripted, half improvised.',body:[intro,'剩下那根轴，你完全看场面说话：遇到某类比赛你会很严格，遇到另一类你会很宽松。这不是摇摆，是你把决定权交给了具体比赛——正式裁判时，这恰恰需要你在赛前想清楚自己到底要什么。'],body1:[intro1,'剩下那根轴，我完全看场面说话：遇到某类比赛我会很严格，遇到另一类我会很宽松。这不是摇摆，而是我把决定权交给了具体比赛——正式裁判时，这恰恰需要我在赛前想清楚自己到底要什么。'],bodyEn:[introEn,'The remaining axis, I leave entirely to the situation: in one kind of match I am strict, in another I am lenient. That is not inconsistency — it is my choice to hand the decision to the specific round, which means before a formal match I should clarify what I actually want.'],chars:CHARS.HYB,charsEn:CHARS_EN.HYB};
+}
+function conflictFlag(nets){
+  var clusters={critic:1,seeker:1,artist:1,judge:2,guardian:2,technician:2};
+  var seen={};
+  ['proof','persuasion','third'].forEach(function(k){if(Math.abs(nets[k])>=3)seen[clusters[poleOf(k,nets[k])]]=1;});
+  return Object.keys(seen).length>1?'有':'无';
+}
+function makeAnchor(nets){
+  var c=function(k){return codeOf(k,nets[k]);};
+  return '[S9 完成] 裁判倾向=说服['+c('persuasion')+']·证明['+c('proof')+']·第三方['+c('third')+']，三维冲突=['+conflictFlag(nets)+']';
+}
+function makeStatement(nets){
+  var rows=['proof','persuasion','third'].map(function(k){
+    return '| '+AXES[k].name+' | '+poleNameZh(k,nets[k])+' | '+poleDescZh(k,nets[k])+' |';
+  }).join('\n');
+  var entry=poleNameZh('persuasion',nets.persuasion)+'、'+poleNameZh('proof',nets.proof)+'、'+poleNameZh('third',nets.third);
+  var wRows=['proof','persuasion','third'].map(function(k){
+    var net=nets[k],w=weights(k,net),a=AXES[k];
+    var p10=Math.round(w.pos/10),n10=10-p10;
+    var left=a.posName+' '+p10,right=a.negName+' '+n10;
+    var line=w.pos>=w.neg?left+' / '+right:right+' / '+left;
+    var diff=Math.abs(p10*2-10);
+    var mag=diff<=1?'持平':(diff<=3?'微弱':(diff<=5?'明显':'压倒'));
+    return a.name+'：'+line+'（'+mag+'）';
+  }).join('\n');
+  return '【裁判倾向声明】\n'+makeAnchor(nets)+'\n\n【裁判倾向自述表】\n'+
+    '| 轴 | 裁判人格 | 判据 |\n|:---|:---|:---|\n'+rows+'\n\n'+
+    '本场我以'+entry+'身份入场。S2-S8的证据[支持/部分挑战/不改变]这个倾向。\n\n【轴内权重】（同 S9 六向度口径，每轴 10 分）\n'+wRows;
+}
+
+function renderIntro(){
+  var has=Object.keys(state.answers).length>0;
+  var complete=QUESTIONS.every(function(q){return state.answers[q.id];});
+  var html='<h2 class="title">'+t('introTitle')+'</h2>'+
+    '<div class="sub">'+t('introSub')+'</div>'+
+    '<div class="axis-grid">'+axisCard('proof')+axisCard('persuasion')+axisCard('third')+'</div>'+
+    '<details class="details"><summary>'+t('whyTitle')+'</summary><ul>'+
+    '<li>'+t('why1')+'</li>'+
+    '<li>'+t('why2')+'</li>'+
+    '<li>'+t('why3')+'</li>'+
+    '<li>'+t('why4')+'</li>'+
+    '<li>'+t('why5')+'</li>'+
+    '</ul></details>'+ 
+    '<div class="note">'+t('note')+'</div>'+
+    '<div class="row">'+
+    (has&&!complete?'<button class="btn-main" onclick="startTest()">'+t('resume')+Object.keys(state.answers).length+' / '+QUESTIONS.length+(LANG==='zh'?'）':')')+'</button>':'<button class="btn-main" onclick="startTest()">'+t('start')+'</button>')+
+    (has?'<button class="btn-ghost" onclick="resetTest()">'+t('restart')+'</button>':'')+
+    '</div>';
+  $('app').innerHTML=html;
+}
+function axisCard(k){
+  var a=AXES[k];
+  return '<div class="axis-card"><h3>'+(LANG==='en'?a.nameEn:a.name)+' · '+a.posEn+'/'+a.negEn+'</h3><div class="dim">'+(LANG==='en'?a.dimEn:a.dim)+'</div><p>'+(LANG==='en'?a.plainEn:a.plain)+'</p></div>';
+}
+function startTest(){
+  var complete=QUESTIONS.every(function(q){return state.answers[q.id];});
+  state.i=complete?0:QUESTIONS.findIndex(function(q){return !state.answers[q.id];});
+  if(state.i<0)state.i=0;
+  saveState();renderQ();
+}
+function resetTest(){
+  if(!confirm(t('confirmReset')))return;
+  state={i:0,answers:{}};saveState();try{localStorage.removeItem('debate_judge_serial');}catch(e){}renderIntro();
+}
+function renderQ(){
+  var idx=state.i,q=QUESTIONS[idx],an=state.answers[q.id];
+  var pct=Math.round(idx/QUESTIONS.length*100);
+  var qe=LANG==='en'?q.en:null;
+  var html='<div class="progress-wrap"><div class="progress-text">'+t('itemOf')+(idx+1)+t('of')+QUESTIONS.length+(LANG==='zh'?t('item'):'')+'</div>'+
+    '<div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%"></div></div></div>'+
+    '<div class="qbox">'+
+    '<div class="qscenario"><span class="tag">'+t('sceneTag')+'</span><br>'+(qe?qe.scenario:q.scenario)+'</div>'+
+    '<button class="opt'+(an&&an.opt==='a'?' sel':'')+'" onclick="pick('+idx+',\'a\')"><span class="opt-key">A</span>'+(qe?qe.a:q.a.text)+'</button>'+
+    '<button class="opt'+(an&&an.opt==='b'?' sel':'')+'" onclick="pick('+idx+',\'b\')"><span class="opt-key">B</span>'+(qe?qe.b:q.b.text)+'</button>'+
+    '<div class="intensity'+(an?'':' hidden')+'"><div class="lbl">'+t('weightLbl')+'</div>'+
+    '<div class="int-row">'+
+    '<button class="int-btn'+(an&&an.s===1?' sel':'')+'" onclick="setS('+idx+',1)"><span class="k">'+t('mild')+'</span><br>'+t('mildD')+'</button>'+
+    '<button class="int-btn'+(an&&an.s===2?' sel':'')+'" onclick="setS('+idx+',2)"><span class="k">'+t('clear')+'</span><br>'+t('clearD')+'</button>'+
+    '<button class="int-btn'+(an&&an.s===3?' sel':'')+'" onclick="setS('+idx+',3)"><span class="k">'+t('strong')+'</span><br>'+t('strongD')+'</button>'+
+    '</div></div>'+
+    '<div class="nav-row">'+
+    '<button class="btn-ghost" onclick="go('+(idx-1)+')"'+(idx===0?' disabled style="opacity:.45"':'')+'>'+t('back')+'</button>'+
+    '<button class="btn-main" onclick="go('+(idx+1)+')"'+(an&&an.s?'':' disabled style="opacity:.45"')+'>'+(idx===QUESTIONS.length-1?t('finish'):t('next'))+'</button>'+
+    '</div></div>';
+  $('app').innerHTML=html;
+  window.scrollTo(0,0);
+}
+function pick(idx,opt){var q=QUESTIONS[idx],an=state.answers[q.id];if(!an){an={};state.answers[q.id]=an;}an.opt=opt;delete an.s;saveState();renderQ();}
+function setS(idx,s){var an=state.answers[QUESTIONS[idx].id];if(!an)return;an.s=s;saveState();renderQ();}
+function go(idx){if(idx<0)return;if(idx>=QUESTIONS.length){renderResult();return;}state.i=idx;saveState();renderQ();}
+
+function renderResult(){
+  var keys=['proof','persuasion','third'];
+  var nets={},cards='';
+  keys.forEach(function(k){nets[k]=axisScore(k);});
+  var code=typeCode(nets),pf=profileOf(nets);
+  keys.forEach(function(k){
+    var a=AXES[k],net=nets[k],b=band(net),w=weights(k,net);
+    var leftDom=w.pos>w.neg,rightDom=w.neg>w.pos;
+    var an=LANG==='en'?a.nameEn:a.name,ad=LANG==='en'?a.dimEn:a.dim;
+    var pn=LANG==='en'?a.posNameEn:a.posName,nn=LANG==='en'?a.negNameEn:a.negName;
+    var pno=LANG==='en'?a.posNoteEn:a.posNote,nno=LANG==='en'?a.negNoteEn:a.negNote;
+    cards+='<div class="axis-card res"><div class="res-head">'+an+' · '+ad+'</div>'+
+      '<div class="axis-row">'+
+        '<div class="axis-pole'+(leftDom?' dominant':'')+'">'+
+          '<div class="pole-name">'+pn+'<span class="pct">'+w.pos+'%</span></div>'+
+          '<div class="pole-note">'+pno+'</div>'+
+        '</div>'+
+        '<div class="axis-track">'+
+          '<div class="axis-line">'+
+            '<div class="axis-bar left'+(leftDom?' dom':'')+'" style="width:'+(w.pos/2)+'%"></div>'+
+            '<div class="axis-origin"></div>'+
+            '<div class="axis-bar right'+(rightDom?' dom':'')+'" style="width:'+(w.neg/2)+'%"></div>'+
+          '</div>'+
+          '<div class="axis-score res-score"><b>'+(net>0?'+':'')+net+'</b>'+t('score')+b.label+'</div>'+
+        '</div>'+
+        '<div class="axis-pole right'+(rightDom?' dominant':'')+'">'+
+          '<div class="pole-name">'+nn+'<span class="pct">'+w.neg+'%</span></div>'+
+          '<div class="pole-note">'+nno+'</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="consist">'+detailText(k,net)+'</div></div>';
+  });
+  var letters=typeLetters(nets);
+  var serial=loadSerial();
+  var profileBody=LANG==='en'?pf.bodyEn.map(function(p){return toSecondPerson(p);}):pf.body;
+  var profileHtml=profileBody.map(function(p){return '<p>'+p+'</p>';}).join('');
+  var charList=LANG==='en'?pf.charsEn:pf.chars;
+  var charsHtml=charList?'<div class="chars-row"><span class="chars-lbl">'+t('animeLabel')+'</span>'+charList.map(function(c){return '<span class="chip">'+c.n+' · '+c.w+'</span>';}).join('')+'</div>':'';
+  var motto=LANG==='en'?pf.mottoEn:pf.motto;
+  var nickMain=LANG==='en'?pf.en:pf.zh,nickSub=LANG==='en'?pf.zh:pf.en;
+  var html='<div class="cert">'+
+    '<div class="cert-eyebrow">'+t('certEyebrow')+'</div>'+
+    '<h2 class="cert-head">'+t('certHead')+'</h2>'+
+    '<div class="cert-rule"></div>'+
+    '<div class="cert-serial">NO. '+serial+'</div>'+
+    '<div class="stamp"><span class="s1">'+code+'</span><span class="s2">DBJ</span></div>'+
+    '<div class="type-code">'+letters+'</div>'+
+    '<div class="nickname">'+nickMain+'<small>'+nickSub+'</small></div>'+
+    '<div class="motto">'+(LANG==='zh'?'「<b>':'“<b>')+motto+(LANG==='zh'?'</b>」':'</b>”')+'</div>'+
+    '<div class="cert-sum">'+oneLineProfile(nets)+'</div>'+
+    '</div>'+
+    '<div class="profile"><div class="p-head"><h3>'+t('profileHead')+nickMain+'</h3><span class="en">'+nickSub+' · '+code+'</span></div>'+
+    '<div class="p-motto">'+(LANG==='zh'?'「':'“')+motto+(LANG==='zh'?'」':'”')+'</div>'+profileHtml+charsHtml+'</div>'+
+    '<div class="axis-grid stacked">'+cards+'</div>'+
+    '<div class="legend">'+t('legend')+'</div>'+
+    '<div class="weights"><h3>'+t('weightsTitle')+'</h3><div class="w-sub">'+t('weightsSub')+'</div><div class="w-grid">'+weightsGrid(nets)+'</div></div>'+
+    '<div class="share"><h3>'+t('shareTitle')+'</h3>'+
+    '<img id="share-preview" alt="'+t('shareTitle')+'">'+
+    '<div class="row"><button class="btn-main" onclick="saveShare()">'+t('saveShare')+'</button>'+
+    '<button class="btn-ghost" onclick="go(0)">'+t('editAns')+'</button>'+
+    '<button class="btn-ghost" onclick="resetTest()">'+t('retest')+'</button></div></div>'+
+    '<div class="decl"><h3>'+t('declTitle')+'</h3>'+
+    '<textarea id="statement-text" readonly></textarea>'+
+    '<div class="row"><button class="btn-main" onclick="copySt()">'+t('copyDecl')+'</button></div>'+
+    '<div class="hint">'+t('declHint')+'</div></div>';
+  $('app').innerHTML=html;
+  $('statement-text').value=makeStatement(nets);
+  drawSharePreview(nets,pf,code,serial);
+  window.scrollTo(0,0);
+}
+function typeLetters(nets){
+  var out='';
+  ['proof','persuasion','third'].forEach(function(k,i){
+    var net=nets[k],x=Math.abs(net)<=2;
+    var letter=x?'X':(net>=0?AXES[k].negEn:AXES[k].posEn);
+    var cn=x?t('neutral'):(net>=0?AXES[k][LANG==='en'?'negNameEn':'negName']:AXES[k][LANG==='en'?'posNameEn':'posName']);
+    if(i>0)out+='<span class="tl-sep">·</span>';
+    out+='<span class="tl'+(x?' x':'')+'"><b>'+letter+'</b><small>'+cn+'</small></span>';
+  });
+  return out;
+}
+function oneLineProfile(nets){
+  var parts=['proof','persuasion','third'].map(function(k){var n=poleName(k,nets[k]);if(Math.abs(nets[k])<=2)return t('neutralShort');return n;});
+  if(LANG==='en')return t('certSum')+parts[0]+t('certSum2')+parts[1]+t('certSum3')+parts[2];
+  return t('certSum')+parts[0]+t('certSum2')+parts[1]+t('certSum3')+parts[2];
+}
+function agreement(k){
+  var signs=QUESTIONS.filter(function(q){return q.axis===k;}).map(function(q){var an=state.answers[q.id];var pole=q[an.opt].pole;return pole===AXES[k].neg?1:-1;});
+  var pos=signs.filter(function(s){return s>0;}).length;
+  return Math.max(pos,signs.length-pos);
+}
+function detailText(k,net){
+  var qs=QUESTIONS.filter(function(q){return q.axis===k;});
+  var marks=['①','②','③','④'];
+  var wName=[t('answerMild'),t('answerClear'),t('answerStrong')];
+  var parts=qs.map(function(q,i){
+    var an=state.answers[q.id];
+    var sel=an.opt==='a'?'A':'B';
+    var wd=wName[an.s-1]||'';
+    return LANG==='zh'?(marks[i]+'选'+sel+'·'+wd):('Q'+(i+1)+': '+sel+' · '+wd);
+  });
+  var s=t('detailPrefix')+parts.join(LANG==='zh'?'，':', ')+(LANG==='zh'?'。':'');
+  var ag=agreement(k);
+  if(ag===4)s+=t('consist1');
+  else if(ag===3)s+=t('consist2');
+  else s+=t('consist3');
+  if(Math.abs(net)<=2)s+=t('consistN');
+  return s;
+}
+function weightsGrid(nets){
+  var out='';
+  SIX.forEach(function(s){
+    var w=weights(s.axis,nets[s.axis]);
+    var pct=s.dir==='pos'?w.pos:w.neg;
+    var nm=LANG==='en'?s.nameEn:s.name,pl=LANG==='en'?s.poleEn:s.pole,ds=LANG==='en'?s.descEn:s.desc;
+    out+='<div class="w-item"><div class="w-name"><span>'+nm+' · '+pl+' </span><span class="pct">'+pct+'%</span></div>'+
+      '<div class="bar-track"><div class="bar-fill" style="width:'+pct+'%"></div></div>'+
+      '<div class="w-desc">'+ds+'</div></div>';
+  });
+  return out;
+}
+function copySt(){
+  var ta=$('statement-text');
+  var txt=ta.value;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){toast(t('copied'));},function(){fallbackCopy(ta);});
+  }else{fallbackCopy(ta);}
+}
+function fallbackCopy(ta){ta.select();try{document.execCommand('copy');toast(t('copied'));}catch(e){toast(t('copyFail'));}}
+function toast(msg){
+  var t=document.createElement('div');
+  t.className='toast';
+  t.textContent=msg;
+  t.style.cssText='position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 20px;border-radius:40px;font-size:13px;z-index:99;box-shadow:0 8px 30px rgba(0,0,0,.15)';
+  document.body.appendChild(t);
+  setTimeout(function(){t.remove();},1600);
+}
+function wrapCtx(ctx,text,x,y,maxW,lineH,maxLines,indent){
+  var lines=[],cur='',firstLine=true;
+  function limit(){return firstLine?maxW-(indent||0):maxW;}
+  for(var i=0;i<text.length;i++){
+    var ch=text[i];
+    if(ch==='\n'){lines.push(cur);cur='';continue;}
+    var test=cur+ch;
+    if(cur&&ctx.measureText(test).width>limit()){
+      var last=cur.slice(-1);
+      if(/[，。、；：！？）】」』”》、…—,.;:!?)\]}"']/.test(ch)){
+        cur=test; // 行首禁则：标点留在上一行行尾
+      }else if(/[（【「『“《]/.test(last)){
+        cur=cur.slice(0,-1); // 行尾禁则：开括号移到下一行
+        if(cur)lines.push(cur);
+        cur=last+ch;
+        firstLine=false;
+      }else{
+        lines.push(cur);cur=ch;firstLine=false;
+      }
+    }else{cur=test;}
+  }
+  if(cur)lines.push(cur);
+  var truncated=lines.length>maxLines;
+  lines=lines.slice(0,maxLines);
+  if(truncated&&lines.length)lines[lines.length-1]+='……';
+  lines.forEach(function(ln,idx){ctx.fillText(ln,idx===0&&indent?x+indent:x,y+idx*lineH);});
+  return lines.length;
+}
+function nowStamp(){
+  var d=new Date();
+  function p(n){return(n<10?'0':'')+n;}
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());
+}
+function toFirstPerson(t){return t.split('你').join('我');}
+function toSecondPerson(t){
+  return t
+    .replace(/\bI am\b/gi,'you are')
+    .replace(/\bI'm\b/gi,"you're")
+    .replace(/\bI've\b/gi,"you've")
+    .replace(/\bI'll\b/gi,"you'll")
+    .replace(/\bI'd\b/gi,"you'd")
+    .replace(/\bmy\b/gi,'your')
+    .replace(/\bme\b/gi,'you')
+    .replace(/\bmine\b/gi,'yours')
+    .replace(/\bmyself\b/gi,'yourself')
+    .replace(/\bI\b/gi,'you');
+}
+function pillLayout(mx,chars,label,x,maxW,font){
+  mx.font=font;
+  var texts=[label].concat(chars.map(function(c){return c.n+' · '+c.w;}));
+  var ascMax=0,descMax=0;
+  texts.forEach(function(t){
+    var m=mx.measureText(t);
+    var a=m.actualBoundingBoxAscent||Math.round(18*0.8);
+    var d=m.actualBoundingBoxDescent||Math.round(18*0.2);
+    if(a>ascMax)ascMax=a;
+    if(d>descMax)descMax=d;
+  });
+  var padH=10,padV=5,gap=8,rowGap=10;
+  var pillH=(ascMax+descMax)+padV*2;
+  var rowH=pillH+rowGap;
+  var lines=1,cx=x+mx.measureText(label).width;
+  chars.forEach(function(c){
+    var w=mx.measureText(c.n+' · '+c.w).width+padH*2;
+    if(cx+w+gap>x+maxW){lines++;cx=x;}
+    cx+=w+gap;
+  });
+  return {font:font,ascMax:ascMax,descMax:descMax,padH:padH,padV:padV,gap:gap,rowH:rowH,pillH:pillH,lines:lines};
+}
+function drawSharePreview(nets,pf,code,serial){
+  var old=$('share-canvas');if(old)old.remove();
+  var c=document.createElement('canvas');
+  c.width=1080;c.height=1560;
+  drawCert(c,nets,pf,code,serial);
+  $('share-preview').src=c.toDataURL('image/png');
+  c.id='share-canvas';c.className='hidden';
+  document.body.appendChild(c);
+}
+function drawCert(c,nets,pf,code,serial){
+  var W=1080;
+  var serif='"Georgia","Songti SC","STSong","Source Han Serif SC","Noto Serif CJK SC","SimSun","Microsoft YaHei",serif';
+  var sans='"PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif';
+  var dark=document.body.classList.contains('dark');
+  var paper=dark?'#0c1017':'#e9edf4';
+  var ivory=dark?'#141a26':'#ffffff';
+  var ink=dark?'#f0b429':'#123a6d';
+  var gold=dark?'#d9b25f':'#6f7f99';
+  var text1=dark?'#ece8df':'#1c2333';
+  var text2=dark?'#c8c2b2':'#39445a';
+  var text3=dark?'#98917f':'#5f6b80';
+  var text4=dark?'#6f6959':'#8b95a8';
+  var line=dark?'#232c3d':'#d9dfe9';
+  var minor=dark?'#5a4c2c':'#b0bfd4';
+  var inkSoft=dark?'#2b2412':'#e7eef8';
+  // 预计算人物侧写行数，底部随内容收口：浅色框线 = 侧写分隔线位置
+  var m=document.createElement('canvas');
+  var mx=m.getContext('2d');
+  mx.font='22px '+sans;
+  var ptext=LANG==='en'?pf.bodyEn:pf.body1;
+  var l1=wrapCtx(mx,ptext[0],130,0,840,34,6,44);
+  var l2=wrapCtx(mx,ptext[1],130,0,840,34,6,44);
+  var charList=LANG==='en'?pf.charsEn:pf.chars;
+  var charLabel=t('animeLabel');
+  var lay=charList&&charList.length?pillLayout(mx,charList,charLabel,130,840,'18px '+sans):null;
+  var charBlock=lay?(lay.lines-1)*lay.rowH+lay.pillH:0;
+  var H=956+l1*34+14+l2*34+14+charBlock+56+126;
+  c.width=W;c.height=H;
+  var ctx=c.getContext('2d');
+  ctx.fillStyle=paper;ctx.fillRect(0,0,W,H);
+  // 白色证书内衬
+  ctx.fillStyle=ivory;ctx.fillRect(40,40,W-80,H-80);
+  ctx.strokeStyle=line;ctx.lineWidth=1;ctx.strokeRect(40,40,W-80,H-80);
+  // 上下双线
+  ctx.fillStyle=ink;ctx.fillRect(84,84,W-168,2);
+  ctx.fillStyle=line;ctx.fillRect(84,98,W-168,1);
+  ctx.fillStyle=line;ctx.fillRect(84,H-126,W-168,1);
+  ctx.fillStyle=ink;ctx.fillRect(84,H-110,W-168,2);
+  // 眉题
+  ctx.fillStyle=text4;ctx.font='600 22px '+sans;ctx.textAlign='center';
+  ctx.fillText(t('certEyebrow'),540,176);
+  // 主标题（衬线 + 字距）
+  ctx.fillStyle=ink;ctx.font='700 62px '+serif;
+  var title=LANG==='zh'?t('certHead').split('').join(' '):t('certHead');
+  ctx.fillText(title,540,258);
+  // 短标尺
+  ctx.fillStyle=gold;ctx.fillRect(492,296,96,3);
+  // 编号
+  ctx.fillStyle=text4;ctx.font='22px Georgia,serif';
+  ctx.fillText('NO. '+serial,540,344);
+  // 三字母
+  var letters=['proof','persuasion','third'].map(function(k){
+    var net=nets[k],x=Math.abs(net)<=2;
+    return {L:x?'X':(net>=0?AXES[k].negEn:AXES[k].posEn),cn:x?t('neutral'):(net>=0?AXES[k][LANG==='en'?'negNameEn':'negName']:AXES[k][LANG==='en'?'posNameEn':'posName']),x:x};
+  });
+  var bw=150,gap=44,total=bw*3+gap*2,startX=(W-total)/2,bY=392;
+  letters.forEach(function(lt,i){
+    var cx=startX+bw*i+gap*i+bw/2;
+    ctx.fillStyle=lt.x?text4:ink;ctx.font='400 116px Georgia,serif';ctx.textAlign='center';
+    ctx.fillText(lt.L,cx,bY+108);
+    ctx.fillStyle=lt.x?text4:text3;ctx.font='24px '+sans;
+    ctx.fillText(lt.cn,cx,bY+154);
+    if(i<2){
+      ctx.fillStyle=gold;ctx.font='32px Georgia,serif';
+      ctx.fillText('·',startX+(i+1)*bw+(i+0.5)*gap,bY+78);
+    }
+  });
+  // 昵称 / 英文名 / 座右铭
+  ctx.fillStyle=text1;ctx.font='700 58px '+sans;ctx.textAlign='center';
+  ctx.fillText(LANG==='en'?pf.en:pf.zh,540,676);
+  ctx.fillStyle=gold;ctx.font='34px Georgia,serif';
+  ctx.fillText((LANG==='en'?pf.zh:pf.en)+' · '+code,540,732);
+  ctx.fillStyle=text3;ctx.font='32px '+sans;
+  ctx.fillText((LANG==='zh'?'「':'“')+(LANG==='en'?pf.mottoEn:pf.motto)+(LANG==='zh'?'」':'”'),540,800);
+  ctx.fillStyle=line;ctx.fillRect(320,846,440,1);
+  // 人物侧写
+  ctx.fillStyle=ink;ctx.font='600 24px '+sans;ctx.textAlign='center';
+  ctx.fillText(t('profileHead')+(LANG==='en'?pf.en:pf.zh),540,906);
+  ctx.textAlign='left';ctx.fillStyle=text2;ctx.font='22px '+sans;
+  var py=956;
+  wrapCtx(ctx,ptext[0],130,py,840,34,6,44);
+  py+=l1*34+14;
+  wrapCtx(ctx,ptext[1],130,py,840,34,6,44);
+  py+=l2*34+14;
+  if(lay){
+    ctx.font=lay.font;
+    ctx.textAlign='left';
+    ctx.fillStyle=ink;
+    var baseY=py+lay.ascMax+lay.padV;
+    ctx.fillText(charLabel,130,baseY);
+    var cx=130+ctx.measureText(charLabel).width,row=0;
+    var rad=Math.min(14,lay.pillH/2);
+    charList.forEach(function(c){
+      var txt=c.n+' · '+c.w;
+      var pw=ctx.measureText(txt).width+lay.padH*2;
+      if(cx+pw+lay.gap>130+840){row++;cx=130;}
+      var b=baseY+row*lay.rowH;
+      ctx.fillStyle=inkSoft;
+      if(ctx.roundRect){ctx.beginPath();ctx.roundRect(cx,b-lay.ascMax-lay.padV,pw,lay.pillH,rad);ctx.fill();}
+      else{ctx.fillRect(cx,b-lay.ascMax-lay.padV,pw,lay.pillH);}
+      ctx.fillStyle=ink;
+      ctx.fillText(txt,cx+lay.padH,b);
+      cx+=pw+lay.gap;
+    });
+    py=py+(lay.lines-1)*lay.rowH+lay.pillH;
+  }
+  py+=56;
+  // 页脚
+  ctx.fillStyle=text4;ctx.font='20px '+sans;ctx.textAlign='center';
+  ctx.fillText(t('profileFooter')+nowStamp(),540,H-70);
+}
+function isMobileUA(){
+  if(window.__forceMobile!==undefined)return !!window.__forceMobile;
+  return /(iPhone|iPad|iPod|Android)/i.test(navigator.userAgent);
+}
+function anchorSave(blob,name){
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download=name;
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){a.remove();URL.revokeObjectURL(url);},1000);
+}
+async function saveSharePNG(blob,name){
+  // 1) Capacitor 原生应用：写入应用文档目录 + 系统分享（与战术板/三合一网页版一致）
+  if(window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.Filesystem){
+    try{
+      var C=window.Capacitor,FS=C.Plugins.Filesystem;
+      var Dir=(C.Plugins.Directory&&C.Plugins.Directory.Documents)?C.Plugins.Directory.Documents:'DOCUMENTS';
+      var folder='Debate-Coach';
+      var opts={path:folder+'/'+name,directory:Dir,recursive:true};
+      opts.data=await new Promise(function(resolve){
+        var reader=new FileReader();
+        reader.onload=function(){resolve(String(reader.result).split(',')[1]);};
+        reader.readAsDataURL(blob);
+      });
+      var result=await FS.writeFile(opts);
+      var Share=C.Plugins.Share;
+      if(Share&&Share.share){
+        try{await Share.share({title:'评委人格鉴定',text:'我的评委人格鉴定结果',files:[result.uri]});return;}
+        catch(se){}
+      }
+      toast(t('capSaved')+name);
+      return;
+    }catch(e){console.warn('Capacitor export failed: '+e.message);}
+  }
+  // 2) 移动端浏览器：系统分享优先，取消/失败则下载兜底
+  var file=null;
+  try{file=new File([blob],name,{type:'image/png'});}catch(e){}
+  var canShare=!!(file&&navigator.share&&navigator.canShare&&navigator.canShare({files:[file]}));
+  if(isMobileUA()&&canShare){
+    navigator.share({files:[file],title:'评委人格鉴定',text:'我的评委人格鉴定结果'}).then(function(){},function(){anchorSave(blob,name);});
+    return;
+  }
+  // 3) 桌面 / 兜底：直接下载
+  anchorSave(blob,name);
+  toast(t('downloadStart'));
+}
+function saveShare(){
+  var c=$('share-canvas');
+  if(!c){var nets={};['proof','persuasion','third'].forEach(function(k){nets[k]=axisScore(k);});var code=typeCode(nets);var pf=profileOf(nets);c=document.createElement('canvas');c.width=1080;c.height=1560;drawCert(c,nets,pf,code,loadSerial());}
+  var name='judge-profile-'+typeCode((function(){var n={};['proof','persuasion','third'].forEach(function(k){n[k]=axisScore(k);});return n;})())+'.png';
+  c.toBlob(function(blob){if(blob)saveSharePNG(blob,name);},'image/png');
+}
+loadState();
+applyStaticLang();
+var complete=QUESTIONS.every(function(q){return state.answers[q.id];});
+if(complete){renderResult();}else{renderIntro();}
+</script>
+</body>
+</html>
