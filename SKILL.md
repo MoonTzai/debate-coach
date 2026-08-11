@@ -4,6 +4,7 @@ description: 《辩论筑基》体系辩论审问——引导出论与攻防处�
 version: 8.0.0-grill
 author: 精靈Moon
 license: CC BY-NC-SA 4.0
+third_party_license: grill-me skill (Matt Pocock / Total TypeScript) — MIT License; 仅教练功能基于 grill-me，裁判所（Judge）功能为原创
 based_on: 《辩论筑基》(2020版+2023Pro版) by 精靈Moon
 inspired_by: grill-me skill (Matt Pocock / Total TypeScript), 王伯元
 attribution: 本 skill 基于《辩论筑基》体系构建，审问模式受 grill-me 启发。使用时请注明出处。
