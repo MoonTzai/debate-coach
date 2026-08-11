@@ -8,9 +8,9 @@ Debate-Coach — An AI debate coaching grill skill grounded in the *Debate Unive
 
 ---
 
-> 本 skill 的审问模式基于 [grill-me](https://github.com/mattpocock/grill-me)（Matt Pocock / Total TypeScript）构建，感谢 Matt Pocock 的开创性工作，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用、并主力完成iOS端APP的开发工作。
+> 本 skill 的审问模式基于 [grill-me](https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me)（Matt Pocock / Total TypeScript，MIT License）构建，感谢 Matt Pocock 的开创性工作，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用、并主力完成iOS端APP的开发工作。
 
-> The questioning protocol is built on [grill-me](https://github.com/mattpocock/grill-me) by Matt Pocock (Total TypeScript). Deep gratitude to Matt for his pioneering work, and to 王伯元 for sharing the inspiration to apply grill-me to debate and for leading the iOS app development.
+> The questioning protocol is built on [grill-me](https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me) by Matt Pocock (Total TypeScript, MIT License). Deep gratitude to Matt for his pioneering work, and to 王伯元 for sharing the inspiration to apply grill-me to debate and for leading the iOS app development.
 
 ---
 
@@ -194,6 +194,7 @@ This skill embeds the complete DUG knowledge system across ten volumes (AI-gener
 This skill is built on the *Debate Universal Grammar (辩论筑基)* system by 精靈Moon (free full video courses on YouTube & Bilibili — search "辩论筑基" or "精靈Moon").
 
 - Skill 文件本身 / Skill files: CC BY-NC-SA 4.0（非商业使用 / non-commercial use）
+- 教练功能的审问协议改编自 [grill-me](https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me)（Matt Pocock / Total TypeScript），遵循其 MIT License；仅教练功能基于 grill-me，裁判所（Judge）功能为原创 / The coach questioning protocol is adapted from grill-me (Matt Pocock / Total TypeScript) under its MIT License; only the coach feature is derived from grill-me, the judge (Judge) feature is original work.
 - 《辩论筑基》课件权利归属 / Courseware rights: 精靈Moon
 - 使用本 skill 生成的辩论内容如大量复现筑基特有术语与框架，建议标注"基于《辩论筑基》（精靈Moon著）" / When debate content generated with this skill extensively reproduces DUG-specific terminology and frameworks, please attribute: "基于《辩论筑基》（精靈Moon著）"
 - 学术引用（Burke新修辞学、Rosch原型理论、Entman框架理论等）遵循学术引用规范 / Academic citations (Burke's New Rhetoric, Rosch's Prototype Theory, Entman's Framing Theory, etc.) follow standard academic practice
