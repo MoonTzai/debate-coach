@@ -17,6 +17,21 @@ Debate-Coach-Backup/          Debate-Coach/
 - 稳定版本发布流程：Backup 完成 → 打包 handoff → 切换到 Debate-Coach 会话 → 读取 handoff → 更新那边文件 → commit + push
 - 对比本地与 GitHub 一致性时，只对比 `Debate-Coach/`（git 仓库）↔ GitHub
 
+## 🗂️ 文件关系速查（新会话先读 · 开发基准）
+
+**网页版开发基准**（改网页：编辑对应基准 → node 纯 base64 编码 → 替换 B64 块 → 发布）：
+
+| 基准文件 | 身份 | 对齐状态 |
+|---|---|---|
+| `debate-coach-web.html` | **三合一网页母版**，GH 发布基准，内嵌 ZH/EN/JUDGE/TOOLBOX/LANG/JUDGE_ENTRY 六个 B64 块 | 当前 GH = v8.0.2（已推） |
+| `Output/裁判所2.0.html` | **裁判所青春版单页母版**（= JUDGE_B64） | ✅ 与 GH 逐字节一致 |
+| `Skill-Web.md` | 教练网页（ZH_B64）知识库源 | ✅ 已对齐 |
+| `Skill-Judge.md` | 裁判页对应独立 skill（v9.0.0-Final-B 两轮提示词） | ⚠️ 未与 GH 裁判页对齐，勿当裁判页源 |
+
+**Agent 单文件交付 Skill 开发基准**：
+- `SKILL.md`（合一版 ≈195KB）：Coach 全套知识库 + 阶段 C 青春版裁判所 C1-C11 协议，**Agent 端单文件交付 Skill 的开发基准文件**。基准副本 = `Debate-Coach/SKILL.md`（工作区未提交版）与 `Test/.claude/skills/debate-coach/SKILL.md`（安装版），哈希一致（5833…）。
+- ⚠️ Backup 根目录 `SKILL.md`（178KB）是旧教练基座（无 C 阶段移植），`Debate-Judge/SKILL.md` 是其残留拷贝，勿混用。
+
 ## ⛔ 最高优先级：禁止推送 Git
 **未经用户明确同意，严禁执行 `git push`、`git commit`、`git tag` 或任何修改 Git 历史的操作。** 只允许只读命令（`git log`、`git diff`、`git status`、`git remote -v` 等）。违反此规则将导致项目不可逆损坏。
 
@@ -29,24 +44,35 @@ Debate-Coach-Backup/          Debate-Coach/
 ## ⛔ 最高优先级：禁止推送到 GitHub 不存在的文件
 **同步到 Debate-Coach 发布仓库时，只更新 GitHub 已存在的文件。** GitHub 已明确删除的文件（TERMINOLOGY.md、debate-coach-web-zh.html、debate-coach-web-en.html）禁止重新推送。新增文件需用户逐次明确授权后才能加入 Git 追踪。判断标准：`git ls-tree -r --name-only HEAD` 的输出 = 可更新白名单。
 
-## 📦 APK 打包（每次必读，禁止猜测 JDK 路径）
+## 📦 APK 打包（唯一工程 `APK/`，唯一命令 `scripts/package.cjs`）
+**唯一工程**：`APK/`（`android/` gradle 工程 + `www/` web 资产 + `capacitor.config.json`）。所有历史残留（根 `android/`、根 `www/`、`APK/app/`、旧安装包等）已归档至 `Output/归档-APK-260815/`，**禁止重建任何平行工程**。
+
 **JDK 位置（不在 Program Files，在用户目录！）：**
-- JDK 17：`C:/Users/Moon/Java/jdk-17.0.16+8`
-- JDK 21：`C:/Users/Moon/Java/jdk-21.0.11+10`（当前 capacitor 8.x 需要 21）
+- JDK 21：`C:/Users/Moon/Java/jdk-21.0.11+10`（capacitor 8.x 需要 21）
 - Android SDK：`C:/Users/Moon/AppData/Local/Android/Sdk`
 
-**打包命令：**
+**唯一命令（全部内含断言，禁止手工删拷）：**
 ```bash
-cp Debate-Coach-web.html APK/app/src/main/assets/public/index.html
-# 或先 npx cap sync 再复制
-cd APK/android
-echo "org.gradle.java.home=C:/Users/Moon/Java/jdk-21.0.11+10" >> gradle.properties
-export JAVA_HOME="C:/Users/Moon/Java/jdk-21.0.11+10"
-./gradlew assembleDebug
-# 输出：app/build/outputs/apk/debug/app-debug.apk
+node scripts/package.cjs --copy-only   # 同步 master → APK/www + 字节/tag 断言（日常同步）
+node scripts/package.cjs --gradle      # 同步 + cap copy → gradle 构建 → APK 内提取复核
 ```
+内部流程：先删后拷破 gradle 文件锁 → 字节/tag 断言 → `npx cap copy`（写 `APK/android/app/src/main/assets/public/`，**勿用 cap sync**——会重置 versionCode）→ `gradlew assembleDebug --rerun-tasks`（JAVA_HOME=JDK21 自动设置，破增量缓存）→ 从 APK 提取 `assets/public/index.html` 与 master 逐字节比对。
+产物：`APK/android/app/build/outputs/apk/debug/app-debug.apk` → 复制为根目录 `Debate-Coach-APK-v8.0.5.apk`（发布基准）。
 
-**禁止**：不要在 `C:\Program Files` 下找 JDK，不在那里。用 `ls /c/Users/Moon/Java/` 直接看可用版本。
+**禁止**：不要在 `C:\Program Files` 下找 JDK；不要手工 `rm/cp` APK/www 或 assets（gradle 守护进程文件锁会静默失败返回0）；不要 `npx cap sync`（会重置原生工程 versionCode）；不要在根目录重建 capacitor 工程。
+
+## 🛠️ 发布与检视模块（scripts/ —— 发布前必跑 verify）
+
+**规则：发布/检视一律用下方 node 模块，禁止再写一次性 Python 脚本**（旧 dump_*/analyze_*/patch_*/push_*/test_* 等 79 个已归档至 `Output/归档-脚本-260815/`，根目录仅保留 build_inf_v805.py / extract_docx.py / count_docx.py）。
+
+| 模块 | 用法 | 职责 |
+|---|---|---|
+| `node scripts/verify.cjs` | 发布前必跑 | 校验 6 个 B64 块可解码、Skill-Web.md 与 ZH_B64 一致、C 协议骨架（C0 已登记豁免）、APK 轨 tag/哈希、裁判所字典单一来源。退出码 0=可发布 |
+| `node scripts/inspect.cjs` | `节点名 [行区间]` 或 `节点名 --grep <正则>` | 检视解码页，替代旧 dump_*.py。`--list` 列块 |
+| `node scripts/package.cjs` | `--copy-only` / `--gradle` | APK 打包：先删后拷破锁 → 字节/tag 断言 →（--gradle）构建 → APK 内提取复核 |
+| `node scripts/i18n/build-judge-dict.cjs` | `--check` / `--emit` / `--splice` | 裁判所字典唯一来源 `scripts/i18n/judge-map.json`。加翻译改 JSON；`--splice` 才写回母版 |
+
+**发布顺序：改源（MD/JSON）→ 生成/编码 → `node scripts/verify.cjs` 全绿 → 打包 → 推送。**
 
 ## 继承包
 - 当前：`Output/handoff-260711/`（v7.6.14，2026-07-11）
@@ -60,7 +86,7 @@ export JAVA_HOME="C:/Users/Moon/Java/jdk-21.0.11+10"
 - `SKILL.md` — 《辩论筑基》完整知识体系 + 审问协议（v7.4.0）
 - `SKILL-EN.md` — 英文版知识库（v7.3.0-en-alpha）
 - `debate-coach-web.html` — 三合一网页版（中文版/English BETA/工具箱）
-- `Debate-Coach-v7.6.14.apk` — APK 安装包（4.6MB）
+- `Debate-Coach-APK-v8.0.5.apk` — APK 安装包（现役发布基准；历史版本归档于 `Output/归档-APK-260815/`）
 - `Output/辩案工作台-Case-Workbench.html` — 辩案工作台独立版
 - `Output/软件著作权登记/` — 著作权登记全部材料（v7.6.14）
 - `Output/handoff-260711/` — 项目继承包（v7.6.14）
@@ -102,7 +128,7 @@ fs.writeFileSync(cwd+'/debate-coach-web.html',updated,'utf-8');"
 ## 术语约束
 **复盘或分析辩论比赛时，描述主线形态使用客观术语**：1型主线="有清晰的决胜逻辑"，2型主线="缺乏聚合的决胜锚点"。禁止使用"评委享受""评委痛苦"等主观措辞。结构性交锋的操作使用消化、反转，不用前体系术语"受身"（仅在解释历史概念时加"旧称"标记）。反驳后回应框架使用习惯性交锋/结构性交锋二分，不用前体系四分类"攻守走受"。
 
-**全项目术语标准参见 `TERMINOLOGY.md`**——包含完整旧→新映射表、禁令级别、豁免条件、自检钩子。所有禁令不影响对旧术语的答疑解释（讨论该概念本身时不受限）。
+**全项目术语标准参见 SKILL.md 中的"术语标准"章节（§术语映射表 + §教练禁令全文 + §自检钩子）**——包含完整旧→新映射表、禁令级别、豁免条件、自检钩子。TERMINOLOGY.md 已被 GitHub 删除（内容已嵌入 SKILL.md）。所有禁令不影响对旧术语的答疑解释（讨论该概念本身时不受限）。
 
 ## 知识库修改遍历清单（三轨隔离）
 
@@ -124,22 +150,24 @@ fs.writeFileSync(cwd+'/debate-coach-web.html',updated,'utf-8');"
 7. `C:/Claude/Project/Debate-Coach/docs/SKILL.md` ← 覆盖
 8. `C:/Claude/Project/Debate-Coach/docs/SKILL-EN.md` ← 覆盖
 9. `CLAUDE.md` ← 如新增项目级约束
-10. `TERMINOLOGY.md` ← 如涉及术语变更
+10. SKILL.md 术语标准章节 ← 如涉及术语变更
 
-**严禁**：修改 SKILL.md 后去碰 `debate-coach-web.html` 或 `评委与复盘AI.html`——它们有自己的知识库。
+**严禁**：修改 SKILL.md 后去碰 `debate-coach-web.html` 或 `裁判所2.0.html`——它们有自己的知识库。
 
 ---
 
 ### 轨道 B：网页版教练知识库（Skill-Web.md）
 
-**源文件**：`Skill-Web.md`（根目录）
+**源文件**：`Skill-Web.md`（Backup 工作区根目录，不在 GitHub 发布仓库中）
 
 修改教练教学规则后，同步：
-1. `debate-coach-web.html` → B64 解码 → 替换 ZH_B64 中的系统提示词 → 重编码写回
-2. `APK/www/index.html` ← 覆盖 `debate-coach-web.html`
-3. `APK/android/` → `npx cap sync` → `./gradlew assembleDebug` → 输出 APK
-4. 根目录 APK 文件 ← 覆盖
+1. 编辑 `Skill-Web.md`（裸 MD，人类可读，git diff 友好）
+2. `debate-coach-web.html` → node 解码 ZH_B64 → 替换系统提示词段 → 重编码写回
+3. `node scripts/package.cjs --copy-only`（同步 master → APK/www + 断言）
+4. `node scripts/package.cjs --gradle`（cap copy + 构建 + APK 内提取复核）→ 产物复制为根目录安装包
 5. `C:/Claude/Project/Debate-Coach/Debate-Coach-web.html` ← 覆盖（GitHub 发布仓库）
+
+⚠️ Skill-Web.md 于 2026-07-21 从 ZH_B64 反向导出重新对齐（1601 行）。此前版本（190 行，Jul 18）已过时。
 
 **严禁**：修改网页版教练知识库后去碰 SKILL.md——Claude Code 的知识库和网页版的知识库是两套独立系统。
 
@@ -147,18 +175,43 @@ fs.writeFileSync(cwd+'/debate-coach-web.html',updated,'utf-8');"
 
 ### 轨道 C：裁判所分析框架（Skill-Judge.md）
 
-**源文件**：`Skill-Judge.md`（根目录）
+**源文件**：`Skill-Judge.md`（Backup 工作区根目录，不在 GitHub 发布仓库中）
+
+**重要**：裁判所有两个 HTML 入口——
+- **网页版内嵌**：`Debate-Coach-web.html` 中的 `JUDGE_B64`（base64 编码）
+- **单页母版**：`Output/裁判所2.0.html`（106KB，独立 HTML，内嵌 buildSystemPrompt 函数）
+- 两者共用 Skill-Judge.md 作为规则源
 
 修改裁判分析规则后，同步：
-1. `Output/评委与复盘AI.html` → Edit 工具手改 `buildSystemPrompt` 函数
-2. `debate-coach-web.html` → B64 编码替换 `JUDGE_B64`
-3. `APK/www/index.html` ← 覆盖
-4. `APK/android/` → `npx cap sync` → `./gradlew assembleDebug` → 输出 APK
-5. `Output/评委与复盘AI-final-*.html` ← 覆盖（定版备份）
-6. `Output/milestone-*-protected/评委与复盘AI.html` ← 需授权后覆盖
-7. `C:/Claude/Project/Debate-Coach/Debate-Coach-web.html` ← 覆盖（GitHub 发布仓库，含更新后的 JUDGE_B64）
+1. 编辑 `Skill-Judge.md`（裸 MD，人类可读，git diff 友好）
+2. `Output/裁判所2.0.html` → Edit 工具手改 `buildSystemPrompt` 函数
+3. `debate-coach-web.html` → node B64 编码替换 `JUDGE_B64`
+4. `node scripts/package.cjs --copy-only`（同步 master → APK/www + 断言）
+5. `node scripts/package.cjs --gradle`（cap copy + 构建 + APK 内提取复核）→ 产物复制为根目录安装包
+6. `C:/Claude/Project/Debate-Coach/Debate-Coach-web.html` ← 覆盖（GitHub 发布仓库，含更新后的 JUDGE_B64）
+
+⚠️ `评委与复盘AI.html` 已于 2026-07-21 归档删除（过时双轮架构）。裁判所单页母版现为 `裁判所2.0.html`。
+⚠️ Skill-Judge.md 于 2026-07-21 从 JUDGE_B64 反向导出更新至 223 行，并新增"理论基础速查"区块。
 
 **严禁**：修改裁判分析规则后去碰 SKILL.md——裁判所的知识库和 Claude Code 的知识库是两套独立系统。
+
+---
+
+### 🆕 轨道 D：架构补偿（@skill-only，仅 Agent-Skill 端）
+
+架构补偿是针对 Agent-Skill 端在单次推理中因上下文特征产生的特定偏差的补偿性文本。这些补偿**仅对 Agent-Skill 端有效**——网页版和裁判所用 HTML class 强制格式，不需要架构补偿。
+
+- **存放位置**：SKILL.md 中，用 `<!-- @skill-only -->...<!-- /@skill-only -->` 包裹（用于构建脚本剥离）
+- **同步**：仅覆盖 Agent-Skill 副本，不碰 Web/APK/MD 源
+- **@skill-only 内容剥离命令**：从 SKILL.md 生成网页版知识库时，始终先执行过滤，再编码 B64：
+  ```bash
+  sed '/<!-- @skill-only -->/,/<!-- \/@skill-only -->/d' SKILL.md | [后续 B64 编码]
+  ```
+  这行命令会自动删除所有 `<!-- @skill-only -->...<!-- /@skill-only -->` 包裹的段落，确保架构补偿不会泄漏到网页版/APK 端。
+- **示例**：C3 格式排他声明、三项禁止、C3/C5 区分标记、α→β→γ 交叉引用锚定、输出后自检
+- **禁止**：架构补偿文本出现在网页版/APK 中
+
+---
 
 ---
 

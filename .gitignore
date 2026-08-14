@@ -1,22 +1,13 @@
-# === 禁止上传 GitHub ===
-Source/
-Memory/
-Upload/
-Output/
-.claude/
-CLAUDE.md
-*.jpg
-*.zip
-*.bat
-*.pptx
-*.xlsx
-*.json
-*.wav
-*.srt
-*.py
 
-# === 系统文件 ===
-.DS_Store
-Thumbs.db
-*.log
-node_modules/
+# ===== 密钥与上传安全（260806 追加）=====
+.api-config.json
+.env*
+*.key
+*.pem
+*.p12
+*.bak
+.tmp-*
+*backup*
+*备份*
+Output/**
+work-omega1/Output/**
