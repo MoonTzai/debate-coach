@@ -35,6 +35,15 @@ Debate-Coach-Backup/          Debate-Coach/
 ## ⛔ 最高优先级：禁止推送 Git
 **未经用户明确同意，严禁执行 `git push`、`git commit`、`git tag` 或任何修改 Git 历史的操作。** 只允许只读命令（`git log`、`git diff`、`git status`、`git remote -v` 等）。违反此规则将导致项目不可逆损坏。
 
+## ⛔ 最高优先级：唯一路径与网络纪律（禁止新建任何工作区域）
+**本地 Git 工作路径只有 1 个：`C:\Claude\Project\Debate-Coach\`**（唯一 git 仓库，remote=MoonTzai/debate-coach）。**开发工作区只有 1 个：本项目（`Debate-Coach-Backup/`）。**
+- 禁止 `git init`、`git clone`、`git worktree`、新建任何其他 git 仓库/工作区/克隆目录
+- 禁止新建任何平行工程（APK 唯一工程为 `APK/`）
+- 历史遗留仓库（Debate-Grill*/worktree/web-check）已归档至 `Output/归档-Git-260815/`，不得恢复为工作区
+- **推送/联网前先跑 `node scripts/proxy.cjs --set`**（自动探测可用代理端口 → 写入 git 全局 → 清除发布仓库 local 残留；`--check` 只探测不修改）
+- **网络故障协议**：网络失败时**禁止新建目录、克隆、备用工作区、新仓库、换路径**。固定流程：`node scripts/proxy.cjs --check` 检查代理 → 原路径重试 → 仍失败则停下向用户报告，等待指示
+- 与 GH 对比时：**先 `git fetch origin` 再用 `origin/main`**（本地跟踪引用会过期，直接看本地 refs 会误判远程状态——2026-08 已因此误判过一次）
+
 ## 🔒 最高优先级：受保护目录禁止修改
 **`Output/milestone-*-protected/` 及所有里程碑目录中的文件禁止任何修改、删除、覆盖。** 只允许读取、复制到新位置、打开查看。修改保护文件需要用户明确说出"授权修改保护目录"。文件系统已设只读（chmod 444）。
 
@@ -71,8 +80,9 @@ node scripts/package.cjs --gradle      # 同步 + cap copy → gradle 构建 →
 | `node scripts/inspect.cjs` | `节点名 [行区间]` 或 `节点名 --grep <正则>` | 检视解码页，替代旧 dump_*.py。`--list` 列块 |
 | `node scripts/package.cjs` | `--copy-only` / `--gradle` | APK 打包：先删后拷破锁 → 字节/tag 断言 →（--gradle）构建 → APK 内提取复核 |
 | `node scripts/i18n/build-judge-dict.cjs` | `--check` / `--emit` / `--splice` | 裁判所字典唯一来源 `scripts/i18n/judge-map.json`。加翻译改 JSON；`--splice` 才写回母版 |
+| `node scripts/proxy.cjs` | `--set`（默认）/ `--check` | 自动探测可用代理端口（7897/8001）→ 写 git 全局 → 清发布仓库 local 残留。**推送/联网前必跑** |
 
-**发布顺序：改源（MD/JSON）→ 生成/编码 → `node scripts/verify.cjs` 全绿 → 打包 → 推送。**
+**发布顺序：改源（MD/JSON）→ 生成/编码 → `node scripts/verify.cjs` 全绿 → 打包 → `node scripts/proxy.cjs --set` → 推送。**
 
 ## 继承包
 - 当前：`Output/handoff-260711/`（v7.6.14，2026-07-11）
