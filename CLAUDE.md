@@ -23,11 +23,13 @@ Debate-Coach-Backup/          Debate-Coach/
 
 | 基准文件 | 身份 | 对齐状态 |
 |---|---|---|
-| `debate-coach-web.html` | **三合一网页母版**，GH 发布基准，内嵌 ZH/EN/JUDGE/TOOLBOX/LANG/JUDGE_ENTRY 六个 B64 块；v8.0.6 起 TOOLBOX_B64=外置壳（~40KB），13 个工具为独立页 | 当前 GH = v8.0.6（已推） |
-| `toolbox.html` + `scripts/tool-manifest.json` | 工具箱壳（链接墙）+ 13 工具页 sha8 清单（唯一来源 = Backup 根目录） | ✅ 与 GH 一致 |
+| `debate-coach-web.html` | **三合一网页母版**，GH 发布基准，内嵌 ZH/EN/JUDGE/TOOLBOX/LANG/JUDGE_ENTRY 六个 B64 块；**v8.0.6 起 TOOLBOX_B64=壳+9工具×中英内嵌**（iframe srcdoc 隔离，单文件交付全功能，~3.24MB） | 当前 GH = v8.0.6（已推） |
+| `toolbox.html`（独立壳）+ 13 工具页 | **线上 InfinityFree 专用外置形态**（1MB 限制）；工具页唯一来源 = Backup 根目录（manifest 指纹校验） | ⚠️ 仅线上使用，GH 已撤除 |
 | `Output/裁判所2.0.html` | **裁判所青春版单页母版**（= JUDGE_B64） | ✅ 与 GH 逐字节一致 |
-| `Skill-Web.md` | 教练网页（ZH_B64）知识库源 | ✅ 已对齐 |
+| `Skill-Web.md` | 教练网页（ZH_B64）知识库源（已含 8 候选重构） | ✅ 已对齐 |
 | `Skill-Judge.md` | 裁判页对应独立 skill（v9.0.0-Final-B 两轮提示词） | ⚠️ 未与 GH 裁判页对齐，勿当裁判页源 |
+
+**单文件交付铁原则（用户规定）**：GH/下载/本地/APK 必须一文件全功能——母版 TOOLBOX_B64 内嵌全部工具（iframe 隔离），不再依赖外部工具页文件。InfinityFree 在线是唯一 1MB 限制例外（保持外置壳+独立页）。
 
 **Agent 单文件交付 Skill 开发基准**：
 - `SKILL.md`（合一版，当前 178KB）：Coach 全套知识库 + 阶段 C 青春版裁判所 C1-C11 协议，**Agent 端单文件交付 Skill 的开发基准文件**。四副本（Backup 根 / `Debate-Coach/SKILL.md` / `.claude/skills/debate-coach/` / `Test/.claude/skills/debate-coach/`）哈希一致 = `9b846074`（2026-08-15 术语统一后同步）。旧版 Test 安装副本（195KB，`58334411`，7/21）已归档至 `Output/归档-SKILL-260816/`。
@@ -77,7 +79,7 @@ node scripts/package.cjs --gradle      # 同步 + cap copy → gradle 构建 →
 
 | 模块 | 用法 | 职责 |
 |---|---|---|
-| `node scripts/verify.cjs` | 发布前必跑 | 校验 6 个 B64 块可解码、Skill-Web.md 与 ZH_B64 一致、C 协议骨架（C0 已登记豁免）、APK 轨 tag/哈希、裁判所字典单一来源、工具箱轨（manifest/三渠道/壳体积链接/壳双载体）。退出码 0=可发布 |
+| `node scripts/verify.cjs` | 发布前必跑 | 校验 6 个 B64 块可解码、Skill-Web.md 与 ZH_B64 一致、C 协议骨架（C0 已登记豁免）、APK 轨 tag/哈希、裁判所字典单一来源、工具箱轨（manifest/三渠道/壳体积链接/**壳双载体=内嵌自洽**——TOOLBOX_B64 含 9 工具×中英+srcdoc+无旧跳转，不再与独立 toolbox.html 一致）。退出码 0=可发布 |
 | `node scripts/inspect.cjs` | `节点名 [行区间]` 或 `节点名 --grep <正则>` | 检视解码页，替代旧 dump_*.py。`--list` 列块 |
 | `node scripts/package.cjs` | `--copy-only` / `--gradle` | APK 打包：先删后拷破锁 → 字节/tag 断言（含 13 工具页清单）→（--gradle）构建 → APK 内提取复核（内置 zip 解析，支持中文文件名） |
 | `node scripts/export-tools.cjs` | `--emit` / `--check` / `--diff` | 工具箱工具页唯一来源维护：--emit 幂等重打补丁（返回按钮/主题键/lang-toggle/样式），--check 校验 manifest 与残留，--diff 功能差异裁决（旧母版导出时代遗留） |
@@ -97,12 +99,13 @@ node scripts/package.cjs --gradle      # 同步 + cap copy → gradle 构建 →
 ## 核心资产
 - `SKILL.md` — 《辩论筑基》完整知识体系 + 审问协议（v7.4.0）
 - `SKILL-EN.md` — 英文版知识库（v7.3.0-en-alpha）
-- `debate-coach-web.html` — 三合一网页版（中文版/English BETA/工具箱，v8.0.6 起 1.0MB）
-- `toolbox.html` + 13 独立工具页 — 工具箱外置化架构（唯一来源 Backup 根，manifest 指纹校验）
-- `Debate-Coach-APK-v8.0.6.apk` — APK 安装包（现役发布基准；历史版本归档于 `Output/归档-APK-260815/`）
+- `debate-coach-web.html` — **三合一网页版单文件交付**（中文版/English BETA/工具箱全内嵌，v8.0.6 起 ~3.24MB，TOOLBOX_B64=壳+9工具×中英 iframe 内嵌）
+- `toolbox.html` + 13 独立工具页 — 工具箱**线上外置形态**（唯一来源 Backup 根，manifest 指纹校验；仅 InfinityFree 1MB 限制场景使用）
+- `Debate-Coach-APK-v8.0.6.apk` — APK 安装包（5.99MB，内嵌工具箱+8候选知识库；历史版本归档于 `Output/归档-APK-260815/`）
 - `Output/辩案工作台-Case-Workbench.html` — 辩案工作台独立版
 - `Output/软件著作权登记/` — 著作权登记全部材料（v7.6.14）
 - `Output/handoff-260711/` — 项目继承包（v7.6.14）
+- `Coach2.0/` — 测试开发子项目（重构方案设计.md + 工具箱内嵌版母版 + 备份归档）
 - `Source/` — 原始课件提取、分析文件、早期测试版、V1原版
 - `Memory/` — 项目记忆和分析记录
 - 协议集成在 `SKILL.md` 第441行（v7）
