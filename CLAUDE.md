@@ -23,7 +23,8 @@ Debate-Coach-Backup/          Debate-Coach/
 
 | 基准文件 | 身份 | 对齐状态 |
 |---|---|---|
-| `debate-coach-web.html` | **三合一网页母版**，GH 发布基准，内嵌 ZH/EN/JUDGE/TOOLBOX/LANG/JUDGE_ENTRY 六个 B64 块 | 当前 GH = v8.0.2（已推） |
+| `debate-coach-web.html` | **三合一网页母版**，GH 发布基准，内嵌 ZH/EN/JUDGE/TOOLBOX/LANG/JUDGE_ENTRY 六个 B64 块；v8.0.6 起 TOOLBOX_B64=外置壳（~40KB），13 个工具为独立页 | 当前 GH = v8.0.6（已推） |
+| `toolbox.html` + `scripts/tool-manifest.json` | 工具箱壳（链接墙）+ 13 工具页 sha8 清单（唯一来源 = Backup 根目录） | ✅ 与 GH 一致 |
 | `Output/裁判所2.0.html` | **裁判所青春版单页母版**（= JUDGE_B64） | ✅ 与 GH 逐字节一致 |
 | `Skill-Web.md` | 教练网页（ZH_B64）知识库源 | ✅ 已对齐 |
 | `Skill-Judge.md` | 裁判页对应独立 skill（v9.0.0-Final-B 两轮提示词） | ⚠️ 未与 GH 裁判页对齐，勿当裁判页源 |
@@ -76,9 +77,10 @@ node scripts/package.cjs --gradle      # 同步 + cap copy → gradle 构建 →
 
 | 模块 | 用法 | 职责 |
 |---|---|---|
-| `node scripts/verify.cjs` | 发布前必跑 | 校验 6 个 B64 块可解码、Skill-Web.md 与 ZH_B64 一致、C 协议骨架（C0 已登记豁免）、APK 轨 tag/哈希、裁判所字典单一来源。退出码 0=可发布 |
+| `node scripts/verify.cjs` | 发布前必跑 | 校验 6 个 B64 块可解码、Skill-Web.md 与 ZH_B64 一致、C 协议骨架（C0 已登记豁免）、APK 轨 tag/哈希、裁判所字典单一来源、工具箱轨（manifest/三渠道/壳体积链接/壳双载体）。退出码 0=可发布 |
 | `node scripts/inspect.cjs` | `节点名 [行区间]` 或 `节点名 --grep <正则>` | 检视解码页，替代旧 dump_*.py。`--list` 列块 |
-| `node scripts/package.cjs` | `--copy-only` / `--gradle` | APK 打包：先删后拷破锁 → 字节/tag 断言 →（--gradle）构建 → APK 内提取复核 |
+| `node scripts/package.cjs` | `--copy-only` / `--gradle` | APK 打包：先删后拷破锁 → 字节/tag 断言（含 13 工具页清单）→（--gradle）构建 → APK 内提取复核（内置 zip 解析，支持中文文件名） |
+| `node scripts/export-tools.cjs` | `--emit` / `--check` / `--diff` | 工具箱工具页唯一来源维护：--emit 幂等重打补丁（返回按钮/主题键/lang-toggle/样式），--check 校验 manifest 与残留，--diff 功能差异裁决（旧母版导出时代遗留） |
 | `node scripts/i18n/build-judge-dict.cjs` | `--check` / `--emit` / `--splice` | 裁判所字典唯一来源 `scripts/i18n/judge-map.json`。加翻译改 JSON；`--splice` 才写回母版 |
 | `node scripts/proxy.cjs` | `--set`（默认）/ `--check` | 自动探测可用代理端口（7897/8001）→ 写 git 全局 → 清发布仓库 local 残留。**推送/联网前必跑** |
 
@@ -95,8 +97,9 @@ node scripts/package.cjs --gradle      # 同步 + cap copy → gradle 构建 →
 ## 核心资产
 - `SKILL.md` — 《辩论筑基》完整知识体系 + 审问协议（v7.4.0）
 - `SKILL-EN.md` — 英文版知识库（v7.3.0-en-alpha）
-- `debate-coach-web.html` — 三合一网页版（中文版/English BETA/工具箱）
-- `Debate-Coach-APK-v8.0.5.apk` — APK 安装包（现役发布基准；历史版本归档于 `Output/归档-APK-260815/`）
+- `debate-coach-web.html` — 三合一网页版（中文版/English BETA/工具箱，v8.0.6 起 1.0MB）
+- `toolbox.html` + 13 独立工具页 — 工具箱外置化架构（唯一来源 Backup 根，manifest 指纹校验）
+- `Debate-Coach-APK-v8.0.6.apk` — APK 安装包（现役发布基准；历史版本归档于 `Output/归档-APK-260815/`）
 - `Output/辩案工作台-Case-Workbench.html` — 辩案工作台独立版
 - `Output/软件著作权登记/` — 著作权登记全部材料（v7.6.14）
 - `Output/handoff-260711/` — 项目继承包（v7.6.14）
