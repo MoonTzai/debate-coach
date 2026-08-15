@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>关于与说明</title>
+<style>
+:root{--bg:#f5f5f5;--card:#fff;--border:#e0e0e0;--gold:#4f6bed;--text:#222;--gray:#666;--input-bg:#f0f0f0;--radius:8px}
+body.dark{--bg:#0d0d0d;--card:#141414;--border:#222;--gold:#ffc000;--text:#eee;--gray:#999;--input-bg:#1a1a1a}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Microsoft YaHei','PingFang SC',sans-serif;min-height:100vh}
+header{background:var(--card);padding:14px 24px 14px 80px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+header h1{font-size:18px;color:var(--gold);position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap}
+.home-btn{position:absolute;left:20px}
+main{max-width:860px;margin:0 auto;padding:20px;line-height:1.8}
+.btn-sm{background:var(--card);border:1px solid var(--border);color:var(--gray);padding:10px 14px;border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit}
+.btn-sm:hover{border-color:var(--gold);color:var(--gold)}
+h1{color:var(--gold);font-size:22px;margin:16px 0 8px;padding-bottom:6px;border-bottom:2px solid var(--gold)}
+h2{color:var(--gold);font-size:18px;margin:20px 0 10px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+h3{color:var(--gold);font-size:15px;margin:16px 0 8px}
+p{margin:8px 0}
+blockquote{background:var(--input-bg);border-left:3px solid var(--gold);padding:8px 16px;margin:12px 0;color:var(--gray);font-size:14px}
+pre{background:var(--input-bg);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;overflow-x:auto;font-size:13px;margin:12px 0}
+code{background:var(--input-bg);padding:2px 6px;border-radius:4px;font-size:13px}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14px}
+td,th{border:1px solid var(--border);padding:8px 12px;text-align:left}
+th{background:var(--input-bg);color:var(--gold);font-weight:bold}
+a{color:var(--gold)}
+hr{border:none;border-top:1px solid var(--border);margin:16px 0}
+ul,ol{padding-left:24px;margin:8px 0}
+li{margin:4px 0}
+#theme-toggle{background:transparent;border:1px solid var(--border);color:var(--gray);padding:10px 14px;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit}
+#theme-toggle:hover{border-color:var(--gold);color:var(--gold)}
+@media(max-width:600px){header{padding:10px 14px;flex-wrap:wrap;gap:6px}.home-btn{position:static;margin-right:auto}header h1{font-size:15px;position:static;transform:none;width:100%;text-align:center;order:5}header span{margin-left:auto}main{padding:12px}}
+</style>
+<script>
+(function(){
+var P={"classic":{"name":"经典","font":"'Microsoft YaHei','PingFang SC',system-ui,sans-serif","light":{"bg":"#f5f5f5","card":"#ffffff","ivory":"#f0f0f0","paper":"#fafafa","input":"#f0f0f0","text1":"#222222","text2":"#333333","text3":"#666666","text4":"#999999","accent":"#4f6bed","accentLight":"#4f6bed","accentSoft":"#e3e9f8","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#8f9bb3","goldSoft":"#f0f0f0","minor":"#b0b0b0","line":"#e0e0e0","lineSoft":"#e8e8e8","blue":"#4f6bed","green":"#4caf50","red":"#e53935","warnBg":"#fff3cd","warnBorder":"#ffc107","eng":"#8e44ad","grid":"#e4e4e4","hover":"#fafafa","shadow":"rgba(0,0,0,.08)","shadowSm":"rgba(0,0,0,.06)","shadowMd":"rgba(0,0,0,.10)","radius":"8px","radiusSm":"6px","sans":"'Microsoft YaHei','PingFang SC',system-ui,sans-serif","serif":"'Songti SC','STSong',Georgia,serif"},"dark":{"bg":"#0d0d0d","card":"#141414","ivory":"#1a1a1a","paper":"#101010","input":"#1a1a1a","text1":"#eeeeee","text2":"#cccccc","text3":"#999999","text4":"#555555","accent":"#ffc000","accentLight":"#ffd75e","accentSoft":"#332b00","onAccent":"#000000","onFunc":"#ffffff","gold":"#8f9bb3","goldSoft":"#2a2a2a","minor":"#666666","line":"#222222","lineSoft":"#1b1b1b","blue":"#4fa8ee","green":"#6ecd71","red":"#ee5555","warnBg":"#2a2000","warnBorder":"#664400","eng":"#c39bdb","grid":"#1e1e1e","hover":"#1b1b1b","shadow":"rgba(0,0,0,.35)","shadowSm":"rgba(0,0,0,.30)","shadowMd":"rgba(0,0,0,.45)","radius":"8px","radiusSm":"6px","sans":"'Microsoft YaHei','PingFang SC',system-ui,sans-serif","serif":"'Songti SC','STSong',Georgia,serif"}},"tendency":{"name":"人格测试","font":"-apple-system,'SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif","light":{"bg":"#eef1f6","card":"#ffffff","ivory":"#f7f9fc","paper":"#f2f5fa","input":"#f7f9fc","text1":"#1c2333","text2":"#39445a","text3":"#5f6b80","text4":"#8b95a8","accent":"#123a6d","accentLight":"#2b5ea8","accentSoft":"#e7eef8","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#6f7f99","goldSoft":"#eef2f8","minor":"#b0bfd4","line":"#dde3ec","lineSoft":"#e8ecf3","blue":"#2b5ea8","green":"#1e8e5a","red":"#c0392b","warnBg":"#eef2f8","warnBorder":"#b0bfd4","eng":"#2b5ea8","grid":"#dde3ec","hover":"#f7f9fc","shadow":"rgba(18,40,80,.06)","shadowSm":"rgba(18,40,80,.06)","shadowMd":"rgba(18,40,80,.08)","radius":"20px","radiusSm":"12px","sans":"-apple-system,'SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif","serif":"Georgia,'Songti SC','STSong','Source Han Serif SC','Noto Serif CJK SC','SimSun',serif"},"dark":{"bg":"#0c1017","card":"#141a26","ivory":"#171e2c","paper":"#121722","input":"#171e2c","text1":"#ece8df","text2":"#c8c2b2","text3":"#98917f","text4":"#6f6959","accent":"#f0b429","accentLight":"#ffd166","accentSoft":"#2b2412","onAccent":"#1c2333","onFunc":"#ffffff","gold":"#d9b25f","goldSoft":"#241d10","minor":"#5a4c2c","line":"#232c3d","lineSoft":"#1f2837","blue":"#9db9e3","green":"#6ecf8f","red":"#e57a77","warnBg":"#2b2412","warnBorder":"#5a4c2c","eng":"#9db9e3","grid":"#232c3d","hover":"#171e2c","shadow":"rgba(0,0,0,.4)","shadowSm":"rgba(0,0,0,.4)","shadowMd":"rgba(0,0,0,.4)","radius":"20px","radiusSm":"12px","sans":"-apple-system,'SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif","serif":"Georgia,'Songti SC','STSong','Source Han Serif SC','Noto Serif CJK SC','SimSun',serif"}},"apple":{"name":"苹果风","font":"-apple-system,'SF Pro Display','SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif","light":{"bg":"#f5f3f0","card":"#ffffff","ivory":"#faf8f6","paper":"#f5f3f0","input":"#faf8f6","text1":"#1c1c1e","text2":"#3a3a3c","text3":"#6e6e73","text4":"#8e8e93","accent":"#007aff","accentLight":"#3395ff","accentSoft":"#e5f0ff","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#bf8d3c","goldSoft":"#faf6ed","minor":"#d1d1d6","line":"#e5e5ea","lineSoft":"#eae9e8","blue":"#007aff","green":"#1e7a1e","red":"#b13e3e","warnBg":"#faf6ed","warnBorder":"#bf8d3c","eng":"#bf8d3c","grid":"#e5e5ea","hover":"#faf8f6","shadow":"rgba(0,0,0,.04)","shadowSm":"rgba(0,0,0,.04)","shadowMd":"rgba(0,0,0,.06)","radius":"20px","radiusSm":"12px","sans":"-apple-system,'SF Pro Display','SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif","serif":"Georgia,'Songti SC','STSong',serif"},"dark":{"bg":"#101014","card":"#1c1c1e","ivory":"#2c2c2e","paper":"#17171a","input":"#2c2c2e","text1":"#f2f2f7","text2":"#c7c7cc","text3":"#8e8e93","text4":"#636366","accent":"#0a84ff","accentLight":"#409cff","accentSoft":"#14273f","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#d4a95c","goldSoft":"#2a2416","minor":"#48484a","line":"#38383a","lineSoft":"#2c2c2e","blue":"#0a84ff","green":"#30d158","red":"#ff453a","warnBg":"#2a2416","warnBorder":"#bf8d3c","eng":"#d4a95c","grid":"#38383a","hover":"#2c2c2e","shadow":"rgba(0,0,0,.5)","shadowSm":"rgba(0,0,0,.5)","shadowMd":"rgba(0,0,0,.5)","radius":"20px","radiusSm":"12px","sans":"-apple-system,'SF Pro Display','SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif","serif":"Georgia,'Songti SC','STSong',serif"}},"editorial":{"name":"编辑风","font":"'Songti SC','STSong','Source Han Serif SC','Noto Serif CJK SC',Georgia,'Microsoft YaHei',serif","light":{"bg":"#f5f4ed","card":"#faf9f5","ivory":"#faf9f5","paper":"#f5f4ed","input":"#faf9f5","text1":"#141413","text2":"#3d3d3a","text3":"#504e49","text4":"#6b6a64","accent":"#1B365D","accentLight":"#2D5A8A","accentSoft":"#E4ECF5","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#b98f3f","goldSoft":"#EEF2F7","minor":"#b8b7b0","line":"#e8e6dc","lineSoft":"#e5e3d8","blue":"#2D5A8A","green":"#52734f","red":"#9c3b33","warnBg":"#f6e9c8","warnBorder":"#b98f3f","eng":"#1B365D","grid":"#e8e6dc","hover":"#faf9f5","shadow":"rgba(20,20,19,.06)","shadowSm":"rgba(20,20,19,.05)","shadowMd":"rgba(20,20,19,.08)","radius":"10px","radiusSm":"6px","sans":"'Microsoft YaHei','PingFang SC',system-ui,sans-serif","serif":"'Songti SC','STSong','Source Han Serif SC','Noto Serif CJK SC',Georgia,'Microsoft YaHei',serif"},"dark":{"bg":"#141413","card":"#1c1c1a","ivory":"#1c1c1a","paper":"#141413","input":"#222220","text1":"#f2f0e9","text2":"#b0aea5","text3":"#8f8d84","text4":"#6b6a64","accent":"#4a7fb5","accentLight":"#6b9fd1","accentSoft":"#1e2a38","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#b98f3f","goldSoft":"#23221f","minor":"#5a5952","line":"#2a2a28","lineSoft":"#242422","blue":"#6b9fd1","green":"#7fa37f","red":"#d08a80","warnBg":"#2a2416","warnBorder":"#b98f3f","eng":"#8fb3d9","grid":"#2a2a28","hover":"#222220","shadow":"rgba(0,0,0,.5)","shadowSm":"rgba(0,0,0,.5)","shadowMd":"rgba(0,0,0,.5)","radius":"10px","radiusSm":"6px","sans":"'Microsoft YaHei','PingFang SC',system-ui,sans-serif","serif":"'Songti SC','STSong','Source Han Serif SC','Noto Serif CJK SC',Georgia,'Microsoft YaHei',serif"}}};
+var A={"bg":["--bg"],"card":["--card"],"ivory":["--ivory"],"paper":["--paper"],"input":["--input-bg","--input"],"text1":["--text","--text-1"],"text2":["--text-2"],"text3":["--gray","--text-3"],"text4":["--dark-gray","--text-4"],"accent":["--gold","--ink"],"accentLight":["--ink-light"],"accentSoft":["--ink-soft"],"goldSoft":["--gold-soft"],"minor":["--minor"],"line":["--border","--line"],"lineSoft":["--line-soft"],"blue":["--blue"],"green":["--green"],"red":["--red"],"warnBg":["--warn-bg"],"warnBorder":["--warn-border"],"eng":["--eng"],"grid":["--grid"],"hover":["--hover"],"shadow":["--shadow"],"shadowSm":["--shadow-sm"],"shadowMd":["--shadow-md"],"radius":["--radius"],"radiusSm":["--radius-sm"],"sans":["--sans"],"serif":["--serif"],"onAccent":["--on-accent"],"onFunc":["--on-func"]};
+var F='lightroot';
+var DEF='classic';
+function css(v){var s='';if(!v)return s;for(var k in v){var a=A[k];if(!a)continue;for(var i=0;i<a.length;i++)s+=a[i]+':'+v[k]+';';}return s;}
+function read(){try{var c=JSON.parse(localStorage.getItem('debate_coach_toolbox_theme')||localStorage.getItem('debate_toolbox_theme')||'null');if(c&&c.preset==='custom'&&c.light&&c.dark)return c;if(c&&P[c.preset])return c;return {preset:DEF};}catch(e){return {preset:DEF};}}
+function tokens(mode){var c=read();var t=P[c.preset]||P.classic;if(c.preset==='custom')return (mode==='dark'?(c.dark||t.dark):(c.light||t.light));return mode==='dark'?t.dark:t.light;}
+function themeCss(c){var t=P[c.preset]||P[DEF]||P.classic;var L=(c.preset==='custom'?(c.light||t.light):t.light);var D=(c.preset==='custom'?(c.dark||t.dark):t.dark);var f=(c.preset==='custom'?(c.font||t.font):t.font)||t.font;var root=(F==='darkroot')?css(D):css(L);return ':root{'+root+'}body.light{'+css(L)+'}body.dark{'+css(D)+'}body{font-family:'+f+';-webkit-font-smoothing:antialiased}.tools .card{border-radius:var(--radius)}.home{border-radius:var(--radius-sm)}';}
+function emit(c){var cssText=themeCss(c);var old=document.getElementById('tbx-theme');if(old&&old.parentNode)old.parentNode.removeChild(old);if(document.body){var s=document.createElement('style');s.id='tbx-theme';s.textContent=cssText;document.head.appendChild(s);}else{document.write('<style id="tbx-theme">'+cssText+'</style>');}}
+var share=null;
+function tokensFor(name,mode){var t=P[name]||P[DEF]||P.classic;return mode==='dark'?t.dark:t.light;}
+function tokens(mode){if(share)return tokensFor(share,mode);var c=read();var t=P[c.preset]||P[DEF]||P.classic;if(c.preset==='custom')return (mode==='dark'?(c.dark||t.dark):(c.light||t.light));return mode==='dark'?t.dark:t.light;}
+function setShare(name){share=name||null;}
+function getShare(){return share;}
+var cfg=read();emit(cfg);
+window.__TBX={P:P,A:A,F:F,emit:emit,read:read,tokens:tokens,tokensFor:tokensFor,setShare:setShare,getShare:getShare};
+})();
+</script>
+</head>
+<body><script>if(localStorage.getItem("debate_coach_theme")==="dark")document.body.classList.add("dark")</script>
+<header>
+<button onclick="window.location.href='toolbox.html'" class="btn-sm home-btn">主页</button>
+<h1>关于与说明</h1>
+<span style="display:flex;gap:8px;align-items:center;margin-left:auto"><button id="theme-toggle" onclick="var d=document.body.classList.toggle('dark');localStorage.setItem('debate_coach_theme',d?'dark':'light')">界面颜色</button></span>
+</header>
+<main>
+<h1>Debate-Coach · 《辩论筑基》 · 辩论教练 · AI Grill Skill</h1>
+<p>Debate-Coach — An AI debate coaching grill skill grounded in the *Debate Universal Grammar (辩论筑基)* system.</p>
+<blockquote>**声明**：本工具仅供技术学习使用。用户须自行承担使用 API 产生的全部法律及费用风险。</blockquote>
+<p>></p>
+<blockquote>**Disclaimer**: This tool is provided for technical learning purposes only. Users are solely responsible for all legal and cost risks arising from API usage.</blockquote>
+<hr>
+<blockquote>本 skill 的审问模式基于 [grill-me](https://github.com/mattpocock/grill-me)（Matt Pocock / Total TypeScript）构建，感谢 Matt Pocock 的开创性工作，也感谢王伯元学弟分享启发 grill-me 在辩论中的应用、并主力完成iOS端APP的开发工作。</blockquote>
+<blockquote>The questioning protocol is built on [grill-me](https://github.com/mattpocock/grill-me) by Matt Pocock (Total TypeScript). Deep gratitude to Matt for his pioneering work, and to 王伯元 for sharing the inspiration to apply grill-me to debate and for leading the iOS app development.</blockquote>
+<hr>
+<p>基于《辩论筑基》（精靈Moon著，2020版+2023Pro版，56课件+SmartArt全量提取）全套理念、知识体系与操作框架的 AI 辩论教练式问答 skill。</p>
+<p>An AI debate-coaching skill grounded in the full conceptual framework, knowledge system, and operational methods of *Debate Universal Grammar* (精靈Moon, 2020 edition + 2023 Pro edition, 56 courseware files with complete SmartArt extraction).</p>
+<p><b>自包含</b>——不需另行学习《辩论筑基》。安装后 AI 即深度理解筑基全部术语与框架，可逐层引导出论、穷举攻防路径、进行结构性交锋分析。</p>
+<p><b>Self-contained</b> — no prior study of the source material required. Once installed, the AI has deep knowledge of all DUG terminology and frameworks: it can guide case construction step by step, exhaust attack-defense pathways, and conduct structural clash analysis.</p>
+<hr>
+<h3>⚠️ 重要声明 / Important Disclaimer</h3>
+<p><b>本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准（Bilibili/YouTube 免费放送），本 Skill 会话内容仅供参考！！！仅供参考！！！仅供参考！！！</b></p>
+<p><b>This skill's responses are produced by AI trained on the Debate Universal Grammar courseware (slides, not video lectures). Discrepancies with the author's understanding and intent are inevitable. For authoritative knowledge, always refer to the video lectures (free on Bilibili/YouTube). Conversations with this skill are for reference only.</b></p>
+<hr>
+<h2>使用方式 / How to Use</h2>
+<h3>网页版 / APP 客户端 / Web Version / APK Client</h3>
+<p>如果你不想安装任何 AI 客户端，可以直接使用独立网页版（安卓手机用户也可安装网页版封装的 APK，比浏览器打开更为易用）：</p>
+<p>If you'd rather not install any AI client, use the standalone web version (Android users can also install the packaged APK, which is more user-friendly than opening in a browser):</p>
+<p>用浏览器打开 <code>debate-coach-web.html</code>，输入 DeepSeek API Key（从 <a href="https://platform.deepseek.com">platform.deepseek.com</a> 获取）即可使用。也支持自定义填入第三方 API 地址和模型名（如 GLM-5.2、Kimi、Qwen 等），只要兼容 OpenAI <code>/v1/chat/completions</code> 格式（Bearer Token + SSE streaming）即可。注意：部分供应商提供多种接口格式，请选择其 OpenAI 兼容地址填入。网页版/APP客户端内置完整的《辩论筑基》知识体系，支持导出/导入会话记录、深色/浅色主题切换、移动端适配。</p>
+<p>Open <code>debate-coach-web.html</code> in your browser, enter a DeepSeek API key (get one at <a href="https://platform.deepseek.com">platform.deepseek.com</a>), and you're ready to go. You can also configure a custom third-party API endpoint and model name (e.g. GLM-5.2, Kimi, Qwen, etc.) — any service compatible with the OpenAI <code>/v1/chat/completions</code> format (Bearer Token + SSE streaming) will work. Note: some providers offer multiple API formats — be sure to select their OpenAI-compatible <code>/v1/chat/completions</code> endpoint. The web version/APK client has the full DUG knowledge base built in, and supports session export/import, dark/light theme switching, and mobile-friendly layout.</p>
+<h3>全功能完整版 / Full-Featured Complete Version</h3>
+<p>全功能完整版需安装 AI 客户端并载入本 Skill，与网页版/APP客户端共享同一套《辩论筑基》知识体系和教练逻辑。区别在于 Skill 版嵌入 AI 客户端（Claude Code、Cursor 等）内运行，结合客户端 API 能力，可对本地文件（包括但不限于文稿、视频、音频）进行分析使用，也可结合知识库和 AI 按要求生成文件，适合深度备赛、训练、教学场景。</p>
+<p>The Full-Featured Complete Version requires an AI client with this Skill installed. It shares the same DUG knowledge base and coaching logic as the web version/APK client. The difference is that the Skill runs inside an AI client (Claude Code, Cursor, etc.) with full access to the client's API capabilities — it can analyze local files (including documents, video, and audio), and can generate files on demand by combining the knowledge base with AI, making it ideal for deep tournament prep, training, and teaching scenarios.</p>
+<p>安装 AI 客户端并安装本 Skill 后，向 AI 输入辩题和持方。Skill 会先确认你的需求（从零出论 / 攻防准备 / 自由问答），然后逐层引导：</p>
+<p>Once you've installed an AI client and this Skill, enter a debate topic and your side. The skill will first confirm what you need (case construction / attack-defense prep / Q&A), then guide you layer by layer:</p>
+<ol>
+<li>**从零出论 / Case Construction**：确认辩题持方 → 选择出论或攻防模式 → 确认赛制（可跳过） → 辩题关键词定义 → 选择切入视角 → 建立标准 → 挖掘价值 → 穷举三类反驳 → 结构性交锋（消化/反转） → 预判主线<br>Confirm topic & side → choose case construction or attack-defense mode → confirm format (skippable) → define keywords → choose framing angle → establish criteria → uncover values → exhaust three types of rebuttal → structural clash (absorption/reversal) → anticipate main thread.</li>
+<li>**备赛攻防 / Pre-tournament Attack-Defense Prep**：两路径——架构攻防（防守自检→对手预判→碰撞防守→主动进攻→决胜推演）或单点攻防（自检→三种反驳穷举→逐类反击→单点整合）。支持传辩/奥瑞冈/BP 三种赛制。<br>Two paths: structural prep (self-audit → opponent prediction → defensive fortification → proactive offense → decisive scenario planning) or single-point prep (self-audit → exhaust three rebuttal types → counter each → integrate). Supports traditional Chinese debate, Oregon-style policy debate, and British Parliamentary.</li>
+<li>**赛后复盘 / Post-match Review**：主线类型判断 → 三维模型得失分析 → 内容深度评估<br>Identify main-thread type → analyze gains/losses via the three-dimensional judging model → assess content depth.</li>
+<li>**自由问答 / Q&A**：无需准备辩题，提出任何辩论相关问题——实战困境、技术选择、策略判断、赛制疑问、训练方法等，基于筑基体系全面解答。<br>No debate topic needed — ask any debate-related question: tactical dilemmas, technique choices, strategy judgments, format questions, training methods, etc. Answered comprehensively through the DUG framework.<br>教练会给出方向选项和推荐，以合作式访谈引导你逐步构建架构。所有交互遵循"术语+白话双轨"原则——使用筑基术语时连带自然语言解释。<br>The coach provides directional options with recommendations, guiding you through a collaborative interview. All interactions follow the "term + plain-language dual track" principle — every DUG term is accompanied by a natural-language explanation.</li>
+</ol>
+<h3>英文版 / English Version</h3>
+<p>如需使用英文版，将 <code>SKILL-EN.md</code> 安装到对应 AI 客户端即可（安装方式见上方各客户端说明）。英文版覆盖 ~90% 内容，尚在完善中。网页版/APP客户端内置中英文切换，无需额外安装。</p>
+<p>For the English version, install <code>SKILL-EN.md</code> into your AI client (see installation instructions above for each client). The English version covers ~90% of the content and is still being refined. The web version/APK client has built-in Chinese/English switching — no extra installation needed.</p>
+<blockquote>**请注意**：因教材所限，本 skill 目前仅针对华语辩论进行了调试，对英语辩论完全不适配，而且主流英语辩论和华语辩论流行的一般性辩论也大相径庭，相关英语功能仅供娱乐与参考。完整免费视频课程见 YouTube 和 Bilibili（搜索"辩论筑基"或"精靈Moon"）。</blockquote>
+<p>></p>
+<blockquote>**Please note**: Due to the nature of its source material, this skill is currently calibrated only for Chinese-language debate. It is wholly unsuited to English-language debate, whose mainstream formats differ fundamentally from the generalist style prevalent in Chinese-language debate. Any English-language functionality is for entertainment and reference only. Free video courses are available on YouTube and Bilibili (search "辩论筑基" or "精靈Moon").</blockquote>
+<hr>
+<h2>快速安装 / Quick Install</h2>
+<h3>Claude Code</h3>
+<pre>
+mkdir -p .claude/skills/debate-coach
+cp SKILL.md .claude/skills/debate-coach/
+</pre>
+<p>然后 <code>/reload-plugins</code> 或重启 Claude Code。调用方式：直接输入辩题和持方即可自动激活，或输入"答疑"进入自由问答模式。也可配置 slash command 后输入 <code>/debate-coach</code>。</p>
+<p>Then <code>/reload-plugins</code> or restart Claude Code. To invoke: type a debate topic and your side, or type <code>答疑</code> for Q&A mode. You can also configure a slash command: <code>/debate-coach</code>.</p>
+<h3>ChatGPT Custom GPT</h3>
+<ol>
+<li>打开 ChatGPT → Explore GPTs → Create</li>
+<li>在 Instructions 字段粘贴 SKILL.md 全文</li>
+<li>Name: `辩论筑基教练`</li>
+<li>Description: `基于《辩论筑基》体系的辩论审问教练`</li>
+<li>Open ChatGPT → Explore GPTs → Create</li>
+<li>Paste the full text of SKILL.md into the Instructions field</li>
+<li>Name: `辩论筑基教练`</li>
+<li>Description: `基于《辩论筑基》体系的辩论审问教练`<br>注意：ChatGPT 的 Instructions 字段有长度限制。如果超出，可去掉协议部分（从 `# 协议` 开始），只保留知识库（第一卷到第十卷）。协议可在对话开始时手动粘贴。<br>Note: ChatGPT's Instructions field has a character limit. If you exceed it, remove the protocol section (starting from `# 协议`) and keep only the knowledge base (Volumes 1–10). You can paste the protocol manually at the start of each conversation.</li>
+</ol>
+<h3>Cursor</h3>
+<pre>
+mkdir -p .cursor/rules
+cp SKILL.md .cursor/rules/debate-coach.md
+</pre>
+<p>在 Cursor 中，skill 作为 rule 生效。可通过 <code>@debate-coach</code> 引用。</p>
+<p>In Cursor, the skill takes effect as a rule. Reference it via <code>@debate-coach</code>.</p>
+<h3>GitHub Copilot</h3>
+<pre>
+cp SKILL.md .github/copilot-instructions.md
+</pre>
+<h3>通用 / Generic (API / Any LLM)</h3>
+<p>将 SKILL.md 的内容作为 system prompt 传入即可。例如 OpenAI API：</p>
+<p>Use the contents of SKILL.md as the system prompt. Example with the OpenAI API:</p>
+<pre>
+import openai
+response = openai.ChatCompletion.create(
+    model="gpt-4",
+    messages=[
+        {"role": "system", "content": open("SKILL.md").read()},
+        {"role": "user", "content": "辩题：在校大学生创业利大于弊还是弊大于利，持方：正方"}
+    ]
+)
+</pre>
+<hr>
+<h2>知识覆盖 / Knowledge Coverage</h2>
+<p>本 skill 内置筑基完整知识体系，十卷覆盖（这里是AI乱总结的，但我不知道怎么改=。=，具体以视频教学为准吧……）：</p>
+<p>This skill embeds the complete DUG knowledge system across ten volumes (AI-generated summary — take with salt; refer to the actual video lectures):</p>
+<table>
+<tr>
+<td>卷 / Vol.</td>
+<td>内容 / Content</td>
+</tr>
+<tr>
+<td>第一卷</td>
+<td>世界观与哲学基础（五观念、Burke新修辞学、证明-说服二象性、不协调而获视角2×2网格、戏剧主义）<br>Worldview & philosophical foundations (five core concepts, Burke's New Rhetoric, proof-persuasion duality, perspective-by-incongruity 2×2 grid, dramatism)</td>
+</tr>
+<tr>
+<td>第二卷</td>
+<td>统一语法A→B→C模型（论证本质、三种反驳穷举、对立成因、全谱系统一）<br>Universal grammar A→B→C model (nature of argument, three rebuttal types, opposing causalities, full-spectrum unification)</td>
+</tr>
+<tr>
+<td>第三卷</td>
+<td>环节操作技术（申论/驳论/质询/自由辩）<br>Speech-event techniques (constructive speech, rebuttal, cross-examination, free debate)</td>
+</tr>
+<tr>
+<td>第四卷</td>
+<td>立论架构（讨论范围/标准/价值阶梯/双层结构/三境界）<br>Case architecture (discussion scope, criteria, value ladder, dual-layer structure, three realms)</td>
+</tr>
+<tr>
+<td>第五卷</td>
+<td>主线、总结与结构性交锋（主线/三向总结/消化反转/主线转型）<br>Main thread, summary & structural clash (main thread, three-directional summary, absorption/reversal, main-thread transformation)</td>
+</tr>
+<tr>
+<td>第六卷</td>
+<td>价值系统（真价值vs假价值/上位批判/价值反转/价值表达）<br>Value systems (true vs. false values, higher-order critique, value reversal, value expression)</td>
+</tr>
+<tr>
+<td>第七卷</td>
+<td>出论与备战（三法+进阶/备赛九要素/攻防体系/切战场/受身论）<br>Case-building & tournament prep (three methods + advanced, nine prep elements, attack-defense system, battlefield segmentation, ukemi theory)</td>
+</tr>
+<tr>
+<td>第八卷</td>
+<td>评判、赛制与争议（三维模型/需根解损/合题性/可辩性四层根源）<br>Judging, formats & disputes (three-dimensional model, needs-plan-advantages, topicality, four roots of debatability)</td>
+</tr>
+<tr>
+<td>第九卷</td>
+<td>Pro版原理贯通（论点=论证/立论=大论点/逻辑链vs演绎塔/主线终极统一）<br>Pro edition integrative principles (argument = argumentation, case = macro-argument, logic chain vs. deductive tower, ultimate unification of main thread)</td>
+</tr>
+<tr>
+<td>第十卷</td>
+<td>胜负观与元原则<br>Views on winning & losing, and meta-principles</td>
+</tr>
+</table>
+<h3>⚠️ 重要声明 / Important Disclaimer</h3>
+<p><b>本 Skill 的回答基于 AI 学习《辩论筑基》课件（而非视频讲解），与精灵的理解和本意必然存在错漏偏差，知识性内容请以精灵的视频讲解为准（Bilibili/YouTube 免费放送），本 Skill 会话内容仅供参考！！！仅供参考！！！仅供参考！！！</b></p>
+<p><b>This skill's responses are produced by AI trained on the Debate Universal Grammar courseware (slides, not video lectures). Discrepancies with the author's understanding and intent are inevitable. For authoritative knowledge, always refer to the video lectures (free on Bilibili/YouTube). Conversations with this skill are for reference only.</b></p>
+<hr>
+<h2>测试鸣谢 / Acknowledgements</h2>
+<p>感谢以下朋友的测试与反馈 / Thanks to the following for testing and feedback:</p>
+<ul>
+<li>**王伯元**</li>
+<li>**蒼神幻影**</li>
+</ul>
+<hr>
+<h2>许可与署名 / License & Attribution</h2>
+<p>本 skill 基于《辩论筑基》（精靈Moon著，YouTube & Bilibili 搜索"辩论筑基"或"精靈Moon"可看完整免费视频课程）体系构建。</p>
+<p>This skill is built on the *Debate Universal Grammar (辩论筑基)* system by 精靈Moon (free full video courses on YouTube & Bilibili — search "辩论筑基" or "精靈Moon").</p>
+<ul>
+<li>Skill 文件本身 / Skill files: CC BY-NC-SA 4.0（非商业使用 / non-commercial use）</li>
+<li>《辩论筑基》课件权利归属 / Courseware rights: 精靈Moon</li>
+<li>使用本 skill 生成的辩论内容如大量复现筑基特有术语与框架，建议标注"基于《辩论筑基》（精靈Moon著）" / When debate content generated with this skill extensively reproduces DUG-specific terminology and frameworks, please attribute: "基于《辩论筑基》（精靈Moon著）"</li>
+<li>学术引用（Burke新修辞学、Rosch原型理论、Entman框架理论等）遵循学术引用规范 / Academic citations (Burke's New Rhetoric, Rosch's Prototype Theory, Entman's Framing Theory, etc.) follow standard academic practice</li>
+</ul>
+</main>
+</body>
+</html>
