@@ -5,9 +5,24 @@
 *.key
 *.pem
 *.p12
+*.p8
+*.pfx
+*.jks
+*.cer
+*.log
 *.bak
 .tmp-*
 *backup*
 *备份*
 Output/**
 work-omega1/Output/**
+
+# ===== 依赖与系统残留（260815 加固）=====
+node_modules/
+package.json
+package-lock.json
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
