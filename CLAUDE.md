@@ -30,8 +30,8 @@ Debate-Coach-Backup/          Debate-Coach/
 | `Skill-Judge.md` | 裁判页对应独立 skill（v9.0.0-Final-B 两轮提示词） | ⚠️ 未与 GH 裁判页对齐，勿当裁判页源 |
 
 **Agent 单文件交付 Skill 开发基准**：
-- `SKILL.md`（合一版 ≈195KB）：Coach 全套知识库 + 阶段 C 青春版裁判所 C1-C11 协议，**Agent 端单文件交付 Skill 的开发基准文件**。基准副本 = `Debate-Coach/SKILL.md`（工作区未提交版）与 `Test/.claude/skills/debate-coach/SKILL.md`（安装版），哈希一致（5833…）。
-- ⚠️ Backup 根目录 `SKILL.md`（178KB）是旧教练基座（无 C 阶段移植），`Debate-Judge/SKILL.md` 是其残留拷贝，勿混用。
+- `SKILL.md`（合一版，当前 178KB）：Coach 全套知识库 + 阶段 C 青春版裁判所 C1-C11 协议，**Agent 端单文件交付 Skill 的开发基准文件**。四副本（Backup 根 / `Debate-Coach/SKILL.md` / `.claude/skills/debate-coach/` / `Test/.claude/skills/debate-coach/`）哈希一致 = `9b846074`（2026-08-15 术语统一后同步）。旧版 Test 安装副本（195KB，`58334411`，7/21）已归档至 `Output/归档-SKILL-260816/`。
+- ⚠️ `Debate-Judge/SKILL.md` 是 Backup 根旧教练基座（无 C 阶段移植）的残留拷贝，勿混用。
 
 ## ⛔ 最高优先级：禁止推送 Git
 **未经用户明确同意，严禁执行 `git push`、`git commit`、`git tag` 或任何修改 Git 历史的操作。** 只允许只读命令（`git log`、`git diff`、`git status`、`git remote -v` 等）。违反此规则将导致项目不可逆损坏。
@@ -67,7 +67,7 @@ node scripts/package.cjs --copy-only   # 同步 master → APK/www + 字节/tag 
 node scripts/package.cjs --gradle      # 同步 + cap copy → gradle 构建 → APK 内提取复核
 ```
 内部流程：先删后拷破 gradle 文件锁 → 字节/tag 断言 → `npx cap copy`（写 `APK/android/app/src/main/assets/public/`，**勿用 cap sync**——会重置 versionCode）→ `gradlew assembleDebug --rerun-tasks`（JAVA_HOME=JDK21 自动设置，破增量缓存）→ 从 APK 提取 `assets/public/index.html` 与 master 逐字节比对。
-产物：`APK/android/app/build/outputs/apk/debug/app-debug.apk` → 复制为根目录 `Debate-Coach-APK-v8.0.5.apk`（发布基准）。
+产物：`APK/android/app/build/outputs/apk/debug/app-debug.apk` → 复制为根目录 `Debate-Coach-APK-v8.0.6.apk`（发布基准）。
 
 **禁止**：不要在 `C:\Program Files` 下找 JDK；不要手工 `rm/cp` APK/www 或 assets（gradle 守护进程文件锁会静默失败返回0）；不要 `npx cap sync`（会重置原生工程 versionCode）；不要在根目录重建 capacitor 工程。
 
