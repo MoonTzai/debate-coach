@@ -23,7 +23,7 @@ Debate-Coach-Backup/          Debate-Coach/
 
 | 基准文件 | 身份 | 对齐状态 |
 |---|---|---|
-| `debate-coach-web.html` | **三合一网页母版**，GH 发布基准，内嵌 ZH/EN/JUDGE/TOOLBOX/LANG/JUDGE_ENTRY 六个 B64 块；**v8.0.6 起 TOOLBOX_B64=壳+9工具×中英内嵌**（iframe srcdoc 隔离，单文件交付全功能，~3.24MB） | 当前 GH = v8.0.6（已推） |
+| `debate-coach-web.html` | **三合一网页母版**，GH 发布基准，内嵌 ZH/EN/JUDGE/TOOLBOX/LANG/JUDGE_ENTRY 六个 B64 块；**v8.0.7 起 TOOLBOX_B64=壳+9工具×中英内嵌**（iframe srcdoc 隔离，单文件交付全功能，~3.24MB） | 当前 GH = v8.0.7（已推） |
 | `toolbox.html`（独立壳）+ 13 工具页 | **线上 InfinityFree 专用外置形态**（1MB 限制）；工具页唯一来源 = Backup 根目录（manifest 指纹校验） | ⚠️ 仅线上使用，GH 已撤除 |
 | `Output/裁判所2.0.html` | **裁判所青春版单页母版**（= JUDGE_B64） | ✅ 与 GH 逐字节一致 |
 | `Skill-Web.md` | 教练网页（ZH_B64）知识库源（已含 8 候选重构） | ✅ 已对齐 |
@@ -69,7 +69,7 @@ node scripts/package.cjs --copy-only   # 同步 master → APK/www + 字节/tag 
 node scripts/package.cjs --gradle      # 同步 + cap copy → gradle 构建 → APK 内提取复核
 ```
 内部流程：先删后拷破 gradle 文件锁 → 字节/tag 断言 → `npx cap copy`（写 `APK/android/app/src/main/assets/public/`，**勿用 cap sync**——会重置 versionCode）→ `gradlew assembleDebug --rerun-tasks`（JAVA_HOME=JDK21 自动设置，破增量缓存）→ 从 APK 提取 `assets/public/index.html` 与 master 逐字节比对。
-产物：`APK/android/app/build/outputs/apk/debug/app-debug.apk` → 复制为根目录 `Debate-Coach-APK-v8.0.6.apk`（发布基准）。
+产物：`APK/android/app/build/outputs/apk/debug/app-debug.apk` → 复制为根目录 `Debate-Coach-APK-v8.0.7.apk`（发布基准）。
 
 **禁止**：不要在 `C:\Program Files` 下找 JDK；不要手工 `rm/cp` APK/www 或 assets（gradle 守护进程文件锁会静默失败返回0）；不要 `npx cap sync`（会重置原生工程 versionCode）；不要在根目录重建 capacitor 工程。
 
@@ -99,9 +99,9 @@ node scripts/package.cjs --gradle      # 同步 + cap copy → gradle 构建 →
 ## 核心资产
 - `SKILL.md` — 《辩论筑基》完整知识体系 + 审问协议（v7.4.0）
 - `SKILL-EN.md` — 英文版知识库（v7.3.0-en-alpha）
-- `debate-coach-web.html` — **三合一网页版单文件交付**（中文版/English BETA/工具箱全内嵌，v8.0.6 起 ~3.24MB，TOOLBOX_B64=壳+9工具×中英 iframe 内嵌）
+- `debate-coach-web.html` — **三合一网页版单文件交付**（中文版/English BETA/工具箱全内嵌，v8.0.7 起 ~3.24MB，TOOLBOX_B64=壳+9工具×中英 iframe 内嵌）
 - `toolbox.html` + 13 独立工具页 — 工具箱**线上外置形态**（唯一来源 Backup 根，manifest 指纹校验；仅 InfinityFree 1MB 限制场景使用）
-- `Debate-Coach-APK-v8.0.6.apk` — APK 安装包（5.99MB，内嵌工具箱+8候选知识库；历史版本归档于 `Output/归档-APK-260815/`）
+- `Debate-Coach-APK-v8.0.7.apk` — APK 安装包（5.99MB，内嵌工具箱+8候选知识库；历史版本归档于 `Output/归档-APK-260815/`）
 - `Output/辩案工作台-Case-Workbench.html` — 辩案工作台独立版
 - `Output/软件著作权登记/` — 著作权登记全部材料（v7.6.14）
 - `Output/handoff-260711/` — 项目继承包（v7.6.14）
