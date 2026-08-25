@@ -16,7 +16,63 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  patch-labels:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Patch Release display labels only
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+
+          repo = os.environ["GITHUB_REPOSITORY"]
+          tag = "v9.2.1"
+          labels = {
+              "Debate-Coach-web-v9.2.1.html": "Debate-Coach-web-v9.2.1\uff08\u7f51\u9875\u7248\uff09.html",
+              "Debate-Coach-APK-v9.2.1.apk": "Debate-Coach-APK-v9.2.1\uff08\u5b89\u5353\u7248\uff09.apk",
+              "Debate-Coach-Windows-v9.2.1.exe": "Debate-Coach-Windows-v9.2.1\uff08Windows\u7248\uff09.exe",
+          }
+          headers = {
+              "Accept": "application/vnd.github+json",
+              "Authorization": f"Bearer {os.environ['GH_TOKEN']}",
+              "User-Agent": "Debate-Coach-Release-Label-Fix",
+          }
+
+          def request(url, *, method="GET", payload=None):
+              data = None if payload is None else json.dumps(payload).encode("utf-8")
+              req = urllib.request.Request(url, data=data, method=method, headers=headers)
+              if data is not None:
+                  req.add_header("Content-Type", "application/json")
+              with urllib.request.urlopen(req, timeout=30) as response:
+                  return json.load(response)
+
+          release_url = f"https://api.github.com/repos/{repo}/releases/tags/{tag}"
+          release = request(release_url)
+          by_name = {asset["name"]: asset for asset in release.get("assets", [])}
+          for name, label in labels.items():
+              asset = by_name.get(name)
+              if not asset:
+                  raise SystemExit(f"missing Release asset: {name}")
+              request(
+                  f"https://api.github.com/repos/{repo}/releases/assets/{asset['id']}",
+                  method="PATCH",
+                  payload={"name": name, "label": label},
+              )
+
+          verified = request(release_url)
+          actual = {asset["name"]: asset.get("label") or "" for asset in verified.get("assets", [])}
+          for name, label in labels.items():
+              if actual.get(name) != label:
+                  raise SystemExit(f"label verification failed: {name}: {actual.get(name)!r} != {label!r}")
+          print(json.dumps(labels, ensure_ascii=True, sort_keys=True))
+          PY
+
   release:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
     steps:
       - name: Checkout
