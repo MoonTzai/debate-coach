@@ -46,11 +46,13 @@ jobs:
           "exe=$exe" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
 
       - name: Install pinned Windows build dependencies
+        id: deps
         shell: pwsh
         run: |
           python -m pip install --disable-pip-version-check "pyinstaller==6.22.2" "pywebview==6.2.1" "pillow==11.3.0"
 
       - name: Extract transparent Totoro icon
+        id: icon
         shell: pwsh
         run: |
           python WindowsApp/extract-icon.py
@@ -58,6 +60,7 @@ jobs:
           if (-not (Test-Path -LiteralPath WindowsApp/generated/Debate-Coach.ico -PathType Leaf)) { throw 'generated icon missing' }
 
       - name: Build single-file WebView2 EXE
+        id: build
         shell: pwsh
         env:
           EXE: ${{ steps.release.outputs.exe }}
@@ -86,6 +89,7 @@ jobs:
           if (-not (Test-Path -LiteralPath (Join-Path dist $env:EXE) -PathType Leaf)) { throw 'built EXE missing' }
 
       - name: Smoke embedded master
+        id: smoke
         shell: pwsh
         env:
           EXE: ${{ steps.release.outputs.exe }}
@@ -121,6 +125,7 @@ jobs:
           "exe=$exe" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
 
       - name: Generate SHA256SUMS
+        id: sums
         shell: pwsh
         env:
           WEB: ${{ steps.friendly.outputs.web }}
@@ -137,6 +142,7 @@ jobs:
           Get-Content -LiteralPath (Join-Path release-assets SHA256SUMS.txt)
 
       - name: Create or update GitHub Release
+        id: github_release
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
@@ -151,6 +157,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw "release create/edit failed: $LASTEXITCODE" }
 
       - name: Upload and verify Release assets
+        id: upload
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
@@ -182,6 +189,7 @@ jobs:
           Write-Host $names
 
       - name: Write verified release receipt
+        id: receipt
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
@@ -210,3 +218,48 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw "release receipt commit failed: $LASTEXITCODE" }
           git push origin HEAD:main
           if ($LASTEXITCODE -ne 0) { throw "release receipt push failed: $LASTEXITCODE" }
+
+      - name: Record workflow diagnostic
+        if: always()
+        shell: pwsh
+        env:
+          JOB_STATUS: ${{ job.status }}
+          TAG: ${{ steps.release.outputs.tag }}
+          DEPS: ${{ steps.deps.outcome }}
+          ICON: ${{ steps.icon.outcome }}
+          BUILD: ${{ steps.build.outcome }}
+          SMOKE: ${{ steps.smoke.outcome }}
+          FRIENDLY: ${{ steps.friendly.outcome }}
+          SUMS: ${{ steps.sums.outcome }}
+          RELEASE: ${{ steps.github_release.outcome }}
+          UPLOAD: ${{ steps.upload.outcome }}
+          RECEIPT: ${{ steps.receipt.outcome }}
+        run: |
+          $debug = [ordered]@{
+            run_id = $env:GITHUB_RUN_ID
+            source_sha = $env:GITHUB_SHA
+            tag = $env:TAG
+            job_status = $env:JOB_STATUS
+            steps = [ordered]@{
+              deps = $env:DEPS
+              icon = $env:ICON
+              build = $env:BUILD
+              smoke = $env:SMOKE
+              friendly = $env:FRIENDLY
+              sums = $env:SUMS
+              release = $env:RELEASE
+              upload = $env:UPLOAD
+              receipt = $env:RECEIPT
+            }
+            recorded_at_utc = (Get-Date).ToUniversalTime().ToString('o')
+          }
+          $debug | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath .github/release-debug.json -Encoding utf8
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin main
+          git checkout -B main origin/main
+          git add -- .github/release-debug.json
+          git commit -m "Record release workflow diagnostic"
+          if ($LASTEXITCODE -ne 0) { throw "diagnostic commit failed: $LASTEXITCODE" }
+          git push origin HEAD:main
+          if ($LASTEXITCODE -ne 0) { throw "diagnostic push failed: $LASTEXITCODE" }
