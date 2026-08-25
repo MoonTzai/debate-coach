@@ -22,6 +22,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Normalize checkout bytes
+        shell: pwsh
+        run: |
+          git config core.autocrlf false
+          git reset --hard HEAD
+          $worktreeBlob = (git hash-object --no-filters Debate-Coach-web.html).Trim()
+          $repoBlob = (git rev-parse HEAD:Debate-Coach-web.html).Trim()
+          if ($worktreeBlob -ne $repoBlob) { throw "Debate-Coach-web.html bytes differ from repository blob after normalization" }
+          Write-Host "Canonical web blob verified: $repoBlob"
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -183,12 +193,35 @@ jobs:
           foreach ($required in @($env:WEB, $env:APK, $env:EXE, 'SHA256SUMS.txt')) {
             if ($names -notcontains $required) { throw "release asset missing: $required" }
           }
-          $assets = gh release view $env:TAG --repo $env:GITHUB_REPOSITORY --json assets | ConvertFrom-Json
-          $expectedLabels = @{ $env:WEB = '网页版'; $env:APK = '安卓版'; $env:EXE = 'Windows版' }
-          foreach ($name in $expectedLabels.Keys) {
-            $asset = $assets.assets | Where-Object { $_.name -eq $name }
-            if (-not $asset -or $asset.label -ne $expectedLabels[$name]) { throw "release asset label mismatch: $name" }
+          @'
+          import json
+          import os
+          import urllib.request
+
+          repo = os.environ["GITHUB_REPOSITORY"]
+          tag = os.environ["TAG"]
+          request = urllib.request.Request(
+              f"https://api.github.com/repos/{repo}/releases/tags/{tag}",
+              headers={
+                  "Accept": "application/vnd.github+json",
+                  "Authorization": f"Bearer {os.environ['GH_TOKEN']}",
+                  "User-Agent": "Debate-Coach-Release-Verify",
+              },
+          )
+          with urllib.request.urlopen(request, timeout=30) as response:
+              release = json.load(response)
+          expected = {
+              os.environ["WEB"]: "\u7f51\u9875\u7248",
+              os.environ["APK"]: "\u5b89\u5353\u7248",
+              os.environ["EXE"]: "Windows\u7248",
           }
+          actual = {asset.get("name"): asset.get("label") or "" for asset in release.get("assets", [])}
+          for name, label in expected.items():
+              if actual.get(name) != label:
+                  raise SystemExit(f"release asset label mismatch: {name}: {actual.get(name)!r} != {label!r}")
+          print(json.dumps(expected, ensure_ascii=True, sort_keys=True))
+          '@ | python -
+          if ($LASTEXITCODE -ne 0) { throw "release asset label verification failed: $LASTEXITCODE" }
           foreach ($old in $legacy) {
             if ($names -contains $old) { throw "legacy release asset still present: $old" }
           }
