@@ -63,7 +63,7 @@ select{background:var(--bg);border:1px solid var(--border);color:var(--text);pad
 .timer-split .active-side .time.warn{color:var(--red)}
 .timer-split .active-side .sub-label{font-size:max(14px,1.4vw);color:var(--gray);margin-bottom:0}
 .timer-split .passive-side .p-label{font-size:max(14px,1.4vw);color:var(--gray);margin-bottom:0;white-space:nowrap}
-.timer-split .passive-side .p-time{font-size:max(28px,4vw);font-weight:bold;color:var(--blue);font-family:'Consolas',monospace;line-height:1;white-space:nowrap}
+.timer-split .passive-side .p-time{font-size:max(28px,4vw);font-weight:bold;color:var(--gold);font-family:'Consolas',monospace;line-height:1;white-space:nowrap}
 .passive-log{display:none!important}
 .round-card{transition:opacity .15s,transform .15s}.round-card.dragging{opacity:.4;transform:scale(.98)}
 .round-card.drag-over{border-top:3px solid var(--gold)!important;margin-top:-3px}
@@ -103,7 +103,7 @@ window.__TBX={P:P,A:A,F:F,emit:emit,read:read,tokens:tokens,tokensFor:tokensFor,
 </head>
 <body class="light"><script>if(localStorage.getItem("debate_coach_theme")==="dark")document.body.classList.remove("light")</script>
 <header>
-  <button onclick="window.location.href='toolbox.html'" class="btn-sm home-btn">主页</button>
+  <button onclick="window.location.href='toolbox.html'" class="btn-sm home-btn">返回</button>
   <h1 id="header-title">辩论赛计时器</h1>
   <span style="display:flex;gap:8px;align-items:center;margin-left:auto"><button id="theme-toggle" onclick="toggleTheme()">界面颜色</button><button class="btn-sm" id="lang-toggle" onclick="localStorage.setItem('debate_coach_lang','en');window.location.href='Debate-Timer-EN.html'">EN</button><button class="btn-sm" id="fullscreen-btn" onclick="if(document.fullscreenElement){document.exitFullscreen()}else{document.documentElement.requestFullscreen()}" title="全屏快捷键F11">全屏/快捷键F11</button></span>
 </header>

@@ -184,7 +184,7 @@ body.dark .toast{background:var(--ink-light);color:#141413}
 <header>
   <h1 id="hdr-title">评委人格测试</h1>
   <div class="spacer"></div>
-  <button class="btn-sm" onclick="window.location.href='toolbox.html'" id="hdr-home">主页</button>
+  <button class="btn-sm" onclick="window.location.href='toolbox.html'" id="hdr-home">返回</button>
   <button class="btn-sm" onclick="toggleLang()" id="lang-btn">EN</button>
   <button class="btn-sm" onclick="toggleTheme()" id="hdr-theme">界面颜色</button>
 </header>
@@ -195,7 +195,7 @@ var LS_KEY='debate_judge_tendency_v2';
 var LANG=(localStorage.getItem('debate_coach_lang')||'zh')==='en'?'en':'zh';
 var T={
   themeBtn:['界面颜色','Theme'],
-  homeBtn:['主页','Home'],
+  homeBtn:['返回','Back'],
   introTitle:['测出你的评委人格：三字母代码','Find Your Judge Profile: A 3-Letter Code'],
   introSub:['基于《辩论筑基》裁判体系与 Debate-Judge V1.0 设计。12 个判赛现场，每题两个选项都来自「好裁判会做的事」，只是取向不同。答完你会得到三个字母（C/J · G/S · T/A，X=中立），像 MBTI 一样好记、好分享，也能复制正式声明用于赛前入场。','Based on the Debate-Judge V1.0 framework. 12 judging scenarios — both options in each are things good judges do, just with different leanings. You get a three-letter code (C/J · G/S · T/A, X = flexible), shareable like an MBTI type, plus a formal declaration you can use before a match.'],
   whyTitle:['为什么这样测？','Why this format?'],

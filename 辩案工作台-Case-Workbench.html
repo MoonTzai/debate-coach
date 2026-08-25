@@ -123,7 +123,7 @@ window.__TBX={P:P,A:A,F:F,emit:emit,read:read,tokens:tokens,tokensFor:tokensFor,
 <header><h1>备赛整合 · 标准化辩案工作台 <span class="step-label" id="step-label"></span></h1><span style="display:flex;gap:8px;align-items:center"><button id="theme-toggle" onclick="var d=document.body.classList.toggle('light');localStorage.setItem('debate_coach_theme',d?'light':'dark');this.textContent='界面颜色'" title="切换深色/浅色主题">界面颜色</button><button class="btn-sm" id="lang-toggle" onclick="localStorage.setItem('debate_coach_lang','en');window.location.href='Case-Workbench-EN.html'">EN</button><button id="clear-data" onclick="if(confirm('确定清除所有填写数据？此操作不可恢复。')){localStorage.removeItem('estage_v2');location.reload();}" title="清除本地数据" style="color:var(--red)">清除数据</button></span></header>
 <main id="content"></main>
 <div style="padding:12px 20px;border-top:1px solid var(--border);flex-shrink:0;display:flex;justify-content:center;background:var(--card);align-items:center;position:relative">
-  <button onclick="window.location.href='toolbox.html'" class="btn" style="padding:10px 12px;position:absolute;left:20px">主页</button>
+  <button onclick="window.location.href='toolbox.html'" class="btn" style="padding:10px 12px;position:absolute;left:20px">返回</button>
   <span style="display:flex;gap:12px;align-items:center">
   <button onclick="prevStep()" id="btn-prev" class="btn">← 上一步</button>
   <span style="color:var(--gray);font-size:13px" id="page-num"></span>
