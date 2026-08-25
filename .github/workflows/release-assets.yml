@@ -179,3 +179,33 @@ jobs:
             if ($names -contains $old) { throw "legacy release asset still present: $old" }
           }
           Write-Host $names
+
+      - name: Write verified release receipt
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.release.outputs.tag }}
+          WEB: ${{ steps.friendly.outputs.web }}
+          APK: ${{ steps.friendly.outputs.apk }}
+          EXE: ${{ steps.friendly.outputs.exe }}
+        run: |
+          $releaseUrl = gh release view $env:TAG --repo $env:GITHUB_REPOSITORY --json url --jq '.url'
+          if ($LASTEXITCODE -ne 0 -or -not $releaseUrl) { throw 'release URL verification failed' }
+          $receipt = [ordered]@{
+            tag = $env:TAG
+            source_sha = $env:GITHUB_SHA
+            run_id = $env:GITHUB_RUN_ID
+            release_url = $releaseUrl
+            assets = @($env:WEB, $env:APK, $env:EXE, 'SHA256SUMS.txt')
+            verified_at_utc = (Get-Date).ToUniversalTime().ToString('o')
+          }
+          $receipt | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath .github/release-status.json -Encoding utf8
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin main
+          git checkout -B main origin/main
+          git add -- .github/release-status.json
+          git commit -m "Record verified $env:TAG release assets"
+          if ($LASTEXITCODE -ne 0) { throw "release receipt commit failed: $LASTEXITCODE" }
+          git push origin HEAD:main
+          if ($LASTEXITCODE -ne 0) { throw "release receipt push failed: $LASTEXITCODE" }
