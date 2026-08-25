@@ -2,6 +2,10 @@ name: Publish release assets
 
 # Legacy/manual fallback only. Normal releases are published through FolderBridge Git Publisher.
 on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/release-assets.yml
   workflow_dispatch:
 
 permissions:
@@ -162,7 +166,12 @@ jobs:
           APK: ${{ steps.friendly.outputs.apk }}
           EXE: ${{ steps.friendly.outputs.exe }}
         run: |
-          $legacy = @('Debate-Coach-web.html', $env:SOURCE_APK, $env:SOURCE_EXE)
+          $legacy = @(
+            'Debate-Coach-web.html',
+            $env:SOURCE_APK,
+            $env:SOURCE_EXE,
+            'Debate-Coach-Windows-v9.2.1-WebView2.Windows.exe'
+          )
           foreach ($name in $legacy) {
             gh release delete-asset $env:TAG $name --repo $env:GITHUB_REPOSITORY -y 2>$null
           }
