@@ -5,6 +5,7 @@ import hashlib
 import os
 import shutil
 import sys
+import threading
 import time
 from pathlib import Path
 
@@ -12,6 +13,43 @@ APP_VERSION = "v9.2.1"
 MASTER_NAME = "Debate-Coach-web.html"
 MASTER_SHA256 = "22657974e560e59bd9609a66aa029bcbfc1a8581497598fc179e2a49214e6445"
 TITLE = "Debate-Coach · 辩论筑基"
+DESKTOP_SHORTCUT_SCRIPT = r"""
+(function(root){
+  function install(w){
+    try{
+      if(!w.__dcDesktopShortcutsInstalled){
+        w.__dcDesktopShortcutsInstalled=true;
+        w.addEventListener('keydown',function(e){
+          if(e.repeat)return;
+          function api(){
+            var x=w;
+            for(var i=0;i<8;i++){
+              try{
+                if(x.pywebview&&x.pywebview.api)return x.pywebview.api;
+                if(x.parent===x)break;
+                x=x.parent;
+              }catch(_e){break;}
+            }
+            return null;
+          }
+          var a;
+          if(e.key==='F11'){
+            e.preventDefault();
+            e.stopPropagation();
+            a=api();
+            if(a&&a.toggle_fullscreen)a.toggle_fullscreen();
+          }else if(e.key==='Escape'){
+            a=api();
+            if(a&&a.exit_fullscreen)a.exit_fullscreen();
+          }
+        },true);
+      }
+      for(var i=0;i<w.frames.length;i++)install(w.frames[i]);
+    }catch(_e){}
+  }
+  install(root);
+})(window);
+"""
 
 
 def message_box(text: str, title: str = TITLE) -> None:
@@ -116,12 +154,93 @@ def executable_sidecar(suffix: str) -> Path:
 class DesktopApi:
     def __init__(self) -> None:
         self._window = None
+        self._fullscreen = False
+        self._lock = threading.Lock()
+        self._accelerator_handler = None
 
     def toggle_fullscreen(self) -> bool:
         if self._window is None:
             return False
-        self._window.toggle_fullscreen()
+        with self._lock:
+            self._window.toggle_fullscreen()
+            self._fullscreen = not self._fullscreen
+            return self._fullscreen
+
+    def exit_fullscreen(self) -> bool:
+        if self._window is None:
+            return False
+        with self._lock:
+            if not self._fullscreen:
+                return False
+            self._window.toggle_fullscreen()
+            self._fullscreen = False
+            return True
+
+    def is_fullscreen(self) -> bool:
+        with self._lock:
+            return self._fullscreen
+
+
+def install_native_shortcuts(window, desktop_api: DesktopApi) -> bool:
+    native = window.native
+    if native is None:
+        return False
+    if desktop_api._accelerator_handler is not None:
         return True
+
+    control = native.browser.webview
+    try:
+        from System import Action
+        from System.Reflection import BindingFlags
+
+        flags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public
+        controller = None
+        for field in control.GetType().GetFields(flags):
+            if str(field.FieldType.FullName) == "Microsoft.Web.WebView2.Core.CoreWebView2Controller":
+                controller = field.GetValue(control)
+                if controller is not None:
+                    break
+        if controller is None:
+            return False
+    except Exception:
+        return False
+
+    def on_accelerator(_sender, event) -> None:
+        kind = str(event.KeyEventKind)
+        if "KeyDown" not in kind:
+            return
+        try:
+            if bool(event.PhysicalKeyStatus.WasKeyDown):
+                return
+        except Exception:
+            pass
+
+        key = int(event.VirtualKey)
+        if key == 0x7A:  # F11
+            event.Handled = True
+            native.BeginInvoke(Action(lambda: desktop_api.toggle_fullscreen()))
+        elif key == 0x1B and desktop_api.is_fullscreen():  # Esc
+            event.Handled = True
+            native.BeginInvoke(Action(lambda: desktop_api.exit_fullscreen()))
+
+    desktop_api._accelerator_handler = on_accelerator
+    controller.AcceleratorKeyPressed += on_accelerator
+
+    try:
+        window.evaluate_js(DESKTOP_SHORTCUT_SCRIPT)
+    except Exception:
+        pass
+
+    def register_future_frames() -> None:
+        try:
+            core = control.CoreWebView2
+            if core is not None:
+                core.AddScriptToExecuteOnDocumentCreatedAsync(DESKTOP_SHORTCUT_SCRIPT)
+        except Exception:
+            pass
+
+    native.BeginInvoke(Action(register_future_frames))
+    return True
 
 
 def run_webview(ui_smoke: bool = False) -> int:
@@ -156,6 +275,11 @@ def run_webview(ui_smoke: bool = False) -> int:
         zoomable=True,
     )
     desktop_api._window = window
+
+    def install_shortcuts_after_load():
+        install_native_shortcuts(window, desktop_api)
+
+    window.events.loaded += install_shortcuts_after_load
 
     smoke_out = executable_sidecar(".ui-smoke.txt") if ui_smoke else None
 

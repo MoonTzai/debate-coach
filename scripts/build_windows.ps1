@@ -27,6 +27,17 @@ try {
     $exe = "Debate-Coach-Windows-$tag.exe"
     $name = [IO.Path]::GetFileNameWithoutExtension($exe)
 
+    # Always package the canonical bytes stored in Git, not the Windows
+    # working-tree representation. core.autocrlf may transparently expand LF
+    # to CRLF while git status remains clean, which would otherwise break the
+    # embedded MASTER_SHA256 contract in WindowsApp/host.py.
+    $canonicalMaster = Join-Path $projectRoot "WindowsApp/generated/Debate-Coach-web.html"
+    $env:DC_CANONICAL_MASTER = $canonicalMaster
+    & $venvPython -c "import os, pathlib, subprocess; pathlib.Path(os.environ['DC_CANONICAL_MASTER']).write_bytes(subprocess.check_output(['git','cat-file','blob','HEAD:Debate-Coach-web.html']))"
+    if ($LASTEXITCODE -ne 0) { throw "canonical Git master extraction failed: $LASTEXITCODE" }
+    Remove-Item Env:DC_CANONICAL_MASTER -ErrorAction SilentlyContinue
+    if (-not (Test-Path -LiteralPath $canonicalMaster -PathType Leaf)) { throw "canonical Git master missing" }
+
     & $venvPython "WindowsApp/extract-icon.py"
     if ($LASTEXITCODE -ne 0) { throw "icon extraction failed: $LASTEXITCODE" }
     $icon = "WindowsApp/generated/Debate-Coach.ico"
@@ -42,7 +53,7 @@ try {
         --version-file (Join-Path $projectRoot "WindowsApp/windows_version_info.txt") `
         --manifest (Join-Path $projectRoot "WindowsApp/windows_dpi_manifest.xml") `
         --icon (Join-Path $projectRoot $icon) `
-        --add-data ((Join-Path $projectRoot "Debate-Coach-web.html") + ";.") `
+        --add-data ($canonicalMaster + ";.") `
         --collect-all webview `
         --hidden-import clr `
         --hidden-import webview.platforms.winforms `
@@ -60,7 +71,7 @@ try {
     $smoke = [IO.Path]::ChangeExtension($exePath, ".smoke.txt")
     if (-not (Test-Path -LiteralPath $smoke -PathType Leaf)) { throw "smoke report missing; exit=$($p.ExitCode)" }
     $report = Get-Content -LiteralPath $smoke -Raw
-    $masterSha = (Get-FileHash -Algorithm SHA256 -LiteralPath "Debate-Coach-web.html").Hash.ToLowerInvariant()
+    $masterSha = (Get-FileHash -Algorithm SHA256 -LiteralPath $canonicalMaster).Hash.ToLowerInvariant()
     if ($report -notmatch [regex]::Escape("embedded_master_sha256=$masterSha")) { throw "embedded master SHA mismatch" }
     if ($p.ExitCode -ne 0 -and $report -notmatch "webview2_runtime=MISSING") { throw "EXE smoke failed unexpectedly: $($p.ExitCode)" }
 
