@@ -219,9 +219,9 @@ fs.writeFileSync(cwd+'/debate-coach-web.html',updated,'utf-8');"
 
 - **存放位置**：SKILL.md 中，用 `<!-- @skill-only -->...<!-- /@skill-only -->` 包裹（用于构建脚本剥离）
 - **同步**：仅覆盖 Agent-Skill 副本，不碰 Web/APK/MD 源
-- **@skill-only 内容剥离命令**：从 SKILL.md 生成网页版知识库时，始终先执行过滤，再编码 B64：
+- **@skill-only 内容剥离**：从 SKILL.md 生成网页版知识库时，始终先过滤 `@skill-only` 区块，再由正式同步流程写入 `DC_PAGES.ZH`；禁止自行编码 B64：
   ```bash
-  sed '/<!-- @skill-only -->/,/<!-- \/@skill-only -->/d' SKILL.md | [后续 B64 编码]
+  sed '/<!-- @skill-only -->/,/<!-- \/@skill-only -->/d' SKILL.md | [交给 DC_PAGES.ZH 同步流程]
   ```
   这行命令会自动删除所有 `<!-- @skill-only -->...<!-- /@skill-only -->` 包裹的段落，确保架构补偿不会泄漏到网页版/APK 端。
 - **示例**：C3 格式排他声明、三项禁止、C3/C5 区分标记、α→β→γ 交叉引用锚定、输出后自检
