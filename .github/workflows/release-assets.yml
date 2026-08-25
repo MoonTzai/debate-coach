@@ -31,7 +31,7 @@ jobs:
           $tag = [string]$v.tag
           if (-not $tag) { throw 'version.json has no tag' }
           $apk = "Debate-Coach-APK-$tag.apk"
-          $exe = "Debate-Coach-Windows-$tag-WebView2.exe"
+          $exe = "Debate-Coach-Windows-$tag.exe"
           if (-not (Test-Path -LiteralPath Debate-Coach-web.html -PathType Leaf)) { throw 'missing Debate-Coach-web.html' }
           if (-not (Test-Path -LiteralPath $apk -PathType Leaf)) { throw "missing $apk" }
           "tag=$tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
@@ -58,6 +58,7 @@ jobs:
         env:
           EXE: ${{ steps.release.outputs.exe }}
         run: |
+          $root = (Resolve-Path '.').Path
           $name = [IO.Path]::GetFileNameWithoutExtension($env:EXE)
           python -m PyInstaller `
             --noconfirm `
@@ -66,10 +67,10 @@ jobs:
             --windowed `
             --noupx `
             --name $name `
-            --version-file WindowsApp/windows_version_info.txt `
-            --manifest WindowsApp/windows_dpi_manifest.xml `
-            --icon WindowsApp/generated/Debate-Coach.ico `
-            --add-data "Debate-Coach-web.html;." `
+            --version-file (Join-Path $root 'WindowsApp/windows_version_info.txt') `
+            --manifest (Join-Path $root 'WindowsApp/windows_dpi_manifest.xml') `
+            --icon (Join-Path $root 'WindowsApp/generated/Debate-Coach.ico') `
+            --add-data ((Join-Path $root 'Debate-Coach-web.html') + ';.') `
             --collect-all webview `
             --hidden-import clr `
             --hidden-import webview.platforms.winforms `
@@ -77,7 +78,7 @@ jobs:
             --distpath dist `
             --workpath build `
             --specpath spec `
-            WindowsApp/host.py
+            (Join-Path $root 'WindowsApp/host.py')
           if ($LASTEXITCODE -ne 0) { throw "PyInstaller failed: $LASTEXITCODE" }
           if (-not (Test-Path -LiteralPath (Join-Path dist $env:EXE) -PathType Leaf)) { throw 'built EXE missing' }
 
@@ -107,9 +108,9 @@ jobs:
           EXE: ${{ steps.release.outputs.exe }}
         run: |
           New-Item -ItemType Directory -Force -Path release-assets | Out-Null
-          $web = "Debate-Coach-web-$env:TAG（网页版）.html"
-          $apk = ([IO.Path]::GetFileNameWithoutExtension($env:APK) + '（安卓版）.apk')
-          $exe = ([IO.Path]::GetFileNameWithoutExtension($env:EXE) + '（Windows版）.exe')
+          $web = "Debate-Coach-web-$env:TAG.html"
+          $apk = $env:APK
+          $exe = $env:EXE
           Copy-Item -LiteralPath Debate-Coach-web.html -Destination (Join-Path release-assets $web)
           Copy-Item -LiteralPath $env:APK -Destination (Join-Path release-assets $apk)
           Copy-Item -LiteralPath (Join-Path dist $env:EXE) -Destination (Join-Path release-assets $exe)
@@ -166,15 +167,21 @@ jobs:
             gh release delete-asset $env:TAG $name --repo $env:GITHUB_REPOSITORY -y 2>$null
           }
           gh release upload $env:TAG `
-            (Join-Path release-assets $env:WEB) `
-            (Join-Path release-assets $env:APK) `
-            (Join-Path release-assets $env:EXE) `
+            ((Join-Path release-assets $env:WEB) + '#网页版') `
+            ((Join-Path release-assets $env:APK) + '#安卓版') `
+            ((Join-Path release-assets $env:EXE) + '#Windows版') `
             (Join-Path release-assets 'SHA256SUMS.txt') `
             --repo $env:GITHUB_REPOSITORY --clobber
           if ($LASTEXITCODE -ne 0) { throw "release upload failed: $LASTEXITCODE" }
           $names = gh release view $env:TAG --repo $env:GITHUB_REPOSITORY --json assets --jq '.assets[].name'
           foreach ($required in @($env:WEB, $env:APK, $env:EXE, 'SHA256SUMS.txt')) {
             if ($names -notcontains $required) { throw "release asset missing: $required" }
+          }
+          $assets = gh release view $env:TAG --repo $env:GITHUB_REPOSITORY --json assets | ConvertFrom-Json
+          $expectedLabels = @{ $env:WEB = '网页版'; $env:APK = '安卓版'; $env:EXE = 'Windows版' }
+          foreach ($name in $expectedLabels.Keys) {
+            $asset = $assets.assets | Where-Object { $_.name -eq $name }
+            if (-not $asset -or $asset.label -ne $expectedLabels[$name]) { throw "release asset label mismatch: $name" }
           }
           foreach ($old in $legacy) {
             if ($names -contains $old) { throw "legacy release asset still present: $old" }

@@ -24,7 +24,7 @@ try {
     $version = Get-Content -LiteralPath "version.json" -Raw | ConvertFrom-Json
     $tag = [string]$version.tag
     if (-not $tag) { throw "version.json has no tag" }
-    $exe = "Debate-Coach-Windows-$tag-WebView2.exe"
+    $exe = "Debate-Coach-Windows-$tag.exe"
     $name = [IO.Path]::GetFileNameWithoutExtension($exe)
 
     & $venvPython "WindowsApp/extract-icon.py"
