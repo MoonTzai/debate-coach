@@ -1,14 +1,7 @@
 name: Publish release assets
 
+# Legacy/manual fallback only. Normal releases are published through FolderBridge Git Publisher.
 on:
-  push:
-    branches: [main]
-    paths:
-      - version.json
-      - Debate-Coach-web.html
-      - 'Debate-Coach-APK-v*.apk'
-      - WindowsApp/**
-      - .github/workflows/release-assets.yml
   workflow_dispatch:
 
 permissions:
