@@ -103,6 +103,24 @@ body.dark .entry-word{color:#7ea4ff}
 .version-toast.show{display:block}
 .version-toast .vt-close{position:absolute;top:4px;right:8px;cursor:pointer;font-size:16px;color:var(--ink-3)}
 .version-toast .vt-link{margin-top:8px;display:inline-block;color:var(--accent);cursor:pointer;text-decoration:underline}
+.exam-notice{
+  position:fixed;inset:0;z-index:2147483646;display:none;align-items:center;justify-content:center;
+  padding:24px;background:rgba(11,14,22,.46);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.exam-notice.show{display:flex}
+.exam-notice-card{
+  width:min(460px,calc(100vw - 32px));padding:30px 28px 26px;text-align:center;
+  border:1px solid var(--line);border-radius:22px;background:var(--card);box-shadow:var(--sh-2);
+}
+.exam-notice-card h2{font-size:21px;line-height:1.35;margin:0 0 14px;color:var(--ink)}
+.exam-notice-card p{font-size:14.5px;line-height:1.85;color:var(--ink-2);margin:0}
+.exam-notice-card button{
+  margin-top:24px;min-width:144px;padding:12px 26px;border:0;border-radius:var(--r-pill);
+  background:var(--grad);color:var(--on-accent);font-family:inherit;font-size:15px;font-weight:700;
+  cursor:pointer;box-shadow:0 6px 20px var(--glow);transition:all .18s ease;
+}
+.exam-notice-card button:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.exam-notice-card button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 @media(max-width:600px){
   body{padding:20px 12px}
   .entry-btn,.entry-btn-coming{width:148px;padding:12px 18px;font-size:15px}
@@ -124,14 +142,15 @@ body.dark .entry-word{color:#7ea4ff}
   </svg>
   <div class="entry-kicker">DEBATE · UNIVERSAL · GRAMMAR</div>
   <div class="entry-btns">
-    <button class="entry-btn primary" onclick="goLang()">教练 · 启动</button><button class="entry-btn" onclick="go('toolbox')">工具箱</button><button class="entry-btn" onclick="goJudge()">AI裁判所 <span class="beta">BETA</span></button><button class="entry-btn" onclick="go('exam')">辩士历练场 <span class="beta-new">NEW</span></button>
+    <button class="entry-btn primary" onclick="goLang()">教练 · 启动</button><button class="entry-btn" onclick="go('toolbox')">工具箱</button><button class="entry-btn" onclick="goJudge()">AI裁判所 <span class="beta">BETA</span></button><button class="entry-btn" onclick="goExam()">辩士历练场 <span class="beta-new">NEW</span></button>
   </div>
   <div class="version-row"><span class="version-link" onclick="checkVersion()"><svg class="vl-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>检查更新</span></div><div class="license-text">© 2026 精靈 Moon · CC BY-NC-SA 4.0（署名 · 非商业 · 相同方式共享）</div>
 </div>
 <script>try{if(localStorage.getItem('debate_coach_theme')==='dark')document.body.classList.add('dark')}catch(e){}</script>
 
+<div class="exam-notice" id="exam-notice" role="dialog" aria-modal="true" aria-labelledby="exam-notice-title" aria-describedby="exam-notice-text"><div class="exam-notice-card"><h2 id="exam-notice-title">辩士历练场 · 使用提示</h2><p id="exam-notice-text">辩士历练场所有题目均由AI生成，仅供参考与娱乐，如有错漏、争议，请以视频讲解为准</p><button id="exam-notice-ok" type="button" onclick="acceptExamNotice()">知道了</button></div></div>
 <div class="version-toast" id="vt"><span class="vt-close" onclick="document.getElementById('vt').classList.remove('show')">×</span><span id="vt-msg"></span><br><a class="vt-link" id="vt-link" href="#" target="_blank" style="display:none">打开下载页面</a></div>
-<script>var CURRENT_TAG="v9.2.1",BUILD_DATE="2026-08-25";function cmpVer(a,b){a=String(a||"").replace(/^v/i,"").split(".");b=String(b||"").replace(/^v/i,"").split(".");for(var i=0;i<Math.max(a.length,b.length);i++){var x=parseInt(a[i])||0,y=parseInt(b[i])||0;if(x>y)return 1;if(x<y)return -1}return 0}function checkVersion(){var t=document.getElementById("vt"),m=document.getElementById("vt-msg"),l=document.getElementById("vt-link");t.classList.add("show");m.textContent="正在检查更新…";l.style.display="none";var c=new AbortController();var to=setTimeout(function(){c.abort()},8000);fetch("https://raw.githubusercontent.com/MoonTzai/debate-coach/main/version.json",{signal:c.signal,cache:"no-cache"}).then(function(r){clearTimeout(to);if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(function(d){var latest=d.tag||"";var date=d.date||"";var url=d.url||"";var c=cmpVer(latest,CURRENT_TAG);var newer=c>0||(c===0&&date&&BUILD_DATE&&date>BUILD_DATE);if(latest&&newer){var h="发现新版本 <b>"+latest+"</b>";if(date)h+="（"+date+"）";h+="<br>你当前版本："+CURRENT_TAG;if(BUILD_DATE)h+="（"+BUILD_DATE+"）";m.innerHTML=h;if(url){l.href=url;l.style.display="inline-block"}}else if(!newer){var h2="已是最新版本（"+CURRENT_TAG;if(BUILD_DATE)h2+="，"+BUILD_DATE;h2+="）";m.innerHTML=h2}else{m.textContent="检查失败，请稍后重试"}}).catch(function(e){m.textContent="检查失败：网络不可用或版本信息暂未发布"})}</script>
+<script>var CURRENT_TAG="v9.2.2",BUILD_DATE="2026-08-26";function cmpVer(a,b){a=String(a||"").replace(/^v/i,"").split(".");b=String(b||"").replace(/^v/i,"").split(".");for(var i=0;i<Math.max(a.length,b.length);i++){var x=parseInt(a[i])||0,y=parseInt(b[i])||0;if(x>y)return 1;if(x<y)return -1}return 0}function checkVersion(){var t=document.getElementById("vt"),m=document.getElementById("vt-msg"),l=document.getElementById("vt-link");t.classList.add("show");m.textContent="正在检查更新…";l.style.display="none";var c=new AbortController();var to=setTimeout(function(){c.abort()},8000);fetch("https://raw.githubusercontent.com/MoonTzai/debate-coach/main/version.json",{signal:c.signal,cache:"no-cache"}).then(function(r){clearTimeout(to);if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(function(d){var latest=d.tag||"";var date=d.date||"";var url=d.url||"";var c=cmpVer(latest,CURRENT_TAG);var newer=c>0||(c===0&&date&&BUILD_DATE&&date>BUILD_DATE);if(latest&&newer){var h="发现新版本 <b>"+latest+"</b>";if(date)h+="（"+date+"）";h+="<br>你当前版本："+CURRENT_TAG;if(BUILD_DATE)h+="（"+BUILD_DATE+"）";m.innerHTML=h;if(url){l.href=url;l.style.display="inline-block"}}else if(!newer){var h2="已是最新版本（"+CURRENT_TAG;if(BUILD_DATE)h2+="，"+BUILD_DATE;h2+="）";m.innerHTML=h2}else{m.textContent="检查失败，请稍后重试"}}).catch(function(e){m.textContent="检查失败：网络不可用或版本信息暂未发布"})}</script>
 <script>
 /*
  * AV-friendly test loader. Production source is unchanged.
@@ -206,9 +225,22 @@ body.dark .entry-word{color:#7ea4ff}
       localStorage.setItem('debate_zj_theme',globalTheme);
     }catch(e){}
   }
-  function open(key){
+  function showExamNotice(){
+    var notice=document.getElementById('exam-notice');
+    if(!notice)return open('exam',true);
+    notice.classList.add('show');
+    var ok=document.getElementById('exam-notice-ok');
+    if(ok)setTimeout(function(){ok.focus();},0);
+    return true;
+  }
+  function hideExamNotice(){
+    var notice=document.getElementById('exam-notice');
+    if(notice)notice.classList.remove('show');
+  }
+  function open(key,skipExamNotice){
     var name=resolve(key);
     if(!name)return false;
+    if(name==='EXAM'&&!skipExamNotice)return showExamNotice();
     if(name==='EXAM')syncExamTheme();
     if(name==='ZH'||name==='EN'||name==='JUDGE'){
       try{localStorage.removeItem('debate_coach_risk_accepted');}catch(e){}
@@ -227,10 +259,12 @@ body.dark .entry-word{color:#7ea4ff}
     open(rt==='judge'?'judge':'judge-entry');
   }
 
-  window.DCStandalone={open:open,home:function(){var f=document.getElementById('dc-module-frame');if(f)f.remove();document.title=HOME_TITLE;try{document.body.classList.toggle('dark',localStorage.getItem('debate_coach_theme')==='dark');}catch(e){}},sourceHash:"456d68871fcd91cab1b45ddd2988bff5d475d6899e557bd7c1bb03d636dd7fa0",pageHashes:{"ZH":"ca667c922ceafa100ccecb6624f050c7270b9d25889e5347a2a0a3b484ca764c","TOOLBOX":"6daaf6927899863b157e9401420d3fa3fbb4f23ada4d1b7c085215500ab0ab80","EN":"b63fd858a57c796ff04eac5cc3290d945370a4f69bd89195b4df21aa3cc6f8f1","JUDGE":"a0f8709aa0f743fc9d92fe960737b1308e854416787460da3acd7c238c2f177f","LANG":"d62ba6a2ac7c071a72524899df5688f80ea9545a36c92721674430a10790a8e5","JUDGE_ENTRY":"b574cd4804cc41854bf189efbd394dec2b02125fc05de382ad270ddd8548736d","EXAM":"6034c5a40d4933706397c69b6559b408d965b8c72daa4a500f68632b974f0fd4"}};
+  window.DCStandalone={open:open,home:function(){hideExamNotice();var f=document.getElementById('dc-module-frame');if(f)f.remove();document.title=HOME_TITLE;try{document.body.classList.toggle('dark',localStorage.getItem('debate_coach_theme')==='dark');}catch(e){}},sourceHash:"456d68871fcd91cab1b45ddd2988bff5d475d6899e557bd7c1bb03d636dd7fa0",pageHashes:{"ZH":"ca667c922ceafa100ccecb6624f050c7270b9d25889e5347a2a0a3b484ca764c","TOOLBOX":"6daaf6927899863b157e9401420d3fa3fbb4f23ada4d1b7c085215500ab0ab80","EN":"b63fd858a57c796ff04eac5cc3290d945370a4f69bd89195b4df21aa3cc6f8f1","JUDGE":"a0f8709aa0f743fc9d92fe960737b1308e854416787460da3acd7c238c2f177f","LANG":"d62ba6a2ac7c071a72524899df5688f80ea9545a36c92721674430a10790a8e5","JUDGE_ENTRY":"b574cd4804cc41854bf189efbd394dec2b02125fc05de382ad270ddd8548736d","EXAM":"6034c5a40d4933706397c69b6559b408d965b8c72daa4a500f68632b974f0fd4"}};
+  window.acceptExamNotice=function(){hideExamNotice();return open('exam',true);};
   window.go=function(lang){return open(lang);};
   window.goLang=function(){return open('lang');};
   window.goJudge=function(){return open('judge-entry');};
+  window.goExam=function(){return showExamNotice();};
   setTimeout(resume,0);
 })();
 </script>

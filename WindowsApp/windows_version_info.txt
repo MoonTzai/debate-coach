@@ -1,7 +1,7 @@
 VSVersionInfo(
   ffi=FixedFileInfo(
-    filevers=(9, 2, 1, 0),
-    prodvers=(9, 2, 1, 0),
+    filevers=(9, 2, 2, 0),
+    prodvers=(9, 2, 2, 0),
     mask=0x3f,
     flags=0x0,
     OS=0x40004,
@@ -16,11 +16,11 @@ VSVersionInfo(
         [
           StringStruct('CompanyName', 'MoonTzai'),
           StringStruct('FileDescription', 'Debate-Coach Windows'),
-          StringStruct('FileVersion', '9.2.1'),
+          StringStruct('FileVersion', '9.2.2'),
           StringStruct('InternalName', 'Debate-Coach-Windows'),
-          StringStruct('OriginalFilename', 'Debate-Coach-Windows-v9.2.1-WebView2.exe'),
+          StringStruct('OriginalFilename', 'Debate-Coach-Windows-v9.2.2.exe'),
           StringStruct('ProductName', 'Debate-Coach'),
-          StringStruct('ProductVersion', '9.2.1')
+          StringStruct('ProductVersion', '9.2.2')
         ]
       )
     ]),
