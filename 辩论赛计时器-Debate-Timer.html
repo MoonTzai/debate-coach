@@ -105,7 +105,7 @@ window.__TBX={P:P,A:A,F:F,emit:emit,read:read,tokens:tokens,tokensFor:tokensFor,
 <header>
   <button onclick="window.location.href='toolbox.html'" class="btn-sm home-btn">返回</button>
   <h1 id="header-title">辩论赛计时器</h1>
-  <span style="display:flex;gap:8px;align-items:center;margin-left:auto"><button id="theme-toggle" onclick="toggleTheme()">界面颜色</button><button class="btn-sm" id="lang-toggle" onclick="localStorage.setItem('debate_coach_lang','en');window.location.href='Debate-Timer-EN.html'">EN</button><button class="btn-sm" id="fullscreen-btn" onclick="if(document.fullscreenElement){document.exitFullscreen()}else{document.documentElement.requestFullscreen()}" title="全屏快捷键F11">全屏/快捷键F11</button></span>
+  <span style="display:flex;gap:8px;align-items:center;margin-left:auto"><button id="theme-toggle" onclick="toggleTheme()">界面颜色</button><button class="btn-sm" id="lang-toggle" onclick="localStorage.setItem('debate_coach_lang','en');window.location.href='Debate-Timer-EN.html'">EN</button><button class="btn-sm" id="fullscreen-btn" onclick="(async()=>{try{var w=window;for(var i=0;i<4;i++){if(w.pywebview&&w.pywebview.api&&w.pywebview.api.toggle_fullscreen){await w.pywebview.api.toggle_fullscreen();return}if(w.parent===w)break;w=w.parent}}catch(e){}if(document.fullscreenElement){document.exitFullscreen()}else{document.documentElement.requestFullscreen()}})()" title="全屏快捷键F11">全屏/快捷键F11</button></span>
 </header>
 <main id="main"></main>
 <div id="footer-bar"><span id="footer-btns" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center"></span></div>

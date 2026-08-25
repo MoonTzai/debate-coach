@@ -10,7 +10,7 @@ from pathlib import Path
 
 APP_VERSION = "v9.2.1"
 MASTER_NAME = "Debate-Coach-web.html"
-MASTER_SHA256 = "0227aae7ef16b18f5f686be0f4ca84321276238e7e80cd46ba6461c6c9cc5e51"
+MASTER_SHA256 = "22657974e560e59bd9609a66aa029bcbfc1a8581497598fc179e2a49214e6445"
 TITLE = "Debate-Coach · 辩论筑基"
 
 
@@ -113,6 +113,17 @@ def executable_sidecar(suffix: str) -> Path:
     return exe.with_suffix(suffix)
 
 
+class DesktopApi:
+    def __init__(self) -> None:
+        self._window = None
+
+    def toggle_fullscreen(self) -> bool:
+        if self._window is None:
+            return False
+        self._window.toggle_fullscreen()
+        return True
+
+
 def run_webview(ui_smoke: bool = False) -> int:
     if not webview2_runtime_versions():
         raise RuntimeError("未检测到 Microsoft Edge WebView2 Runtime。请安装或修复 WebView2 Runtime 后再启动。")
@@ -129,9 +140,11 @@ def run_webview(ui_smoke: bool = False) -> int:
     webview.settings["OPEN_EXTERNAL_LINKS_IN_BROWSER"] = True
     webview.settings["OPEN_DEVTOOLS_IN_DEBUG"] = False
 
+    desktop_api = DesktopApi()
     window = webview.create_window(
         TITLE,
         url=master.as_uri(),
+        js_api=desktop_api,
         width=1100,
         height=680,
         min_size=(760, 520),
@@ -142,6 +155,7 @@ def run_webview(ui_smoke: bool = False) -> int:
         text_select=True,
         zoomable=True,
     )
+    desktop_api._window = window
 
     smoke_out = executable_sidecar(".ui-smoke.txt") if ui_smoke else None
 
