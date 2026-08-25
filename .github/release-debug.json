@@ -1,18 +1,18 @@
 {
-  "run_id": "32831569360",
-  "source_sha": "a009d1ef4745c3ae58e9e8af671baa785b013c57",
-  "tag": "v9.2.1",
+  "run_id": "32832079483",
+  "source_sha": "6f8015aefc8b077f2f2070b06e7873949a5d0a8d",
+  "tag": "",
   "job_status": "failure",
   "steps": {
-    "deps": "success",
-    "icon": "success",
-    "build": "success",
-    "smoke": "success",
-    "friendly": "success",
-    "sums": "success",
-    "release": "success",
-    "upload": "failure",
+    "deps": "skipped",
+    "icon": "skipped",
+    "build": "skipped",
+    "smoke": "skipped",
+    "friendly": "skipped",
+    "sums": "skipped",
+    "release": "skipped",
+    "upload": "skipped",
     "receipt": "skipped"
   },
-  "recorded_at_utc": "2026-08-25T09:23:10.8702923Z"
+  "recorded_at_utc": "2026-08-25T09:28:22.2801185Z"
 }
