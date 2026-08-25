@@ -48,7 +48,14 @@ jobs:
       - name: Install pinned Windows build dependencies
         shell: pwsh
         run: |
-          python -m pip install --disable-pip-version-check "pyinstaller==6.22.2" "pywebview==6.2.1"
+          python -m pip install --disable-pip-version-check "pyinstaller==6.22.2" "pywebview==6.2.1" "pillow==11.3.0"
+
+      - name: Extract transparent Totoro icon
+        shell: pwsh
+        run: |
+          python WindowsApp/extract-icon.py
+          if ($LASTEXITCODE -ne 0) { throw "icon extraction failed: $LASTEXITCODE" }
+          if (-not (Test-Path -LiteralPath WindowsApp/generated/Debate-Coach.ico -PathType Leaf)) { throw 'generated icon missing' }
 
       - name: Build single-file WebView2 EXE
         shell: pwsh
@@ -65,6 +72,7 @@ jobs:
             --name $name `
             --version-file WindowsApp/windows_version_info.txt `
             --manifest WindowsApp/windows_dpi_manifest.xml `
+            --icon WindowsApp/generated/Debate-Coach.ico `
             --add-data "Debate-Coach-web.html;." `
             --collect-all webview `
             --hidden-import clr `
