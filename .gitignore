@@ -26,3 +26,12 @@ npm-debug.log*
 Thumbs.db
 .idea/
 .vscode/
+
+# ===== Windows 本地构建产物 =====
+.build-venv/
+build/
+spec/
+dist/
+WindowsApp/generated/
+*.smoke.txt
+*.ui-smoke.txt
