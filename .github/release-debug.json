@@ -1,0 +1,18 @@
+{
+  "run_id": "32820359274",
+  "source_sha": "1cbbe1f64a58fd268f49509c70fa6a1d08b0d258",
+  "tag": "v9.2.1",
+  "job_status": "failure",
+  "steps": {
+    "deps": "success",
+    "icon": "success",
+    "build": "failure",
+    "smoke": "skipped",
+    "friendly": "skipped",
+    "sums": "skipped",
+    "release": "skipped",
+    "upload": "skipped",
+    "receipt": "skipped"
+  },
+  "recorded_at_utc": "2026-08-25T07:11:58.5114699Z"
+}
