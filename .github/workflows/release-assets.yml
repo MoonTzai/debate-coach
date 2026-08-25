@@ -1,0 +1,133 @@
+name: Publish release assets
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - version.json
+      - Debate-Coach-web.html
+      - 'Debate-Coach-APK-v*.apk'
+      - WindowsApp/**
+      - .github/workflows/release-assets.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Resolve version
+        id: release
+        shell: pwsh
+        run: |
+          $v = Get-Content -LiteralPath version.json -Raw | ConvertFrom-Json
+          $tag = [string]$v.tag
+          if (-not $tag) { throw 'version.json has no tag' }
+          $apk = "Debate-Coach-APK-$tag.apk"
+          $exe = "Debate-Coach-Windows-$tag-WebView2.exe"
+          if (-not (Test-Path -LiteralPath Debate-Coach-web.html -PathType Leaf)) { throw 'missing Debate-Coach-web.html' }
+          if (-not (Test-Path -LiteralPath $apk -PathType Leaf)) { throw "missing $apk" }
+          "tag=$tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "apk=$apk" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "exe=$exe" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Install pinned Windows build dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --disable-pip-version-check "pyinstaller==6.22.2" "pywebview==6.2.1"
+
+      - name: Build single-file WebView2 EXE
+        shell: pwsh
+        env:
+          EXE: ${{ steps.release.outputs.exe }}
+        run: |
+          $name = [IO.Path]::GetFileNameWithoutExtension($env:EXE)
+          python -m PyInstaller `
+            --noconfirm `
+            --clean `
+            --onefile `
+            --windowed `
+            --noupx `
+            --name $name `
+            --version-file WindowsApp/windows_version_info.txt `
+            --manifest WindowsApp/windows_dpi_manifest.xml `
+            --add-data "Debate-Coach-web.html;." `
+            --collect-all webview `
+            --hidden-import clr `
+            --hidden-import webview.platforms.winforms `
+            --hidden-import webview.platforms.edgechromium `
+            --distpath dist `
+            --workpath build `
+            --specpath spec `
+            WindowsApp/host.py
+          if ($LASTEXITCODE -ne 0) { throw "PyInstaller failed: $LASTEXITCODE" }
+          if (-not (Test-Path -LiteralPath (Join-Path dist $env:EXE) -PathType Leaf)) { throw 'built EXE missing' }
+
+      - name: Smoke embedded master
+        shell: pwsh
+        env:
+          EXE: ${{ steps.release.outputs.exe }}
+        run: |
+          $exePath = Join-Path dist $env:EXE
+          $p = Start-Process -FilePath $exePath -ArgumentList '--smoke' -PassThru -Wait
+          if ($p.ExitCode -ne 0) { throw "EXE smoke failed: $($p.ExitCode)" }
+          $smoke = [IO.Path]::ChangeExtension($exePath, '.smoke.txt')
+          if (-not (Test-Path -LiteralPath $smoke -PathType Leaf)) { throw 'smoke report missing' }
+          $report = Get-Content -LiteralPath $smoke -Raw
+          $masterSha = (Get-FileHash -Algorithm SHA256 -LiteralPath Debate-Coach-web.html).Hash.ToLowerInvariant()
+          if ($report -notmatch [regex]::Escape("embedded_master_sha256=$masterSha")) { throw 'embedded master SHA mismatch' }
+          Write-Host $report
+
+      - name: Generate SHA256SUMS
+        shell: pwsh
+        env:
+          APK: ${{ steps.release.outputs.apk }}
+          EXE: ${{ steps.release.outputs.exe }}
+        run: |
+          $files = @('Debate-Coach-web.html', $env:APK, (Join-Path dist $env:EXE))
+          $lines = foreach ($file in $files) {
+            $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $file).Hash.ToLowerInvariant()
+            "$hash  $([IO.Path]::GetFileName($file))"
+          }
+          $lines | Set-Content -LiteralPath SHA256SUMS.txt -Encoding ascii
+          Get-Content -LiteralPath SHA256SUMS.txt
+
+      - name: Create or update GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          gh release view $env:TAG --repo $env:GITHUB_REPOSITORY *> $null
+          if ($LASTEXITCODE -eq 0) {
+            gh release edit $env:TAG --repo $env:GITHUB_REPOSITORY --title "Debate-Coach $env:TAG" --latest
+          } else {
+            gh release create $env:TAG --repo $env:GITHUB_REPOSITORY --target $env:GITHUB_SHA --title "Debate-Coach $env:TAG" --notes "Debate-Coach $env:TAG multi-platform release." --latest
+          }
+          if ($LASTEXITCODE -ne 0) { throw "release create/edit failed: $LASTEXITCODE" }
+
+      - name: Upload and verify Release assets
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.release.outputs.tag }}
+          APK: ${{ steps.release.outputs.apk }}
+          EXE: ${{ steps.release.outputs.exe }}
+        run: |
+          gh release upload $env:TAG Debate-Coach-web.html $env:APK (Join-Path dist $env:EXE) SHA256SUMS.txt --repo $env:GITHUB_REPOSITORY --clobber
+          if ($LASTEXITCODE -ne 0) { throw "release upload failed: $LASTEXITCODE" }
+          $names = gh release view $env:TAG --repo $env:GITHUB_REPOSITORY --json assets --jq '.assets[].name'
+          foreach ($required in @('Debate-Coach-web.html', $env:APK, $env:EXE, 'SHA256SUMS.txt')) {
+            if ($names -notcontains $required) { throw "release asset missing: $required" }
+          }
+          Write-Host $names
