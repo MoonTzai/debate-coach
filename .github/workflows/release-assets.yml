@@ -14,6 +14,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: release-assets-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   release:
     runs-on: windows-latest
@@ -88,19 +92,40 @@ jobs:
           if ($report -notmatch [regex]::Escape("embedded_master_sha256=$masterSha")) { throw 'embedded master SHA mismatch' }
           Write-Host $report
 
-      - name: Generate SHA256SUMS
+      - name: Prepare friendly Release filenames
+        id: friendly
         shell: pwsh
         env:
+          TAG: ${{ steps.release.outputs.tag }}
           APK: ${{ steps.release.outputs.apk }}
           EXE: ${{ steps.release.outputs.exe }}
         run: |
-          $files = @('Debate-Coach-web.html', $env:APK, (Join-Path dist $env:EXE))
-          $lines = foreach ($file in $files) {
+          New-Item -ItemType Directory -Force -Path release-assets | Out-Null
+          $web = "Debate-Coach-web-$env:TAG（网页版）.html"
+          $apk = ([IO.Path]::GetFileNameWithoutExtension($env:APK) + '（安卓版）.apk')
+          $exe = ([IO.Path]::GetFileNameWithoutExtension($env:EXE) + '（Windows版）.exe')
+          Copy-Item -LiteralPath Debate-Coach-web.html -Destination (Join-Path release-assets $web)
+          Copy-Item -LiteralPath $env:APK -Destination (Join-Path release-assets $apk)
+          Copy-Item -LiteralPath (Join-Path dist $env:EXE) -Destination (Join-Path release-assets $exe)
+          "web=$web" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "apk=$apk" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "exe=$exe" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Generate SHA256SUMS
+        shell: pwsh
+        env:
+          WEB: ${{ steps.friendly.outputs.web }}
+          APK: ${{ steps.friendly.outputs.apk }}
+          EXE: ${{ steps.friendly.outputs.exe }}
+        run: |
+          $files = @($env:WEB, $env:APK, $env:EXE)
+          $lines = foreach ($name in $files) {
+            $file = Join-Path release-assets $name
             $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $file).Hash.ToLowerInvariant()
-            "$hash  $([IO.Path]::GetFileName($file))"
+            "$hash  $name"
           }
-          $lines | Set-Content -LiteralPath SHA256SUMS.txt -Encoding ascii
-          Get-Content -LiteralPath SHA256SUMS.txt
+          $lines | Set-Content -LiteralPath (Join-Path release-assets SHA256SUMS.txt) -Encoding utf8
+          Get-Content -LiteralPath (Join-Path release-assets SHA256SUMS.txt)
 
       - name: Create or update GitHub Release
         shell: pwsh
@@ -121,13 +146,28 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.release.outputs.tag }}
-          APK: ${{ steps.release.outputs.apk }}
-          EXE: ${{ steps.release.outputs.exe }}
+          SOURCE_APK: ${{ steps.release.outputs.apk }}
+          SOURCE_EXE: ${{ steps.release.outputs.exe }}
+          WEB: ${{ steps.friendly.outputs.web }}
+          APK: ${{ steps.friendly.outputs.apk }}
+          EXE: ${{ steps.friendly.outputs.exe }}
         run: |
-          gh release upload $env:TAG Debate-Coach-web.html $env:APK (Join-Path dist $env:EXE) SHA256SUMS.txt --repo $env:GITHUB_REPOSITORY --clobber
+          $legacy = @('Debate-Coach-web.html', $env:SOURCE_APK, $env:SOURCE_EXE)
+          foreach ($name in $legacy) {
+            gh release delete-asset $env:TAG $name --repo $env:GITHUB_REPOSITORY -y 2>$null
+          }
+          gh release upload $env:TAG `
+            (Join-Path release-assets $env:WEB) `
+            (Join-Path release-assets $env:APK) `
+            (Join-Path release-assets $env:EXE) `
+            (Join-Path release-assets 'SHA256SUMS.txt') `
+            --repo $env:GITHUB_REPOSITORY --clobber
           if ($LASTEXITCODE -ne 0) { throw "release upload failed: $LASTEXITCODE" }
           $names = gh release view $env:TAG --repo $env:GITHUB_REPOSITORY --json assets --jq '.assets[].name'
-          foreach ($required in @('Debate-Coach-web.html', $env:APK, $env:EXE, 'SHA256SUMS.txt')) {
+          foreach ($required in @($env:WEB, $env:APK, $env:EXE, 'SHA256SUMS.txt')) {
             if ($names -notcontains $required) { throw "release asset missing: $required" }
+          }
+          foreach ($old in $legacy) {
+            if ($names -contains $old) { throw "legacy release asset still present: $old" }
           }
           Write-Host $names
