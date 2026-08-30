@@ -115,7 +115,7 @@ jobs:
           grep -Fx "$web" <<<"$names"
           grep -Fx "$apk" <<<"$names"
           grep -Fx "$exe" <<<"$names"
-          labels="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" --jq '.assets[] | "\(.name)\t\(.label // \"\")"')"
+          labels="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" --jq '.assets[] | [.name, (.label // "")] | @tsv')"
           grep -Fqx "$web"$'\t'"$web_label" <<<"$labels"
           grep -Fqx "$apk"$'\t'"$apk_label" <<<"$labels"
           grep -Fqx "$exe"$'\t'"$exe_label" <<<"$labels"
