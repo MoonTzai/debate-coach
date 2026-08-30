@@ -64,7 +64,7 @@ body.light .btn-sm.gold:hover{color:var(--on-accent)}
 
 /* +1 btn */
 .plus-one-row{display:flex;gap:10px;align-items:flex-start;margin:8px 0}
-.plus-one-row .plus-label{color:var(--gray);font-size:12px;min-width:70px;padding-top:9px;flex-shrink:0}
+.plus-one-row .plus-label{color:var(--gray);font-size:12px;width:96px;min-width:96px;padding-top:9px;flex-shrink:0}
 .plus-one-row .ta-wrap{flex:1}
 .plus-one-row .ta-wrap textarea{width:100%;min-height:72px;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:var(--radius-sm);font-size:13px;font-family:inherit;outline:none;resize:vertical;word-wrap:break-word;white-space:pre-wrap}
 .plus-one-row .ta-wrap textarea:focus{border-color:var(--gold)}
@@ -168,6 +168,11 @@ var STORAGE_LIST_KEY='flowing_v2_matches';
 var POSITIONS=['','一辩','二辩','三辩','四辩','五辩','六辩','教练','评委','其他','无'];
 var ROUND_TYPES=['选择','质询','对辩','盘问','申论或驳论','攻辩小结','自由辩','总结陈词','奇袭','评委互动','其它'];
 
+function roundLabel(r,i){
+  if(r.name&&r.name!=='选择')return r.name;
+  return '环节'+(i+1)+'/'+(M.rounds.length+1);
+}
+
 function save(){if(M){M._updated=Date.now();localStorage.setItem(STORAGE_KEY,JSON.stringify(M));}}
 
 function newMatch(){
@@ -243,11 +248,12 @@ function renderStepBar(){
   steps.push({name:'汇总分析',idx:total});
   var h='<div class="step-bar">';
   steps.forEach(function(s,i){
-    var cls='',labelCls='';
-    if(s.name==='立论'&&(VIEW===1||(VIEW===2&&roundIdx===0))){cls=' current';labelCls=' current';}
-    else if(VIEW===2&&M.rounds[roundIdx]&&M.rounds[roundIdx].name===s.name&&M.rounds[roundIdx].type!=='opening'){cls=' current';labelCls=' current';}
-    else if(VIEW===3&&s.name==='汇总分析'){cls=' current';labelCls=' current';}
-    else if(VIEW===3||(VIEW===2&&i<=roundIdx)){cls=' done';labelCls=' done';}
+    var cls='',labelCls='',isCurrent=false;
+    if(VIEW===1)isCurrent=(i===0);
+    else if(VIEW===2)isCurrent=(roundIdx===0?i===0:i===roundIdx);
+    else if(VIEW===3)isCurrent=(i===steps.length-1);
+    if(isCurrent){cls=' current';labelCls=' current';}
+    else if(VIEW===3||(VIEW===2&&i<roundIdx)){cls=' done';labelCls=' done';}
     h+='<span class="dot'+cls+'"></span>';
     h+='<span class="label'+labelCls+'">'+s.idx+'/'+total+'. '+s.name+'</span>';
     if(i<steps.length-1)h+='<span class="sep">──</span>';
@@ -441,7 +447,7 @@ function renderRound(m,f,idx){
   // Config bar
   h+='<div class="round-config">';
   h+='<span class="config-text">环节</span>';
-  h+='<select onchange="onRoundTypeChange('+idx+',this)">'+ROUND_TYPES.map(function(x){return'<option '+(r.name===x?'selected':'')+'>'+x+'</option>';}).join('')+'</select>';
+  h+='<select onchange="onRoundTypeChange('+idx+',this)">'+ROUND_TYPES.map(function(x){return'<option value="'+x+'"'+(r.name===x?'selected':'')+'>'+(x==='选择'?roundLabel(r,idx):x)+'</option>';}).join('')+'</select>';
   h+='<span class="config-text">，正方</span>';
   h+='<select onchange="setRoundField('+idx+',\'proPlayer\',this.value)">'+POSITIONS.map(function(x){return'<option '+(r.proPlayer===x?'selected':'')+'>'+(x||'— 选择 —')+'</option>';}).join('')+'</select>';
   h+='<span class="config-text"> VS 反方</span>';
@@ -579,8 +585,8 @@ function renderSummary(m,f){
 
 function buildSideSummary(side){
   var lines=[];
-  M.rounds.forEach(function(r){
-    var label='【'+r.name+'】';
+  M.rounds.forEach(function(r,i){
+    var label='【'+roundLabel(r,i)+'】';
     if(side==='pro'){
       if(r.type==='opening'){
         var o=r.pro;
@@ -643,8 +649,8 @@ async function exportMatch(fmt){
   var content='';
   if(fmt==='txt'||fmt==='md'){
     content+='# '+title+'\n\n'+dateStr+'\n\n';
-    M.rounds.forEach(function(r){
-      content+='## '+r.name+'\n\n';
+    M.rounds.forEach(function(r,i){
+      content+='## '+roundLabel(r,i)+'\n\n';
       if(r.type==='opening'){
         content+=sideText(r,'pro','正方')+'\n';
         content+=sideText(r,'con','反方')+'\n';
@@ -658,8 +664,8 @@ async function exportMatch(fmt){
   }else if(fmt==='html'){
     content='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+title+'</title></head><body>';
     content+='<h1>'+title+'</h1><p>'+dateStr+'</p>';
-    M.rounds.forEach(function(r){
-      content+='<h2>'+r.name+'</h2>';
+    M.rounds.forEach(function(r,i){
+      content+='<h2>'+roundLabel(r,i)+'</h2>';
       if(r.type==='opening'){content+=sideHTML(r,'pro','正方');content+=sideHTML(r,'con','反方');}
       else{
         content+='<h3>正方'+(r.proPlayer?' · '+r.proPlayer:'')+'</h3><p>'+nl2br(r.proContent||'')+'</p>';
@@ -670,11 +676,11 @@ async function exportMatch(fmt){
     content+=assessHTML()+'</body></html>';
   }else if(fmt==='csv'){
     content='环节,正方选手,正方内容,反方选手,反方内容,合并记录或备注\n';
-    M.rounds.forEach(function(r){
+    M.rounds.forEach(function(r,i){
       if(r.type==='opening'){
-        content+=csvCell(r.name)+','+csvCell(r.proPlayer)+','+csvCell(openingToOneLine(r.pro))+','+csvCell(r.conPlayer)+','+csvCell(openingToOneLine(r.con))+',\n';
+        content+=csvCell(roundLabel(r,i))+','+csvCell(r.proPlayer)+','+csvCell(openingToOneLine(r.pro))+','+csvCell(r.conPlayer)+','+csvCell(openingToOneLine(r.con))+',\n';
       }else{
-        content+=csvCell(r.name)+','+csvCell(r.proPlayer)+','+csvCell(r.proContent||'')+','+csvCell(r.conPlayer)+','+csvCell(r.conContent||'')+','+csvCell(r.mergedNote||'')+'\n';
+        content+=csvCell(roundLabel(r,i))+','+csvCell(r.proPlayer)+','+csvCell(r.proContent||'')+','+csvCell(r.conPlayer)+','+csvCell(r.conContent||'')+','+csvCell(r.mergedNote||'')+'\n';
       }
     });
     content+='\n\n评估项,内容\n';
