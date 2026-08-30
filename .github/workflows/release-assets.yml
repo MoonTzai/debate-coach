@@ -121,6 +121,36 @@ jobs:
           if grep -Fx "Debate-Coach-HTML-${tag}.html" <<<"$names"; then exit 1; fi
           if grep -Fx "Debate-Coach-Windows-${tag}-WebView2.exe" <<<"$names"; then exit 1; fi
 
+      - name: Record normalized Release receipt
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="$(jq -r '.tag' version.json)"
+          web="Debate-Coach-web-${tag}.html"
+          apk="Debate-Coach-APK-${tag}.apk"
+          exe="Debate-Coach-Windows-${tag}.exe"
+          gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" > /tmp/release.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin main
+          git checkout -B main origin/main
+          jq --arg tag "$tag" --arg web "$web" --arg apk "$apk" --arg exe "$exe" '
+            {
+              tag: $tag,
+              release_url: .html_url,
+              assets: [.assets[] | select(.name == $web or .name == $apk or .name == $exe) | {name, label, size}],
+              verified_at_utc: (now | todateiso8601)
+            }
+          ' /tmp/release.json > .github/release-status.json
+          test "$(jq '.assets | length' .github/release-status.json)" -eq 3
+          git add -- .github/release-status.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Record verified ${tag} Release labels"
+            git push origin HEAD:main
+          fi
+
   release:
     if: github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
