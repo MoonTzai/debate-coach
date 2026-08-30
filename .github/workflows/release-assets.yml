@@ -79,6 +79,7 @@ jobs:
           PY
 
       - name: Normalize current Release asset names and bytes
+        id: normalize
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -122,6 +123,7 @@ jobs:
           if grep -Fx "Debate-Coach-Windows-${tag}-WebView2.exe" <<<"$names"; then exit 1; fi
 
       - name: Record normalized Release receipt
+        id: receipt
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -148,6 +150,35 @@ jobs:
           git add -- .github/release-status.json
           if ! git diff --cached --quiet; then
             git commit -m "Record verified ${tag} Release labels"
+            git push origin HEAD:main
+          fi
+
+      - name: Record push normalization diagnostic
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+          NORMALIZE: ${{ steps.normalize.outcome }}
+          RECEIPT: ${{ steps.receipt.outcome }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="$(jq -r '.tag // ""' version.json 2>/dev/null || true)"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin main
+          git checkout -B main origin/main
+          jq -n \
+            --arg run_id "$GITHUB_RUN_ID" \
+            --arg source_sha "$GITHUB_SHA" \
+            --arg tag "$tag" \
+            --arg job_status "$JOB_STATUS" \
+            --arg normalize "$NORMALIZE" \
+            --arg receipt "$RECEIPT" \
+            '{run_id:$run_id,source_sha:$source_sha,tag:$tag,job_status:$job_status,steps:{normalize:$normalize,receipt:$receipt}}' \
+            > .github/release-debug.json
+          git add -- .github/release-debug.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Record Release normalization diagnostic"
             git push origin HEAD:main
           fi
 
