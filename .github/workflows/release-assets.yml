@@ -85,7 +85,7 @@ jobs:
         run: |
           set -euo pipefail
           tag="$(jq -r '.tag' version.json)"
-          web="Debate-Coach-HTML-${tag}.html"
+          web="Debate-Coach-web-${tag}.html"
           apk="Debate-Coach-APK-${tag}.apk"
           exe="Debate-Coach-Windows-${tag}.exe"
           test -f Debate-Coach-web.html
@@ -97,13 +97,13 @@ jobs:
           cp "$apk" "release-assets/$apk"
           cp "$exe" "release-assets/$exe"
           for legacy in \
-            "Debate-Coach-web-${tag}.html" \
+            "Debate-Coach-HTML-${tag}.html" \
             "Debate-Coach-web.html" \
             "Debate-Coach-Windows-${tag}-WebView2.exe"; do
             gh release delete-asset "$tag" "$legacy" --repo "$GITHUB_REPOSITORY" -y 2>/dev/null || true
           done
           gh release upload "$tag" \
-            "release-assets/$web#HTML版" \
+            "release-assets/$web#网页版" \
             "release-assets/$apk#安卓版" \
             "release-assets/$exe#Windows版" \
             --repo "$GITHUB_REPOSITORY" --clobber
@@ -111,7 +111,7 @@ jobs:
           grep -Fx "$web" <<<"$names"
           grep -Fx "$apk" <<<"$names"
           grep -Fx "$exe" <<<"$names"
-          if grep -Fx "Debate-Coach-web-${tag}.html" <<<"$names"; then exit 1; fi
+          if grep -Fx "Debate-Coach-HTML-${tag}.html" <<<"$names"; then exit 1; fi
           if grep -Fx "Debate-Coach-Windows-${tag}-WebView2.exe" <<<"$names"; then exit 1; fi
 
   release:
@@ -218,7 +218,7 @@ jobs:
           EXE: ${{ steps.release.outputs.exe }}
         run: |
           New-Item -ItemType Directory -Force -Path release-assets | Out-Null
-          $web = "Debate-Coach-HTML-$env:TAG.html"
+          $web = "Debate-Coach-web-$env:TAG.html"
           $apk = $env:APK
           $exe = $env:EXE
           Copy-Item -LiteralPath Debate-Coach-web.html -Destination (Join-Path release-assets $web)
