@@ -181,6 +181,7 @@ body.dark .toast{background:var(--ink-light);color:#141413}
 </style>
 </head>
 <body>
+<script>(function(){try{if(localStorage.getItem('debate_coach_toolbox_theme_user_set')!=='1')return;var css=localStorage.getItem('debate_coach_toolbox_tendency_css')||'';if(!css)return;var s=document.createElement('style');s.id='tbx-explicit-theme';s.textContent=css;document.head.appendChild(s);var c=JSON.parse(localStorage.getItem('debate_coach_toolbox_theme')||localStorage.getItem('debate_toolbox_theme')||'null');if(c&&c.preset)document.documentElement.setAttribute('data-tbx-style',c.preset==='custom'?(c.base||'classic'):c.preset);}catch(e){}})();</script>
 <header>
   <h1 id="hdr-title">评委人格测试</h1>
   <div class="spacer"></div>
