@@ -1,0 +1,22 @@
+{
+  "tag": "v9.2.4",
+  "release_url": "https://github.com/MoonTzai/debate-coach/releases/tag/v9.2.4",
+  "assets": [
+    {
+      "name": "Debate-Coach-APK-v9.2.4.apk",
+      "label": "Debate-Coach-APK-v9.2.4（安卓版）.apk",
+      "size": 8788629
+    },
+    {
+      "name": "Debate-Coach-web-v9.2.4.html",
+      "label": "Debate-Coach-web-v9.2.4（网页版）.html",
+      "size": 7004371
+    },
+    {
+      "name": "Debate-Coach-Windows-v9.2.4.exe",
+      "label": "Debate-Coach-Windows-v9.2.4（Windows版）.exe",
+      "size": 18720717
+    }
+  ],
+  "verified_at_utc": "2026-08-30T09:50:52Z"
+}
