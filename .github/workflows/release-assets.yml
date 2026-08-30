@@ -88,6 +88,9 @@ jobs:
           web="Debate-Coach-web-${tag}.html"
           apk="Debate-Coach-APK-${tag}.apk"
           exe="Debate-Coach-Windows-${tag}.exe"
+          web_label="Debate-Coach-web-${tag}（网页版）.html"
+          apk_label="Debate-Coach-APK-${tag}（安卓版）.apk"
+          exe_label="Debate-Coach-Windows-${tag}（Windows版）.exe"
           test -f Debate-Coach-web.html
           test -f "$apk"
           test -f "$exe"
@@ -103,14 +106,18 @@ jobs:
             gh release delete-asset "$tag" "$legacy" --repo "$GITHUB_REPOSITORY" -y 2>/dev/null || true
           done
           gh release upload "$tag" \
-            "release-assets/$web#网页版" \
-            "release-assets/$apk#安卓版" \
-            "release-assets/$exe#Windows版" \
+            "release-assets/$web#$web_label" \
+            "release-assets/$apk#$apk_label" \
+            "release-assets/$exe#$exe_label" \
             --repo "$GITHUB_REPOSITORY" --clobber
           names="$(gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name')"
           grep -Fx "$web" <<<"$names"
           grep -Fx "$apk" <<<"$names"
           grep -Fx "$exe" <<<"$names"
+          labels="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" --jq '.assets[] | "\(.name)\t\(.label // \"\")"')"
+          grep -Fqx "$web"$'\t'"$web_label" <<<"$labels"
+          grep -Fqx "$apk"$'\t'"$apk_label" <<<"$labels"
+          grep -Fqx "$exe"$'\t'"$exe_label" <<<"$labels"
           if grep -Fx "Debate-Coach-HTML-${tag}.html" <<<"$names"; then exit 1; fi
           if grep -Fx "Debate-Coach-Windows-${tag}-WebView2.exe" <<<"$names"; then exit 1; fi
 
@@ -282,9 +289,9 @@ jobs:
             gh release delete-asset $env:TAG $name --repo $env:GITHUB_REPOSITORY -y 2>$null
           }
           gh release upload $env:TAG `
-            ((Join-Path release-assets $env:WEB) + '#网页版') `
-            ((Join-Path release-assets $env:APK) + '#安卓版') `
-            ((Join-Path release-assets $env:EXE) + '#Windows版') `
+            ((Join-Path release-assets $env:WEB) + ('#' + ($env:WEB -replace '\.html$', '（网页版）.html'))) `
+            ((Join-Path release-assets $env:APK) + ('#' + ($env:APK -replace '\.apk$', '（安卓版）.apk'))) `
+            ((Join-Path release-assets $env:EXE) + ('#' + ($env:EXE -replace '\.exe$', '（Windows版）.exe'))) `
             (Join-Path release-assets 'SHA256SUMS.txt') `
             --repo $env:GITHUB_REPOSITORY --clobber
           if ($LASTEXITCODE -ne 0) { throw "release upload failed: $LASTEXITCODE" }
@@ -310,9 +317,9 @@ jobs:
           with urllib.request.urlopen(request, timeout=30) as response:
               release = json.load(response)
           expected = {
-              os.environ["WEB"]: "\u7f51\u9875\u7248",
-              os.environ["APK"]: "\u5b89\u5353\u7248",
-              os.environ["EXE"]: "Windows\u7248",
+              os.environ["WEB"]: os.environ["WEB"].removesuffix(".html") + "（网页版）.html",
+              os.environ["APK"]: os.environ["APK"].removesuffix(".apk") + "（安卓版）.apk",
+              os.environ["EXE"]: os.environ["EXE"].removesuffix(".exe") + "（Windows版）.exe",
           }
           actual = {asset.get("name"): asset.get("label") or "" for asset in release.get("assets", [])}
           for name, label in expected.items():
