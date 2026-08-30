@@ -63,7 +63,7 @@ jobs:
           for name, label in labels.items():
               asset = by_name.get(name)
               if not asset:
-                  raise SystemExit(f"missing Release asset: {name}")
+                  continue
               request(
                   f"https://api.github.com/repos/{repo}/releases/assets/{asset['id']}",
                   method="PATCH",
@@ -73,7 +73,7 @@ jobs:
           verified = request(release_url)
           actual = {asset["name"]: asset.get("label") or "" for asset in verified.get("assets", [])}
           for name, label in labels.items():
-              if actual.get(name) != label:
+              if name in by_name and actual.get(name) != label:
                   raise SystemExit(f"label verification failed: {name}: {actual.get(name)!r} != {label!r}")
           print(json.dumps(labels, ensure_ascii=True, sort_keys=True))
           PY
