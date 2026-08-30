@@ -5,6 +5,10 @@ on:
   push:
     branches: [main]
     paths:
+      - version.json
+      - Debate-Coach-web.html
+      - 'Debate-Coach-APK-v*.apk'
+      - 'Debate-Coach-Windows-v*.exe'
       - .github/workflows/release-assets.yml
   workflow_dispatch:
 
@@ -20,7 +24,10 @@ jobs:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - name: Patch Release display labels only
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch historical Release display labels
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -70,6 +77,42 @@ jobs:
                   raise SystemExit(f"label verification failed: {name}: {actual.get(name)!r} != {label!r}")
           print(json.dumps(labels, ensure_ascii=True, sort_keys=True))
           PY
+
+      - name: Normalize current Release asset names and bytes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="$(jq -r '.tag' version.json)"
+          web="Debate-Coach-HTML-${tag}.html"
+          apk="Debate-Coach-APK-${tag}.apk"
+          exe="Debate-Coach-Windows-${tag}.exe"
+          test -f Debate-Coach-web.html
+          test -f "$apk"
+          test -f "$exe"
+          rm -rf release-assets
+          mkdir -p release-assets
+          cp Debate-Coach-web.html "release-assets/$web"
+          cp "$apk" "release-assets/$apk"
+          cp "$exe" "release-assets/$exe"
+          for legacy in \
+            "Debate-Coach-web-${tag}.html" \
+            "Debate-Coach-web.html" \
+            "Debate-Coach-Windows-${tag}-WebView2.exe"; do
+            gh release delete-asset "$tag" "$legacy" --repo "$GITHUB_REPOSITORY" -y 2>/dev/null || true
+          done
+          gh release upload "$tag" \
+            "release-assets/$web#HTML版" \
+            "release-assets/$apk#安卓版" \
+            "release-assets/$exe#Windows版" \
+            --repo "$GITHUB_REPOSITORY" --clobber
+          names="$(gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name')"
+          grep -Fx "$web" <<<"$names"
+          grep -Fx "$apk" <<<"$names"
+          grep -Fx "$exe" <<<"$names"
+          if grep -Fx "Debate-Coach-web-${tag}.html" <<<"$names"; then exit 1; fi
+          if grep -Fx "Debate-Coach-Windows-${tag}-WebView2.exe" <<<"$names"; then exit 1; fi
 
   release:
     if: github.event_name == 'workflow_dispatch'
