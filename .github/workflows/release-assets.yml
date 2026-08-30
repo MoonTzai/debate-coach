@@ -175,7 +175,7 @@ jobs:
           EXE: ${{ steps.release.outputs.exe }}
         run: |
           New-Item -ItemType Directory -Force -Path release-assets | Out-Null
-          $web = "Debate-Coach-web-$env:TAG.html"
+          $web = "Debate-Coach-HTML-$env:TAG.html"
           $apk = $env:APK
           $exe = $env:EXE
           Copy-Item -LiteralPath Debate-Coach-web.html -Destination (Join-Path release-assets $web)
