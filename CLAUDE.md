@@ -23,13 +23,15 @@ Debate-Coach-Backup/          Debate-Coach/
 
 | 基准文件 | 身份 | 对齐状态 |
 |---|---|---|
-| `debate-coach-web.html` | **正式单文件网页母版 / GH 发布基准**。v9.2.1+ 使用 `DC_PAGES` 可读字符串内嵌 ZH/EN/JUDGE/TOOLBOX/LANG/JUDGE_ENTRY/EXAM 七个完整 HTML；Toolbox 内以 `TOOL_HTML` 内嵌 9 工具×中英，运行时由同源 `iframe.srcdoc` 加载。禁止恢复根部 Base64 + `atob/TextDecoder/document.write` 旧加载链。 | 当前发布线 = v9.2.1 |
-| `toolbox.html`（独立壳）+ 13 工具页 | **线上 InfinityFree 专用外置形态**（1MB 限制）；工具页唯一来源 = Backup 根目录（manifest 指纹校验） | ⚠️ 仅线上使用，GH 已撤除 |
+| `debate-coach-web.html` | **正式单文件网页母版 / GH 发布基准**。v9.2.1+ 使用 `DC_PAGES` 可读字符串内嵌 ZH/EN/JUDGE/TOOLBOX/LANG/JUDGE_ENTRY/EXAM 七个完整 HTML；Toolbox 内以 `TOOL_HTML` 内嵌 9 工具×中英，运行时由同源 `iframe.srcdoc` 加载。禁止恢复根部 Base64 + `atob/TextDecoder/document.write` 旧加载链。 | 当前发布线 = v9.2.5 |
+| `Upload/infinityfree/htdocs/debate-coach-zh.html` + `coach-dist/` | **InfinityFree 正式在线形态**：稳定 loader + 900 KiB 机械字节切片；唯一完整母版真源仍是 `Debate-Coach-web.html`，浏览器逐片校验后重组为完全一致的单文件母版 | ⚠️ 仅线上传输架构；详见 `Upload/infinityfree/COACH-CHUNK-DEPLOY.md` |
 | `Output/裁判所2.0.html` | **裁判所青春版单页母版**（发布时同步到 `DC_PAGES.JUDGE`） | 独立真源，发布前由 verify 检查 |
 | `Skill-Web.md` | 教练网页（`DC_PAGES.ZH`）知识库源（已含 8 候选重构） | 发布前由 verify 检查 |
 | `Skill-Judge.md` | 裁判页对应独立 skill（v9.0.0-Final-B 两轮提示词） | ⚠️ 未与 GH 裁判页对齐，勿当裁判页源 |
 
-**单文件交付铁原则（用户规定）**：GH/下载/本地/APK 必须一文件全功能——正式母版 `DC_PAGES.TOOLBOX` 内的 `TOOL_HTML` 内嵌全部工具（iframe/srcdoc 隔离），不得依赖外部工具页文件。InfinityFree 在线是唯一 1MB 限制例外（保持外置壳+独立页）。
+**单文件交付铁原则（用户规定）**：GH/下载/本地/APK 必须一文件全功能——正式母版 `DC_PAGES.TOOLBOX` 内的 `TOOL_HTML` 内嵌全部工具（iframe/srcdoc 隔离），不得依赖外部工具页文件。InfinityFree 在线只在**传输层**例外：稳定 loader 下载同源 `coach-dist` 机械切片，完成逐片与整包 SHA-256 校验后恢复完全一致的 `Debate-Coach-web.html`；禁止重新采用“外置壳+独立业务页”作为 Coach 主发布架构。
+
+**InfinityFree 当前控制面优先级**：`COACH-CHUNK-DEPLOY.md`（架构/原子切换协议）→ `INF-工作手册.md`（执行手册）→ 本文件项目纪律。`Memory/`、旧 handoff、`htdocs-backup-*`、`.bak-*`、`build_inf_v805.py` 及归档脚本仅是历史证据，不得覆盖当前控制面。
 
 **Agent 单文件交付 Skill 开发基准**：
 - `SKILL.md`（合一版，当前 178KB）：Coach 全套知识库 + 阶段 C 青春版裁判所 C1-C11 协议，**Agent 端单文件交付 Skill 的开发基准文件**。四副本（Backup 根 / `Debate-Coach/SKILL.md` / `.claude/skills/debate-coach/` / `Test/.claude/skills/debate-coach/`）哈希一致 = `9b846074`（2026-08-15 术语统一后同步）。旧版 Test 安装副本（195KB，`58334411`，7/21）已归档至 `Output/归档-SKILL-260816/`。
@@ -75,7 +77,7 @@ node scripts/package.cjs --gradle      # 同步 + cap copy → gradle 构建 →
 
 ## 🛠️ 发布与检视模块（scripts/ —— 发布前必跑 verify）
 
-**规则：发布/检视一律用下方 node 模块，禁止再写一次性 Python 脚本**（旧 dump_*/analyze_*/patch_*/push_*/test_* 等 79 个已归档至 `Output/归档-脚本-260815/`，根目录仅保留 build_inf_v805.py / extract_docx.py / count_docx.py）。
+**规则：发布/检视一律用下方 node 模块，禁止再写一次性 Python 脚本**（旧 dump_*/analyze_*/patch_*/push_*/test_* 等 79 个已归档至 `Output/归档-脚本-260815/`）。根目录 `build_inf_v805.py` 是旧 v8.0.5 InfinityFree 独立页构建器，**仅作历史残留，禁止用于当前发布**；当前 InfinityFree 构建唯一使用 `node Upload/infinityfree/build-coach-dist.cjs`。`extract_docx.py / count_docx.py` 仅用于其各自文档处理用途。
 
 | 模块 | 用法 | 职责 |
 |---|---|---|
@@ -100,7 +102,7 @@ node scripts/package.cjs --gradle      # 同步 + cap copy → gradle 构建 →
 - `SKILL.md` — 《辩论筑基》完整知识体系 + 审问协议（v7.4.0）
 - `SKILL-EN.md` — 英文版知识库（v7.3.0-en-alpha）
 - `debate-coach-web.html` — **网页版正式单文件交付**（v9.2.1+：`DC_PAGES` 七页面全内嵌；Toolbox 的 `TOOL_HTML` 内嵌 9 工具×中英；同源 iframe.srcdoc；无根部可执行 HTML Base64 loader）
-- `toolbox.html` + 13 独立工具页 — 工具箱**线上外置形态**（唯一来源 Backup 根，manifest 指纹校验；仅 InfinityFree 1MB 限制场景使用）
+- `Upload/infinityfree/htdocs/debate-coach-zh.html` + `coach-dist/` — InfinityFree **稳定 loader + 机械切片在线形态**；完整业务内容仍来自 `Debate-Coach-web.html`，旧独立页/工具页仅为历史或辅助入口，不是当前 Coach 主发布链
 - `Debate-Coach-APK-v8.0.7.apk` — APK 安装包（5.99MB，内嵌工具箱+8候选知识库；历史版本归档于 `Output/归档-APK-260815/`）
 - `Output/辩案工作台-Case-Workbench.html` — 辩案工作台独立版
 - `Output/软件著作权登记/` — 著作权登记全部材料（v7.6.14）

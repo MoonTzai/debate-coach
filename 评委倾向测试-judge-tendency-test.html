@@ -100,9 +100,9 @@ body.dark .btn-main{background:var(--ink-light);color:#141413}
 .stamp{position:absolute;right:var(--space-4);top:var(--space-4);width:64px;height:64px;border:1.5px solid var(--gold);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--gold);transform:rotate(-8deg);opacity:.85;background:var(--gold-soft)}
 .stamp .s1{font-size:16px;font-weight:700;font-family:Georgia,serif;line-height:1;letter-spacing:.5px}
 .stamp .s2{font-size:8px;letter-spacing:2px;margin-top:2px;font-weight:600}
-.type-code{display:flex;justify-content:center;align-items:flex-start;gap:36px;margin:var(--space-5) 0 var(--space-4)}
-.tl{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:64px}
-.tl b{font-family:Georgia,'Times New Roman',serif;font-size:84px;font-weight:400;line-height:1;color:var(--ink)}
+.type-code{display:flex;justify-content:center;align-items:flex-start;gap:24px;margin:var(--space-5) 0 var(--space-4);flex-wrap:nowrap}
+.tl{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:58px}
+.tl b{font-family:Georgia,'Times New Roman',serif;font-size:72px;font-weight:400;line-height:1;color:var(--ink)}
 .tl small{font-size:12px;color:var(--text-3);letter-spacing:2px}
 .tl.x b{color:var(--text-4)}
 .tl-sep{font-family:Georgia,serif;font-size:28px;line-height:1;color:var(--gold);margin-top:34px}
@@ -113,6 +113,9 @@ body.dark .btn-main{background:var(--ink-light);color:#141413}
 .cert-sum{font-size:12.5px;color:var(--text-4);letter-spacing:.5px}
 /* ===== 结果区 ===== */
 .axis-grid.stacked{grid-template-columns:1fr;gap:var(--space-2)}
+.result-section-head{margin:var(--space-4) 0 var(--space-2);padding-top:var(--space-2);border-top:1px solid var(--line-soft)}
+.result-section-head h3{font-size:19px;font-weight:600;color:var(--ink);margin:0 0 6px}
+.result-section-head p{font-size:12px;line-height:1.8;color:var(--text-4);margin:0;max-width:84ch}
 .axis-card.res{border-left:2px solid var(--ink)}
 .res-head{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-4);margin-bottom:var(--space-1)}
 .axis-row{display:flex;align-items:center;gap:var(--space-3);margin:var(--space-3) 0 var(--space-2)}
@@ -143,6 +146,10 @@ body.dark .btn-main{background:var(--ink-light);color:#141413}
 .profile .p-head .en{font-size:14px;color:var(--text-4);font-family:Georgia,serif}
 .profile .p-motto{border-left:2px solid var(--gold);padding:4px 0 4px 16px;color:var(--text-2);font-size:14px;margin:0 0 var(--space-3)}
 .profile p{font-size:14.5px;line-height:1.9;color:var(--text-2);margin-bottom:var(--space-2)}
+.criteria-profile{border-left:3px solid var(--gold);background:linear-gradient(135deg,var(--card),var(--ink-soft))}
+.criteria-profile .p-head{margin-bottom:var(--space-2)}
+.criteria-profile .p-head h3{color:var(--gold)}
+.criteria-profile p{margin-bottom:0;max-width:78ch}
 .chars-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:var(--space-2);padding-top:var(--space-2);border-top:1px solid var(--line-soft)}
 .chars-lbl{font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap}
 .chip{background:var(--ink-soft);color:var(--ink);border-radius:40px;padding:3px 12px;font-size:12px;font-weight:600;white-space:nowrap}
@@ -167,8 +174,9 @@ body.dark .toast{background:var(--ink-light);color:#141413}
 @media (max-width:700px){
   .main{padding:var(--space-3) 14px var(--space-6)}
   .cert{padding:var(--space-5) var(--space-3) var(--space-4)}
-  .type-code{gap:24px}
-  .tl b{font-size:68px}
+  .type-code{gap:12px}
+  .tl{min-width:48px}
+  .tl b{font-size:54px}
   .tl-sep{line-height:68px;font-size:20px}
   .stamp{right:var(--space-2);top:var(--space-2)}
   .qbox{padding:var(--space-3)}
@@ -192,28 +200,36 @@ body.dark .toast{background:var(--ink-light);color:#141413}
 <div id="app" class="main"></div>
 <div class="foot" id="hdr-foot">数据仅保存在本机浏览器</div>
 <script>
-var LS_KEY='debate_judge_tendency_v2';
+var LS_KEY='debate_judge_tendency_v3';
+var LEGACY_LS_KEY='debate_judge_tendency_v2';
+var PROFILE_LS_KEY='debate_judge_tendency_profile_v1';
+var PROFILE_V2_LS_KEY='debate_judge_tendency_profile_v2';
 var LANG=(localStorage.getItem('debate_coach_lang')||'zh')==='en'?'en':'zh';
 var T={
   themeBtn:['界面颜色','Theme'],
   homeBtn:['返回','Back'],
-  introTitle:['测出你的评委人格：三字母代码','Find Your Judge Profile: A 3-Letter Code'],
-  introSub:['基于《辩论筑基》裁判体系与 Debate-Judge V1.0 设计。12 个判赛现场，每题两个选项都来自「好裁判会做的事」，只是取向不同。答完你会得到三个字母（C/J · G/S · T/A，X=中立），像 MBTI 一样好记、好分享，也能复制正式声明用于赛前入场。','Based on the Debate-Judge V1.0 framework. 12 judging scenarios — both options in each are things good judges do, just with different leanings. You get a three-letter code (C/J · G/S · T/A, X = flexible), shareable like an MBTI type, plus a formal declaration you can use before a match.'],
+  introTitle:['测出你的评委人格：三轴人格 + 判准型','Find Your Judge Profile: Three Axes + Criteria Type'],
+  introSub:['基于《辩论筑基》裁判体系与 Debate-Judge 设计。前12题测三根轴各自偏哪一端；后6题专门让「证明 / 说服 / 第三方」发生取舍，测你的天然判准重心。最终代码采用「三轴人格 + 判准后缀」：前三位 C/J · G/S · T/A（X=轴内中立），后缀为 P/R/O/PR/PO/RO/B/X，分别表示单维优先、双维共同优先、三维均衡或未形成稳定结构。','Based on the Debate-Judge framework. The first 12 items measure direction within each axis; the final 6 force trade-offs among Proof, Persuasion, and Third-Party value. The final code uses a three-axis personality plus a criteria suffix: P/R/O for a single priority, PR/PO/RO for dual priorities, B for balanced, and X for no stable structure.'],
   whyTitle:['为什么这样测？','Why this format?'],
   why1:['旧版问「符不符合你」：六个方向都是好品质，大家都会选「大致符合」，测不出差别。','The old “does this describe you” format fails: all six directions are virtues, so everyone picks “roughly yes” — no discrimination.'],
   why2:['新版每道题都给你两个「好裁判都会做」的选择，逼你只选一个——没有全选这条路。','Every item offers two things good judges would do and forces a choice — there is no “select all.”'],
   why3:['题目都是具体场面，不问你抽象想法，更接近你真的坐在评委席上会怎么判。','Items are concrete scenes, not abstract self-ratings — closer to what you would actually do on the bench.'],
-  why4:['只比每一根轴内部偏哪边，不比谁更好；也不告诉你题目在测哪根轴，免得你猜到意图后「自我修正」。','Only relative preference within each axis is measured, not “how good you are”; the axis being tested stays hidden so you cannot game it.'],
-  why5:['A/B 位置在每根轴内严格对半轮换；先选方向、再选强度，强度用「会不会写进评语/判准」这类行为锚定，而不是空泛的「多确定」。','A/B positions are strictly balanced within every axis; after the direction, the weight step is anchored to behavior (would it go into your comments/criteria), not vague confidence.'],
+  why4:['前12题只测每根轴内部偏哪边；最后6题才让「证明 / 说服 / 第三方」直接发生取舍，用来估计三维整体判准重心。两部分分开计分，不拿前12题的强度硬猜跨轴权重。','The first 12 items measure direction within each axis only; the final 6 directly trade Proof, Persuasion, and Third-Party value to estimate overall dimension priority. The two parts are scored separately instead of inferring cross-axis weights from the first 12.'],
+  why5:['A/B 位置在原三轴与新增三组维度配对中都做对半轮换；先选方向、再选强度，强度继续用「会不会写进评语/判准」这类行为锚定，而不是空泛的「多确定」。','A/B positions are counterbalanced both within the original axes and across the three new dimension pairs. You choose a direction first, then a behavior-anchored strength rather than vague confidence.'],
   note:['⚠️ 本工具是自我认识与赛前倾向声明的启发式工具，不是经学术验证的心理量表。结果会受具体情境影响，建议用 2-3 场真实比赛对照校准。','⚠️ This is a self-insight and pre-match declaration aid, not a validated psychological scale. Results vary by situation; cross-check with 2–3 real matches.'],
-  start:['开始测试（12 题 · 约 6 分钟）','Start (12 items · ~6 min)'],
+  start:['开始测试（18 题 · 约 9 分钟）','Start (18 items · ~9 min)'],
   resume:['继续上次进度（','Resume ('],
   restart:['重新开始','Restart'],
   itemOf:['第 ','Item '],
   of:[' / ',' / '],
   item:['题',''],
   sceneTag:['判赛现场','Judging scene'],
+  priorityTag:['判准取舍校准','Criteria trade-off'],
   weightLbl:['这一判法在你心里的分量（无对错，按你真实会怎么做选）：','How much weight would this ruling carry for you? (No right answer — choose what you would actually do)'],
+  priorityWeightLbl:['当这两个维度真正冲突时，你会把这次选择放多重？','When these two dimensions truly conflict, how strongly would you prioritize this choice?'],
+  priorityMildD:['轻微优先：只有双方差距不大时，这个维度才会稍微往前排。','Mild priority: this dimension only edges ahead when the match is otherwise close.'],
+  priorityClearD:['明显优先：我会把它明确写进判准排序，通常排在另一维前面。','Clear priority: I would explicitly rank it above the other dimension in my criteria.'],
+  priorityStrongD:['强烈优先：两者冲突时我几乎总先保这个维度，它可能直接决定胜负。','Strong priority: when they conflict, I almost always protect this dimension first; it can decide the ballot.'],
   mild:['轻微 · 1','Mild · 1'],
   mildD:['只影响我心里对这一环的印象，不会写进评语或判准','Only shapes my private impression of this exchange; I would not put it in my comments or criteria'],
   clear:['明显 · 2','Clear · 2'],
@@ -223,23 +239,30 @@ var T={
   back:['上一题','Back'],
   next:['下一题','Next'],
   finish:['查看鉴定','See Result'],
-  certEyebrow:['《辩论筑基》· DEBATE JUDGE · 三维度六向度自测','《辩论筑基》· DEBATE JUDGE · 3-Axis · 6-Direction Self-Test'],
+  certEyebrow:['《辩论筑基》· DEBATE JUDGE · 三维权重 × 六向度自测','《辩论筑基》· DEBATE JUDGE · 3-Dimension Priority × 6-Direction Test'],
   certHead:['评委人格鉴定书','JUDGE PROFILE CERTIFICATE'],
   neutral:['中立','Neutral'],
   neutralFull:['中立（灵活）','Flexible / Neutral'],
   neutralDesc:['两向度权重接近，随情境浮动','Both directions are nearly balanced; it shifts with the situation'],
   profileHead:['人物侧写 · ','JUDGE PROFILE · '],
   animeLabel:['二次元投影：','Anime counterparts: '],
-  legend:['三字母 = 每根轴各取一端：<b>C</b> 批判者 Critic / <b>J</b> 审判者 Judge · <b>G</b> 卫道者 Guardian / <b>S</b> 问道者 Seeker · <b>T</b> 技术者 Technician / <b>A</b> 艺术者 Artist · <b>X</b> = 中立灵活。顺序：证明轴 · 说服轴 · 第三方轴。','The code takes one end of each axis: <b>C</b> Critic / <b>J</b> Judge · <b>G</b> Guardian / <b>S</b> Seeker · <b>T</b> Technician / <b>A</b> Artist · <b>X</b> = flexible. Order: Proof · Persuasion · Third-Party.'],
+  legend:['代码采用 <b>3+1 / 3+2</b>：前三位仍是轴内人格——<b>C/J</b> 批判者/审判者 · <b>G/S</b> 卫道者/问道者 · <b>T/A</b> 技术者/艺术者，<b>X</b> = 轴内中立；连字符后的判准后缀为 <b>P/R/O</b> 单维优先、<b>PR/PO/RO</b> 双维共同优先、<b>B</b> 三维均衡、<b>X</b> 未形成稳定结构。','The code uses 3+1 / 3+2: the first three letters keep the within-axis personality code; the suffix after the hyphen is P/R/O for a single priority, PR/PO/RO for dual priorities, B for balanced, and X for no stable structure.'],
+  dimWeightsTitle:['三维整体权重','Three-Dimension Priority'],
+  dimWeightsSub:['来自最后6题的跨维度直接取舍；表示三个整体判准在彼此冲突时的相对优先级，不是心理概率，也不是合计100%的占比。三项权重值彼此独立，数值被保守限制在20–80，避免少量题目制造极端权重。','Derived from the final 6 direct trade-off items. They express the relative priority of the three judging criteria when they conflict, not psychological probabilities or shares that sum to 100%. The three weight values are independent and conservatively bounded to 20–80.'],
+  axisDetailTitle:['三轴答题细节','Axis Response Details'],
+  axisDetailSub:['下面回看前12题在三根轴内部的具体取舍与一致性，用来解释六向度结果，不参与后三维判准型的跨轴分类。','The section below revisits the first 12 within-axis items to explain the six-direction result; it does not participate in the cross-axis criteria-type classification.'],
   weightsTitle:['六向度权重','Six-Direction Weights'],
   weightsSub:['百分比 = 你在该向度上的轴内相对权重；释义为通俗转写，另挂靠相关学科视角。','Percentages are your relative weight within each axis; explanations are plain-language glosses with academic hooks.'],
   shareTitle:['鉴定结果分享','Share Result'],
   saveShare:['保存 / 分享','Save / Share'],
   editAns:['修改答案','Edit Answers'],
   retest:['重新测试','Restart'],
-  declTitle:['给比赛用的正式声明','Formal Declaration (for the Chinese pipeline)'],
+  declTitle:['正式裁判倾向声明','Formal Judge-Tendency Declaration'],
   copyDecl:['复制正式声明','Copy Declaration'],
-  declHint:['本正式声明导入《辩论筑基》·Debate-Coach/Debate-Judge的复盘/评委流程，即可复刻倾向一致的诊断流程','This declaration stays in Chinese for compatibility with the 《辩论筑基》·Debate-Coach/Debate-Judge pipeline; import it there to reproduce a consistent diagnostic flow.'],
+  saveJudgeProfile:['保存为 Judge 倾向配置','Save Judge Profile Config'],
+  saveJudgeProfileHint:['仅在你手工点击后保存本次三维权重与六向度配置；不会自动应用到 Judge。进入 Judge 后仍需再次手工点击“应用本机人格测试结果”并确认。','Saved only when you click; it is never auto-applied to Judge. In Judge you must still manually choose “Apply local profile result” and confirm.'],
+  profileSaved:['Judge 倾向配置已保存到本机，并同时导出 JSON。','Judge profile config saved locally and exported as JSON.'],
+  declHint:['本声明用于阅读、留档或手工引用。若要把本次测评结果应用到 Judge，请点击本区“保存为 Judge 倾向配置”，再到 Judge 中手工导入/应用并确认；以结构化 profile-v2 为准，不依赖自然语言解析。','This declaration is for reading, archiving, or manual reference. To apply this result to Judge, use “Save Judge Profile Config” here, then manually import/apply and confirm it in Judge. The structured profile-v2 is authoritative; do not rely on natural-language parsing.'],
   copied:['已复制','Copied'],
   copyFail:['复制失败，请手动选择复制','Copy failed — select and copy manually'],
   confirmReset:['确定清空全部答案重新测试？','Clear all answers and restart?'],
@@ -286,6 +309,13 @@ var QUESTIONS=[
   {id:'p4',axis:'proof',a:{pole:'critic',text:'攻防各算各的：反方那个点被打掉了就掉分；正方那个点没人打，就还站着。我不替反方补刀，也不替正方自证。'},b:{pole:'judge',text:'漏洞就是漏洞，我不看谁先指出：两个点我都会独立核一遍，该扣的都扣，不能因为哪边没打就放过。'},scenario:'这场双方各有一个明显的逻辑漏洞。正方在自由辩论里当场指出了反方的漏洞，反方没接住；反方自始至终没有指出正方那个漏洞，正方也没有主动补强。',en:{scenario:'Both sides have an obvious logical flaw this match. In free debate, the affirmative points out the negative’s flaw on the spot; the negative can’t answer. But the negative never points out the affirmative’s flaw, and the affirmative never fixes it either.',a:'Attack and defense settle each claim separately: the negative’s flaw got hit and drops; the affirmative’s flaw was never hit, so it stands. I don’t attack for either side.',b:'A flaw is a flaw regardless of who points it out. I independently check both claims and mark both down — I don’t let one side off because the other missed it.'}},
   {id:'s4',axis:'persuasion',a:{pole:'seeker',text:'让人不舒服不等于错；敢说不舒服的真话、还能把逻辑立住，这种挑战值得加分，而不是因为「不舒服」被扣分。'},b:{pole:'guardian',text:'让人不适的立场要付出更高的说服成本——大多数人感到安全和舒服，本身是说服力的一部分；它必须比常规论证强很多，我才愿意采信。'},scenario:'正方立了一个让全场都感到不适的立场——比如「网络匿名不该被保护」，逻辑完整、证据充分；反方讲的是大家都爱听的立场，但论证明显更单薄。观众席上不少人皱眉头。',en:{scenario:'The affirmative takes a position everyone finds uncomfortable — say, “online anonymity should not be protected” — complete and well-evidenced. The negative defends the likeable position but argues far more thinly. Many in the audience frown.',a:'Uncomfortable isn’t wrong. Speaking an uncomfortable truth and making it hold is worth credit, not penalty for discomfort.',b:'An uncomfortable position must pay a higher persuasive cost — comfort and safety are part of persuasion. It must be far stronger than a normal case before I accept it.'}},
   {id:'t4',axis:'third',a:{pole:'artist',text:'内容精彩到让人意犹未尽，说明比赛实现了它的价值；规则瑕疵我会提示，但不该抹掉内容的分量。'},b:{pole:'technician',text:'时间纪律是比赛规则的一部分，频繁违规会破坏公平和可判性；不管内容多精彩，这笔账要体现在裁决里。'},scenario:'反方今天的节奏完全失控：申论超时、自由辩几次犯规，评委多次提醒。但每次开口内容都很精彩，观众意犹未尽，赛后有人说「要是再给他五分钟就好了」。',en:{scenario:'The negative’s time discipline collapses: constructive over time, repeated violations in free debate, multiple warnings. But every speech is brilliant, and people leave wanting more: “Give them five more minutes.”',a:'Content so good that people want more means the match achieved its value. I note the violations, but they shouldn’t erase the content’s weight.',b:'Time discipline is part of the rules; repeated violations damage fairness and judgeability. No matter how brilliant, the ledger has to reflect it.'}}
+,
+  {id:'d1',kind:'priority',pair:['proof','persuasion'],a:{dim:'proof',text:'我先保「证明」：核心主张究竟有没有被充分证成，是判票的底座。没真正证明出来，再会让人点头也不该先赢。'},b:{dim:'persuasion',text:'我先保「说服」：辩论最终要让一个认真听完整场的合理听众接受总体答案。证明很扎实但没完成说服，仍然少了关键一步。'},scenario:'正方的核心因果证据链更完整，反方也没有真正拆穿；但正方一路讲得艰涩，结辩后一个认真听完全场的普通听众仍说不清「为什么最终应该接受正方答案」。反方的证据链有两处不致命但真实的缺口，却把争点解释得非常清楚，听众更愿意接受反方的总体判断。如果这两个优势只能保一个来决定你的判票，你先保哪一个？',en:{scenario:'The affirmative has the stronger causal evidence chain and the negative never truly breaks it, but the case remains hard to follow; after the closing, a careful listener still cannot explain why the affirmative answer should be accepted. The negative has two real but non-fatal evidentiary gaps, yet explains the dispute so clearly that the listener is more willing to accept its overall answer. If only one advantage can decide your ballot, which comes first?',a:'I protect Proof first: whether the central claim is actually established is the floor of the ballot. Persuasion cannot substitute for proof.',b:'I protect Persuasion first: debate must ultimately move a reasonable listener to accept the overall answer. Proof that never completes persuasion is still missing a key step.'}},
+  {id:'d2',kind:'priority',pair:['proof','persuasion'],a:{dim:'persuasion',text:'我更看重哪套解释真正把争点讲通、让我愿意接受它的判断框架；个别证明缺口可以在总体说服力里被看见但不必一票否决。'},b:{dim:'proof',text:'我更看重每个关键跳步是否真的有证据和推理支撑；整体解释再顺，只要核心链条没站住，我不会让它靠「听起来更通」越过去。'},scenario:'一方把每份证据都核得很扎实，但这些证据最终只能支持一个较窄的结论，整场也没有很好解释「所以呢」。另一方把双方争点串成了一套非常完整、容易接受的解释，不过其中一个关键因果环节只做到高度合理、没有完全坐实。你必须在「证明链更硬」和「总体解释更能说服人」之间排先后时，会怎么判？',en:{scenario:'One side verifies every piece of evidence carefully, but the evidence only supports a narrower conclusion and the case never fully answers “so what?” The other side connects the dispute into a coherent, persuasive explanation, but one key causal step is highly plausible rather than fully established. When Proof strength and overall Persuasion conflict, which do you rank first?',a:'I rank the explanation that truly makes the dispute make sense and earns acceptance; a limited proof gap can matter without automatically deciding the ballot.',b:'I rank whether every key inferential step is actually supported. A smooth overall story cannot leap over a core proof gap.'}},
+  {id:'d3',kind:'priority',pair:['proof','third'],a:{dim:'proof',text:'我先保「证明」：比赛形式和余味都重要，但最终仍要先看哪边把辩题上的核心主张证明得更好。'},b:{dim:'third',text:'我先保「第三方价值」：一场比赛若失去基本可判性、完整交锋和公共讨论价值，即使某条证明链更硬，我也会明显降低它的整体胜势。'},scenario:'正方在核心事实和因果链上明显占优，关键证据也更可靠；但整场回应凌乱，多次错过对方主线，时间纪律很差，最后几乎没有形成一场完整、可追踪的交锋。反方的核心证明稍弱，却把规则、回应、主线总结都做得完整，而且把议题推进到了一个值得观众继续思考的位置。若两者冲突，你更先保护哪种优势？',en:{scenario:'The affirmative clearly wins the core facts and causal proof, with more reliable evidence. But the match is messy: missed responses, poor time discipline, and little coherent clash. The negative proves the central claim less strongly, yet delivers a complete, judgeable exchange and advances the issue in a way worth thinking about afterward. Which advantage comes first?',a:'Proof first: form and aftertaste matter, but the ballot still begins with who better established the central claim on the motion.',b:'Third-Party value first: if the match loses judgeability, complete clash, and public value, a stronger proof chain does not automatically preserve the overall edge.'}},
+  {id:'d4',kind:'priority',pair:['proof','third'],a:{dim:'third',text:'我更愿意奖励那场真正完成了「比赛」与「公共讨论」的呈现：可判、完整、回应充分，而且留下了东西；证明差一点会扣分，但不是唯一总开关。'},b:{dim:'proof',text:'我仍把核心证明放在最前：比赛再完整、再有意义，如果关键命题没有被更好地证明，就不能靠完成度或余味反超。'},scenario:'反方抓住了一份决定性的材料，确实让自己的核心结论比正方更有根据；但除此之外几乎没有形成有效交锋，很多内容只是单边陈述。正方在那份关键材料上落后，却持续回应、重组双方内容，完整呈现了冲突，也让观众真正理解了这个议题为什么重要。你的判票更愿意把哪一种优势排在前面？',en:{scenario:'The negative has one decisive piece of material that genuinely makes its central conclusion better supported, but little else becomes meaningful clash; much of the match is one-sided assertion. The affirmative loses on that key material yet continuously responds, reconstructs both sides, produces a complete contest, and makes the audience understand why the issue matters. Which advantage ranks first?',a:'I reward the side that completes the match and the public discussion: judgeable, responsive, coherent, and meaningful. The proof deficit matters, but it is not the only master switch.',b:'I still put the core proof first. A complete and meaningful match cannot overtake a side that better proves the decisive proposition.'}},
+  {id:'d5',kind:'priority',pair:['persuasion','third'],a:{dim:'persuasion',text:'我先看哪边真正让合理听众接受了自己的总体答案；比赛是否漂亮、完整、有余味会影响评价，但说服失败很难靠「比赛价值」补回来。'},b:{dim:'third',text:'我更看重比赛作为公共讨论本身是否完成得好、是否值得被留下；即使某方更容易让人点头，若它没有贡献足够的比赛完成度和意义，我不会自动把票给它。'},scenario:'正方的表达并不华丽，交锋也只是合格，但它一步步回应了听众最真实的疑问，最后让一个原本中立的合理听众愿意接受正方总体答案。反方打得更完整、更漂亮，议题挖得更深，很多段落值得赛后反复讨论，可多数人听完仍不愿接受反方的最终结论。你更先看哪一个？',en:{scenario:'The affirmative is not flashy and the clash is merely competent, but it answers the listener’s real doubts step by step and ultimately persuades a previously neutral reasonable listener to accept its overall answer. The negative delivers the more complete, beautiful, and deep debate, with passages worth revisiting, yet most listeners still do not accept its final conclusion. Which comes first?',a:'Persuasion first: I look at which side actually moved a reasonable listener to accept its overall answer. Match value matters, but it cannot easily compensate for failing to persuade.',b:'Third-Party value first: I care whether the debate itself was completed well and left something worth keeping. Easier agreement does not automatically win if the match contributes too little beyond that.'}},
+  {id:'d6',kind:'priority',pair:['persuasion','third'],a:{dim:'third',text:'我先保比赛对第三方的整体价值：规则与交锋的完成度、内容深度和赛后仍值得思考的东西，是独立于「我有没有被说服」之外的判准。'},b:{dim:'persuasion',text:'我先保说服结果：第三方体验再完整，如果一方始终没能让我接受它的总体答案，它就没有完成辩论最核心的任务。'},scenario:'一方给出了一场结构完整、交锋清楚、深度很高的比赛，你甚至觉得这是今天最值得回看的场次；但它始终没有解决一个让你无法接受其持方结论的关键直觉障碍。另一方的内容没那么深、比赛完成度也普通，却准确抓住那个障碍，把自己的总体答案真正讲进了你心里。若只能让一个维度优先，你选哪一个？',en:{scenario:'One side produces a structurally complete, clear, and deep debate — perhaps the match most worth rewatching today — but never resolves one intuitive barrier that keeps you from accepting its side. The other is less deep and less complete as a match, yet identifies that barrier and genuinely wins you over to its overall answer. Which dimension gets priority?',a:'Third-Party value first: completion, depth, and what remains worth thinking about are criteria independent of whether I personally ended up persuaded.',b:'Persuasion first: however complete the experience, a side that never gets me to accept its overall answer has not completed debate’s central task.'}}
 ];
 var EN={critic:'C',judge:'J',guardian:'G',seeker:'S',technician:'T',artist:'A'};
 var POLE_VIVID={
@@ -358,7 +388,7 @@ var SIX=[
 ];
 var state={i:0,answers:{}};
 function $(id){return document.getElementById(id);}
-function loadState(){try{var s=JSON.parse(localStorage.getItem(LS_KEY)||'null');if(s&&s.answers)state=s;}catch(e){}}
+function loadState(){try{var raw=localStorage.getItem(LS_KEY)||localStorage.getItem(LEGACY_LS_KEY)||'null';var s=JSON.parse(raw);if(s&&s.answers){state=s;try{localStorage.setItem(LS_KEY,JSON.stringify(state));}catch(e){}}}catch(e){}}
 function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify(state));}catch(e){}}
 function loadSerial(){
   var s=localStorage.getItem('debate_judge_serial')||'';
@@ -379,7 +409,7 @@ function applyStaticLang(){
   $('hdr-theme').textContent=t('themeBtn');
   $('hdr-foot').textContent=t('foot');
   $('lang-btn').textContent=LANG==='zh'?'EN':'中文';
-  document.title=LANG==='en'?'Judge Profile Test · 3-Axis 6-Direction Self-Test':'评委人格测试 · 三维度六向度自测';
+  document.title=LANG==='en'?'Judge Profile Test · 3+Suffix · 3-Dimension Priority × 6-Direction':'评委人格测试 · 3+判准后缀 · 三维权重 × 六向度';
 }
 function toggleLang(){
   LANG=LANG==='zh'?'en':'zh';
@@ -406,9 +436,83 @@ function poleDescZh(k,net){if(Math.abs(net)<=2)return'两向度权重接近，�
 function shortName(k,net){return poleName(k,net);}
 function codeOf(k,net){if(Math.abs(net)<=2)return'中';return net>=0?AXES[k].negCode:AXES[k].posCode;}
 function weights(k,net){var posW=Math.round((12-net)/24*100);posW=Math.max(0,Math.min(100,posW));return{pos:posW,neg:100-posW};}
-function typeCode(nets){return ['proof','persuasion','third'].map(function(k){if(Math.abs(nets[k])<=2)return'X';return nets[k]>=0?AXES[k].negEn:AXES[k].posEn;}).join('');}
+function axisTypeCode(nets){return ['proof','persuasion','third'].map(function(k){if(Math.abs(nets[k])<=2)return'X';return nets[k]>=0?AXES[k].negEn:AXES[k].posEn;}).join('');}
+var PRIORITY_META={proof:{code:'P',name:'证明优先',nameEn:'Proof-first',dim:'证明'},persuasion:{code:'R',name:'说服优先',nameEn:'Persuasion-first',dim:'说服'},third:{code:'O',name:'第三方优先',nameEn:'Third-Party-first',dim:'第三方'}};
+var PRIORITY_TYPE_META={
+  'P':{name:'证成型',nameEn:'Proof type',desc:'证明单维优先',profileZh:'你在真正发生取舍时，最不愿牺牲的是“这件事到底有没有被证明”。表达是否动人、比赛是否完整都可以加分，但如果核心事实、因果或推理链没有站稳，你通常不会让其他优点替它补票。对你来说，裁决首先是一项证成责任：先确认结论值得相信，再讨论它是否漂亮。',profileEn:'When criteria truly conflict, the thing you protect first is whether the claim has actually been proved. Persuasion and match quality can add value, but they do not compensate for a weak factual or inferential foundation. For you, adjudication begins with justification: establish what deserves belief before rewarding elegance.'},
+  'R':{name:'说服型',nameEn:'Persuasion type',desc:'说服单维优先',profileZh:'你最在意的是理由最终有没有完成“从成立到被接受”的转换。一套论证即使局部很硬，如果没有形成清楚、完整、能让合理听众接受的总体答案，你会觉得它还没有真正完成任务。你并不排斥严格证明或比赛完成度，但当它们与总体说服发生冲突时，你往往更保护后者。',profileEn:'You care most about whether reasons complete the journey from being defensible to being genuinely persuasive. A technically strong chain still feels unfinished if it never becomes a coherent overall answer that a reasonable listener can accept. Proof and match quality matter, but when they conflict with overall persuasion, you tend to protect persuasion.'},
+  'O':{name:'观局型',nameEn:'Observer type',desc:'第三方单维优先',profileZh:'你会把视线拉到整场比赛之外：这场辩论是否完整、可判、回应充分，并且真的给第三方留下了值得带走的东西。单条论证再漂亮，如果整场比赛因此失去秩序、交锋或公共讨论价值，你也会犹豫。对你而言，裁判不只是验算论证，还在判断一场公共辩论究竟完成了什么。',profileEn:'You naturally widen the frame beyond isolated arguments. You care whether the debate is complete, judgeable, responsive, and leaves something worthwhile for third parties. Even a brilliant argument can lose weight if the match around it collapses in order, clash, or public value. Adjudication, for you, evaluates what the debate as a whole accomplished.'},
+  'PR':{name:'论证型',nameEn:'Argument type',desc:'证明 + 说服共同优先',profileZh:'你通常不愿在“证明得够不够硬”和“总体答案有没有真正说服人”之间二选一。对你来说，好的裁决既要有可靠的事实与推理底座，也要完成从理由到总体答案的说服闭环。比赛完成度与第三方价值当然重要，但正面冲突时，你更先保护一套既站得住、又真正说得通的答案。',profileEn:'You resist choosing between rigorous proof and genuine persuasion. A good decision needs both a reliable factual and inferential foundation and a completed persuasive path from reasons to an overall answer. Match quality and third-party value still matter, but in direct conflict you protect an answer that both stands up and makes sense to listeners.'},
+  'PO':{name:'裁量型',nameEn:'Judgment type',desc:'证明 + 第三方共同优先',profileZh:'你同时保护“论证有没有被证明”与“整场比赛是否形成可判、完整、有公共价值的裁决对象”。你不太愿意因为一时很有说服力就放松证成要求，也不会只盯着一条逻辑链而忽略比赛整体。你的典型判断方式是先确认事实与推理底座，再把它放回整场交锋和第三方视角中裁量。',profileEn:'You jointly protect proof and the integrity of the debate as a judgeable public event. Immediate persuasiveness does not make you relax justification, yet you also refuse to reduce the ballot to one isolated logical chain. Your instinct is to establish the evidential foundation, then weigh it inside the full clash, structure, and third-party value of the match.'},
+  'RO':{name:'共鸣型',nameEn:'Resonance type',desc:'说服 + 第三方共同优先',profileZh:'你最看重一场比赛是否既让合理听众真正接受某个总体答案，又给第三方留下完整、深刻、值得回看的讨论。严格证成仍然是底线之一，但当比赛进入更高层次的取舍时，你会更重视“有没有把人说进去”和“这场讨论最终留下了什么”。你偏爱的胜利通常同时具有接受度与余味。',profileEn:'You value debates that both persuade reasonable listeners and leave third parties with a complete, meaningful discussion worth remembering. Rigorous justification remains a floor, but at higher-level trade-offs you focus more on whether the audience was truly brought into the answer and what the debate ultimately left behind. Your preferred wins carry both acceptance and aftertaste.'},
+  'B':{name:'均衡型',nameEn:'Balanced type',desc:'三维整体接近，无明显层级',profileZh:'你的三种判准并不是互相替代，而是长期维持在相近的重要程度。证明、说服与第三方价值都可能在不同比赛里成为第一顺位，但没有哪一个稳定压过另外两个。这样的均衡不是“什么都一样”，而是你会更依赖具体辩题、交锋结构与双方完成情况来决定本场究竟该把哪把尺子放在最前。',profileEn:'Your three criteria remain genuinely close in importance rather than collapsing into one dominant priority. Proof, persuasion, or third-party value can each lead in a particular match, but none consistently outranks the others. This is not indifference; it means the topic, clash structure, and actual performance determine which ruler should lead in each round.'},
+  'X':{name:'开放型',nameEn:'Open type',desc:'成对取舍出现循环或未形成稳定排序',profileZh:'你的取舍没有形成一条稳定的线性排序：在不同的两两冲突里，优先级可能发生反转，甚至出现“证明胜说服、说服胜第三方、第三方又胜证明”的循环。这不等于没有主见，更像是你的判准具有明显条件性。正式裁决时，你尤其需要先把本场冲突结构说清楚，再说明为什么这一次某个维度获得优先。',profileEn:'Your trade-offs do not form one stable linear ranking. Priorities can reverse across pairwise conflicts and may even cycle, such as proof over persuasion, persuasion over third-party value, and third-party value over proof. This is not a lack of conviction; your criteria are strongly conditional. In formal judging, make the conflict structure explicit before explaining why one dimension leads this time.'}
+};
+function priorityScores(){
+  var out={proof:0,persuasion:0,third:0};
+  QUESTIONS.forEach(function(q){
+    if(q.kind!=='priority')return;
+    var an=state.answers[q.id];if(!an||!an.s||!q[an.opt])return;
+    var chosen=q[an.opt].dim,other=q.pair[0]===chosen?q.pair[1]:q.pair[0];
+    out[chosen]+=an.s;out[other]-=an.s;
+  });
+  return out;
+}
+function priorityPairNets(){
+  var out={'proof|persuasion':0,'proof|third':0,'persuasion|third':0};
+  QUESTIONS.forEach(function(q){
+    if(q.kind!=='priority')return;
+    var an=state.answers[q.id];if(!an||!an.s||!q[an.opt])return;
+    var first=q.pair[0],second=q.pair[1],key=first+'|'+second,chosen=q[an.opt].dim;
+    out[key]+=(chosen===first?1:-1)*an.s;
+  });
+  return out;
+}
+function dimWeightsFromPriority(scores){
+  var out={};
+  ['proof','persuasion','third'].forEach(function(k){
+    var v=Math.max(20,Math.min(80,50+(Number(scores[k])||0)*2.5));
+    out[PRIORITY_META[k].dim]=Math.round(v/5)*5;
+  });
+  return out;
+}
+function priorityCode(scores,pairs){
+  pairs=pairs||priorityPairNets();
+  var pr=Number(pairs['proof|persuasion'])||0,po=Number(pairs['proof|third'])||0,ro=Number(pairs['persuasion|third'])||0;
+  var cycle=(pr>0&&ro>0&&po<0)||(pr<0&&ro<0&&po>0);
+  if(cycle)return 'X';
+  var order=['proof','persuasion','third'].slice().sort(function(a,b){return scores[b]-scores[a];});
+  var top=scores[order[0]],mid=scores[order[1]],low=scores[order[2]];
+  if(top-low<3)return 'B';
+  function beats(a,b){var key=a+'|'+b,sign=1;if(!(key in pairs)){key=b+'|'+a;sign=-1;}return (Number(pairs[key])||0)*sign>0;}
+  if(top-mid>=3&&beats(order[0],order[1])&&beats(order[0],order[2]))return PRIORITY_META[order[0]].code;
+  if(top-mid<3&&mid-low>=3&&beats(order[0],order[2])&&beats(order[1],order[2])){
+    var duo=[PRIORITY_META[order[0]].code,PRIORITY_META[order[1]].code].sort(function(a,b){return ['P','R','O'].indexOf(a)-['P','R','O'].indexOf(b);}).join('');
+    if(duo==='PR')return 'PR';
+    if(duo==='PO')return 'PO';
+    if(duo==='RO')return 'RO';
+  }
+  return 'X';
+}
+function priorityLabel(scores){
+  var code=priorityCode(scores),meta=PRIORITY_TYPE_META[code]||PRIORITY_TYPE_META.X;
+  return LANG==='en'?meta.nameEn:meta.name;
+}
+function priorityDescription(scores){
+  var code=priorityCode(scores),meta=PRIORITY_TYPE_META[code]||PRIORITY_TYPE_META.X;
+  return LANG==='en'?meta.nameEn:meta.desc;
+}
+function priorityProfileText(scores){
+  var code=priorityCode(scores),meta=PRIORITY_TYPE_META[code]||PRIORITY_TYPE_META.X;
+  return LANG==='en'?meta.profileEn:meta.profileZh;
+}
+function priorityProfileHtml(scores){
+  var code=priorityCode(scores),meta=PRIORITY_TYPE_META[code]||PRIORITY_TYPE_META.X;
+  return '<div class="profile criteria-profile"><div class="p-head"><h3>'+(LANG==='en'?'Criteria Profile · ':'判准型侧写 · ')+(LANG==='en'?meta.nameEn:meta.name)+'</h3><span class="en">'+code+(LANG==='en'?'':' · '+meta.desc)+'</span></div><p>'+priorityProfileText(scores)+'</p></div>';
+}
+function typeCode(nets,scores){return axisTypeCode(nets)+'-'+priorityCode(scores||priorityScores());}
 function profileOf(nets){
-  var code=typeCode(nets);
+  var code=axisTypeCode(nets);
   if(PROFILES[code]){
     var pf=PROFILES[code],pfe=PROFILES_EN[code];
     return {zh:pf.zh,en:pf.en,motto:pf.motto,mottoEn:pfe.motto,body:pf.body,body1:pf.body1||pf.body.map(function(p){return toFirstPerson(p);}),bodyEn:pfe.body,chars:CHARS[code],charsEn:CHARS_EN[code]};
@@ -429,11 +533,14 @@ function conflictFlag(nets){
   ['proof','persuasion','third'].forEach(function(k){if(Math.abs(nets[k])>=3)seen[clusters[poleOf(k,nets[k])]]=1;});
   return Object.keys(seen).length>1?'有':'无';
 }
-function makeAnchor(nets){
+function makeAnchor(nets,scores){
+  scores=scores||priorityScores();
   var c=function(k){return codeOf(k,nets[k]);};
-  return '[S9 完成] 裁判倾向=说服['+c('persuasion')+']·证明['+c('proof')+']·第三方['+c('third')+']，三维冲突=['+conflictFlag(nets)+']';
+  return '[S9 完成] 裁判倾向=说服['+c('persuasion')+']·证明['+c('proof')+']·第三方['+c('third')+']，判准型=['+priorityLabel(scores)+' '+priorityCode(scores)+']，人格代码=['+typeCode(nets,scores)+']，三维冲突=['+conflictFlag(nets)+']';
 }
-function makeStatement(nets){
+function makeStatement(nets,scores){
+  scores=scores||priorityScores();
+  var dims=dimWeightsFromPriority(scores);
   var rows=['proof','persuasion','third'].map(function(k){
     return '| '+AXES[k].name+' | '+poleNameZh(k,nets[k])+' | '+poleDescZh(k,nets[k])+' |';
   }).join('\n');
@@ -447,9 +554,53 @@ function makeStatement(nets){
     var mag=diff<=1?'持平':(diff<=3?'微弱':(diff<=5?'明显':'压倒'));
     return a.name+'：'+line+'（'+mag+'）';
   }).join('\n');
-  return '【裁判倾向声明】\n'+makeAnchor(nets)+'\n\n【裁判倾向自述表】\n'+
+  var dimLine='说服 '+dims['说服']+' ｜ 证明 '+dims['证明']+' ｜ 第三方 '+dims['第三方']+'；判准型：'+priorityLabel(scores)+'（'+priorityCode(scores)+'）';
+  return '【裁判倾向声明】\n'+makeAnchor(nets,scores)+'\n\n【裁判倾向自述表】\n'+
     '| 轴 | 裁判人格 | 判据 |\n|:---|:---|:---|\n'+rows+'\n\n'+
-    '本场我以'+entry+'身份入场。S2-S8的证据[支持/部分挑战/不改变]这个倾向。\n\n【轴内权重】（同 S9 六向度口径，每轴 10 分）\n'+wRows;
+    '本场我以'+entry+'身份入场。S2-S8的证据[支持/部分挑战/不改变]这个倾向。\n\n【三维整体权重】（最后6题跨维度取舍校准）\n'+dimLine+'\n\n【轴内权重】（同 S9 六向度口径，每轴 10 分）\n'+wRows;
+}
+
+function judgeProfileVectorWeights(nets){
+  var out={};
+  var map={
+    proof:['证伪','证成'],
+    persuasion:['理性','感性'],
+    third:['场面感','意义感']
+  };
+  ['proof','persuasion','third'].forEach(function(k){
+    var net=nets[k];
+    var w=Math.abs(net)<=2?{pos:50,neg:50}:weights(k,net);
+    out[map[k][0]]=w.pos;
+    out[map[k][1]]=w.neg;
+  });
+  return out;
+}
+function makeJudgeProfileConfig(nets){
+  var scores=priorityScores();
+  return {
+    kind:'debate-judge-tendency-profile-v2',
+    version:2,
+    source:'debate-coach-judge-profile-test',
+    testVersion:'v3-18-item',
+    generatedAt:new Date().toISOString(),
+    code:typeCode(nets,scores),
+    priorityCode:priorityCode(scores),
+    axisNet:{proof:nets.proof,persuasion:nets.persuasion,third:nets.third},
+    priorityScore:{proof:scores.proof,persuasion:scores.persuasion,third:scores.third},
+    priorityPairNet:priorityPairNets(),
+    dimWeights:dimWeightsFromPriority(scores),
+    vectorWeights:judgeProfileVectorWeights(nets)
+  };
+}
+function saveJudgeProfileConfig(){
+  var nets={};['proof','persuasion','third'].forEach(function(k){nets[k]=axisScore(k);});
+  var payload=makeJudgeProfileConfig(nets);
+  try{localStorage.setItem(PROFILE_V2_LS_KEY,JSON.stringify(payload));localStorage.removeItem(PROFILE_LS_KEY);}catch(e){}
+  try{
+    var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+    anchorSave(blob,'judge-tendency-profile-'+payload.code+'.json');
+  }catch(e){}
+  toast(t('profileSaved'));
 }
 
 function renderIntro(){
@@ -490,17 +641,18 @@ function renderQ(){
   var idx=state.i,q=QUESTIONS[idx],an=state.answers[q.id];
   var pct=Math.round(idx/QUESTIONS.length*100);
   var qe=LANG==='en'?q.en:null;
+  var priorityQ=q.kind==='priority';
   var html='<div class="progress-wrap"><div class="progress-text">'+t('itemOf')+(idx+1)+t('of')+QUESTIONS.length+(LANG==='zh'?t('item'):'')+'</div>'+
     '<div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%"></div></div></div>'+
     '<div class="qbox">'+
-    '<div class="qscenario"><span class="tag">'+t('sceneTag')+'</span><br>'+(qe?qe.scenario:q.scenario)+'</div>'+
+    '<div class="qscenario"><span class="tag">'+t(priorityQ?'priorityTag':'sceneTag')+'</span><br>'+(qe?qe.scenario:q.scenario)+'</div>'+
     '<button class="opt'+(an&&an.opt==='a'?' sel':'')+'" onclick="pick('+idx+',\'a\')"><span class="opt-key">A</span>'+(qe?qe.a:q.a.text)+'</button>'+
     '<button class="opt'+(an&&an.opt==='b'?' sel':'')+'" onclick="pick('+idx+',\'b\')"><span class="opt-key">B</span>'+(qe?qe.b:q.b.text)+'</button>'+
-    '<div class="intensity'+(an?'':' hidden')+'"><div class="lbl">'+t('weightLbl')+'</div>'+
+    '<div class="intensity'+(an?'':' hidden')+'"><div class="lbl">'+t(priorityQ?'priorityWeightLbl':'weightLbl')+'</div>'+
     '<div class="int-row">'+
-    '<button class="int-btn'+(an&&an.s===1?' sel':'')+'" onclick="setS('+idx+',1)"><span class="k">'+t('mild')+'</span><br>'+t('mildD')+'</button>'+
-    '<button class="int-btn'+(an&&an.s===2?' sel':'')+'" onclick="setS('+idx+',2)"><span class="k">'+t('clear')+'</span><br>'+t('clearD')+'</button>'+
-    '<button class="int-btn'+(an&&an.s===3?' sel':'')+'" onclick="setS('+idx+',3)"><span class="k">'+t('strong')+'</span><br>'+t('strongD')+'</button>'+
+    '<button class="int-btn'+(an&&an.s===1?' sel':'')+'" onclick="setS('+idx+',1)"><span class="k">'+t('mild')+'</span><br>'+t(priorityQ?'priorityMildD':'mildD')+'</button>'+
+    '<button class="int-btn'+(an&&an.s===2?' sel':'')+'" onclick="setS('+idx+',2)"><span class="k">'+t('clear')+'</span><br>'+t(priorityQ?'priorityClearD':'clearD')+'</button>'+
+    '<button class="int-btn'+(an&&an.s===3?' sel':'')+'" onclick="setS('+idx+',3)"><span class="k">'+t('strong')+'</span><br>'+t(priorityQ?'priorityStrongD':'strongD')+'</button>'+
     '</div></div>'+
     '<div class="nav-row">'+
     '<button class="btn-ghost" onclick="go('+(idx-1)+')"'+(idx===0?' disabled style="opacity:.45"':'')+'>'+t('back')+'</button>'+
@@ -517,7 +669,9 @@ function renderResult(){
   var keys=['proof','persuasion','third'];
   var nets={},cards='';
   keys.forEach(function(k){nets[k]=axisScore(k);});
-  var code=typeCode(nets),pf=profileOf(nets);
+  var priority=priorityScores(),dimWeights=dimWeightsFromPriority(priority);
+  var titleSep=LANG==='en'?' · ':'：';
+  var code=typeCode(nets,priority),pf=profileOf(nets);
   keys.forEach(function(k){
     var a=AXES[k],net=nets[k],b=band(net),w=weights(k,net);
     var leftDom=w.pos>w.neg,rightDom=w.neg>w.pos;
@@ -562,13 +716,19 @@ function renderResult(){
     '<div class="type-code">'+letters+'</div>'+
     '<div class="nickname">'+nickMain+'<small>'+nickSub+'</small></div>'+
     '<div class="motto">'+(LANG==='zh'?'「<b>':'“<b>')+motto+(LANG==='zh'?'</b>」':'</b>”')+'</div>'+
-    '<div class="cert-sum">'+oneLineProfile(nets)+'</div>'+
+    '<div class="cert-sum">'+oneLineProfile(nets,priority)+'</div>'+
     '</div>'+
     '<div class="profile"><div class="p-head"><h3>'+t('profileHead')+nickMain+'</h3><span class="en">'+nickSub+' · '+code+'</span></div>'+
     '<div class="p-motto">'+(LANG==='zh'?'「':'“')+motto+(LANG==='zh'?'」':'”')+'</div>'+profileHtml+charsHtml+'</div>'+
+    priorityProfileHtml(priority)+
+
+
+
+    '<div class="legend">'+t('legend')+'</div>'+ 
+    '<div class="weights"><h3>'+t('weightsTitle')+titleSep+nickMain+'</h3><div class="w-sub">'+t('weightsSub')+'</div><div class="w-grid">'+weightsGrid(nets)+'</div></div>'+ 
+    '<div class="weights"><h3>'+t('dimWeightsTitle')+titleSep+priorityLabel(priority)+'</h3><div class="w-sub">'+t('dimWeightsSub')+'</div><div class="w-grid">'+dimWeightsGrid(dimWeights,priority)+'</div></div>'+ 
+    '<div class="result-section-head"><h3>'+t('axisDetailTitle')+'</h3><p>'+t('axisDetailSub')+'</p></div>'+ 
     '<div class="axis-grid stacked">'+cards+'</div>'+
-    '<div class="legend">'+t('legend')+'</div>'+
-    '<div class="weights"><h3>'+t('weightsTitle')+'</h3><div class="w-sub">'+t('weightsSub')+'</div><div class="w-grid">'+weightsGrid(nets)+'</div></div>'+
     '<div class="share"><h3>'+t('shareTitle')+'</h3>'+
     '<img id="share-preview" alt="'+t('shareTitle')+'">'+
     '<div class="row"><button class="btn-main" onclick="saveShare()">'+t('saveShare')+'</button>'+
@@ -576,10 +736,11 @@ function renderResult(){
     '<button class="btn-ghost" onclick="resetTest()">'+t('retest')+'</button></div></div>'+
     '<div class="decl"><h3>'+t('declTitle')+'</h3>'+
     '<textarea id="statement-text" readonly></textarea>'+
-    '<div class="row"><button class="btn-main" onclick="copySt()">'+t('copyDecl')+'</button></div>'+
+    '<div class="row"><button class="btn-main" onclick="copySt()">'+t('copyDecl')+'</button><button class="btn-ghost" onclick="saveJudgeProfileConfig()">'+t('saveJudgeProfile')+'</button></div>'+
+    '<div class="hint">'+t('saveJudgeProfileHint')+'</div>'+
     '<div class="hint">'+t('declHint')+'</div></div>';
   $('app').innerHTML=html;
-  $('statement-text').value=makeStatement(nets);
+  $('statement-text').value=makeStatement(nets,priority);
   drawSharePreview(nets,pf,code,serial);
   window.scrollTo(0,0);
 }
@@ -592,12 +753,14 @@ function typeLetters(nets){
     if(i>0)out+='<span class="tl-sep">·</span>';
     out+='<span class="tl'+(x?' x':'')+'"><b>'+letter+'</b><small>'+cn+'</small></span>';
   });
+  var scores=priorityScores(),pc=priorityCode(scores),px=pc==='X';
+  out+='<span class="tl-sep">−</span><span class="tl'+(px?' x':'')+'"><b>'+pc+'</b><small>'+priorityLabel(scores)+'</small></span>';
   return out;
 }
-function oneLineProfile(nets){
+function oneLineProfile(nets,scores){
   var parts=['proof','persuasion','third'].map(function(k){var n=poleName(k,nets[k]);if(Math.abs(nets[k])<=2)return t('neutralShort');return n;});
-  if(LANG==='en')return t('certSum')+parts[0]+t('certSum2')+parts[1]+t('certSum3')+parts[2];
-  return t('certSum')+parts[0]+t('certSum2')+parts[1]+t('certSum3')+parts[2];
+  scores=scores||priorityScores();
+  return t('certSum')+parts[0]+t('certSum2')+parts[1]+t('certSum3')+parts[2]+(LANG==='en'?' · Priority: ':' · 判准重心：')+priorityLabel(scores);
 }
 function agreement(k){
   var signs=QUESTIONS.filter(function(q){return q.axis===k;}).map(function(q){var an=state.answers[q.id];var pole=q[an.opt].pole;return pole===AXES[k].neg?1:-1;});
@@ -621,6 +784,18 @@ function detailText(k,net){
   else s+=t('consist3');
   if(Math.abs(net)<=2)s+=t('consistN');
   return s;
+}
+function dimWeightsGrid(dimWeights,scores){
+  var out='';
+  ['proof','persuasion','third'].forEach(function(k){
+    var dim=PRIORITY_META[k].dim;
+    var name=LANG==='en'?(k==='proof'?'Proof':k==='persuasion'?'Persuasion':'Third-Party'):dim;
+    var val=dimWeights[dim],score=Number(scores[k])||0;
+    out+='<div class="w-item"><div class="w-name"><span>'+name+'</span><span class="pct">'+val+'</span></div>'+
+      '<div class="bar-track"><div class="bar-fill" style="width:'+val+'%"></div></div>'+
+      '<div class="w-desc">'+(LANG==='en'?'Trade-off net score ':'取舍净分 ')+(score>0?'+':'')+score+' / 12</div></div>';
+  });
+  return out;
 }
 function weightsGrid(nets){
   var out='';
@@ -755,7 +930,14 @@ function drawCert(c,nets,pf,code,serial){
   var charLabel=t('animeLabel');
   var lay=charList&&charList.length?pillLayout(mx,charList,charLabel,130,840,'18px '+sans):null;
   var charBlock=lay?(lay.lines-1)*lay.rowH+lay.pillH:0;
-  var H=956+l1*34+14+l2*34+14+charBlock+56+126;
+  var ps=priorityScores();
+  var pc=priorityCode(ps);
+  var priorityProfile=priorityProfileText(ps);
+  mx.font='22px '+sans;
+  var priorityProfileLines=wrapCtx(mx,priorityProfile,130,0,840,34,8,44);
+  var criteriaRuleGap=60;
+  var priorityProfileBlock=150+priorityProfileLines*34;
+  var H=956+l1*34+14+l2*34+14+charBlock+priorityProfileBlock+56+126;
   c.width=W;c.height=H;
   var ctx=c.getContext('2d');
   ctx.fillStyle=paper;ctx.fillRect(0,0,W,H);
@@ -779,21 +961,23 @@ function drawCert(c,nets,pf,code,serial){
   // 编号
   ctx.fillStyle=text4;ctx.font='22px Georgia,serif';
   ctx.fillText('NO. '+serial,540,344);
-  // 三字母
+  // 3+1 / 3+2：前三位是轴内人格；连字符后缀表示单维/双维/均衡/开放判准型
   var letters=['proof','persuasion','third'].map(function(k){
     var net=nets[k],x=Math.abs(net)<=2;
     return {L:x?'X':(net>=0?AXES[k].negEn:AXES[k].posEn),cn:x?t('neutral'):(net>=0?AXES[k][LANG==='en'?'negNameEn':'negName']:AXES[k][LANG==='en'?'posNameEn':'posName']),x:x};
   });
-  var bw=150,gap=44,total=bw*3+gap*2,startX=(W-total)/2,bY=392;
+  // ps / pc 已在动态高度预计算阶段生成。
+  letters.push({L:pc,cn:priorityLabel(ps),x:pc==='X'});
+  var bw=126,gap=24,total=bw*4+gap*3,startX=(W-total)/2,bY=392;
   letters.forEach(function(lt,i){
     var cx=startX+bw*i+gap*i+bw/2;
-    ctx.fillStyle=lt.x?text4:ink;ctx.font='400 116px Georgia,serif';ctx.textAlign='center';
-    ctx.fillText(lt.L,cx,bY+108);
-    ctx.fillStyle=lt.x?text4:text3;ctx.font='24px '+sans;
-    ctx.fillText(lt.cn,cx,bY+154);
-    if(i<2){
-      ctx.fillStyle=gold;ctx.font='32px Georgia,serif';
-      ctx.fillText('·',startX+(i+1)*bw+(i+0.5)*gap,bY+78);
+    ctx.fillStyle=lt.x?text4:ink;ctx.font='400 92px Georgia,serif';ctx.textAlign='center';
+    ctx.fillText(lt.L,cx,bY+100);
+    ctx.fillStyle=lt.x?text4:text3;ctx.font='20px '+sans;
+    ctx.fillText(lt.cn,cx,bY+146);
+    if(i<3){
+      ctx.fillStyle=gold;ctx.font='28px Georgia,serif';
+      ctx.fillText(i===2?'−':'·',startX+(i+1)*bw+(i+0.5)*gap,bY+72);
     }
   });
   // 昵称 / 英文名 / 座右铭
@@ -835,6 +1019,15 @@ function drawCert(c,nets,pf,code,serial){
     });
     py=py+(lay.lines-1)*lay.rowH+lay.pillH;
   }
+  py+=30;
+  ctx.fillStyle=line;ctx.fillRect(320,py,440,1);
+  py+=criteriaRuleGap;
+  ctx.fillStyle=ink;ctx.font='600 24px '+sans;ctx.textAlign='center';
+  ctx.fillText((LANG==='en'?'Criteria Profile · ':'判准型侧写 · ')+priorityLabel(ps)+' '+pc,540,py);
+  py+=42;
+  ctx.textAlign='left';ctx.fillStyle=text2;ctx.font='22px '+sans;
+  wrapCtx(ctx,priorityProfile,130,py,840,34,8,44);
+  py+=priorityProfileLines*34+18;
   py+=56;
   // 页脚
   ctx.fillStyle=text4;ctx.font='20px '+sans;ctx.textAlign='center';
