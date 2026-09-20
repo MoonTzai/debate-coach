@@ -1,10 +1,10 @@
 {
-  "run_id": "33305034997",
-  "source_sha": "ae70076a0e5b450acc31f8e497a571a3904f71fc",
-  "tag": "v9.2.4",
-  "job_status": "success",
+  "run_id": "35541848849",
+  "source_sha": "93919b9b49ab429841546835d71f952218752aa1",
+  "tag": "v9.2.5",
+  "job_status": "failure",
   "steps": {
-    "normalize": "success",
-    "receipt": "success"
+    "normalize": "failure",
+    "receipt": "skipped"
   }
 }
