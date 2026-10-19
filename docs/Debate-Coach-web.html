@@ -57,7 +57,9 @@ body.dark .entry-word{color:#7ea4ff}
   display:flex;align-items:center;gap:12px;
 }
 .entry-kicker::before,.entry-kicker::after{content:'';width:26px;height:2px;border-radius:2px;background:var(--grad)}
-.entry-btns{margin-top:20px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.entry-btns{margin-top:18px;display:grid;grid-template-columns:repeat(4,164px);justify-content:center;gap:10px}
+.entry-launch{margin-top:28px}
+.entry-btns .entry-btn{width:164px;padding:13px 16px;font-size:15px}
 .entry-btn{
   display:inline-flex;align-items:center;justify-content:center;gap:7px;
   width:184px;padding:14px 26px;font-size:16.5px;cursor:pointer;
@@ -75,6 +77,29 @@ body.dark .entry-word{color:#7ea4ff}
   box-shadow:0 6px 20px var(--glow);
 }
 .entry-btn.primary:hover{color:var(--on-accent);filter:brightness(1.06);box-shadow:0 8px 26px var(--glow)}
+.entry-toolbox{margin-top:20px}
+.entry-toolbox-toggle{width:auto;min-width:116px;min-height:44px;padding:10px 16px;background:transparent;color:var(--ink-3);border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;font-size:14px;font-weight:500;gap:8px}
+.entry-toolbox-toggle:hover,.entry-toolbox-toggle[aria-expanded="true"]{background:var(--accent-soft);color:var(--accent);transform:none;box-shadow:none}
+.entry-toolbox-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px;background:var(--accent-soft)}
+.entry-toolbox-toggle svg{flex:none;width:15px;height:15px}
+.entry-toolbox-chevron{transition:transform .18s ease}
+.entry-toolbox-toggle[aria-expanded="true"] .entry-toolbox-chevron{transform:rotate(180deg)}
+.entry-toolbox-panel{position:fixed;left:50%;top:50%;transform:translateX(-50%);margin:0;width:min(690px,calc(100vw - 32px));max-height:calc(100dvh - 32px);padding:20px;border:1px solid var(--line);border-radius:22px;background:var(--card);color:var(--ink);font-family:inherit;box-shadow:0 18px 70px rgba(23,32,54,.2);overflow:auto;text-align:left}
+.entry-toolbox-panel::backdrop{background:rgba(23,32,54,.16);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.entry-toolbox-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px}
+.entry-toolbox-heading h2{font-size:17px;font-weight:600;color:var(--ink-2)}
+.entry-toolbox-close{display:grid;place-items:center;width:36px;height:36px;padding:0;border:1px solid var(--line-soft);border-radius:50%;background:var(--bg);color:var(--ink-3);font-size:22px;line-height:1;font-family:inherit;cursor:pointer}
+.entry-toolbox-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.entry-toolbox-item{display:flex;align-items:center;gap:10px;min-height:60px;padding:12px 10px;text-align:left;border:1px solid var(--line-soft);border-radius:12px;background:var(--bg);color:var(--ink-2);font-size:14px;line-height:1.5;font-family:inherit;cursor:pointer;transition:background .18s ease,border-color .18s ease,color .18s ease}
+.entry-toolbox-icon{display:grid;place-items:center;flex:0 0 28px;height:28px;font-size:20px}
+.entry-toolbox-item:hover,.entry-toolbox-close:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.entry-toolbox-item:focus-visible,.entry-toolbox-close:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.entry-toolbox-item span:last-child{overflow-wrap:anywhere}
+.entry-toolbox-footer{display:flex;justify-content:flex-end;margin-top:14px;padding-top:12px;border-top:1px solid var(--line-soft)}
+.entry-toolbox-more{border:0;background:none;padding:5px 3px;color:var(--ink-3);font:inherit;font-size:12px;cursor:pointer}
+.entry-toolbox-more:hover{color:var(--accent)}
+.entry-toolbox-more:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.entry-toolbox-mobile-notice{display:none;margin-top:14px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);font-size:12px;line-height:1.7;color:var(--ink-3)}
 .entry-btn-coming{
   display:inline-flex;align-items:center;justify-content:center;width:184px;padding:13px 26px;
   margin:0;font-size:14px;cursor:not-allowed;color:var(--ink-4);font-family:inherit;
@@ -121,13 +146,21 @@ body.dark .entry-word{color:#7ea4ff}
 }
 .exam-notice-card button:hover{filter:brightness(1.06);transform:translateY(-1px)}
 .exam-notice-card button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-@media(max-width:600px){
+@media(max-width:720px){
   body{padding:20px 12px}
   .entry-btn,.entry-btn-coming{width:148px;padding:12px 18px;font-size:15px}
   .entry-btn-coming{font-size:13px}
   .entry-logo-img{width:200px}
   .entry-word{width:230px}
+  .entry-btns{grid-template-columns:repeat(2,minmax(0,164px));gap:10px;width:min(100%,338px)}
+  .entry-btns .entry-btn{width:100%;padding:12px 10px;font-size:14px}
+  .entry-toolbox-toggle{width:auto;padding:10px 16px;font-size:14px}
+  .entry-toolbox-panel{padding:16px;border-radius:18px}
+  .entry-toolbox-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .entry-toolbox-item{min-height:64px;padding:10px 8px;gap:7px;font-size:13px}
+  .entry-toolbox-mobile-notice{display:block}
 }
+@media(prefers-reduced-motion:reduce){.entry-btn,.entry-toolbox-chevron,.entry-toolbox-item{transition:none}.bouncing{animation:none}}
 
 </style>
 <style id="dc-startrack-notice-style">
@@ -149,8 +182,28 @@ body.dark .entry-word{color:#7ea4ff}
     <rect x="0" y="0" width="711" height="132" fill="currentColor" mask="url(#entry-word-mask)"/>
   </svg>
   <div class="entry-kicker">DEBATE · UNIVERSAL · GRAMMAR</div>
+  <div class="entry-launch"><button class="entry-btn primary" onclick="goLang()">教练 · 启动</button></div>
   <div class="entry-btns">
-    <button class="entry-btn primary" onclick="goLang()">教练 · 启动</button><button class="entry-btn" onclick="go('toolbox')">工具箱</button><button class="entry-btn" onclick="go('atlas')">认知星图</button><button class="entry-btn" onclick="goExam()">辩士历练场</button><button class="entry-btn" onclick="goJudge()">AI裁判所 <span class="beta">BETA</span></button><button class="entry-btn" onclick="go('startrack')">立论星轨</button>
+    <button class="entry-btn" onclick="go('atlas')">认知星图</button><button class="entry-btn" onclick="go('startrack')">立论星轨</button><button class="entry-btn" id="entry-debate-timer" onclick="openEntryTool('debate')">辩论赛计时器</button><button class="entry-btn" onclick="goJudge()">AI裁判所 <span class="beta">BETA</span></button>
+  </div>
+  <div class="entry-toolbox">
+    <button class="entry-btn entry-toolbox-toggle" id="entry-toolbox-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="entry-toolbox-panel" onclick="toggleEntryToolbox()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>工具箱<svg class="entry-toolbox-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+    <dialog class="entry-toolbox-panel" id="entry-toolbox-panel" aria-labelledby="entry-toolbox-title">
+      <div class="entry-toolbox-heading"><h2 id="entry-toolbox-title">工具箱</h2><button class="entry-toolbox-close" type="button" aria-label="关闭工具箱" onclick="closeEntryToolbox()">×</button></div>
+      <div class="entry-toolbox-grid">
+        <button class="entry-toolbox-item" id="entry-exam" type="button" onclick="openEntryExam()"><span class="entry-toolbox-icon" aria-hidden="true">◎</span><span>辩士历练场</span></button>
+        <button class="entry-toolbox-item" data-entry-tool="board" type="button" onclick="openEntryTool('board')" title="无限画布：卡片连线、备赛体检、AI 整理"><span class="entry-toolbox-icon" aria-hidden="true">🎯</span><span>辩论战术板</span></button>
+        <button class="entry-toolbox-item" data-entry-tool="coach" type="button" onclick="openEntryTool('coach')" title="按环节倒计时+教练实时记录+赛后汇总评估"><span class="entry-toolbox-icon" aria-hidden="true">⏱️</span><span>教练记录计时器</span></button>
+        <button class="entry-toolbox-item" data-entry-tool="flow" type="button" onclick="openEntryTool('flow')" title="评委/比赛记录辅助工具，按环节记录并汇总"><span class="entry-toolbox-icon" aria-hidden="true">📋</span><span>简易流水单</span></button>
+        <button class="entry-toolbox-item" data-entry-tool="case" type="button" onclick="openEntryTool('case')" title="标准化辩案模板，逐表填写，导出完整辩案"><span class="entry-toolbox-icon" aria-hidden="true">📋</span><span>备赛引导·辩案工作台</span></button>
+        <button class="entry-toolbox-item" data-entry-tool="tendency" type="button" onclick="openEntryTool('tendency')" title="三维度六向度自测"><span class="entry-toolbox-icon" aria-hidden="true">⚖️</span><span>评委人格测试</span></button>
+        <button class="entry-toolbox-item" data-entry-tool="voice" type="button" onclick="openEntryTool('voice')" title="声律启蒙+绕口令+普通话诵读作品56篇等文字版练习素材"><span class="entry-toolbox-icon" aria-hidden="true">🎤</span><span>语音与口条练习</span></button>
+        <button class="entry-toolbox-item" data-entry-tool="glossary" type="button" onclick="openEntryTool('glossary')" title="辩论术语中英文对照速查表"><span class="entry-toolbox-icon" aria-hidden="true">📖</span><span>术语速查</span></button>
+        <button class="entry-toolbox-item" data-entry-tool="about" type="button" onclick="openEntryTool('about')" title="项目介绍、使用方式、安装指南、知识覆盖与许可声明"><span class="entry-toolbox-icon" aria-hidden="true">ℹ️</span><span>关于与说明</span></button>
+      </div>
+      <p class="entry-toolbox-mobile-notice">⚠️ <b>移动端提示：</b>工具箱各个工具在手机端适配较差，尤其是导出功能和辩论战术板工具。如果遇到使用不便、功能失效等问题，建议在电脑端进行使用。</p>
+      <div class="entry-toolbox-footer"><button class="entry-toolbox-more" type="button" onclick="go('toolbox')">完整工具箱 ↗</button></div>
+    </dialog>
   </div>
   <div class="version-row"><span class="version-link" onclick="checkVersion()"><svg class="vl-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>检查更新</span></div><div class="license-text">© 2026 精靈 Moon · CC BY-NC-SA 4.0（署名 · 非商业 · 相同方式共享）</div>
 </div>
@@ -159,7 +212,7 @@ body.dark .entry-word{color:#7ea4ff}
 <div class="exam-notice" id="startrack-notice" role="dialog" aria-modal="true" aria-labelledby="startrack-notice-title" aria-describedby="startrack-notice-text"><div class="exam-notice-card"><h2 id="startrack-notice-title">警告</h2><div id="startrack-notice-text"><p>（1）一般的立论辅助请点击主页的『教练·启动』进入，这是结构性交锋立论用的特型化辅助工具，并不通用；本工具集成了并发-聚合机制，可能大量消耗Token，请自行承担相关消费和法律法规风险；</p><p>（2）本工具为精灵一时兴起做的自用工具，懒得做可读性优化和可用性检验，运行结果AI言AI语，如果你就是想用用看，请自行人话转译和人话表达，不要照抄，而且也完全有可能不可用，不要有过高期待。</p></div><div class="startrack-notice-actions"><button id="startrack-notice-cancel" type="button" onclick="dismissStartrackNotice()">返回主页</button><button id="startrack-notice-ok" type="button" onclick="acceptStartrackNotice()">知道了，继续</button></div></div></div>
 <div class="exam-notice" id="exam-notice" role="dialog" aria-modal="true" aria-labelledby="exam-notice-title" aria-describedby="exam-notice-text"><div class="exam-notice-card"><h2 id="exam-notice-title">辩士历练场 · 使用提示</h2><p id="exam-notice-text">辩士历练场所有题目均由AI生成，仅供参考与娱乐，如有错漏、争议，请以视频讲解为准</p><button id="exam-notice-ok" type="button" onclick="acceptExamNotice()">知道了</button></div></div>
 <div class="version-toast" id="vt"><span class="vt-close" onclick="document.getElementById('vt').classList.remove('show')">×</span><span id="vt-msg"></span><br><a class="vt-link" id="vt-link" href="#" target="_blank" style="display:none">打开下载页面</a></div>
-<script>var CURRENT_TAG="v9.3.1",BUILD_DATE="2026-10-19";function cmpVer(a,b){a=String(a||"").replace(/^v/i,"").split(".");b=String(b||"").replace(/^v/i,"").split(".");for(var i=0;i<Math.max(a.length,b.length);i++){var x=parseInt(a[i])||0,y=parseInt(b[i])||0;if(x>y)return 1;if(x<y)return -1}return 0}function checkVersion(){var t=document.getElementById("vt"),m=document.getElementById("vt-msg"),l=document.getElementById("vt-link");t.classList.add("show");m.textContent="正在检查更新…";l.style.display="none";var c=new AbortController();var to=setTimeout(function(){c.abort()},8000);fetch("https://raw.githubusercontent.com/MoonTzai/debate-coach/main/version.json",{signal:c.signal,cache:"no-cache"}).then(function(r){clearTimeout(to);if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(function(d){var latest=d.tag||"";var date=d.date||"";var url=d.url||"";var c=cmpVer(latest,CURRENT_TAG);var newer=c>0||(c===0&&date&&BUILD_DATE&&date>BUILD_DATE);if(latest&&newer){var h="发现新版本 <b>"+latest+"</b>";if(date)h+="（"+date+"）";h+="<br>你当前版本："+CURRENT_TAG;if(BUILD_DATE)h+="（"+BUILD_DATE+"）";m.innerHTML=h;if(url){l.href=url;l.style.display="inline-block"}}else if(!newer){var h2="已是最新版本（"+CURRENT_TAG;if(BUILD_DATE)h2+="，"+BUILD_DATE;h2+="）";m.innerHTML=h2}else{m.textContent="检查失败，请稍后重试"}}).catch(function(e){m.textContent="检查失败：网络不可用或版本信息暂未发布"})}</script>
+<script>var CURRENT_TAG="v9.3.2",BUILD_DATE="2026-10-20";function cmpVer(a,b){a=String(a||"").replace(/^v/i,"").split(".");b=String(b||"").replace(/^v/i,"").split(".");for(var i=0;i<Math.max(a.length,b.length);i++){var x=parseInt(a[i])||0,y=parseInt(b[i])||0;if(x>y)return 1;if(x<y)return -1}return 0}function checkVersion(){var t=document.getElementById("vt"),m=document.getElementById("vt-msg"),l=document.getElementById("vt-link");t.classList.add("show");m.textContent="正在检查更新…";l.style.display="none";var c=new AbortController();var to=setTimeout(function(){c.abort()},8000);fetch("https://raw.githubusercontent.com/MoonTzai/debate-coach/main/version.json",{signal:c.signal,cache:"no-cache"}).then(function(r){clearTimeout(to);if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(function(d){var latest=d.tag||"";var date=d.date||"";var url=d.url||"";var c=cmpVer(latest,CURRENT_TAG);var newer=c>0||(c===0&&date&&BUILD_DATE&&date>BUILD_DATE);if(latest&&newer){var h="发现新版本 <b>"+latest+"</b>";if(date)h+="（"+date+"）";h+="<br>你当前版本："+CURRENT_TAG;if(BUILD_DATE)h+="（"+BUILD_DATE+"）";m.innerHTML=h;if(url){l.href=url;l.style.display="inline-block"}}else if(!newer){var h2="已是最新版本（"+CURRENT_TAG;if(BUILD_DATE)h2+="，"+BUILD_DATE;h2+="）";m.innerHTML=h2}else{m.textContent="检查失败，请稍后重试"}}).catch(function(e){m.textContent="检查失败：网络不可用或版本信息暂未发布"})}</script>
 <script>
 /*
  * AV-friendly test loader. Production source is unchanged.
@@ -189,6 +242,47 @@ body.dark .entry-word{color:#7ea4ff}
   var HOME_TITLE='Debate-Coach';
 
   var currentRoute=null;
+  var examEntryReturn=false;
+  function entryToolbox(){return document.getElementById('entry-toolbox-panel');}
+  function positionEntryToolbox(){
+    var panel=entryToolbox(),button=document.getElementById('entry-toolbox-toggle');
+    if(!panel||!panel.open||!button)return;
+    var rect=button.getBoundingClientRect(),height=panel.getBoundingClientRect().height;
+    var viewport=window.innerHeight,above=rect.top-height-12,below=rect.bottom+12;
+    var top=above>=16?above:below+height<=viewport-16?below:(viewport-height)/2;
+    panel.style.top=Math.max(16,Math.min(top,viewport-height-16))+'px';
+  }
+  function showEntryToolbox(focusTool){
+    var panel=entryToolbox();
+    if(!panel.open)panel.showModal();
+    document.getElementById('entry-toolbox-toggle').setAttribute('aria-expanded','true');
+    positionEntryToolbox();
+    var target=focusTool==='exam'?document.getElementById('entry-exam'):
+      focusTool?panel.querySelector('[data-entry-tool="'+focusTool+'"]'):null;
+    (target||panel.querySelector('.entry-toolbox-close')).focus();
+    return true;
+  }
+  function closeEntryToolbox(){
+    var panel=entryToolbox();
+    if(panel&&panel.open)panel.close();
+    document.getElementById('entry-toolbox-toggle').setAttribute('aria-expanded','false');
+  }
+  window.toggleEntryToolbox=function(){if(entryToolbox().open){closeEntryToolbox();return false;}return showEntryToolbox();};
+  window.closeEntryToolbox=closeEntryToolbox;
+  window.openEntryTool=function(id){
+    if(['debate','board','coach','flow','case','tendency','voice','glossary','about'].indexOf(id)<0)return false;
+    var request={id:id,panel:entryToolbox().open};
+    closeEntryToolbox();
+    return open('toolbox',false,request);
+  };
+  window.openEntryExam=function(){examEntryReturn=true;closeEntryToolbox();return showExamNotice();};
+  entryToolbox().addEventListener('close',function(){document.getElementById('entry-toolbox-toggle').setAttribute('aria-expanded','false');});
+  entryToolbox().addEventListener('click',function(event){
+    if(event.target!==this)return;
+    var r=this.getBoundingClientRect();
+    if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)closeEntryToolbox();
+  });
+  window.addEventListener('resize',positionEntryToolbox);
   function routeMeta(name){return DC_ROUTE_META[name]||null;}
   function resolve(key){
     var raw=String(key||'');
@@ -277,7 +371,7 @@ body.dark .entry-word{color:#7ea4ff}
     };
     try{w.eval('('+installer.toString()+')('+JSON.stringify(labels)+');');}catch(e){console.error('[DCStandalone coach export]',e);}
   }
-  function installAdapter(f,key){
+  function installAdapter(f,key,entryRequest){
     try{
       var w=f.contentWindow;
       if(!w)return;
@@ -348,6 +442,18 @@ body.dark .entry-word{color:#7ea4ff}
           }catch(_e){}
           return false;
         };
+        // New homepage shortcuts keep the original TOOLBOX -> tool iframe chain.
+        // Adapt return only for this entry instance; legacy go('toolbox') is unchanged.
+        if(entryRequest&&typeof w.openTool==='function'&&typeof w.closeTool==='function'){
+          var closeOriginal=w.closeTool;
+          w.closeTool=function(){
+            closeOriginal.apply(w,arguments);
+            home();
+            if(entryRequest.panel)showEntryToolbox(entryRequest.id);
+            else document.getElementById('entry-debate-timer').focus();
+          };
+          w.openTool(entryRequest.id);
+        }
       }
       if((key==='ZH'||key==='EN')&&typeof w.closePage==='function'){
         w.closePage=function(){window.DCStandalone.home();};
@@ -418,9 +524,10 @@ body.dark .entry-word{color:#7ea4ff}
     return assets[id];
   });
 };
-  function open(key,skipExamNotice){
+  function open(key,skipExamNotice,entryRequest){
     var name=resolve(key);
     if(!name)return false;
+    closeEntryToolbox();
     if(name==='EXAM'&&!skipExamNotice)return showExamNotice();
     if(name==='STARTRACK'&&!skipExamNotice)return showStartrackNotice();
     hideStartrackNotice(false);
@@ -440,11 +547,13 @@ body.dark .entry-word{color:#7ea4ff}
     var meta=routeMeta(name);
     document.title=(meta&&meta.title)||HOME_TITLE;
     var f=frame();
-    f.onload=function(){installAdapter(f,name);};
+    f.onload=function(){installAdapter(f,name,entryRequest);};
     f.srcdoc=nativeSrcdoc(DC_hydrate(DC_PAGES[name],typeof DC_SHARED_ASSETS!=='undefined'?DC_SHARED_ASSETS:{}));
     return true;
   }
   function home(){
+    closeEntryToolbox();
+    examEntryReturn=false;
     hideStartrackNotice(false);
     hideExamNotice();
     var f=document.getElementById('dc-module-frame');
@@ -455,11 +564,13 @@ body.dark .entry-word{color:#7ea4ff}
     return true;
   }
   function back(){
+    if(entryToolbox().open){closeEntryToolbox();return true;}
     var startrackNotice=document.getElementById('startrack-notice');
     if(startrackNotice&&startrackNotice.classList.contains('show')){hideStartrackNotice(true);return true;}
     var notice=document.getElementById('exam-notice');
     if(notice&&notice.classList.contains('show')){
       hideExamNotice();
+      if(examEntryReturn){examEntryReturn=false;showEntryToolbox('exam');}
       return true;
     }
     var f=document.getElementById('dc-module-frame');
@@ -484,6 +595,8 @@ body.dark .entry-word{color:#7ea4ff}
   window.acceptStartrackNotice=function(){hideStartrackNotice(false);return open('startrack',true);};
   window.dismissStartrackNotice=function(){hideStartrackNotice(true);return true;};
   document.addEventListener('keydown',function(event){
+    var examNotice=document.getElementById('exam-notice');
+    if(event.key==='Escape'&&examNotice&&examNotice.classList.contains('show')){event.preventDefault();back();return;}
     var notice=document.getElementById('startrack-notice');
     if(!notice||!notice.classList.contains('show'))return;
     if(event.key==='Escape'){event.preventDefault();hideStartrackNotice(true);}
@@ -493,7 +606,7 @@ body.dark .entry-word{color:#7ea4ff}
       else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
     }
   });
-  window.acceptExamNotice=function(){hideExamNotice();return open('exam',true);};
+  window.acceptExamNotice=function(){examEntryReturn=false;hideExamNotice();return open('exam',true);};
   window.go=function(lang){return open(lang);};
   window.goLang=function(){return open('lang');};
   window.goJudge=function(){return open('judge-entry');};
