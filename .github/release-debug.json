@@ -1,7 +1,7 @@
 {
-  "run_id": "39273217498",
-  "source_sha": "263e2e84c2d82efa15b4bb6c5529055575d28e13",
-  "tag": "v9.3.1",
+  "run_id": "39296300771",
+  "source_sha": "e2ac0f3c1dfb90a1e32132fe4f9868cf45457800",
+  "tag": "v9.3.2",
   "job_status": "failure",
   "steps": {
     "normalize": "failure",
