@@ -249,6 +249,10 @@ kbd{display:inline-block;font-family:var(--font-num);font-size:11.5px;line-heigh
 .tfield .inp{width:64px;height:38px;padding:0 6px;text-align:center;font-family:var(--font-num);font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
 .tfield em{font-style:normal;font-size:12.5px;color:var(--text-3)}
 .tgroup{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.rc-body>.seg{flex:0 0 120px;justify-content:center}
+.rc-time-slot{display:inline-flex;flex:1 1 240px;min-width:240px;align-items:flex-start;gap:8px 14px}
+.rc-dual-times{flex-direction:column;align-items:flex-start}
+.rc-dual-times>.tgroup{gap:6px}
 .tlabel{font-size:12px;font-weight:700;padding:3px 8px;border-radius:6px;letter-spacing:.04em}
 .tlabel.pro{color:var(--pro);background:var(--pro-soft)}
 .tlabel.con{color:var(--con);background:var(--con-soft)}
@@ -1430,7 +1434,7 @@ const assets=new Map(),pins=new Set();let N=null,C=null,applied=null,session=nul
 let resolveReady;const ready=new Promise(r=>resolveReady=r);
 function defaults(){const n=N.defaults();return {kind:KIND,version:1,common:{materials:copy(n.materials),fonts:copy(n.fonts),themeColors:copy(n.themeColors),background:copy(n.background),sound:N.soundDefaults(),media:{background:null,warn:null,end:null}},layouts:{native:{profiles:copy(n.profiles)},canvas:{layout:W.FCView.model.defaults(),floorOpacity:1}}};}
 function nativeConfig(d){return Object.assign(N.defaults(),{profiles:copy(d.layouts.native.profiles),materials:copy(d.common.materials),fonts:copy(d.common.fonts),themeColors:copy(d.common.themeColors),background:copy(d.common.background)});}
-function canvasBundle(d){d=d||session?.document||applied;return {kind:'debate-timer-free-canvas-bundle',version:1,layout:copy(d.layouts.canvas.layout),resources:nativeConfig(d),sound:copy(d.common.sound),floorOpacity:d.layouts.canvas.floorOpacity,media:copy(d.common.media)};}
+function canvasBundle(d){d=d||session?.document||applied;return {kind:'debate-timer-free-canvas-bundle',version:1,layout:copy(d.layouts.canvas.layout),resources:nativeConfig(d),sound:copy(N.upgradeSound(d.common.sound)),floorOpacity:d.layouts.canvas.floorOpacity,media:copy(d.common.media)};}
 // A single native settings owner with independently validated domains.
 // Until canvas layout finalization, incompatible canvas topology is discarded,
 // never migrated, while valid original layout + shared media are preserved.
@@ -1451,9 +1455,9 @@ function snapshotEntry(){return {document:copy(session.document)};}
 function setCanvasUI(ui){if(!session||session.editor!=='canvas'||blocked()||!ui)return false;if(!W.FCView.model.PROFILES[ui.profile]||!W.FCView.model.MODES[ui.mode]||typeof ui.scope!=='string')return false;session.canvasUI={profile:ui.profile,mode:ui.mode,scope:ui.scope};return true;}
 function update(next,ui){assertEditable();begin();if(!valid(next))throw Error('设置字段或数值不合法');if(same(next,session.document)){if(ui)session.canvasUI=copy(ui);return false;}session.undo.push(snapshotEntry());if(session.undo.length>80)session.undo.shift();session.redo=[];session.document=copy(next);if(ui)session.canvasUI=copy(ui);session.mutation++;error='';notify();return true;}
 function register(a){if(a){if(!(a.blob instanceof Blob)||!hash(a.meta?.sha256)||!a.meta?.sha256)throw Error('媒体文件无效');assets.set(a.meta.sha256,a);}return a?.meta?.sha256||null;}
-function mergeNative(target,p){if(!N.valid(p.config)||!N.audioReady(p.sound,p.soundAssets))throw Error('原版设置或声音文件无效');const d=copy(target);d.layouts.native.profiles=copy(p.config.profiles);for(const k of ['materials','fonts','themeColors','background'])d.common[k]=copy(p.config[k]);d.common.sound=copy(p.sound);d.common.media.background=p.blob?register({blob:p.blob,meta:p.meta}):null;for(const k of ['warn','end'])d.common.media[k]=register(p.soundAssets[k]);return d;}
+function mergeNative(target,p){if(!N.valid(p.config)||!N.audioReady(p.sound,p.soundAssets))throw Error('原版设置或声音文件无效');const d=copy(target);d.layouts.native.profiles=copy(p.config.profiles);for(const k of ['materials','fonts','themeColors','background'])d.common[k]=copy(p.config[k]);d.common.sound=copy(N.upgradeSound(p.sound));d.common.media.background=p.blob?register({blob:p.blob,meta:p.meta}):null;for(const k of ['warn','end'])d.common.media[k]=register(p.soundAssets[k]);return d;}
 function captureNative(p){if(muted||!session||session.editor!=='native'||blocked())return false;return update(mergeNative(session.document,p));}
-function captureCanvas(bundle,map,ui){if(muted)return false;assertEditable();begin('canvas');if(!bundle||!N.valid(bundle.resources)||!N.soundValid(bundle.sound)||!W.FCView.model.valid(bundle.layout))throw Error('自由画布设置无效');const d=copy(session.document);const mismatch=W.FCView.model.sharedConflicts(bundle.layout);if(mismatch.count)throw Error('同屏型公共模块设置尚未同步；请先在自由画布中统一公共模块。');for(const k of ['materials','fonts','themeColors','background'])d.common[k]=copy(bundle.resources[k]);d.common.sound=copy(bundle.sound);d.common.media=copy(bundle.media);d.layouts.canvas={layout:copy(bundle.layout),floorOpacity:bundle.floorOpacity};if(map)for(const h of Object.values(bundle.media))if(h&&map.has(h))register(map.get(h));return update(d,ui);}
+function captureCanvas(bundle,map,ui){if(muted)return false;assertEditable();begin('canvas');if(!bundle||!N.valid(bundle.resources)||!N.soundValid(bundle.sound)||!W.FCView.model.valid(bundle.layout))throw Error('自由画布设置无效');const d=copy(session.document);const mismatch=W.FCView.model.sharedConflicts(bundle.layout);if(mismatch.count)throw Error('同屏型公共模块设置尚未同步；请先在自由画布中统一公共模块。');for(const k of ['materials','fonts','themeColors','background'])d.common[k]=copy(bundle.resources[k]);d.common.sound=copy(N.upgradeSound(bundle.sound));d.common.media=copy(bundle.media);d.layouts.canvas={layout:copy(bundle.layout),floorOpacity:bundle.floorOpacity};if(map)for(const h of Object.values(bundle.media))if(h&&map.has(h))register(map.get(h));return update(d,ui);}
 function projection(d){const a=slots(d);return {config:nativeConfig(d),blob:a.background?.blob||null,meta:a.background?.meta||null,sound:copy(d.common.sound),soundAssets:{warn:a.warn,end:a.end}};}
 function flush(){if(!session)return;if(session.editor==='native'&&N?.isOpen())captureNative(N.capture());if(session.editor==='canvas'&&C?.isOpen())C.flush();}
 function refresh(){if(!session)return;muted++;try{if(session.editor==='native'&&N.isOpen())N.restore(projection(session.document));if(session.editor==='canvas'&&C?.isOpen())C.restore(canvasBundle(session.document),session.canvasUI);}finally{muted--;}notify();}
@@ -1467,6 +1471,8 @@ async function validateDocument(d,map){if(!valid(d))throw Error('配置结构或
 async function checkedRecord(record){
  if(!record||typeof record.revision!=='string'||!record.revision||!keys(record,['revision','config','assets'])||!record.assets||typeof record.assets!=='object'||Array.isArray(record.assets))throw Error('已保存记录结构不完整');
  const d=copy(record.config);
+ // The previous three-field sound contract is upgraded read-only; no stored record is rewritten until Apply.
+ if(d?.common?.sound)d.common.sound=N.upgradeSound(d.common.sound);
  // Shared or original settings corruption is never waived or silently reset.
  if(!validNativeCommon(d))throw Error('配置结构或范围验证失败');
  const invalidCanvas=!validCanvas(d);
@@ -1512,6 +1518,7 @@ else if(pkg?.kind===PORTABLE||pkg?.kind==='debate-timer-free-canvas-portable'){
  if(offset!==raw.size)throw Error('媒体尾部长度不一致');for(const k of ['background','warn','end'])if(k==='background'?pkg.include.background:pkg.include.sounds){const ref=next.common.media[k];if(ref&&!(modern?seen.has(ref):seen.has(k))||!ref&&!modern&&seen.has(k))throw Error('包含的媒体清单与引用不一致');}
  omitted(next,target,pkg.include);issues.push(modern?'两种布局与公共设置一起进入草稿。':'自由画布与公共设置进入草稿；原版布局保留。');if(!pkg.include.background)issues.push('未包含背景：保留目标草稿背景参数与文件。');if(!pkg.include.sounds)issues.push('未包含声音文件：保留目标文件，提醒秒数采用来源设置。');
 }else throw Error('不支持此配置格式或版本；请使用原版 v9、R08、纯画布 v1 或二合一便携配置。');
+if(next?.common?.sound)next.common.sound=N.upgradeSound(next.common.sound);
 const all=new Map([...ticket.media,...added]);const verified=await validateDocument(next,all);return {document:next,added:verified,ticket,issues};}
 function hashRevision(v){return v===null||typeof v==='string'&&v.length>0&&v.length<200;}
 async function prepareImport(file){await ready;assertEditable();const ticket=freeze(),pin=new Set(refs(ticket.document));pins.add(pin);importing++;notify();try{const pkg=file instanceof Blob?await parseFile(file):file,result=await decodePackage(pkg,ticket);checkTicket(ticket);const latest=await readRecord();if((latest?.revision??null)!==ticket.baseRevision)throw Error('导入验证期间其它窗口已保存设置，请重新载入');return result;}finally{importing--;pins.delete(pin);notify();}}
@@ -1988,6 +1995,8 @@ function stopTimer(){
 }
 // Audio sidecar: only reminder eligibility; no change to clock values or layout.
 var r11RoundWarnSeconds=30,r11RoundBudget={pro:0,con:0},r11AudioQuiet=false;
+// One frozen passive-side threshold per answer; 0 disables both red warning and reminder tone.
+var r22PassiveWarnThreshold=0;
 function r11SoundEvent(kind){if(!r11AudioQuiet&&!document.hidden)playBeep(kind);}
 function currentRound(){return FORMAT&&FORMAT.rounds&&FORMAT.rounds[roundIdx];}
 function isPoolRound(r){return !!(FORMAT&&FORMAT.timePool&&FORMAT.timePool.enabled&&r&&r.fromPool);}
@@ -2033,6 +2042,7 @@ function readRoundProgress(s){
     passiveElapsed=s.passive.elapsed;passiveRemain=s.passive.remain;
     passiveFraction=s.passive.fraction;passiveLimitMode=s.passive.limited;
     passiveFrozen=!!(s.passive.wasActive||s.passive.frozen);
+    r22PassiveWarnThreshold=passiveLimitMode?TimerAudio.getPassiveWarnThreshold(currentRound()?.passiveDuration||0):0;
   }
   return true;
 }
@@ -2106,8 +2116,8 @@ function applyPassiveElapsed(ms,fromReview){
   if(passiveLimitMode){
     before=Math.max(0,passiveRemain*1000-passiveFraction);
     after=Math.max(0,before-spent);
-    var lim=currentRound()&&currentRound().passiveDuration||20,th=lim>30?30:Math.min(5,lim);
-    if(r11RoundWarnSeconds>0&&before>th*1000&&after>0&&after<=th*1000)r11SoundEvent('warn');
+    var th=r22PassiveWarnThreshold;
+    if(th>0&&before>th*1000&&after>0&&after<=th*1000)r11SoundEvent('warn');
     passiveRemain=Math.ceil(after/1000);passiveFraction=passiveRemain*1000-after;
     if(after===0&&before>0){stopPassiveTimer(false,true);r11SoundEvent('end');}
   }else{
@@ -2319,7 +2329,7 @@ var DING_B64="//NgxAAasQqMx0FYAg8ABQbwAAAAxsYxjGMAAAAAAAPf//sYyv/qTcd4ew9jrXGwBM
 // One AudioManager belongs to the final timer document (never the preview iframe).
 // It never awaits or throws into the clock engine. No interval/polling/unlock loop.
 var TimerAudio=(function(){
-  var config={warnSeconds:30,warnChoice:'builtin',endChoice:'builtin'};
+  var config={warnSeconds:30,warnChoice:'builtin',endChoice:'builtin',passiveWarnMode:'auto',passiveWarnSeconds:5};
   var assets={warn:null,end:null},buffers={warn:null,end:null,builtinEnd:null};
   var context=null,htmlAudio=null,currentSource=null,token=0,decodeEpoch=0;
   var state='COLD', lastError='',preparing=false,gestureStarted=false;
@@ -2435,9 +2445,12 @@ var TimerAudio=(function(){
     }catch(e){lastError=String(e);return false;}
   }
   function configure(next,assetMap){
+    var passiveMode=next?.passiveWarnMode??'auto',passiveSeconds=next?.passiveWarnSeconds??5;
     if(!next||!Number.isInteger(next.warnSeconds)||next.warnSeconds<0||next.warnSeconds>3600||
-       !['builtin','custom'].includes(next.warnChoice)||!['builtin','custom'].includes(next.endChoice))return false;
-    token++;decodeEpoch++;config={warnSeconds:next.warnSeconds,warnChoice:next.warnChoice,endChoice:next.endChoice};
+       !['builtin','custom'].includes(next.warnChoice)||!['builtin','custom'].includes(next.endChoice)||
+       !['auto','custom','off'].includes(passiveMode)||!Number.isInteger(passiveSeconds)||passiveSeconds<1||passiveSeconds>3600)return false;
+    token++;decodeEpoch++;config={warnSeconds:next.warnSeconds,warnChoice:next.warnChoice,endChoice:next.endChoice,
+      passiveWarnMode:passiveMode,passiveWarnSeconds:passiveSeconds};
     assets={warn:assetMap?.warn||null,end:assetMap?.end||null};
     buffers.warn=assets.warn?.decoded||null;buffers.end=assets.end?.decoded||null;preparing=false;
     if(context&&context.state==='running'&&!timerRunning&&!passiveInterval)prepare();
@@ -2470,6 +2483,10 @@ var TimerAudio=(function(){
   }
   return {warm:warm,play:play,preview:preview,configure:configure,
     getWarnSeconds:function(){return config.warnSeconds;},
+    getPassiveWarnThreshold:function(limit){
+      if(!Number.isFinite(limit)||limit<=0||config.passiveWarnMode==='off')return 0;
+      return config.passiveWarnMode==='custom'?config.passiveWarnSeconds:(limit>30?30:5);
+    },
     getStatus:function(){return {state:state,contextState:context?.state||'absent',
       warned:gestureStarted,builtinReady:!!buffers.builtinEnd,customWarnReady:!!buffers.warn,
       customEndReady:!!buffers.end,lastError:lastError};}
@@ -3081,9 +3098,11 @@ function renderFormatEdit(m){
       if(P)h+='<label class="chk"><input type="checkbox" '+(r.fromPool?'checked':'')+' onchange="FORMAT.rounds['+i+'].fromPool=this.checked;goFormatEdit()"><span>'+t('fromPool')+'</span></label>';
       if(!r.fromPool||!P){
         if(r.mode==='2'){
-          h+='<span class="tgroup"><span class="tlabel pro">'+t('proShort')+'</span>'+tfield(Math.floor((r.proDuration||120)/60),(r.proDuration||120)%60,rMinH(i,'proDuration','proSec'),rSecH(i,'proDuration','proSec',120))+'</span>';
-          h+='<span class="tgroup"><span class="tlabel con">'+t('conShort')+'</span>'+tfield(Math.floor((r.conDuration||120)/60),(r.conDuration||120)%60,rMinH(i,'conDuration','conSec'),rSecH(i,'conDuration','conSec',120))+'</span>';
-        }else h+=tfield(Math.floor((r.duration||180)/60),(r.duration||180)%60,rMinH(i,'duration','durSec'),rSecH(i,'duration','durSec',180));
+          h+='<span class="rc-time-slot rc-dual-times">';
+          h+='<span class="tgroup">'+tfield(Math.floor((r.proDuration||120)/60),(r.proDuration||120)%60,rMinH(i,'proDuration','proSec'),rSecH(i,'proDuration','proSec',120))+'<span class="tlabel pro">'+t('proShort')+'</span></span>';
+          h+='<span class="tgroup">'+tfield(Math.floor((r.conDuration||120)/60),(r.conDuration||120)%60,rMinH(i,'conDuration','conSec'),rSecH(i,'conDuration','conSec',120))+'<span class="tlabel con">'+t('conShort')+'</span></span>';
+          h+='</span>';
+        }else h+='<span class="rc-time-slot">'+tfield(Math.floor((r.duration||180)/60),(r.duration||180)%60,rMinH(i,'duration','durSec'),rSecH(i,'duration','durSec',180))+'</span>';
       }
       h+='</div>';
       if(r.mode==='3a'){
@@ -3230,25 +3249,47 @@ function goMatchRound(idx){
 // ── Painting ───────────────────────────────────────────
 function setDigits(el,s){if(!el)return;var p=fmtTime(s).split(':'),html=p[0]+'<span class="colon"><i></i><i></i></span>'+p[1];if(el._v!==html){el._v=html;el.innerHTML=html;}}
 function setPlain(el,txt){if(!el)return;el._v=null;el.textContent=txt;}
-function setBar(id,v,total,warn){var b=document.getElementById(id);if(!b)return;b.style.transform='scaleX('+(total>0?Math.max(0,Math.min(1,v/total)):0)+')';if(b.parentNode&&b.parentNode.classList)b.parentNode.classList.toggle('warn',!!warn);}
+/* Native one-second CSS interpolation samples the existing authoritative millisecond clock.
+   The target is the next second's fraction; the current CSS transition itself
+   paints the in-between values, including the final second to exact zero.
+   No added timer, RAF, observer, duplicate clock, or post-layout correction. */
+function r21BarClock(side,pool){
+  var r=currentRound();
+  var remain=pool?(MATCH?Math.round((MATCH[side+'Pool']||0)*1000-poolFraction(side)):0):currentMs(side);
+  var account=r?(r.mode==='2'?activeSide:currentPoolSide(r)):null;
+  var active=!!(VIEW===2&&r&&timerRunning&&clockMain&&!clockReviewPending&&!document.hidden&&
+    (pool?(isPoolRound(r)&&account===side):(r.mode==='2'?activeSide===side:side==='pro')));
+  if(active)remain-=Math.max(0,performance.now()-clockMain.perfAt);
+  return {ms:Math.max(0,remain),active:active};
+}
+function setBar(id,v,total,warn,clock){
+  var b=document.getElementById(id);if(!b)return;
+  var ms=clock?clock.ms:Math.max(0,v*1000);
+  var animate=!!(clock&&clock.active&&ms>0&&total>0);
+  var ahead=animate?Math.min(1000,ms):0;
+  var ratio=total>0?Math.max(0,Math.min(1,(ms-ahead)/(total*1000))):0;
+  b.style.transitionDuration=animate?ahead+'ms, .4s':'0s, .4s';
+  b.style.transform='scaleX('+ratio+')';
+  if(b.parentNode&&b.parentNode.classList)b.parentNode.classList.toggle('warn',!!warn);
+}
 function paintMain(){
   var el=document.getElementById('t-main');
   var ended=proRemain<=0&&timeUpState,w=proRemain<=30&&proRemain<roundTotal.pro;
   if(el){setDigits(el,proRemain);el.classList.toggle('warn',w&&!ended);el.classList.toggle('ended',ended);}
-  setBar('bar-main',proRemain,roundTotal.pro,w);
+  setBar('bar-main',proRemain,roundTotal.pro,w,typeof r21BarClock==='function'?r21BarClock('pro',false):null);
 }
 function paintDual(){
   [['pro',proRemain],['con',conRemain]].forEach(function(p){
     var el=document.getElementById('t-'+p[0]),tot=roundTotal[p[0]],ended=p[1]<=0&&tot>0,w=p[1]<=30&&p[1]<tot;
     if(el){setDigits(el,p[1]);el.classList.toggle('warn',w&&!ended);el.classList.toggle('ended',ended);}
-    setBar('bar-'+p[0],p[1],tot,w);
+    setBar('bar-'+p[0],p[1],tot,w,typeof r21BarClock==='function'?r21BarClock(p[0],false):null);
   });
 }
 function updatePoolDisplay(){
   if(!MATCH||!FORMAT)return;
   var ep=document.getElementById('pool-pro');if(ep)ep.textContent=fmtTime(MATCH.proPool);
   var ec=document.getElementById('pool-con');if(ec)ec.textContent=fmtTime(MATCH.conPool);
-  setBar('pbar-pro',MATCH.proPool,FORMAT.timePool.pro);setBar('pbar-con',MATCH.conPool,FORMAT.timePool.con);
+  setBar('pbar-pro',MATCH.proPool,FORMAT.timePool.pro,false,typeof r21BarClock==='function'?r21BarClock('pro',true):null);setBar('pbar-con',MATCH.conPool,FORMAT.timePool.con,false,typeof r21BarClock==='function'?r21BarClock('con',true):null);
 }
 function updateToggleBtn(){
   TimerParts.refresh();
@@ -3285,7 +3326,7 @@ function toggleSingle(){
   if(timerRunning&&!timerPaused){
     settleTimer('pause-single');stopTimer();timerPaused=true;
     if(currentRound().mode==='3a')startPassiveTimer();
-    updateToggleBtn();saveMatchSnapshot();return;
+    paintAfterSettle();saveMatchSnapshot();return;
   }
   if(timeUpState||currentMs('pro')<=0)return;
   var wasPaused=timerPaused;
@@ -3296,7 +3337,7 @@ function toggleSingle(){
 function toggleDual(){
   if(timerRunning&&!timerPaused){
     settleTimer('pause-dual');stopTimer();timerPaused=true;
-    updateToggleBtn();saveMatchSnapshot();return;
+    paintAfterSettle();saveMatchSnapshot();return;
   }
   if(timeUpState||(currentMs('pro')<=0&&currentMs('con')<=0))return;
   if(currentMs(activeSide)<=0)activeSide=activeSide==='pro'?'con':'pro';
@@ -3355,7 +3396,8 @@ function startPassiveTimer(){
   if(passiveInterval){settlePassive('restart');clearInterval(passiveInterval);}
   var r=currentRound();passiveFrozen=false;
   passiveLimitMode=!!(r.passiveLimit&&r.passiveDuration);
-  if(passiveLimitMode){passiveRemain=r.passiveDuration||20;}else{passiveElapsed=0;}
+  if(passiveLimitMode){passiveRemain=r.passiveDuration||20;r22PassiveWarnThreshold=TimerAudio.getPassiveWarnThreshold(passiveRemain);}
+  else{passiveElapsed=0;r22PassiveWarnThreshold=0;}
   passiveFraction=0;startPassiveClock();
   passiveInterval=setInterval(function(){settlePassive('interval');saveMatchSnapshot();},1000);
   updatePassiveDisplay();updateStatus();saveMatchSnapshot();
@@ -3365,7 +3407,7 @@ function stopPassiveTimer(shouldSettle,freezeDisplay){
   if(passiveInterval){clearInterval(passiveInterval);passiveInterval=null;}
   clockPassive=null;
   if(freezeDisplay){passiveFrozen=true;}
-  else{passiveFrozen=false;passiveElapsed=0;passiveRemain=0;passiveFraction=0;passiveLimitMode=false;}
+  else{passiveFrozen=false;passiveElapsed=0;passiveRemain=0;passiveFraction=0;passiveLimitMode=false;r22PassiveWarnThreshold=0;}
   updatePassiveDisplay();updateStatus();
 }
 function clearPassiveHistory(){stopPassiveTimer();}
@@ -3375,8 +3417,8 @@ function updatePassiveDisplay(){
   var r=FORMAT.rounds[roundIdx];
   if(passiveInterval||passiveFrozen){
     if(passiveLimitMode){
-      var lim=r&&r.passiveDuration||20,th=lim>30?30:Math.min(5,lim);
-      setDigits(el,passiveRemain);el.classList.toggle('warn',passiveRemain<=th);
+      var th=r22PassiveWarnThreshold;
+      setDigits(el,passiveRemain);el.classList.toggle('warn',th>0&&passiveRemain<=th);
     }else{setPlain(el,passiveElapsed+'s');el.classList.remove('warn');}
   }else{
     el.classList.remove('warn');
@@ -3992,10 +4034,18 @@ var r11NativePreviewCollapsed=false;
 var r11SoundApplied={warnSeconds:30,warnChoice:'builtin',endChoice:'builtin'};
 var r11SoundDraft=r6Copy(r11SoundApplied);
 var r11SoundAppliedAssets={warn:null,end:null},r11SoundDraftAssets={warn:null,end:null};
-function r11SoundDefaults(){return {warnSeconds:30,warnChoice:'builtin',endChoice:'builtin'};}
-function r11SoundValid(s){return !!s&&r6EqKeys(s,r11SoundDefaults())&&
+function r11SoundDefaults(){return {warnSeconds:30,warnChoice:'builtin',endChoice:'builtin',passiveWarnMode:'auto',passiveWarnSeconds:5};}
+// Upgrade only the exact previous sound shape; reject malformed or unexpected fields.
+function r11SoundUpgrade(s){
+  if(s&&r6EqKeys(s,{warnSeconds:0,warnChoice:'',endChoice:''}))
+    return {...s,passiveWarnMode:'auto',passiveWarnSeconds:5};
+  return s;
+}
+function r11SoundValid(s){s=r11SoundUpgrade(s);return !!s&&r6EqKeys(s,r11SoundDefaults())&&
   Number.isInteger(s.warnSeconds)&&s.warnSeconds>=0&&s.warnSeconds<=3600&&
-  ['builtin','custom'].includes(s.warnChoice)&&['builtin','custom'].includes(s.endChoice);}
+  ['builtin','custom'].includes(s.warnChoice)&&['builtin','custom'].includes(s.endChoice)&&
+  ['auto','custom','off'].includes(s.passiveWarnMode)&&
+  Number.isInteger(s.passiveWarnSeconds)&&s.passiveWarnSeconds>=1&&s.passiveWarnSeconds<=3600;}
 function r11AudioMetaOk(meta,slot){
   var max=slot==='warn'?1024*1024:2*1024*1024;
   var duration=slot==='warn'?3:10;
@@ -4125,6 +4175,15 @@ function r8InvalidateAssets(){r8AssetEpoch++;}
 function r6SafeText(x){return String(x==null?'':x).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]});}
 /* R6 QA editor-only English strings. No CSS/layout state. */
 var R6_EN={
+ '被动方限时提醒':'Passive-side time-limit reminder',
+ '提示时机':'Reminder timing',
+ '自动（默认 5 / 30 秒）':'Auto (default 5/30 seconds)',
+ '自定义':'Custom',
+ '关闭（不变红、不响提示音）':'Off (no red digits or reminder tone)',
+ '距结束多少秒提醒':'Seconds before time up',
+ '自动：限时超过 30 秒提前 30 秒提醒；其余提前 5 秒。自定义秒数必须小于限时才会在倒计时过程中响铃；阈值同时控制数字变红和中途提示音，归零铃声不受影响。此设置与普通环节中途提醒秒数独立，共用已经选择的中途提醒铃声。':'Auto: for limits above 30 seconds, warn at 30 seconds remaining; otherwise warn at 5 seconds. Custom timing must be below the response limit to ring during countdown. Red digits and the tone use the same threshold; the time-up ring is unaffected. This setting is independent of the regular mid-round reminder and uses its chosen sound.',
+ '默认 30 秒；设为 0 关闭普通环节中途提醒。被动方限时提醒在下方独立设置；归零铃声保持不变。':'Default 30 seconds; 0 disables the regular mid-round reminder. The passive-side response reminder is configured separately below. Time-up ring is unchanged.',
+ '被动方提醒秒数必须是 1–3600 的整数':'Passive reminder seconds must be an integer from 1 to 3600',
  '响应式布局、背景与材质 · R10 UX R11':'Responsive Layout, Colors, Background & Fonts · R10 UX R11',
  '已只读载入 R10/R9/R8/R7/R6/R5 已保存设置（优先 R10），保留图片强度；应用后仅写入独立 R11 存储。':'R10/R9/R8/R7/R6/R5 settings loaded read-only (R10 preferred); image intensity preserved. Applying writes to R11 only.',
  'R10 UX R5/R6 便携格式校验通过，已保留配置显式值；应用后生效。':'R10 UX R5/R6 portable settings validated; explicit values preserved. Apply to activate.',
@@ -5857,7 +5916,7 @@ function r11SoundControls(){
     var timing=warn?'<label class="r6-field"><span>距结束多少秒响铃</span>'+
       '<input class="inp" type="number" data-r11-warn-seconds min="0" max="3600" step="1" value="'+
       r11SoundDraft.warnSeconds+'" aria-label="中途提示秒数"></label>'+
-      '<p class="r6-note">默认 30 秒；设为 0 禁用中途提醒。短于或等于设定秒数的环节不预先提醒；归零铃声优先。</p>':'';
+      '<p class="r6-note">默认 30 秒；设为 0 关闭普通环节中途提醒。被动方限时提醒在下方独立设置；归零铃声保持不变。</p>':'';
     var details=item?'<p class="r6-asset">'+Math.round(item.meta.bytes/1024)+' KiB · '+
       item.meta.duration.toFixed(1)+' s · '+item.meta.mime+'<span class="r6-sha">'+r6SafeText(item.meta.sha256)+'</span></p>':
       '<p class="r6-note">尚未保存自定义铃声。</p>';
@@ -5877,6 +5936,20 @@ function r11SoundControls(){
       '<p class="r6-note">单项恢复仅切回内置声音，保留自定义文件；「删除自定义铃声」需点击应用设置才会提交删除。</p>';
     h+='<section data-r11-sound-slot="'+slot+'">'+r6Panel(name,body)+'</section>';
   }
+  var mode=r11SoundDraft.passiveWarnMode;
+  var passive='<label class="r6-field"><span>提示时机</span>'+
+    '<select class="inp" data-r22-passive-mode>'+
+    '<option value="auto" '+(mode==='auto'?'selected':'')+'>自动（默认 5 / 30 秒）</option>'+
+    '<option value="custom" '+(mode==='custom'?'selected':'')+'>自定义</option>'+
+    '<option value="off" '+(mode==='off'?'selected':'')+'>关闭（不变红、不响提示音）</option>'+
+    '</select></label>'+
+    '<label class="r6-field"><span>距结束多少秒提醒</span>'+
+    '<input class="inp" type="number" min="1" max="3600" step="1" data-r22-passive-seconds value="'+r11SoundDraft.passiveWarnSeconds+'"'+(mode==='custom'?'':' disabled')+'></label>'+
+    '<p class="r6-note">自动：限时超过 30 秒提前 30 秒提醒；其余提前 5 秒。'+
+    '自定义秒数必须小于限时才会在倒计时过程中响铃；阈值同时控制数字变红和中途提示音，归零铃声不受影响。'+
+    '此设置与普通环节中途提醒秒数独立，共用已经选择的中途提醒铃声。</p>'+
+    '<div class="r6-actions"><button type="button" data-r6-action="sound-reset-passive">恢复默认（仅此项）</button></div>';
+  h+='<section data-r11-sound-slot="passive">'+r6Panel('被动方限时提醒',passive)+'</section>';
   return h;
 }
 // R10: both editors share this material control; adapters only supply their field attributes.
@@ -6324,6 +6397,10 @@ async function r6EditorAction(action,el){
   if(action==='sound-choose-warn'||action==='sound-choose-end'){
     document.getElementById('r11-sound-'+action.split('-')[2]+'-file')?.click();return;
    }
+   if(action==='sound-reset-passive'){
+    r11SoundDraft.passiveWarnMode='auto';r11SoundDraft.passiveWarnSeconds=5;
+    r6Dirty=true;r6RenderEditor();return;
+   }
    if(action==='sound-reset-warn'||action==='sound-reset-end'){
     var slot=action.endsWith('warn')?'warn':'end';
     r11SoundDraft[slot+'Choice']='builtin';
@@ -6408,6 +6485,16 @@ function r6OpenEditor(){
  });
  r6Editor.addEventListener('change',function(e){
   if(e.target.matches('select[data-r6-key]'))r6Change(e.target);
+   if(e.target.matches('select[data-r22-passive-mode]')){
+     r11SoundDraft.passiveWarnMode=e.target.value;
+     r6Dirty=true;r6RenderEditor();
+   }
+   if(e.target.matches('[data-r22-passive-seconds]')){
+     var ps=e.target.value;
+     if(!/^[1-9][0-9]{0,3}$/.test(ps)||Number(ps)>3600){
+       e.target.value=r11SoundDraft.passiveWarnSeconds;r6Message('被动方提醒秒数必须是 1–3600 的整数');
+     }else{r11SoundDraft.passiveWarnSeconds=Number(ps);r6Dirty=true;r6RenderEditor();}
+   }
    if(e.target.matches('[data-r11-warn-seconds]')){
      var v=e.target.value;
      if(!/^(0|[1-9][0-9]{0,3})$/.test(v)||Number(v)>3600){
@@ -6482,7 +6569,7 @@ function dualNativeProject(p,render){
  dualNativeRestoring=true;
  try{
   var old=r6DraftUrl;r6Draft=r6Copy(p.config);r6DraftBlob=p.blob;r6DraftMeta=p.meta;r6DraftUrl=r6UseObjectUrl(p.blob);r6ReleaseUrl(old);
-  r11SoundDraft=r6Copy(p.sound);r11SoundDraftAssets={warn:p.soundAssets.warn,end:p.soundAssets.end};r6Dirty=window.DualSettings.state().dirty;r6Pending=null;
+  r11SoundDraft=r6Copy(r11SoundUpgrade(p.sound));r11SoundDraftAssets={warn:p.soundAssets.warn,end:p.soundAssets.end};r6Dirty=window.DualSettings.state().dirty;r6Pending=null;
   if(render&&r6Editor)r6RenderEditor();
  }finally{dualNativeRestoring=false;}
 }
@@ -6510,7 +6597,7 @@ window.FCResources={
  }
 };
 window.DualNativeBridge={
- defaults:r6Defaults,valid:r6Valid,soundDefaults:r11SoundDefaults,soundValid:r11SoundValid,
+ defaults:r6Defaults,valid:r6Valid,soundDefaults:r11SoundDefaults,soundValid:r11SoundValid,upgradeSound:r11SoundUpgrade,
  imageInfo:r6ImageInfo,audioInfo:r11ValidateAudio,audioReady:r11AudioReady,imageMetaEqual:r6SameMeta,audioMetaEqual:r11AudioSameMeta,
  deliver:r7DeliverExport,parseNative:r11PortableImport,open:r6OpenEditor,close:r6CloseEditor,isOpen:()=>!!r6Editor,busy:()=>!!r8ResourceBusy,
  capture:dualNativeCapture,restore:p=>dualNativeProject(p,true),
@@ -6521,7 +6608,7 @@ window.DualNativeBridge={
   try{
    window.TimerAudio.configure(sound,{warn:a.warn||null,end:a.end||null});
    r6Applied=r6Copy(cfg);r6AppliedBlob=a.background?.blob||null;r6AppliedMeta=a.background?.meta||null;r6AppliedUrl=next;
-   r11SoundApplied=r6Copy(sound);r11SoundAppliedAssets={warn:a.warn||null,end:a.end||null};r6AppliedRevision=revision;
+   r11SoundApplied=r6Copy(r11SoundUpgrade(sound));r11SoundAppliedAssets={warn:a.warn||null,end:a.end||null};r6AppliedRevision=revision;
    r6RefreshLive();r6ReleaseUrl(old);
   }catch(e){r6ReleaseUrl(next);throw e;}
  }
@@ -6783,7 +6870,18 @@ function resourcePanel(){const r=draft.resources;
  if(tab==='background')return '<h3>背景与透明度</h3><p class="fc-note">背景、画布与声音共用顶部的应用和导入导出。</p><div class="fc-resource-actions"><button class="btn sm" data-cmd="choose-background">选择 JPEG / PNG / WebP</button><button class="btn sm" data-cmd="native-background">原生背景</button>'+(draft.media.background?'<button class="btn sm" data-cmd="image-background">使用已选图片</button><button class="btn sm" data-cmd="remove-background">删除图片</button>':'')+'</div>'+rfield('background.opacity','图片显示强度（%）','range',100,0,100)+rfield('background.focalX','图片焦点 X（%）','number',1,0,100)+rfield('background.focalY','图片焦点 Y（%）','number',1,0,100)+'<hr><label class="fc-field fc-wide"><span>底面背景透明度 <output id="fc-floor-value">'+Math.round((1-draft.floorOpacity)*100)+'%</output></span><input type="range" min="0" max="100" step="1" data-floor value="'+Math.round((1-draft.floorOpacity)*100)+'"></label><p class="fc-note">0% 为原背景，100% 为页面透明。只改变底层背景，不淡化数字、按钮或模块。</p><p class="fc-capability-note">普通浏览器不能透出桌面。要看到后面的窗口，需要透明桌面宿主；本 HTML 测试版未启用该宿主。</p><p class="fc-note">图片沿用原限制：60 MiB、1.5 亿像素以内。</p>';
  if(tab==='material')return '<h3>'+esc(W.DualMaterial.title())+'</h3>'+W.DualMaterial.controls('canvas',r.materials.strength);
  if(tab==='fonts')return '<h3>全局字体</h3><p class="fc-note">选中模块单独设置的字体优先；留空使用原版推荐。</p>'+rfield('fonts.ui','界面系统字体','text')+rfield('fonts.num','数字系统字体','text')+['ui','num'].map(k=>'<label class="fc-field fc-wide"><span>'+(k==='ui'?'界面字重':'数字字重')+'</span><select data-resource="fonts.'+k+'Weight"><option value="recommended">原版推荐</option>'+[100,200,300,400,500,600,700,800,900].map(v=>'<option value="'+v+'" '+(r.fonts[k+'Weight']===v?'selected':'')+'>'+v+'</option>').join('')+'</select></label>').join('')+'<div class="fc-resource-actions"><button class="btn sm" data-cmd="font-list">读取本机字体</button><button class="btn sm" data-cmd="reset-fonts">恢复推荐字体</button></div>';
- if(tab==='sound')return '<h3>声音设置</h3>'+['warn','end'].map(slot=>{const a=media.get(draft.media[slot]),name=slot==='warn'?'中途提示音':'归零铃声';return '<section class="fc-sound-section"><h4>'+name+'</h4>'+(slot==='warn'?'<label class="fc-field fc-wide"><span>距结束多少秒响铃（0 = 关闭）</span><input type="number" min="0" max="3600" step="1" data-sound="warnSeconds" value="'+draft.sound.warnSeconds+'"></label>':'')+'<label class="fc-field fc-wide"><span>使用声音</span><select data-sound="'+slot+'Choice"><option value="builtin" '+(draft.sound[slot+'Choice']==='builtin'?'selected':'')+'>内置原声</option><option value="custom" '+(draft.sound[slot+'Choice']==='custom'?'selected':'')+' '+(!a?'disabled':'')+'>自定义声音</option></select></label><div class="fc-resource-actions"><button class="btn sm" data-cmd="choose-'+slot+'">选择 MP3 / WAV</button><button class="btn sm" data-cmd="preview-'+slot+'">试听</button><button class="btn sm" data-cmd="reset-'+slot+'">恢复此项</button>'+(a?'<button class="btn sm" data-cmd="remove-'+slot+'">删除文件</button>':'')+'</div><p class="fc-note">'+(a?Math.round(a.meta.bytes/1024)+' KiB · '+a.meta.duration.toFixed(1)+' 秒':'尚未选择自定义文件')+'</p><p class="fc-note">'+(slot==='warn'?'限 1 MiB、0.1–3 秒':'限 2 MiB、0.1–10 秒')+'；原有音频校验与播放机制。恢复此项保留文件。</p></section>';}).join('');return '';
+ if(tab==='sound'){const pm=draft.sound.passiveWarnMode;return '<h3>声音设置</h3>'+['warn','end'].map(slot=>{const a=media.get(draft.media[slot]),name=slot==='warn'?'中途提示音':'归零铃声';return '<section class="fc-sound-section"><h4>'+name+'</h4>'+(slot==='warn'?'<label class="fc-field fc-wide"><span>距结束多少秒响铃（0 = 关闭）</span><input type="number" min="0" max="3600" step="1" data-sound="warnSeconds" value="'+draft.sound.warnSeconds+'"></label>':'')+'<label class="fc-field fc-wide"><span>使用声音</span><select data-sound="'+slot+'Choice"><option value="builtin" '+(draft.sound[slot+'Choice']==='builtin'?'selected':'')+'>内置原声</option><option value="custom" '+(draft.sound[slot+'Choice']==='custom'?'selected':'')+' '+(!a?'disabled':'')+'>自定义声音</option></select></label><div class="fc-resource-actions"><button class="btn sm" data-cmd="choose-'+slot+'">选择 MP3 / WAV</button><button class="btn sm" data-cmd="preview-'+slot+'">试听</button><button class="btn sm" data-cmd="reset-'+slot+'">恢复此项</button>'+(a?'<button class="btn sm" data-cmd="remove-'+slot+'">删除文件</button>':'')+'</div><p class="fc-note">'+(a?Math.round(a.meta.bytes/1024)+' KiB · '+a.meta.duration.toFixed(1)+' 秒':'尚未选择自定义文件')+'</p><p class="fc-note">'+(slot==='warn'?'限 1 MiB、0.1–3 秒':'限 2 MiB、0.1–10 秒')+'；原有音频校验与播放机制。恢复此项保留文件。</p></section>';}).join('')+
+ '<section class="fc-sound-section" data-fc-passive-reminder><h4>'+say('被动方限时提醒','Passive-side time limit reminder')+'</h4>'+
+ '<label class="fc-field fc-wide"><span>'+say('提示时机','Reminder timing')+'</span>'+
+ '<select data-sound="passiveWarnMode">'+
+ '<option value="auto" '+(pm==='auto'?'selected':'')+'>'+say('自动（默认 5 / 30 秒）','Auto (default 5/30 s)')+'</option>'+
+ '<option value="custom" '+(pm==='custom'?'selected':'')+'>'+say('自定义秒数','Custom seconds')+'</option>'+
+ '<option value="off" '+(pm==='off'?'selected':'')+'>'+say('关闭（不变红、不响提示音）','Off (no red or warning tone)')+'</option></select></label>'+
+ '<label class="fc-field fc-wide"><span>'+say('距结束多少秒提醒','Seconds before time up')+'</span>'+
+ '<input type="number" min="1" max="3600" step="1" data-sound="passiveWarnSeconds" value="'+draft.sound.passiveWarnSeconds+'"'+(pm==='custom'?'':' disabled')+'></label>'+
+ '<p class="fc-note">'+say('自动：限时超过30秒提前30秒，其余提前5秒。数字变红和中途提示音共用同一阈值；自定义值须小于限时才会在倒计时中响铃。独立于普通中途提醒，归零铃声不变。','Auto: warn at 30s for limits over 30s, otherwise at 5s. Red digits and the warning tone share one threshold; custom timing must be less than the limit to ring during countdown. Independent of normal mid-round reminders; time-up tone unchanged.')+'</p>'+
+ '<div class="fc-resource-actions"><button class="btn sm" data-cmd="reset-passive">'+say('恢复默认（仅此项）','Restore default (this item only)')+'</button></div></section>';
+ }return '';
 }
 function syncMaterialRange(preserve=null){
  const range=document.querySelector('#fc-properties input[data-r10-material-range]');if(!range)return;
@@ -6867,7 +6965,7 @@ function liveField(e){const el=e.target;if(inspectorRendering||busy||visibilityB
 function setField(el){
  if(el.dataset.prop){let value=['family','color','fill'].includes(el.dataset.prop)?el.value.trim():Number(el.value);for(const n of chosen())if(el.dataset.prop!=='teamGap'||M.defs[n.id].type==='team')n[el.dataset.prop]=value;}
  else if(el.hasAttribute('data-floor'))draft.floorOpacity=1-Number(el.value)/100;
- else if(el.dataset.sound){draft.sound[el.dataset.sound]=el.dataset.sound==='warnSeconds'?Number(el.value):el.value;}
+ else if(el.dataset.sound){draft.sound[el.dataset.sound]=['warnSeconds','passiveWarnSeconds'].includes(el.dataset.sound)?Number(el.value):el.value;}
  else if(el.dataset.resource){const path=el.dataset.resource;if(path==='materials.strength'&&el.value===el.dataset.r10MaterialShown)return;let value=el.value;if(path==='materials.strength'&&el.type==='range')value=W.DualMaterial.readRange(el);else if(el.type==='range'||el.type==='number')value=Number(value)/Number(el.dataset.factor||1);else if(path.endsWith('Weight'))value=value==='recommended'?value:Number(value);else if(path==='fonts.ui'||path==='fonts.num'){value=value.trim()||'recommended';if(value==='recommended')setAt(draft.resources,path+'Weight','recommended');}setAt(draft.resources,path,value);}
 }
 function flushField(){const el=document.activeElement;if(editor&&el&&editor.contains(el)&&el.matches('[data-prop],[data-resource],[data-sound],[data-floor]'))inputChange({target:el});}
@@ -6920,6 +7018,7 @@ async function command(c){if(busy||visibilityBusy||S.blocked()&&c!=='close')retu
   selected=new Set(clear?[]:nodes.map(n=>n.id));overlay();inspector();return;
  }
  if(c==='reset-all'){if(await W.ask('两种布局与公共设置全部恢复默认并进入草稿？可以撤销，点击应用后保存。')){S.reset();scope='';selected.clear();context();}return;}
+ if(c==='reset-passive'){changed(()=>{draft.sound.passiveWarnMode='auto';draft.sound.passiveWarnSeconds=5;});return;}
  if(c==='reset-colors'){changed(()=>draft.resources.themeColors=clone(W.FCResources.defaults().themeColors));return;}if(c==='reset-material'){changed(()=>draft.resources.materials.strength=W.FCResources.defaults().materials.strength);return;}if(c==='reset-fonts'){changed(()=>draft.resources.fonts=clone(W.FCResources.defaults().fonts));return;}
  if(c==='native-background'){changed(()=>draft.resources.background.mode='native');return;}if(c==='image-background'){if(draft.media.background)changed(()=>draft.resources.background.mode='image');return;}
  if(c==='remove-background'){if(await W.ask('删除已选背景图片？应用设置后生效。'))changed(()=>{draft.media.background=null;draft.resources.background.mode='native';});return;}
