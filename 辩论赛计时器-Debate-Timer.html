@@ -103,10 +103,11 @@ body.v2 #header-title{font-size:var(--r6-title-match,var(--r6-native-title))}
 .tool{height:38px;min-width:38px;padding:0 10px;display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:11px;border:1px solid var(--line);background:var(--surface);color:var(--text-2);cursor:pointer;font-size:13px;font-weight:700;letter-spacing:.04em;transition:color .2s,background .2s,border-color .2s}
 .tool:hover{color:var(--text);border-color:var(--line-2);background:var(--surface-2)}
 .tool svg{width:17px;height:17px}
+#lang-toggle{width:64px;flex:0 0 64px;white-space:nowrap}
 @media(max-width:1100px){.brand-txt{display:none}}
 /* Preserve narrow headers, while allowing the new wordmark on mid-width desktop screens. */
 @media(min-width:761px) and (max-width:1100px){body.v0 .brand-txt{display:flex}body.v0 .brand-txt small{display:none}body.v0 .brand-txt .brand-course-title{font-size:clamp(13px,1.75vw,19px);letter-spacing:0}}
-@media(max-width:700px){.topbar{grid-template-columns:auto minmax(0,1fr) auto;gap:10px}.tool{height:34px;min-width:34px;padding:0 8px}.tool svg{width:16px;height:16px}#lang-toggle svg{display:none}}
+@media(max-width:700px){.topbar{grid-template-columns:auto minmax(0,1fr) auto;gap:10px}.tool{height:34px;min-width:34px;padding:0 8px}.tool svg{width:16px;height:16px}#lang-toggle{width:38px;flex:0 0 38px;padding-inline:0}#lang-toggle svg{display:none}}
 @media(min-width:701px){.topbar{grid-template-columns:minmax(0,1fr) minmax(0,4.2fr) minmax(max-content,1fr)}}
 
 /* ── Main / dock ─────────────────────────── */
@@ -934,7 +935,7 @@ body.v2[data-display-mode="canvas"] #main{position:relative;display:block;min-he
 .fc-canvas[data-narrow-buttons=true] .fc-node .btn.xl .lbl,#fc-surface[data-profile=portrait] .fc-node .btn.xl .lbl,#fc-surface[data-profile=compactLandscape] .fc-node .btn.xl .lbl{display:inline}
 .fc-canvas[data-compact-tools=true] [data-fc-id=language] svg,#fc-surface[data-profile=portrait] [data-fc-id=language] svg,.fc-canvas[data-profile=compactLandscape] [data-fc-id=language] svg{display:none}
 /* Native compact canvas tool style: one button box, one centered label, no post-layout fix. */
-.fc-canvas[data-profile=compactLandscape] [data-fc-id=language]>.tool{padding-inline:0;gap:0;letter-spacing:0}
+.fc-canvas [data-fc-id=language]>.tool{padding-inline:0;gap:0;letter-spacing:0;white-space:nowrap}
 #fc-floor{display:contents}
 body.v2[data-display-mode="canvas"] #fc-floor{display:block;position:fixed;inset:0;z-index:0;pointer-events:none;background:var(--bg0)}
 body.v2[data-display-mode="canvas"] #fc-floor{opacity:var(--fc-floor-alpha,1)}
@@ -1663,7 +1664,7 @@ en:{
   storageConflict:'Another window changed the match checkpoint. This window is paused to prevent overwriting progress.',
   st_ready:'Ready',st_run:'Running',st_pause:'Paused',st_up:"Time's up",st_answer:'Responding',speaking:'Speaking',waiting:'Waiting',
   ok:'OK',cancel:'Cancel',gotIt:'Got it',theme:'Theme',themeDark:'Dark theme',themeLight:'Light theme',bgMotionOff:'Hide animated background',bgMotionOn:'Show animated background',full:'Click to toggle page fullscreen; press F11 again to exit browser fullscreen',
-  langBtn:'中文',langTip:'切换到中文',notifTitle:'Debate Timer',notifWarn:'Mid-round time reminder',notifEnd:"Time's up!"
+  langBtn:'中',langTip:'切换到中文',notifTitle:'Debate Timer',notifWarn:'Mid-round time reminder',notifEnd:"Time's up!"
 }};
 function t(k){var v=I18N[LANG][k];return v===undefined?k:v;}
 
@@ -6685,7 +6686,7 @@ function snapshot(){return JSON.stringify(draft);}
 function isDirty(){return S.state().dirty||!!draft&&JSON.stringify(draft)!==JSON.stringify(applied);}
 function remember(before){if(before===snapshot())return;const old=JSON.parse(before);M.shareChanged(draft.layout,profile,mode,old.layout);S.captureCanvas(draft,media,{profile,mode,scope});}
 function changed(fn,render=true){if(S.blocked())return false;const before=snapshot();fn();if(!valid(draft)){draft=JSON.parse(before);message('输入超出范围，未更改设置。');return false;}remember(before);if(render){paint();inspector();}return true;}
-function localizeEditor(){if(!editor)return;const toggle=editor.querySelector('.fc-language-toggle');if(toggle)toggle.textContent=en()?'中文':'EN';W.r6TranslateTree?.(editor);}
+function localizeEditor(){if(!editor)return;const toggle=editor.querySelector('.fc-language-toggle');if(toggle)toggle.textContent=en()?'中':'EN';W.r6TranslateTree?.(editor);}
 function message(text){const el=document.getElementById('fc-message');if(el){el.textContent=text;W.r6TranslateTree?.(el);}}
 async function confirmHide(next){if(!M.newlyHiddenIdentity(draft.layout,next.layout).length)return true;if(visibilityBusy)return false;visibilityBusy=true;try{return await W.dialog({title:say('隐藏队名或归属标签？','Hide team identity labels?'),msg:say('隐藏后可能不方便识别各个计时区域属于正方还是反方。计时、换方和时间池功能不受影响，之后可在图层列表重新显示。','Hidden labels may make it harder to identify which timer belongs to each side. Timing, switching and pools are unchanged. Restore visibility in Layers.'),ok:say('仍然隐藏','Hide anyway'),cancel:say('取消','Cancel'),icon:'alert'});}finally{visibilityBusy=false;}}
 async function setVisible(ids,value,locked=false){if(busy||visibilityBusy||S.blocked())return;const before=snapshot(),owner=editor,next=clone(draft);for(const n of next.layout.scenes[profile][mode].nodes)if(ids.includes(n.id)&&(locked||!n.locked))n.visible=value;M.shareChanged(next.layout,profile,mode,draft.layout);if(!await confirmHide(next)||owner!==editor||before!==snapshot())return;changed(()=>draft=next);}
@@ -6796,7 +6797,7 @@ async function open(){
  treeSuppressClick=false;treeCollapsed=false;previewTheme=W.currentTheme();
  S.begin('canvas');applied=S.canvasBundle(false);draft=S.canvasBundle(true);const ui=S.canvasUI();selected.clear();scope=ui.scope||'';history=[];future=[];profile=ui.profile||V.activeProfile();mode=ui.mode||'single';tab='module';zoom='fit';focusView=false;sideHidden=false;
  editor=document.createElement('section');editor.id='fc-editor';editor.tabIndex=-1;editor.setAttribute('aria-label','布局、背景、外观与声音设置');document.body.append(editor);document.querySelector('.app').inert=true;
- editor.innerHTML='<header class="fc-header"><div class="fc-heading"><b>布局设置</b><span>自由画布与公共设置</span></div><div class="fc-header-actions"><button class="tool" data-cmd="theme" title="深浅主题">'+W.ic('sun')+'</button><button class="tool fc-language-toggle" data-cmd="language" title="切换中文 / English" aria-label="切换界面语言">'+(en()?'中文':'EN')+'</button><button class="btn sm" data-cmd="export">导出配置</button><button class="btn sm" data-cmd="import">导入配置</button><button class="btn sm" data-cmd="reset-all">全部恢复默认</button><button class="btn sm primary" data-cmd="apply">应用设置</button><button class="btn sm" data-cmd="close">返回</button></div></header>'+
+ editor.innerHTML='<header class="fc-header"><div class="fc-heading"><b>布局设置</b><span>自由画布与公共设置</span></div><div class="fc-header-actions"><button class="tool" data-cmd="theme" title="深浅主题">'+W.ic('sun')+'</button><button class="tool fc-language-toggle" data-cmd="language" title="切换中文 / English" aria-label="切换界面语言">'+(en()?'中':'EN')+'</button><button class="btn sm" data-cmd="export">导出配置</button><button class="btn sm" data-cmd="import">导入配置</button><button class="btn sm" data-cmd="reset-all">全部恢复默认</button><button class="btn sm primary" data-cmd="apply">应用设置</button><button class="btn sm" data-cmd="close">返回</button></div></header>'+
  '<div class="fc-work"><nav class="fc-commandbar" aria-label="编辑工具">'+toolbar()+'</nav><section class="fc-center" aria-label="画布工作区"><div class="fc-stage" id="fc-stage">'+
  '<div class="fc-workspace" id="fc-workspace"><div id="fc-extent"><div class="fc-canvas" id="fc-surface"><div class="sky fc-preview-floor"></div><div id="fc-content" data-r10-literal></div><div id="fc-grid-plane"></div><div id="fc-overlay"></div></div></div></div>'+treeWindow()+'</div><div class="fc-context-options fc-bottom-options" id="fc-options" role="group" aria-label="画布显示与选择选项"></div><footer class="fc-statusbar"><span id="fc-message"></span><span id="fc-dirty"></span></footer></section>'+
  '<aside class="fc-sidebar"><section class="fc-property-pane"><nav class="fc-tabs" id="fc-tabs"></nav><div id="fc-properties"></div></section><section class="fc-layer-pane"><header><b>图层</b><div>'+ib('front','置于顶层')+ib('up-layer','上移一层')+ib('down-layer','下移一层')+ib('back','置于底层')+'<button type="button" id="fc-select-all" class="tool fc-iconbtn fc-select-all" data-cmd="toggle-select-all" aria-label="全选" aria-pressed="false" title="当前场景可见且未锁定模块；点击全选，再次点击清空选择">全选</button>'+ib('hide','隐藏选中模块','eyeOff')+ib('show','显示选中模块','eye')+'</div></header><div class="fc-layer-head"><span>名称</span><span>可见性</span><span>锁定</span></div><div id="fc-layer-list"></div></section></aside></div>'+
