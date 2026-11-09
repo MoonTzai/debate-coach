@@ -502,7 +502,8 @@ html[data-theme=light] .dlg.timeup{background:radial-gradient(circle at 50% 50%,
  body.v2 .dock .btn.xl{--h:clamp(40px,9.5vh,48px)}
 }
 body.v0 .hero-actions{display:grid;grid-template-columns:repeat(2,minmax(0,max-content));align-items:center}
-@media(max-width:560px){body.v0 .hero-actions{grid-template-columns:repeat(2,minmax(0,1fr))}body.v0 .hero-actions>.btn{min-width:0;white-space:normal}}
+body.v0 .hero-actions .start-current-short{display:none}
+@media(max-width:560px){body.v0 .hero-actions{grid-template-columns:repeat(2,minmax(0,1fr))}body.v0 .hero-actions>.btn{min-width:0;white-space:normal;padding-inline:7px;gap:5px}html[lang=en] body.v0 .hero-actions .start-current-full{display:none}html[lang=en] body.v0 .hero-actions .start-current-short{display:inline}}
 /* One CSS material parameter owns both fill and decorative emission. */
 body.v2 .app{font-family:var(--font-ui);font-weight:var(--r10-ui-weight,400);--r6-material-strength:1;--r6-material-fade:min(var(--r6-material-strength),1);--r6-material-boost:max(0,calc(var(--r6-material-strength) - 1));--r6-pro-deco-glow:color-mix(in srgb,var(--pro-glow) calc(min(var(--r6-material-strength),1) * 100%),transparent);--r6-con-deco-glow:color-mix(in srgb,var(--con-glow) calc(min(var(--r6-material-strength),1) * 100%),transparent)}
 /* R10: one material declaration serves native and free-canvas surfaces. */
@@ -935,7 +936,7 @@ body.v2[data-display-mode="canvas"] #main{position:relative;display:block;min-he
 .fc-canvas[data-narrow-buttons=true] .fc-node .btn.xl .lbl,#fc-surface[data-profile=portrait] .fc-node .btn.xl .lbl,#fc-surface[data-profile=compactLandscape] .fc-node .btn.xl .lbl{display:inline}
 .fc-canvas[data-compact-tools=true] [data-fc-id=language] svg,#fc-surface[data-profile=portrait] [data-fc-id=language] svg,.fc-canvas[data-profile=compactLandscape] [data-fc-id=language] svg{display:none}
 /* Native compact canvas tool style: one button box, one centered label, no post-layout fix. */
-.fc-canvas [data-fc-id=language]>.tool{padding-inline:0;gap:0;letter-spacing:0;white-space:nowrap}
+.fc-canvas [data-fc-id=language]>.tool{padding-inline:0;display:inline-flex;align-items:center;justify-content:center;gap:5px;line-height:1;letter-spacing:0;white-space:nowrap}
 #fc-floor{display:contents}
 body.v2[data-display-mode="canvas"] #fc-floor{display:block;position:fixed;inset:0;z-index:0;pointer-events:none;background:var(--bg0)}
 body.v2[data-display-mode="canvas"] #fc-floor{opacity:var(--fc-floor-alpha,1)}
@@ -1421,7 +1422,34 @@ function syncChrome(){
  autoFit(root,s);centerProgress(root);
 }
 
-global.FCView={model:Pure,draw,dispose,act,syncChrome,markup,nodeStyle,autoFit,centerProgress,activeProfile,modeOf,sample:function(m,p){poolPreview=p;return sample(m);},setLayout:function(c){if(!valid(c))throw Error("Invalid layout");applied=clone(c);}};
+/* Reuse the original node content renderer for localized nodes only.
+   Never replace bar, pool-bar, time, panel, or progress nodes during a language click. */
+function localizeLive(){
+  if(global.VIEW!==2||!global.FORMAT||!global.MATCH||global.DualMode?.current()!=='canvas')return;
+  const root=document.getElementById('fc-live');
+  if(!root)return;
+  const s=applied.scenes[root.dataset.profile]?.[modeOf(global.currentRound())];
+  if(!s)return;
+  const snapshot=liveState();
+  const localized=new Set(['title','team','tag','round','text','hint']);
+  for(const node of s.nodes){
+    const el=root.querySelector('[data-fc-id="'+node.id+'"]');
+    if(!el)continue;
+    const type=defs[node.id].type;
+    if(type==='pool'){
+      const label=el.querySelector('.fc-pool>span');
+      if(label)label.textContent=txt(sideOf(defs[node.id],snapshot)==='pro'?'poolLeftPro':'poolLeftCon');
+    }else if(localized.has(type)||(type==='button'&&!['theme','motion','language','fullscreen'].includes(node.id))){
+      const html=inner(node,snapshot,'');
+      if(el.innerHTML!==html)el.innerHTML=html;
+    }
+  }
+  autoFit(root,s);
+  global.updateStatus();
+  centerProgress(root);
+}
+
+global.FCView={model:Pure,draw,dispose,act,syncChrome,localizeLive,markup,nodeStyle,autoFit,centerProgress,activeProfile,modeOf,sample:function(m,p){poolPreview=p;return sample(m);},setLayout:function(c){if(!valid(c))throw Error("Invalid layout");applied=clone(c);}};
 })(typeof window!=="undefined"?window:globalThis);
 
 </script>
@@ -1597,7 +1625,7 @@ var I18N={
 zh:{
   appName:'辩论赛计时器',brandSub:'Debate Universal Grammar',docTitle:'辩论赛计时器 · Debate Timer',
   tagline:'适配单方发言 · 双方交替 · 质询盘问 · 时间池/共计时赛制',
-  newFormat:'新建赛制',startCurrent:'使用当前赛事/赛制开始',loadFile:'导入赛制',importFmt:'导入赛制',importLocal:'本地赛制文件',importDemo:'测试用Demo',editCurrent:'编辑',clearEditor:'清空页面',clearEditorTitle:'确认清空赛制编辑页面？',clearEditorWarning:'将清空当前赛事名称、双方队名、时间池及全部环节。不会删除其他已保存赛制。',clearEditorConfirm:'确认清空',
+  newFormat:'新建赛制',startCurrent:'使用当前赛制开始',startCurrentShort:'开始',loadFile:'导入赛制',importFmt:'导入赛制',importLocal:'本地赛制文件',importDemo:'测试用Demo',editCurrent:'编辑',clearEditor:'清空页面',clearEditorTitle:'确认清空赛制编辑页面？',clearEditorWarning:'将清空当前赛事名称、双方队名、时间池及全部环节。不会删除其他已保存赛制。',clearEditorConfirm:'确认清空',
   current:'当前赛事/赛制',roundsN:function(n){return n+' 个环节';},poolOn:'时间池/共计时',poolShort:'池',
   clearAll:'清除全部缓存',saved:'已保存赛制',savedMeta:function(c,p){return c+' 个环节'+(p?' · 时间池':'');},del:'删除',currentTag:'当前',
   emptyTitle:'还没有赛制',emptyMsg:'新建一个赛制，或加载已导出的赛制文件（.json）',
@@ -1633,7 +1661,7 @@ zh:{
 en:{
   appName:'Debate Timer',brandSub:'Debate Universal Grammar',docTitle:'Debate Timer · Standalone Bilingual',
   tagline:'For single speeches, alternating sides, cross-examination, and time-pool formats',
-  newFormat:'New Format',startCurrent:'Start with Current Format',loadFile:'Import Format',importFmt:'Import Format',importLocal:'Local Format File',importDemo:'Test Demo',editCurrent:'Edit',clearEditor:'Clear Page',clearEditorTitle:'Clear this format editor?',clearEditorWarning:'Clear the event name, both teams, time pool and all rounds. Other saved formats will remain.',clearEditorConfirm:'Clear Page',
+  newFormat:'New Format',startCurrent:'Start with Current Format',startCurrentShort:'Start',loadFile:'Import Format',importFmt:'Import Format',importLocal:'Local Format File',importDemo:'Test Demo',editCurrent:'Edit',clearEditor:'Clear Page',clearEditorTitle:'Clear this format editor?',clearEditorWarning:'Clear the event name, both teams, time pool and all rounds. Other saved formats will remain.',clearEditorConfirm:'Clear Page',
   current:'Current format',roundsN:function(n){return n+(n===1?' round':' rounds');},poolOn:'Time pool',poolShort:'pool',
   clearAll:'Clear All Data',saved:'Saved Formats',savedMeta:function(c,p){return c+(c===1?' round':' rounds')+(p?' · time pool':'');},del:'Delete',currentTag:'Current',
   emptyTitle:'No formats yet',emptyMsg:'Create a new format, or load an exported format file (.json).',
@@ -2534,10 +2562,39 @@ function setLang(l,first){
   updateChrome();
   if(first)return;
   // One codebase: re-draw in place; a running match keeps its state.
-  if(VIEW===2)drawMatch();else{if(VIEW===1)flushFormatInputs();render();}
+  if(VIEW===2)localizeActiveMatch();else{if(VIEW===1)flushFormatInputs();render();}
   window.FCanvas?.localeChanged?.();
 }
 function changeTimerLanguage(){setLang(LANG==='en'?'zh':'en');}
+
+/* Language affects only labels and controls during a match.
+   Preserve live bar elements, their CSS transition timeline, and the one clock. */
+function localizeActiveMatch(){
+  if(VIEW!==2||!FORMAT||!MATCH)return;
+  setHeaderTitle();
+  if(window.DualMode.current()==='canvas'){
+    window.FCView?.localizeLive?.();
+    return;
+  }
+  document.querySelectorAll('.stepbar .team-badge').forEach(function(el){
+    var label=el.querySelector('.tb-side');
+    if(label)label.textContent=t(el.classList.contains('pro')?'pro':'con');
+  });
+  var custom=currentRound()&&spk(currentRound().speaker)==='other';
+  document.querySelectorAll('.stage .side-tag').forEach(function(el){
+    if(custom&&el.closest('.solo'))return;
+    var label=el.querySelector('b');
+    if(label)label.textContent=t(el.classList.contains('side-pro')?'pro':'con');
+  });
+  document.querySelectorAll('.pools .pool').forEach(function(el){
+    var label=el.querySelector('.pl');
+    if(label)label.textContent=t(el.classList.contains('side-pro')?'poolLeftPro':'poolLeftCon');
+  });
+  document.querySelectorAll('.split-passive .p-sub').forEach(function(el){el.textContent=t('answer');});
+  document.querySelectorAll('.split-passive .p-hint').forEach(function(el){el.textContent=t('passiveHint');});
+  setDock(TimerParts.dock());
+  updateStatus();
+}
 async function toggleFullscreen(){
   try{var w=window;for(var i=0;i<4;i++){if(w.pywebview&&w.pywebview.api&&w.pywebview.api.toggle_fullscreen){await w.pywebview.api.toggle_fullscreen();return}if(w.parent===w)break;w=w.parent}}catch(e){}
   try{if(document.fullscreenElement){await document.exitFullscreen()}else{await document.documentElement.requestFullscreen()}}catch(e){}
@@ -2658,7 +2715,7 @@ function renderStart(m){
   h+='<h2 class="hero-title">'+t('appName')+'</h2>';
   h+='<p class="hero-tag">'+t('tagline')+'</p>';
   h+='<div class="hero-actions'+(FORMAT?' r9-has-format':'')+'">';
-  if(FORMAT)h+='<button class="btn primary lg" onclick="goMatch()">'+ic('play')+'<span>'+t('startCurrent')+'</span></button><button class="btn lg" onclick="newFormat()">'+ic('plus')+'<span>'+t('newFormat')+'</span></button>';
+  if(FORMAT)h+='<button class="btn primary lg" onclick="goMatch()" title="'+t('startCurrent')+'" aria-label="'+t('startCurrent')+'">'+ic('play')+'<span class="start-current-full">'+t('startCurrent')+'</span><span class="start-current-short" aria-hidden="true">'+t('startCurrentShort')+'</span></button><button class="btn lg" onclick="newFormat()">'+ic('plus')+'<span>'+t('newFormat')+'</span></button>';
   else h+='<button class="btn primary lg" onclick="newFormat()">'+ic('plus')+'<span>'+t('newFormat')+'</span></button>';
   if(FORMAT){
    // Preserve R8's two native auto-grid sizing inputs in their original order.
@@ -3447,9 +3504,8 @@ document.addEventListener('keydown',function(e){
   if(e.ctrlKey||e.metaKey||e.altKey)return;
   if(document.documentElement.classList.contains('r6-editor-open')||(window.FCanvas&&window.FCanvas.isOpen&&window.FCanvas.isOpen()))return;
   var tg=e.target,tn=tg&&tg.tagName;
-  if(tn==='INPUT'||tn==='TEXTAREA'||tn==='SELECT'||tn==='BUTTON'||(tg&&tg.isContentEditable))return;
+  if(tn==='INPUT'||tn==='TEXTAREA'||tn==='SELECT'||(tg&&tg.isContentEditable)||(tn==='BUTTON'&&!isSpace))return;
   if(VIEW!==2)return;
-  if(isSpace&&tg&&tg.id==='bg-motion-toggle')return;
   if(isSpace){
     e.preventDefault();if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
     var r=FORMAT&&FORMAT.rounds[roundIdx];
