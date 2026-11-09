@@ -9,9 +9,9 @@ import threading
 import time
 from pathlib import Path
 
-APP_VERSION = "v9.2.2"
+APP_VERSION = "v9.3.12"
 MASTER_NAME = "Debate-Coach-web.html"
-MASTER_SHA256 = "a8ef90c6ee68ddf24447f0545070bf23e7c35a896a64edc0dc9fd43689447311"
+MASTER_SHA256 = "e11d006d7717a1f4e9cb45803690266c8a93a4f7eb56c20675fc6d17cafa10f1"
 TITLE = "Debate-Coach · 辩论筑基"
 DESKTOP_SHORTCUT_SCRIPT = r"""
 (function(root){
@@ -61,6 +61,7 @@ def message_box(text: str, title: str = TITLE) -> None:
 
 def local_appdata() -> Path:
     buf = ctypes.create_unicode_buffer(32768)
+    # CSIDL_LOCAL_APPDATA = 0x001c. This does not depend on inherited env vars.
     if ctypes.windll.shell32.SHGetFolderPathW(None, 0x001C, None, 0, buf) == 0 and buf.value:
         return Path(buf.value)
     value = os.environ.get("LOCALAPPDATA")
@@ -291,7 +292,9 @@ def run_webview(ui_smoke: bool = False) -> int:
             try:
                 state = window.evaluate_js(
                     "JSON.stringify({ready:document.readyState,title:document.title,"
-                    "body:(document.body?document.body.innerText.slice(0,120):'')})"
+                    "dcPages:(typeof DC_PAGES!=='undefined'),"
+                    "toolbox:(typeof DC_PAGES!=='undefined'&&!!DC_PAGES.TOOLBOX),"
+                    "body:(document.body?document.body.innerText.slice(0,1200):'')})"
                 )
                 smoke_out.write_text(
                     "renderer=" + str(webview.renderer) + "\n" +
@@ -328,8 +331,9 @@ def run_webview(ui_smoke: bool = False) -> int:
             "renderer=edgechromium" in report
             and '"ready":"complete"' in report
             and '"title":"Debate-Coach"' in report
-            and "工具箱" in report
-            and "AI裁判所" in report
+            and "辩论赛计时器" in report
+            and "认知星图" in report
+            and "立论星轨" in report
         )
         return 0 if ok else 1
 
