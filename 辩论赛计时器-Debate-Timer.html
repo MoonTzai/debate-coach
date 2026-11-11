@@ -182,12 +182,19 @@ kbd{display:inline-block;font-family:var(--font-num);font-size:11.5px;line-heigh
 .hero-mark{width:clamp(92px,11vw,150px);aspect-ratio:1;margin-bottom:6px}
 .hero-mark svg{width:100%;height:100%;display:block;overflow:visible}
 .hero-mark img{width:100%;height:100%;display:block;object-fit:contain}
+.hero-mark.mascot-bounce{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 @keyframes coachMascotBounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-12px)}60%{transform:translateY(-3px)}}
 .hero-mark.mascot-bounce.bouncing{animation:coachMascotBounce .5s ease}
 .hero-en{font-family:var(--font-num);letter-spacing:.46em;font-size:clamp(11px,.95vw,14px);color:var(--gold);text-transform:uppercase}
 .hero-title{font-size:clamp(36px,4.8vw,76px);font-weight:800;letter-spacing:.06em;line-height:1.08;background:var(--title-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero-tag{color:var(--text-2);font-size:clamp(14px,1.15vw,17px);line-height:1.75;max-width:32em}
-.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
+/* Home action rows reuse the early native v3 flex-column + independent-grid topology. */
+.hero-actions{display:flex;flex-direction:column;align-self:stretch;gap:10px;margin-top:12px;width:min(100%,480px)}
+.hero-actions .hero-action-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%}
+.hero-actions .hero-action-row.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.hero-actions .hero-action-row .btn{min-width:0;width:100%;height:auto;min-height:52px;display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;line-height:1.3;white-space:normal;padding:8px 10px}
+.hero-actions .hero-action-row .btn span{min-width:0;overflow-wrap:anywhere}
+@media(max-width:420px){.hero-actions .hero-action-row{gap:7px}.hero-actions .hero-action-row .btn{padding:7px 6px;gap:5px;font-size:13px}}
 .kbd-row{display:flex;flex-wrap:wrap;gap:8px 20px;color:var(--text-3);font-size:12.5px;margin-top:14px}
 .side-col{display:flex;flex-direction:column;gap:18px;min-width:0}
 .cur-name{font-size:clamp(20px,1.8vw,28px);font-weight:700;margin:8px 0 12px;word-break:break-word;line-height:1.35}
@@ -219,7 +226,7 @@ kbd{display:inline-block;font-family:var(--font-num);font-size:11.5px;line-heigh
 .empty-panel .ico svg{width:26px;height:26px}
 .empty-panel b{display:block;font-size:17px;margin-bottom:6px}
 .danger-zone{display:flex;justify-content:flex-end}
-@media(max-width:920px){.view-start{grid-template-columns:1fr;align-items:start}.hero{align-items:center;text-align:center}.hero-actions,.kbd-row{justify-content:center}}
+@media(max-width:920px){.view-start{grid-template-columns:1fr;align-items:start}.hero{align-items:center;text-align:center}.hero-actions{align-self:center}.kbd-row{justify-content:center}}
 
 /* ── Format editor ───────────────────────── */
 .view-edit{max-width:1380px;margin:0 auto;padding:clamp(18px,3vh,36px) clamp(14px,3vw,48px) 40px}
@@ -456,6 +463,9 @@ html[data-theme=light] .dlg{background:rgba(30,40,70,.22)}
 .dlg-msg{color:var(--text-2);font-size:14.5px;line-height:1.65;margin-top:6px;white-space:pre-line}
 .dlg-actions{display:flex;gap:10px;justify-content:center;margin-top:24px}
 .dlg-actions .btn{min-width:116px}
+.dlg.snapshot-debug .dlg-actions,.dlg.debug-only .dlg-actions{flex-wrap:wrap;gap:8px;margin-top:18px}
+.dlg.snapshot-debug .dlg-actions .btn,.dlg.debug-only .dlg-actions .btn{min-width:0;flex:1 1 125px;min-height:42px}
+.dlg .debug-status{font-size:12px;line-height:1.55;color:var(--text-3);margin-top:12px;overflow-wrap:anywhere}
 .dlg-keys{margin-top:14px;font-size:11.5px;color:var(--text-3);letter-spacing:.04em}
 .dlg.timeup{background:radial-gradient(circle at 50% 50%,rgba(255,40,60,.26),rgba(3,5,10,.72) 72%)}
 html[data-theme=light] .dlg.timeup{background:radial-gradient(circle at 50% 50%,rgba(225,29,72,.18),rgba(30,40,70,.3) 72%)}
@@ -501,9 +511,8 @@ html[data-theme=light] .dlg.timeup{background:radial-gradient(circle at 50% 50%,
  body.v2 .dock .btn{--h:clamp(33px,7vh,40px);padding-inline:10px}
  body.v2 .dock .btn.xl{--h:clamp(40px,9.5vh,48px)}
 }
-body.v0 .hero-actions{display:grid;grid-template-columns:repeat(2,minmax(0,max-content));align-items:center}
 body.v0 .hero-actions .start-current-short{display:none}
-@media(max-width:560px){body.v0 .hero-actions{grid-template-columns:repeat(2,minmax(0,1fr))}body.v0 .hero-actions>.btn{min-width:0;white-space:normal;padding-inline:7px;gap:5px}html[lang=en] body.v0 .hero-actions .start-current-full{display:none}html[lang=en] body.v0 .hero-actions .start-current-short{display:inline}}
+@media(max-width:560px){html[lang=en] body.v0 .hero-actions .start-current-full{display:none}html[lang=en] body.v0 .hero-actions .start-current-short{display:inline}}
 /* One CSS material parameter owns both fill and decorative emission. */
 body.v2 .app{font-family:var(--font-ui);font-weight:var(--r10-ui-weight,400);--r6-material-strength:1;--r6-material-fade:min(var(--r6-material-strength),1);--r6-material-boost:max(0,calc(var(--r6-material-strength) - 1));--r6-pro-deco-glow:color-mix(in srgb,var(--pro-glow) calc(min(var(--r6-material-strength),1) * 100%),transparent);--r6-con-deco-glow:color-mix(in srgb,var(--con-glow) calc(min(var(--r6-material-strength),1) * 100%),transparent)}
 /* R10: one material declaration serves native and free-canvas surfaces. */
@@ -809,46 +818,10 @@ html.r6-editor-open #toast{z-index:10003}
 html.r8-reordering,html.r8-reordering *{cursor:grabbing!important;user-select:none!important}
 .view-edit .drag-handle:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){.view-edit .round-card{transition:none}}
-</style>
-<style id="r9-home-second-row-drag-ghost">
-/* The original row-2 grid items remain as inert sizing slots.
-   The visible 3-button row overlays them; row 1 remains the exact R8 grid. */
-body.v0 .hero-actions{position:relative}
-body.v0 .hero-actions>.r9-sizing-only{
- visibility:hidden;pointer-events:none;
-}
-body.v0 .hero-actions>.r9-secondary-row{
- position:absolute;left:0;right:0;bottom:0;
- display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
- gap:12px;align-items:stretch;width:100%;height:52px;min-width:0;
-}
-body.v0 .hero-actions>.r9-secondary-row>.btn{
- width:100%;
- min-width:0;
- padding-inline:clamp(7px,1vw,14px);
-}
-body.v0 .hero-actions>.r9-secondary-row>.btn span{
- min-width:0;
- overflow:hidden;
- text-overflow:ellipsis;
- white-space:nowrap;
-}
-@media(max-width:560px){
- body.v0 .hero-actions>.r9-secondary-row{gap:6px}
- body.v0 .hero-actions>.r9-secondary-row>.btn{
-  gap:4px;padding-inline:6px;font-size:clamp(11px,3vw,13px);
- }
- body.v0 .hero-actions>.r9-secondary-row>.btn span{
-  white-space:normal;overflow-wrap:anywhere;line-height:1.2;
- }
- body.v0 .hero-actions>.r9-secondary-row>.btn svg{
-  width:15px;height:15px;
- }
-}
-/* Fix the drag shadow lag: it inherits .round-card transform .2s. */
-/* Never change other round cards' existing 150ms FLIP displacement effect. */
+/* Drag-follow native owner: remove the cloned card transform transition. */
 .r8-round-ghost{transition:none!important;animation:none!important;will-change:transform}
 </style>
+
 <style id="dual-mode-css">
 /* R09 homepage choice uses the existing visual tokens and does not alter match layout. */
 /* Match display mode is selected only on the homepage. */
@@ -2026,7 +1999,7 @@ function stopTimer(){
 var r11RoundWarnSeconds=30,r11RoundBudget={pro:0,con:0},r11AudioQuiet=false;
 // One frozen passive-side threshold per answer; 0 disables both red warning and reminder tone.
 var r22PassiveWarnThreshold=0;
-function r11SoundEvent(kind){if(!r11AudioQuiet&&!document.hidden)playBeep(kind);}
+function r11SoundEvent(kind){if(!r11AudioQuiet&&!document.hidden){playBeep(kind);window.TimerDebug?.event('AUDIO_REQUEST',{kind:kind});}}
 function currentRound(){return FORMAT&&FORMAT.rounds&&FORMAT.rounds[roundIdx];}
 function isPoolRound(r){return !!(FORMAT&&FORMAT.timePool&&FORMAT.timePool.enabled&&r&&r.fromPool);}
 function currentPoolSide(r){return spk(r.speaker)==='pro'?'pro':'con';}
@@ -2160,6 +2133,7 @@ function settleTimer(reason){
   if(delta.uncertain){
     stopTimer();timerPaused=true;
     clockReviewPending={kind:'main',perf:Math.round(delta.perf),wall:Math.round(delta.wall)};
+    window.TimerDebug?.event('CLOCK_REVIEW',{kind:'main'});
     saveMatchSnapshot();showClockReview();return;
   }
   var quiet=r11AudioQuiet;r11AudioQuiet=quiet||document.hidden||clockMain.hiddenDuring||
@@ -2175,6 +2149,7 @@ function settlePassive(reason){
     if(passiveInterval){clearInterval(passiveInterval);passiveInterval=null;}
     clockPassive=null;
     clockReviewPending={kind:'passive',perf:Math.round(delta.perf),wall:Math.round(delta.wall)};
+    window.TimerDebug?.event('CLOCK_REVIEW',{kind:'passive'});
     saveMatchSnapshot();showClockReview();return;
   }
   var quiet=r11AudioQuiet;r11AudioQuiet=quiet||document.hidden||clockPassive.hiddenDuring||
@@ -2264,11 +2239,12 @@ function safeStoredMatch(){
   }catch(e){return null;}
 }
 function isPoolIndex(index){return !!(FORMAT.timePool.enabled&&FORMAT.rounds[index]&&FORMAT.rounds[index].fromPool);}
-function storageConflict(){
+function storageConflict(suppressNotice){
   matchSaveLocked=true;
   // A stale tab must not silently overwrite a newer writer's data.
   if(VIEW===2){if(timerRunning)settleTimer('storage-conflict');stopTimer();timerPaused=true;}
-  if(!DLG.cur)notice(t('storageConflict'));
+  window.TimerDebug?.event('STORAGE_CONFLICT');
+  if(!suppressNotice&&!DLG.cur)notice(t('storageConflict'));
 }
 function saveMatchSnapshot(){
   if(!MATCH||!FORMAT||MATCH.resetFresh||matchSaveLocked||!matchFormatIdentity())return false;
@@ -2298,21 +2274,39 @@ function saveMatchSnapshot(){
     matchSaveActive=true;
     if(localStorage.getItem(MATCH_SNAPSHOT_KEY)!==encoded){storageConflict();return false;}
     return true;
-  }catch(e){return false;} // SecurityError / quota / inaccessible srcdoc
+  }catch(e){window.TimerDebug?.event('SNAPSHOT_WRITE_FAIL',{kind:window.TimerDebug?.errorKind(e)||'storage'});return false;} // SecurityError / quota / inaccessible srcdoc
 }
-function invalidateMatchSnapshot(){
-  if(matchSaveLocked)return false;
+function invalidateMatchSnapshot(suppressNotice){
+  if(matchSaveLocked){window.TimerDebug?.event('SNAPSHOT_LOCKED');return false;}
   try{
     var raw=localStorage.getItem(MATCH_SNAPSHOT_KEY),previous=null;
     if(raw){try{previous=JSON.parse(raw);}catch(_e){}}
     if(matchSaveActive&&previous&&previous.writerId!==matchWriterId){
-      storageConflict();return false;
+      storageConflict(!!suppressNotice);return false;
     }
-    localStorage.setItem(MATCH_SNAPSHOT_KEY,JSON.stringify({
+    var tombstone=JSON.stringify({
       kind:'tombstone',schemaVersion:MATCH_SNAPSHOT_VERSION,writerId:matchWriterId,epoch:Date.now()
-    }));
-  }catch(e){}
-  matchSaveActive=false;matchSaveRevision=0;return true;
+    });
+    localStorage.setItem(MATCH_SNAPSHOT_KEY,tombstone);
+    // A failed/contended write must not be reported as a completed match exit.
+    if(localStorage.getItem(MATCH_SNAPSHOT_KEY)!==tombstone){storageConflict(!!suppressNotice);return false;}
+  }catch(e){window.TimerDebug?.event('SNAPSHOT_FAIL',{kind:window.TimerDebug?.errorKind(e)||'storage'});return false;}
+  matchSaveActive=false;matchSaveRevision=0;
+  window.TimerDebug?.event('SNAPSHOT_OK');return true;
+}
+/* Invalidate before replacement only when an existing match can be affected.
+   No match + no recoverable snapshot is safe in memory-only storage mode. */
+function invalidateMatchSnapshotIfNeeded(){
+  if(matchSaveLocked)return false;
+  if(MATCH||matchSaveActive)return invalidateMatchSnapshot();
+  try{
+    var raw=localStorage.getItem(MATCH_SNAPSHOT_KEY);
+    if(!raw)return true;
+    var stored;
+    try{stored=JSON.parse(raw);}catch(_e){return true;}
+    if(!stored||stored.kind!=='match')return true;
+  }catch(_e){return true;}
+  return invalidateMatchSnapshot();
 }
 function restoreMatchFromSnapshot(s){
   if(!window.DualMode.restore(s))return false;
@@ -2620,6 +2614,9 @@ function dialog(o){return new Promise(function(res){DLG.q.push({o:o,res:res});if
 function nextDialog(){
   var it=DLG.q.shift(),root=document.getElementById('dlg');if(!it){DLG.cur=null;return;}
   DLG.cur=it;var o=it.o;
+  if((o.kind==='snapshot-debug'||o.kind==='debug-only')&&window.TimerDebug){
+    window.TimerDebug.renderDialog(it,root,o);return;
+  }
   var title=esc(o.title),emphasis=o.emphasis?esc(o.emphasis):'';
   if(o.kind==='timeup'&&title.endsWith('！'))title=title.slice(0,-1)+'<span class="dlg-timeup-punct">！</span>';
   if(emphasis)title=title.replace(emphasis,'<span class="dlg-em">'+emphasis+'</span>');
@@ -2682,7 +2679,8 @@ function goMatch(skipCapture){
   if(!FORMAT.rounds||!FORMAT.rounds.length){notice(t('needRounds'));return;}
   if(!window.DualMode.bindForEntry())return;
   if(MATCH&&MATCH.formatIdentity&&MATCH.formatIdentity!==matchFormatIdentity()){
-    MATCH=null;invalidateMatchSnapshot();restoreRenderState=null;
+    if(!invalidateMatchSnapshotIfNeeded()){if(!DLG.cur)notice(t('storageConflict'));return;}
+    MATCH=null;restoreRenderState=null;
   }
   if(!MATCH){saveCurrentFormat();MATCH=freshMatch();matchSaveRevision=0;matchSaveActive=false;}
   if(!MATCH.roundStates)MATCH.roundStates={};
@@ -2710,29 +2708,22 @@ function renderStart(m){
   setDock('');
   var pool=FORMAT&&FORMAT.timePool.enabled;
   var h='<section class="view view-start'+enterCls('0')+'"><div class="hero">';
-  h+='<div class="hero-mark mascot-bounce"><img src="'+COACH_MASCOT_SRC+'" alt="" aria-hidden="true"></div>';
+  h+='<div class="hero-mark mascot-bounce" onclick="TimerDebug.onMascotClick(event)"><img src="'+COACH_MASCOT_SRC+'" alt="" aria-hidden="true"></div>';
   h+='<div class="hero-en">Debate · Timer</div>';
   h+='<h2 class="hero-title">'+t('appName')+'</h2>';
   h+='<p class="hero-tag">'+t('tagline')+'</p>';
-  h+='<div class="hero-actions'+(FORMAT?' r9-has-format':'')+'">';
-  if(FORMAT)h+='<button class="btn primary lg" onclick="goMatch()" title="'+t('startCurrent')+'" aria-label="'+t('startCurrent')+'">'+ic('play')+'<span class="start-current-full">'+t('startCurrent')+'</span><span class="start-current-short" aria-hidden="true">'+t('startCurrentShort')+'</span></button><button class="btn lg" onclick="newFormat()">'+ic('plus')+'<span>'+t('newFormat')+'</span></button>';
-  else h+='<button class="btn primary lg" onclick="newFormat()">'+ic('plus')+'<span>'+t('newFormat')+'</span></button>';
+  h+='<div class="hero-actions"><div class="hero-action-row">';
+  if(FORMAT)h+='<button class="btn primary lg" onclick="goMatch()" title="'+t('startCurrent')+'" aria-label="'+t('startCurrent')+'">'+ic('play')+'<span class="start-current-full">'+t('startCurrent')+'</span><span class="start-current-short" aria-hidden="true">'+t('startCurrentShort')+'</span></button><button class="btn lg" onclick="newFormat()"><span>'+t('newFormat')+'</span></button>';
+  else h+='<button class="btn primary lg" onclick="newFormat()"><span>'+t('newFormat')+'</span></button><button class="btn lg ghost" onclick="openImportFormatMenu()">'+ic('upload')+'<span>'+t('loadFile')+'</span></button>';
+  h+='</div><div class="hero-action-row'+(FORMAT?' three':'')+'">';
   if(FORMAT){
-   // Preserve R8's two native auto-grid sizing inputs in their original order.
-   // These are inert, visually hidden, and cannot receive pointer/keyboard input.
-   // Actual buttons are in the overlay row below; first-row widths are untouched.
-   h+='<button class="btn lg ghost r9-sizing-only" inert aria-hidden="true" tabindex="-1"><span>'+(LANG==='en'?'Layout Settings':'布局设置')+'</span></button>';
-   h+='<button class="btn lg ghost r9-sizing-only" inert aria-hidden="true" tabindex="-1">'+ic('upload')+'<span>'+t('loadFile')+'</span></button>';
-   h+='<div class="r9-secondary-row"><button class="btn lg ghost" id="r6-layout-open" onclick="DualMode.openSettings()"><span>'+(LANG==='en'?'Layout Settings':'布局设置')+'</span></button>';
+   h+='<button class="btn lg ghost" id="r6-layout-open" onclick="DualMode.openSettings()"><span>'+(LANG==='en'?'Layout Settings':'布局设置')+'</span></button>';
    h+='<button class="btn lg ghost" onclick="openImportFormatMenu()">'+ic('upload')+'<span>'+t('loadFile')+'</span></button>';
-   h+='<button class="btn lg ghost" onclick="goFormatEdit()">'+ic('sliders')+'<span>'+t('editFmt')+'</span></button></div>';
+   h+='<button class="btn lg ghost" onclick="goFormatEdit()">'+ic('sliders')+'<span>'+t('editFmt')+'</span></button>';
   }else{
-   // Original empty-state native auto-placement: exactly three actions.
-   // Only swap Import and Layout; do not introduce a new row/grid here.
-   h+='<button class="btn lg ghost" onclick="openImportFormatMenu()">'+ic('upload')+'<span>'+t('loadFile')+'</span></button>';
    h+='<button class="btn lg ghost" id="r6-layout-open" onclick="DualMode.openSettings()"><span>'+(LANG==='en'?'Layout Settings':'布局设置')+'</span></button>';
   }
-  h+='</div><input type="file" id="load-fmt" accept=".json" class="hidden" onchange="loadFormatFile(this)">';
+  h+='</div></div><input type="file" id="load-fmt" accept=".json" class="hidden" onchange="loadFormatFile(this)">';
   h+='<div class="kbd-row"><span><kbd>Space</kbd>'+t('kSpace')+'</span><span><kbd>←</kbd><kbd>→</kbd>'+t('kArrows')+'</span><span><kbd>F11</kbd>'+t('kF11')+'</span></div>';
   h+='</div><div class="side-col">';
   if(FORMAT){
@@ -2783,18 +2774,20 @@ async function exportFormat(){
 async function clearAll(){
   if(!(await ask(t('confirmClear1'),true)))return;
   if(!(await ask(t('confirmClear2'),true)))return;
+  if(!invalidateMatchSnapshotIfNeeded()){if(!DLG.cur)notice(t('storageConflict'));return;}
   settleTimer('clear-all');stopTimer();clearPassiveHistory();
   try{localStorage.removeItem('debate_timer_dual_mode_r13_fmt_current');
     var list=JSON.parse(localStorage.getItem(FORMATS_KEY)||'[]');
     list.forEach(function(item){localStorage.removeItem('debate_timer_dual_mode_r13_fmt_'+item.key);});
     localStorage.removeItem(FORMATS_KEY);
   }catch(e){}
-  clockReviewPending=null;MATCH=null;FORMAT=null;invalidateMatchSnapshot();window.DualMode.clear();goStart();
+  clockReviewPending=null;MATCH=null;FORMAT=null;window.DualMode.clear();goStart();
 }
 function newFormat(){
+  if(!invalidateMatchSnapshotIfNeeded()){if(!DLG.cur)notice(t('storageConflict'));return;}
   settleTimer('new-format');stopTimer();clearPassiveHistory();
   FORMAT={name:'',proTeam:'',conTeam:'',timePool:{enabled:false,pro:0,con:0},rounds:[]};
-  clockReviewPending=null;MATCH=null;invalidateMatchSnapshot();window.DualMode.clear();goFormatEdit();
+  clockReviewPending=null;MATCH=null;window.DualMode.clear();goFormatEdit();
   setTimeout(function(){var el=document.getElementById('f-title');if(el)el.focus();},60);
 }
 async function clearFormatEditor(){
@@ -2971,7 +2964,16 @@ function renderFormatList(){
     return h+'</div></div>';
   }catch(e){return'';}
 }
-function loadSavedFormat(key){try{var s=localStorage.getItem('debate_timer_dual_mode_r13_fmt_'+key);if(s){settleTimer('load-format');stopTimer();clearPassiveHistory();FORMAT=normalizeFormat(JSON.parse(s));MATCH=null;invalidateMatchSnapshot();saveCurrentFormat();goStart();}}catch(e){}}
+function loadSavedFormat(key){
+  try{
+    var raw=localStorage.getItem('debate_timer_dual_mode_r13_fmt_'+key);
+    if(!raw)return;
+    var candidate=normalizeFormat(JSON.parse(raw));if(!candidate)return;
+    if(!invalidateMatchSnapshotIfNeeded()){if(!DLG.cur)notice(t('storageConflict'));return;}
+    settleTimer('load-format');stopTimer();clearPassiveHistory();
+    FORMAT=candidate;MATCH=null;saveCurrentFormat();goStart();
+  }catch(e){}
+}
 async function deleteSavedFormat(key){
   if(!(await ask(t('confirmDel'),true)))return;
   try{localStorage.removeItem('debate_timer_dual_mode_r13_fmt_'+key);
@@ -3180,7 +3182,9 @@ function renderFormatEdit(m){
 async function saveAndStart(){
   if(!FORMAT)return;
   if(!FORMAT.rounds.length){notice(t('needRounds'));return;}
-  flushFormatInputs();invalidateMatchSnapshot();MATCH=null;goMatch();
+  flushFormatInputs();
+  if(!invalidateMatchSnapshotIfNeeded()){if(!DLG.cur)notice(t('storageConflict'));return;}
+  MATCH=null;goMatch();
 }
 
 // ── Match runner ───────────────────────────────────────
@@ -3283,25 +3287,42 @@ async function editFormatFromMatch(){if(await ask(t('confirmEdit'))){goFormatEdi
 async function resetAllRounds(){
   if(!(await ask(t('confirmResetAll'),false,t('resetAllEmphasis'))))return;
   settleTimer('reset-all');settlePassive('reset-all');stopTimer();clearPassiveHistory();
+  if(!invalidateMatchSnapshotIfNeeded()){timerPaused=!timeUpState;paintAfterSettle();if(!DLG.cur)notice(t('storageConflict'));return;}
   clockReviewPending=null;
   MATCH.proPool=FORMAT.timePool.pro;MATCH.conPool=FORMAT.timePool.con;
   MATCH.poolRemainder={pro:0,con:0};MATCH.roundStates={};
   delete MATCH._snapPro;delete MATCH._snapCon;delete MATCH._snapFraction;
   MATCH.matchId='match-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);
   MATCH.epoch=Date.now();MATCH.currentRound=roundIdx;MATCH.resetFresh=true;
-  roundRemainder={pro:0,con:0};invalidateMatchSnapshot();goMatch(true);
+  roundRemainder={pro:0,con:0};goMatch(true);
 }
 async function endMatch(){
   if(!(await ask(t('confirmEnd'),true)))return;
   settleTimer('end-match');settlePassive('end-match');stopTimer();clearPassiveHistory();
   if(FORMAT&&FORMAT.name&&(await ask(t('confirmExport')(FORMAT.name)))){await exportFormat();}
-  clockReviewPending=null;MATCH=null;invalidateMatchSnapshot();window.DualMode.clear();goStart();
+  if(!invalidateMatchSnapshot(true)){
+    window.TimerDebug?.event('END_FAIL',{kind:matchSaveLocked?'conflict':'storage'});
+    var locked=matchSaveLocked;
+    var result=await dialog({
+      kind:'snapshot-debug',icon:'alert',
+      title:LANG==='en'?'Match snapshot could not be safely cleared':'比赛快照未能安全清除',
+      msg:locked?
+        (LANG==='en'?'A conflicting or unverifiable write was detected. This match remains here. Do not force-clear another tab.':'检测到其他写者或无法核验的写入，比赛已保留；不能强制清除其他窗口的进度。'):
+        (LANG==='en'?'The match is retained and paused. Check browser storage access, then retry safely.':'比赛已保留并暂停。请检查浏览器存储权限后安全重试。'),
+      cancel:LANG==='en'?'Return to match':'返回比赛',
+      ok:LANG==='en'?'Retry clear':'重试清除'
+    });
+    if(result!=='completed')return;
+  }
+  clockReviewPending=null;MATCH=null;window.DualMode.clear();goStart();
+  window.TimerDebug?.event('END_COMPLETE');
 }
 function goMatchRound(idx){
   if(!FORMAT||!MATCH||idx<0||idx>=FORMAT.rounds.length||idx===roundIdx)return;
   settleTimer('navigate');settlePassive('navigate');
   saveRoundProgress();stopTimer();clearPassiveHistory();
   roundIdx=idx;MATCH.currentRound=idx;render();saveMatchSnapshot();
+  window.TimerDebug?.event('ROUND_CHANGE');
 }
 
 // ── Painting ───────────────────────────────────────────
@@ -3405,7 +3426,7 @@ function toggleDualMain(){
   if(timerRunning&&!timerPaused)manualSwitchSide(activeSide==='pro'?'con':'pro');
   else toggleDual();
 }
-function toggleTimer(){if(!FORMAT||!FORMAT.rounds[roundIdx])return;if(FORMAT.rounds[roundIdx].mode==='2')toggleDual();else toggleSingle();}
+function toggleTimer(){if(!FORMAT||!FORMAT.rounds[roundIdx])return;if(FORMAT.rounds[roundIdx].mode==='2')toggleDual();else toggleSingle();window.TimerDebug?.event('TIMER_TOGGLE',{kind:timerRunning?'running':'stopped'});}
 function startMainInterval(){
   startMainClock();timerInterval=setInterval(function(){
     settleTimer('interval');
@@ -3496,6 +3517,15 @@ document.addEventListener('keydown',function(e){
   poke();
   var k=e.key,isSpace=k===' '||e.code==='Space';
   if(DLG.cur){
+    if(DLG.cur.o.kind==='snapshot-debug'||DLG.cur.o.kind==='debug-only'){
+      if(k==='Escape'){e.preventDefault();closeDialog(false);}
+      else if(k==='Enter'){
+        e.preventDefault();var focus=document.activeElement;
+        if(focus&&focus.closest?.('#dlg')&&focus.tagName==='BUTTON'&&!focus.disabled)focus.click();
+        else closeDialog(false);
+      }
+      return;
+    }
     if(k==='Enter'){e.preventDefault();closeDialog(true);}
     else if(k==='Escape'){e.preventDefault();closeDialog(DLG.cur.o.cancel?false:true);}
     else if(isSpace){e.preventDefault();if(!DLG.cur.o.cancel)closeDialog(true);}
@@ -3602,6 +3632,7 @@ var BG=(function(){
 document.addEventListener('visibilitychange',function(){
   settleTimer('visibility');settlePassive('visibility');
   saveMatchSnapshot();
+  window.TimerDebug?.event('VISIBILITY',{kind:document.hidden?'hidden':'visible'});
   if(!document.hidden)showClockReview();
 });
 window.addEventListener('pagehide',function(){
@@ -7118,6 +7149,284 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
 })(window);
 
+</script>
+
+<script>
+/* R11-R4: bounded diagnostic sidecar. It never owns a match, clock or sound decision.
+   No periodic monitoring and no transport: a click alone opens the local export. */
+(function(W){
+'use strict';
+var SESSION='run-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,9);
+var START=performance.now(),SEQ=0,MAX_RING=512*1024,MAX_PACKET=8*1024,MAX_PACKETS=128;
+var events=[],used=0,dropped=0,pending=[],pendingDropped=0,dbState='pending';
+var openPromise=null,scheduled=false,writing=false,lastWriteFail=0,lastLogo=null,firstTap=0,tapCount=0;
+var permitted=new Set(['BOOT','SNAPSHOT_OK','SNAPSHOT_FAIL','SNAPSHOT_LOCKED',
+ 'SNAPSHOT_WRITE_FAIL','STORAGE_CONFLICT','END_FAIL','END_COMPLETE','RETRY_OK','RETRY_FAIL',
+ 'CLOCK_REVIEW','AUDIO_REQUEST','ROUND_CHANGE','TIMER_TOGGLE','VISIBILITY','JS_ERROR',
+ 'PROMISE_REJECTION','DEBUG_OPEN','DEBUG_EXPORT']);
+function errorKind(e){
+ var name=String(e&&e.name||'Error');
+ return ['SecurityError','QuotaExceededError','InvalidStateError','AbortError','NotAllowedError',
+  'TypeError','SyntaxError','Error','UnknownError'].includes(name)?name:'other';
+}
+function event(code,meta){
+ try{
+  if(!permitted.has(code))return;
+  var now=performance.now();
+  if(code==='SNAPSHOT_WRITE_FAIL'&&now-lastWriteFail<8000)return;
+  if(code==='SNAPSHOT_WRITE_FAIL')lastWriteFail=now;
+  var clean={};
+  if(meta&&typeof meta==='object'){
+   ['kind','mode','source'].forEach(function(k){
+    var v=meta[k];
+    if(typeof v==='string'&&/^[a-zA-Z0-9_-]{1,40}$/.test(v))clean[k]=v;
+   });
+  }
+  var item={session:SESSION,seq:++SEQ,at:Date.now(),elapsedMs:Math.round(now-START),code:code,meta:clean};
+  var bytes=JSON.stringify(item).length+1;
+  events.push({item:item,bytes:bytes});used+=bytes;
+  while(used>MAX_RING&&events.length){var gone=events.shift();used-=gone.bytes;dropped++;}
+  if(pending.length<400)pending.push(item);
+  else{pending.shift();pending.push(item);pendingDropped++;}
+  schedulePersist();
+ }catch(_e){/* Diagnostics cannot throw into business or audio paths. */}
+}
+function openDB(){
+ if(openPromise)return openPromise;
+ openPromise=new Promise(function(resolve){
+  var request;
+  try{
+   if(!W.indexedDB)throw Error('indexeddb-unavailable');
+   request=W.indexedDB.open('debate_timer_r11r4_diagnostics',1);
+   request.onupgradeneeded=function(){
+    if(!request.result.objectStoreNames.contains('segments'))
+     request.result.createObjectStore('segments',{autoIncrement:true});
+   };
+   request.onsuccess=function(){dbState='ready';resolve(request.result);};
+   request.onerror=function(){dbState='unavailable';resolve(null);};
+   request.onblocked=function(){dbState='blocked';resolve(null);};
+  }catch(_e){dbState='unavailable';resolve(null);}
+ });
+ return openPromise;
+}
+function appendPacket(db,items){
+ return new Promise(function(resolve){
+  try{
+   var tx=db.transaction('segments','readwrite'),store=tx.objectStore('segments');
+   var payload=JSON.stringify(items);
+   if(payload.length>MAX_PACKET){resolve(false);return;}
+   store.add({items:items,bytes:payload.length});
+   var countReq=store.count();
+   countReq.onsuccess=function(){
+    var extra=Math.max(0,countReq.result-MAX_PACKETS);
+    if(!extra)return;
+    var cursorReq=store.openKeyCursor();
+    cursorReq.onsuccess=function(){
+     var cursor=cursorReq.result;
+     if(cursor&&extra>0){store.delete(cursor.primaryKey);extra--;cursor.continue();}
+    };
+   };
+   tx.oncomplete=function(){resolve(true);};
+   tx.onerror=tx.onabort=function(){resolve(false);};
+  }catch(_e){resolve(false);}
+ });
+}
+async function persist(){
+ if(writing||!pending.length||dbState==='unavailable'||dbState==='blocked')return;
+ writing=true;
+ try{
+  var db=await openDB();
+  if(!db){pending.length=0;return;}
+  for(var turn=0;turn<4&&pending.length;turn++){
+   var packet=[],size=2;
+   while(pending.length&&packet.length<48){
+    var next=pending[0],length=JSON.stringify(next).length+1;
+    if(size+length>MAX_PACKET&&packet.length)break;
+    if(length>MAX_PACKET-2){pending.shift();pendingDropped++;continue;}
+    packet.push(pending.shift());size+=length;
+   }
+   if(packet.length&&!await appendPacket(db,packet)){
+    dbState='unavailable';pending.length=0;break;
+   }
+  }
+ }catch(_e){dbState='unavailable';pending.length=0;}
+ finally{writing=false;if(pending.length&&dbState==='ready')schedulePersist();}
+}
+function schedulePersist(){
+ if(scheduled||dbState==='unavailable'||dbState==='blocked')return;
+ scheduled=true;
+ // One-shot batching only; never a recurring interval, tick hook or animation callback.
+ setTimeout(function(){scheduled=false;void persist();},450);
+}
+async function persistedItems(){
+ try{
+  var db=await openDB();if(!db)return [];
+  return await new Promise(function(resolve){
+   try{
+    var tx=db.transaction('segments','readonly');
+    var req=tx.objectStore('segments').getAll();
+    req.onsuccess=function(){
+     var rows=[];
+     (req.result||[]).forEach(function(packet){
+      if(Array.isArray(packet.items))packet.items.forEach(function(item){rows.push(item);});
+     });
+     resolve(rows);
+    };
+    req.onerror=function(){resolve([]);};
+   }catch(_e){resolve([]);}
+  });
+ }catch(_e){return [];}
+}
+function status(){
+ var audio=null;
+ try{
+  var a=W.TimerAudio?.getStatus?.();
+  if(a)audio={state:a.state,contextState:a.contextState,
+   gestureStarted:!!a.warned,builtinReady:!!a.builtinReady,
+   customWarnReady:!!a.customWarnReady,customEndReady:!!a.customEndReady,
+   hadError:!!a.lastError};
+ }catch(_e){}
+ return {
+  view:typeof W.VIEW==='number'?W.VIEW:null,
+  matchPresent:!!W.MATCH,matchSaveLocked:!!W.matchSaveLocked,
+  timerRunning:!!W.timerRunning,timerPaused:!!W.timerPaused,
+  displayMode:W.DualMode?.current?.()||'unknown',language:W.LANG==='en'?'en':'zh',
+  idb:dbState,ringBytes:used,ringEvents:events.length,
+  ringDropped:dropped,persistQueueDropped:pendingDropped,
+  audio:audio
+ };
+}
+async function prepare(){
+ var disk=await persistedItems(),all=new Map();
+ disk.concat(events.map(function(x){return x.item;})).forEach(function(item){
+  if(item&&typeof item.session==='string'&&Number.isSafeInteger(item.seq)&&permitted.has(item.code)){
+   all.set(item.session+':'+item.seq,item);
+  }
+ });
+ var ordered=Array.from(all.values()).sort(function(a,b){return a.at-b.at||a.seq-b.seq;});
+ var doc={schema:'debate-timer-r11-r4-debug-v1',
+  build:'Debate Timer v3 R11-R4-R1; verify artifact SHA from release/QA receipt',
+  generatedAt:new Date().toISOString(),status:status(),
+  limits:{memoryBytes:MAX_RING,persistedPacketLimit:MAX_PACKETS,packetMaxChars:MAX_PACKET,
+   missingUnflushedEventsPossible:true,hardwareAudioNotVerifiable:true},
+  events:ordered.slice(-5000)};
+ var data=JSON.stringify(doc,null,2);
+ while(data.length>2700000&&doc.events.length>10){
+  doc.events.splice(0,Math.max(1,Math.ceil(doc.events.length*.15)));
+  data=JSON.stringify(doc,null,2);
+ }
+ return new Blob([data],{type:'application/json;charset=utf-8'});
+}
+function say(zh,en){return W.LANG==='en'?en:zh;}
+function onMascotClick(e){
+ if(W.VIEW!==0||W.DLG?.cur||W.timerImportBusy||W.FCanvas?.isOpen?.())return;
+ var now=performance.now(),target=e?.currentTarget;
+ if(lastLogo!==target||!firstTap||now-firstTap>8000){
+  lastLogo=target;firstTap=now;tapCount=0;
+ }
+ if(++tapCount<10)return;
+ tapCount=0;firstTap=0;lastLogo=null;
+ event('DEBUG_OPEN',{source:'mascot'});
+ W.dialog({
+  kind:'debug-only',icon:'info',
+  title:say('计时器 Debug','Timer Debug'),
+  msg:say('本地诊断记录，仅由您主动导出；不会自动上传。','Local diagnostics; export is optional and nothing is uploaded.'),
+  cancel:say('关闭','Close')
+ });
+}
+function renderDialog(it,root,o){
+ var snapshot=o.kind==='snapshot-debug',locked=snapshot&&!!W.matchSaveLocked;
+ var prior=document.activeElement;
+ it.debugFocus=prior;
+ if(prior&&prior.blur)prior.blur();
+ document.body.classList.remove('idle');
+ root.className='dlg '+o.kind;
+ root.innerHTML='<div class="dlg-card" role="alertdialog" aria-modal="true">'+
+  '<div class="dlg-ico">'+W.ic(o.icon||'info')+'</div>'+
+  '<div class="dlg-title">'+W.esc(o.title)+'</div>'+
+  (o.msg?'<div class="dlg-msg">'+W.esc(o.msg)+'</div>':'')+
+  '<div class="dlg-actions">'+
+  '<button type="button" class="btn" data-debug-back>'+W.esc(o.cancel||say('关闭','Close'))+'</button>'+
+  (snapshot?'<button type="button" class="btn primary" data-debug-retry'+(locked?' disabled':'')+'>'+
+    W.esc(o.ok||say('重试清除','Retry clear'))+'</button>':'')+
+  '<button type="button" class="btn ghost" data-debug-export disabled>'+say('导出 Debug','Export Debug')+'</button></div>'+
+  '<div class="debug-status" role="status" aria-live="polite" data-debug-status>'+
+  say('正在准备本地诊断记录…','Preparing local diagnostics…')+'</div>'+
+  '<div class="dlg-keys">'+say('Esc · 返回 / 关闭','Esc · Return / close')+'</div></div>';
+ var back=root.querySelector('[data-debug-back]'),
+  retry=root.querySelector('[data-debug-retry]'),
+  exportBtn=root.querySelector('[data-debug-export]'),
+  message=root.querySelector('[data-debug-status]'),prepared=null,working=false,reading=false;
+ function valid(){return W.DLG?.cur===it;}
+ function text(zh,en){if(valid())message.textContent=say(zh,en);}
+ function reload(){
+  prepared=null;exportBtn.disabled=true;
+  if(reading)return;
+  reading=true;
+  prepare().then(function(blob){
+   if(!valid())return;
+   prepared=blob;exportBtn.disabled=false;
+   text('诊断记录已准备好 ('+Math.ceil(blob.size/1024)+' KiB)，可导出本地文件。',
+    'Diagnostics ready ('+Math.ceil(blob.size/1024)+' KiB). Export locally when ready.');
+  }).catch(function(){
+   text('读取诊断存储失败，仍可尝试重新打开。','Unable to read diagnostics. Close and retry.');
+  }).finally(function(){reading=false;});
+ }
+ back.onclick=function(){if(valid())W.closeDialog(false);};
+ if(retry)retry.onclick=function(){
+  if(!valid()||working||W.matchSaveLocked)return;
+  working=true;retry.disabled=true;
+  var success=false;
+  try{success=!!W.invalidateMatchSnapshot(true);}catch(_e){}
+  if(success){
+   event('RETRY_OK');W.closeDialog('completed');return;
+  }
+  event('RETRY_FAIL',{kind:W.matchSaveLocked?'conflict':'storage'});
+  text(W.matchSaveLocked?'冲突保护已锁定，不能继续重试；请导出 Debug。':'仍未能安全清除，可检查权限后再次重试。',
+   W.matchSaveLocked?'Conflict protection is active. Export Debug; retry is blocked.':'Safe clear failed again. Check storage access and retry.');
+  working=false;retry.disabled=!!W.matchSaveLocked;
+  if(!reading)reload();
+ };
+ exportBtn.onclick=function(){
+  if(!valid()||!prepared||working)return;
+  working=true;exportBtn.disabled=true;if(retry)retry.disabled=true;
+  var blob=prepared;
+  var now=new Date().toISOString().replace(/[:.]/g,'-');
+  var filename='Debate-Timer-Debug-R11-R4-'+now+'.json',op;
+  try{
+   if(!W.R7_QA||typeof W.R7_QA.deliverExport!=='function')throw Error('exporter-unavailable');
+   // Call the existing exporter in the direct click stack, preserving Web Share activation.
+   op=W.R7_QA.deliverExport(blob,filename);
+  }catch(_e){op=Promise.resolve({status:'failed'});}
+  Promise.resolve(op).then(function(result){
+   if(!valid())return;
+   var kind=String(result&&result.status||'failed');
+   event('DEBUG_EXPORT',{kind:/^native-saved/.test(kind)?'native-saved':kind});
+   if(kind==='browser-download-started')text('已发起下载，请检查浏览器保存结果。','Download started; check your browser.');
+   else if(kind==='web-shared')text('系统分享流程已返回。','The system share flow returned.');
+   else if(kind==='web-share-canceled')text('分享已取消；未额外下载。','Share canceled; no extra download.');
+   else if(kind.startsWith('native-saved'))text('已保存到应用文档，可从系统分享或文件管理中查找。','Saved to app documents; check sharing or Files.');
+   else text('Debug 导出失败，请稍后重试。','Debug export failed; try again.');
+  }).catch(function(){text('Debug 导出失败，请稍后重试。','Debug export failed; try again.');})
+   .finally(function(){
+    working=false;
+    if(valid()){exportBtn.disabled=!prepared;if(retry)retry.disabled=!!W.matchSaveLocked;}
+   });
+ };
+ root.onclick=function(e){if(e.target===root&&!snapshot&&valid())W.closeDialog(false);};
+ void root.offsetWidth;root.classList.add('show');
+ back.focus();
+ reload();
+}
+W.TimerDebug={onMascotClick:onMascotClick,renderDialog:renderDialog,
+ event:event,prepare:prepare,persistedItems:persistedItems,status:status,errorKind:errorKind};
+W.addEventListener('error',function(e){event('JS_ERROR',{kind:errorKind(e&&e.error)});},true);
+W.addEventListener('unhandledrejection',function(e){
+ event('PROMISE_REJECTION',{kind:errorKind(e&&e.reason)});
+});
+W.addEventListener('pagehide',function(){void persist();},{passive:true});
+event('BOOT');
+})(window);
 </script>
 </body>
 </html>
