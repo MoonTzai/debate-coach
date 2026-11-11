@@ -3,6 +3,10 @@ name: Publish release assets
 # Legacy/manual fallback only. Normal releases are published through FolderBridge Git Publisher.
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/release-assets.yml
 
 permissions:
   contents: write
@@ -12,6 +16,79 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  append_v9313_assets:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout frozen v9.3.13 binaries
+        uses: actions/checkout@v4
+      - name: Append missing EXE and APK assets without clobbering HTML or moving tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib, subprocess, time
+          repo = os.environ["GITHUB_REPOSITORY"]
+          tag = "v9.3.13"
+          def gh(*args):
+              return subprocess.check_output(["gh", *args], text=True).strip()
+          def api(path):
+              return json.loads(gh("api", path))
+          def digest(path):
+              h = hashlib.sha256()
+              with pathlib.Path(path).open("rb") as f:
+                  for data in iter(lambda: f.read(1024 * 1024), b""):
+                      h.update(data)
+              return h.hexdigest()
+          binaries = [
+              ("Debate-Coach-APK-v9.3.13.apk", "Debate-Coach-APK-v9.3.13（安卓版）.apk", 20891913, "1a5f77eee5e74418ac2dbcf13b75aaf40281b4039a0a976ad70f7f0e3ee4b5c5"),
+              ("Debate-Coach-Windows-v9.3.13.exe", "Debate-Coach-Windows-v9.3.13（Windows版）.exe", 30307491, "2cfa8dbaaaaf18f5e5ec7a863d718f783e1714a14627f7b0f6a4fe60dc118f55"),
+          ]
+          html_name = "Debate-Coach-web-v9.3.13.html"
+          html_sha = "3fc58b17cea5a994f508e372ba731294cdd2f584c72e188223d93c05235cc3e4"
+          tag_sha = "164260f5205fef4d4e44e981316a7e0094ab28ef"
+          assert digest("Debate-Coach-web.html") == html_sha
+          assert api(f"repos/{repo}/git/ref/tags/{tag}")["object"]["sha"] == tag_sha
+          def release():
+              result = api(f"repos/{repo}/releases/tags/{tag}")
+              assert result["id"] == 441388074 and not result["draft"]
+              return result
+          def asset(release_data, name):
+              return next((a for a in release_data["assets"] if a["name"] == name), None)
+          def confirm_html(result):
+              original = asset(result, html_name)
+              assert original is not None and original["size"] == 24268427
+              assert original["digest"] == "sha256:" + html_sha
+              assert original["label"] == "Debate-Coach-web-v9.3.13（网页版）.html"
+          r = release()
+          confirm_html(r)
+          for name, label, size, expected_sha in binaries:
+              p = pathlib.Path(name)
+              assert p.is_file() and p.stat().st_size == size and digest(name) == expected_sha, name
+              present = asset(r, name)
+              if present is None:
+                  subprocess.run(["gh", "release", "upload", tag, name + "#" + label, "--repo", repo], check=True)
+                  print("Added", name)
+              else:
+                  print("Already present", name)
+              for retry in range(5):
+                  r = release()
+                  got = asset(r, name)
+                  if got and got["size"] == size and got["label"] == label and got.get("digest") == "sha256:" + expected_sha:
+                      break
+                  time.sleep(2)
+              else:
+                  raise RuntimeError("Release asset mismatch: " + name)
+              confirm_html(r)
+          r = release()
+          for name, label, size, expected_sha in binaries:
+              got = asset(r, name)
+              assert got is not None and got["label"] == label and got["size"] == size and got["digest"] == "sha256:" + expected_sha
+          confirm_html(r)
+          assert api(f"repos/{repo}/git/ref/tags/{tag}")["object"]["sha"] == tag_sha
+          print("PASS: Existing v9.3.13 release has HTML, APK, EXE; tag unchanged")
+          PY
   release:
     if: github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
