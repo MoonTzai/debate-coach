@@ -9,9 +9,9 @@ import threading
 import time
 from pathlib import Path
 
-APP_VERSION = "v9.3.12"
+APP_VERSION = "v9.3.13"
 MASTER_NAME = "Debate-Coach-web.html"
-MASTER_SHA256 = "e11d006d7717a1f4e9cb45803690266c8a93a4f7eb56c20675fc6d17cafa10f1"
+MASTER_SHA256 = "3fc58b17cea5a994f508e372ba731294cdd2f584c72e188223d93c05235cc3e4"
 TITLE = "Debate-Coach · 辩论筑基"
 DESKTOP_SHORTCUT_SCRIPT = r"""
 (function(root){
